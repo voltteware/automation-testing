@@ -2,20 +2,20 @@
 
 ## How to run script from command line
 
-# 1. Update test environment in .env file: TEST SITE or STAGING
-# 2. Run command line to execute test and generate HTML report
-npm run test-api 
-npm run test-ui
+## 1. Update test environment in .env file: TEST SITE or STAGING
+## 2. Run command line to execute test and generate HTML report
+- npm run test-api 
+- npm run test-ui
 
 Or Run command line below to execute test only
 
-npx cucumber-js --tags @api-authenticate 
-npx cucumber-js --tags @test-api
-npx cucumber-js --tags @api-get-user-by-id
-npx cucumber-js --tags @test-ui
+- npx cucumber-js --tags @api-authenticate 
+- npx cucumber-js --tags @test-api
+- npx cucumber-js --tags @api-get-user-by-id
+- npx cucumber-js --tags @test-ui
 
-- Then Show report with Cucumber-HTML-Reporter
-npm run cucumber-html-reporter
+Then Show report with Cucumber-HTML-Reporter
+- npm run cucumber-html-reporter
 
 ## Install Extensions:
 
