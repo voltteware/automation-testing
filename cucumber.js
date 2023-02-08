@@ -1,0 +1,13 @@
+module.exports = {
+  default: [
+    "--require-module ts-node/register", // Load TypeScript module
+    "--require features/step_definitions/**/*.steps.ts", // Load step definitions
+    "--require src/hooks/**/*.ts", // Load hooks
+    //"--format progress", // Load custom formatter
+    "--format html:./reports/cucumber-report.html",
+    "--format json:./reports/cucumber-report.json",
+    "--publish",
+    "--retry 0",
+    // "--parallel 2"
+  ].join(" "),
+};

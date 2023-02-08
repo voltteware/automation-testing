@@ -1,0 +1,10 @@
+{
+    "admin": {
+        "email": "may27pre@gmail.com",
+        "password": "Test1111!"
+    },
+    "user": {
+        "email": "restockuser@gmail.com",
+        "password": "Test1111!"
+    }
+}
