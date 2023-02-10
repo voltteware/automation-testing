@@ -77,5 +77,3 @@ Then('The success value should be {string}', function (success: string) {
     expect(this.responseBody.success).toBeFalsy()
   }
 });
-
-
