@@ -2,7 +2,7 @@
 Feature: API_User GET/realm
 
     @REALM001
-    Scenario Outline: REALM001 - Verify <email> could call this API to get information of his/her companies
+    Scenario Outline: TC_REALM001 - Verify <email> could call this API to get information of his/her companies
         Given Nancy has valid connect.sid of "<user>" after send a POST request with payload as email: "<email>" and password: "<password>"
         And She sets GET api endpoint to get company keys
         And In Header of the request, she sets param Cookie as valid connect.sid
@@ -16,7 +16,7 @@ Feature: API_User GET/realm
             | admin | may27pre@gmail.com | Test1111! | 200            |
 
     @REALM002
-    Scenario Outline: REALM002 - Verify error when user sends this API with <cookie> cookie
+    Scenario Outline: TC_REALM002 - Verify error when user sends this API with <cookie> cookie
         Given Nancy sets GET api endpoint to get company keys
         But she sets Cookie in HEADER as <cookie>
         When She sends a GET request to get company keys

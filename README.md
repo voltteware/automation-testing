@@ -9,9 +9,9 @@
 
 Or Run command line below to execute test only
 
-- npx cucumber-js --tags @api-authenticate 
+- npx cucumber-js --tags @api-login 
 - npx cucumber-js --tags @test-api
-- npx cucumber-js --tags @api-get-user-by-id
+- npx cucumber-js --tags @api-realm
 - npx cucumber-js --tags @test-ui
 
 Then Show report with Cucumber-HTML-Reporter
