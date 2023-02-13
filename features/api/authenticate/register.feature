@@ -5,7 +5,7 @@ Feature: API /register
 	Scenario Outline: <id> - Verify POST /api/register with <scenario>
 		Given User sets POST register service api endpoint
 		And User sets request body with payload as firstName: "<firstName>" and lastName: "<lastName>" and companyName: "<companyName>" and companyType: "<companyType>" and phone: "<phone>" and email: "<email>" and password: "<password>"
-		When User sends a POST method to authenticate account
+		When User sends a POST method to register account
 		Then The expected status code should be <expectedStatus>
 		And Response of Login and Register API includes enough properties or keys
 		And UserId <email> in the response of API is correct
@@ -19,7 +19,7 @@ Feature: API /register
 	Scenario Outline: <id> - Verify POST /api/register with <scenario>
 		Given User sets POST register service api endpoint
 		And User sets request body with payload as firstName: "<firstName>" and lastName: "<lastName>" and companyName: "<companyName>" and companyType: "<companyType>" and phone: "<phone>" and email: "<email>" and password: "<password>"
-		When User sends a POST method to authenticate account
+		When User sends a POST method to register account
 		Then The expected status code should be <expectedStatus>
 		And The status text is "<expectedStatusText>"
 		
@@ -28,3 +28,15 @@ Feature: API /register
 			| A002 | exist email and valid /password/firstName/lastName/companyName/companyType/phone 	| testauto@gmail.com  | Test1111! | Test      | Auto     | ITC-Company-Testing | ASC		     | 0355025511 	| 400			 | Username already exists 						 |
 			| A003 | invalid passowrd and valid /email/firstName/lastName/companyName/companyType/phone | testauto1@gmail.com | Test1111  | Test      | Auto     | ITC-Company-Testing | ASC		     | 0355025511 	| 400			 | Password does not meet strength requirements. |
 			| A004 | empty passowrd and valid /email/firstName/lastName/companyName/companyType/phone   | testauto1@gmail.com | 		  | Test      | Auto     | ITC-Company-Testing | ASC		     | 0355025511 	| 400			 | Password does not meet strength requirements. |
+
+	@api-delete-user
+	Scenario Outline: Verify DELETE /api/admin/users with <scenario>
+		Given User has valid connect.sid of "<user>" after send a POST request with payload as email: "<email>" and password: "<password>"
+		When User sends a DELETE method to delete user
+		Then The expected status code should be <expectedStatus>
+		And The status text is "<expectedStatusText>"
+		
+		Examples:
+			Examples:
+            | user  | scenario        | email              | password  | expectedStatus | expectedStatusText |
+            | admin | valid email	  | may27pre@gmail.com | Test1111! | 200            | OK				 |
