@@ -58,7 +58,7 @@ Then('The status text is {string}', function (message: string) {
 });
 
 // Check response is true when authenticate or register success
-Then('Response of Login API includes enough properties or keys', async function () {
+Then('Response of Login and Register API includes enough properties or keys', async function () {
     expect(this.responseBody).toHaveProperty('userId')
     expect(this.responseBody).toHaveProperty('isAdmin')
     expect(this.responseBody).toHaveProperty('isRestrictAddCSV')
@@ -103,7 +103,7 @@ Then('Response of Login API includes enough properties or keys', async function 
     // expect(this.responseBody.user).toHaveProperty('id')
 });
 
-Then('UserId {} in the response of API Login is correct', async function (email) {
+Then('UserId {} in the response of API is correct', async function (email) {
     expect(typeof (this.responseBody.userId)).toBe('string')
     expect(typeof (this.responseBody.isAdmin)).toBe('boolean')
     expect(typeof (this.responseBody.isRestrictAddCSV)).toBe('boolean')
@@ -114,5 +114,10 @@ Then('UserId {} in the response of API Login is correct', async function (email)
 
 Then('Check that API Login returns cookie value', async function () {
     console.log('Check that API Login returns cookie value-----------', this.cookie);
+    expect(this.cookie, 'Check cookie exists').not.toBeNaN();
+});
+
+Then('Check that API Register returns cookie value', async function () {
+    console.log('Check that API Register returns cookie value-----------', this.cookie);
     expect(this.cookie, 'Check cookie exists').not.toBeNaN();
 });

@@ -7,8 +7,8 @@ Feature: API /login
 		And She sets request body with payload as email: "<email>" and passowrd: "<password>"
 		When She sends a POST method to authenticate account
 		Then The expected status code should be <expectedStatus>
-		And Response of Login API includes enough properties or keys
-		And UserId <email> in the response of API Login is correct
+		And Response of Login and Register API includes enough properties or keys
+		And UserId <email> in the response of API is correct
 		And Check that API Login returns cookie value
 
 		Examples:
@@ -16,7 +16,7 @@ Feature: API /login
 			| TC_L001 | valid email/password | may27pre@gmail.com | Test1111! | 201            |
 
 	@api-login-with-invalid-payload
-	Scenario Outline: <id> - Verify POST /login with with <scenario>
+	Scenario Outline: <id> - Verify POST /login with <scenario>
 		Given Nancy sets POST login service api endpoint
 		And She sets request body with payload as email: "<email>" and passowrd: "<password>"
 		When She sends a POST method to authenticate account
