@@ -6,7 +6,6 @@ import logger from '../../../../src/Logger/logger';
 import { Links } from '../../../../src/utils/links';
 
 let link: any;
-let linkDelete: any;
 let registerResponseBody: any;
 
 Given('User sets POST register service api endpoint', function () {
@@ -38,13 +37,3 @@ Then('User sends a POST method to register account', async function () {
     registerResponseBody = this.responseBody;
   }
 })
-
-Then('User sends a DELETE method to delete user', async function () {
-  const options = {
-    headers: this.headers
-  }
-  linkDelete = Links.API_ADMIN_DELETE;
-  const email = registerResponseBody.userId;
-  this.response = await deleteRequest.sendDELETEUserRequest(this.request, linkDelete, email, options);
-})
-

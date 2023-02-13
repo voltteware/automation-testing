@@ -8,4 +8,5 @@ export class Links {
 
     //API Admin
     static API_ADMIN_DELETE: string = '/api/admin/users/';
+    static API_ADMIN_GET_COMPANIES: string = '/api/admin/companies';
 }
