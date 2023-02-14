@@ -1,8 +1,7 @@
 @test-api @api-user @api-realm
 Feature: API_User GET/realm
-
     @REALM001
-    Scenario Outline: TC_REALM001 - Verify <email> could call this API to get information of his/her companies
+    Scenario Outline: TC_REALM001 - Verify <email> could call this API to get company ey of his/her companies
         Given Nancy has valid connect.sid of "<user>" after send a POST request with payload as email: "<email>" and password: "<password>"
         And She sets GET api endpoint to get company keys
         And In Header of the request, she sets param Cookie as valid connect.sid
@@ -24,8 +23,18 @@ Feature: API_User GET/realm
         And The status text is "<expectedStatusText>"
         Examples:
             | cookie  | expectedStatus | expectedStatusText |
-            | empty   | 401            | Unauthorized       |
             | invalid | 401            | Unauthorized       |
+
+    @REALM003
+    Scenario Outline: TC_REALM003 - Verify error when user sends this API without cookie
+        Given Nancy sets GET api endpoint to get company keys
+        But she doesn't set Cookie, Company Type and Company Key in HEADER
+        When She sends a GET request to get company keys
+        Then The expected status code should be <expectedStatus>
+        And The status text is "<expectedStatusText>"
+        Examples:
+            | expectedStatus | expectedStatusText |
+            | 401            | Unauthorized       |
 
 
 
