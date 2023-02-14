@@ -55,7 +55,7 @@ Then('{} checks {} and other values in response of random company are correct', 
     expect(this.randomCompany.companyName).not.toBeNull();
 })
 
-Then(`{} sets GET api endpoint to get information of company using company key {}`, async function (actor: string, company: string) {
+Then(`{} sets GET api endpoint to get information of a company belongs to {} using company key {}`, async function (actor, email, company: string) {
     if (company == 'random') {
         this.selectedCompany = this.randomCompany;
     }
@@ -63,8 +63,8 @@ Then(`{} sets GET api endpoint to get information of company using company key {
         this.selectedCompany = this.getRealmResponseBody.find((co: any) => co.companyKey == company);
     }
 
-    logger.log('info', `Selected company: ${JSON.stringify(this.selectedCompany, undefined, 4)}`);
-    this.attach(`Selected company: ${JSON.stringify(this.selectedCompany, undefined, 4)}`);
+    logger.log('info', `Selected company of account ${email}: ${JSON.stringify(this.selectedCompany, undefined, 4)}`);
+    this.attach(`Selected company of account ${email}: ${JSON.stringify(this.selectedCompany, undefined, 4)}`);
 
     this.companyKey = this.selectedCompany.companyKey;
     this.companyType = this.selectedCompany.companyType;
@@ -75,7 +75,7 @@ Then(`{} sets GET api endpoint to get information of company using company key {
     link = `${Links.API_COMPANY}${this.companyKey}`;
 });
 
-When(`{} sends a GET request to get company information by company key`, async function (actor: string) {
+When(`{} sends a GET request to get company information of {} by company key`, async function (actor, email: string) {
     const options = {
         headers: this.headers
     }

@@ -58,7 +58,7 @@ Then('{} sets Cookie in HEADER as {}', async function (actor, cookieValue: strin
     this.attach(`HEADERS with cookie ${cookieValue}: ${JSON.stringify(this.headers, undefined, 4)}`)
 });
 
-Then('{} sets {} cookie and {} companyKey and {} companyType in the header', async function (actor, cookieValue, companyKeyValue, companyTypeValue: string) {
+Then('{} sets {} cookie of {} and {} companyKey and {} companyType in the header', async function (actor, cookieValue, user, companyKeyValue, companyTypeValue: string) {
     var cookieHeaderValue = cookieValue == 'valid' ? this.cookie : cookieValue;
     var companyKeyHeaderValue = companyKeyValue == 'valid' ? this.companyKey : companyKeyValue;
     var companyTypeHeaderValue = companyTypeValue == 'valid' ? this.companyType : companyTypeValue;
@@ -68,8 +68,8 @@ Then('{} sets {} cookie and {} companyKey and {} companyType in the header', asy
         'COMPANY-KEY': companyKeyHeaderValue,
         'COMPANY-TYPE': companyTypeHeaderValue,
     }
-    logger.log('info', `HEADERS with cookie ${cookieValue} and company key ${companyKeyValue} and company type ${companyTypeValue}: ${JSON.stringify(this.headers, undefined, 4)}`)
-    this.attach(`HEADERS with cookie ${cookieValue} and company key ${companyKeyValue} and company type ${companyTypeValue}: ${JSON.stringify(this.headers, undefined, 4)}`)
+    logger.log('info', `HEADERS with cookie ${cookieValue} and company key ${companyKeyValue} and company type ${companyTypeValue} of ${user}: ${JSON.stringify(this.headers, undefined, 4)}`)
+    this.attach(`HEADERS with cookie ${cookieValue} and company key ${companyKeyValue} and company type ${companyTypeValue} of ${user}: ${JSON.stringify(this.headers, undefined, 4)}`)
 });
 
 Then('In Header of the request, {} sets param Cookie as valid connect.sid', async function (user) {
