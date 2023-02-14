@@ -1,4 +1,4 @@
-import { Then } from "@cucumber/cucumber";
+import { DataTable, Then } from "@cucumber/cucumber";
 import { expect } from "@playwright/test";
 import * as authenticateRequest from '../../../../src/api/request/authentication.service';
 import logger from "../../../../src/Logger/logger";
@@ -23,11 +23,29 @@ Then('{} has valid connect.sid of {} after send a POST request with payload as e
     this.authenticateResponseBody = this.responseBody
 })
 
-//Set Token in HEADER
-Then('{} doesn\'t set Cookie in HEADER', async function (actor: string) {
-    this.headers = {
-        'Cookie': ''
+Then('user sends a POST login request to get valid cookie', async function (dataTable: DataTable) {
+    var username: string = dataTable.hashes()[0].username
+    var password: string = dataTable.hashes()[0].password
+
+    const payload = {
+        username: username,
+        password: password,
     }
+    var response = await authenticateRequest.sendPOSTAuthenticatieRequest(this.request, Links.API_LOGIN, payload);
+    expect(response.status()).toBe(201);
+
+    const responseHeaders = response.headers();
+    this.cookie = responseHeaders['set-cookie'];
+    console.log('Cookie----------', this.cookie)
+    this.responseBody = JSON.parse(await response.text())
+    // logger.log('info', 'Response Body:\n' + JSON.stringify(this.responseBody, undefined, 4))
+    // this.attach(JSON.stringify(this.responseBody, undefined, 4))
+    this.authenticateResponseBody = this.responseBody
+})
+
+//Set Token in HEADER
+Then('{} doesn\'t set Cookie, Company Type and Company Key in HEADER', async function (actor: string) {
+    this.headers = {}
     logger.log('info', `HEADERS with cookie empty: ${JSON.stringify(this.headers, undefined, 4)}`)
     this.attach(`HEADERS with cookie empty: ${JSON.stringify(this.headers, undefined, 4)}`)
 });
@@ -40,12 +58,26 @@ Then('{} sets Cookie in HEADER as {}', async function (actor, cookieValue: strin
     this.attach(`HEADERS with cookie ${cookieValue}: ${JSON.stringify(this.headers, undefined, 4)}`)
 });
 
+Then('{} sets {} cookie and {} companyKey and {} companyType in the header', async function (actor, cookieValue, companyKeyValue, companyTypeValue: string) {
+    var cookieHeaderValue = cookieValue == 'valid' ? this.cookie : cookieValue;
+    var companyKeyHeaderValue = companyKeyValue == 'valid' ? this.companyKey : companyKeyValue;
+    var companyTypeHeaderValue = companyTypeValue == 'valid' ? this.companyType : companyTypeValue;
+
+    this.headers = {
+        'Cookie': cookieHeaderValue,
+        'COMPANY-KEY': companyKeyHeaderValue,
+        'COMPANY-TYPE': companyTypeHeaderValue,
+    }
+    logger.log('info', `HEADERS with cookie ${cookieValue} and company key ${companyKeyValue} and company type ${companyTypeValue}: ${JSON.stringify(this.headers, undefined, 4)}`)
+    this.attach(`HEADERS with cookie ${cookieValue} and company key ${companyKeyValue} and company type ${companyTypeValue}: ${JSON.stringify(this.headers, undefined, 4)}`)
+});
+
 Then('In Header of the request, {} sets param Cookie as valid connect.sid', async function (user) {
     this.headers = {
         'Cookie': this.cookie
     }
-    logger.log('info', `HEADERS with valid connect.sid of account ${user}: ${JSON.stringify(this.headers, undefined, 4)}`)
-    this.attach(`HEADERS with valid connect.sid of account ${user}: ${JSON.stringify(this.headers, undefined, 4)}`)
+    logger.log('info', `HEADERS with valid connect.sid: ${JSON.stringify(this.headers, undefined, 4)}`)
+    this.attach(`HEADERS with valid connect.sid: ${JSON.stringify(this.headers, undefined, 4)}`)
 })
 
 // Check expected status code should be <statusCode>
@@ -57,7 +89,6 @@ Then('The status text is {string}', function (message: string) {
     expect(this.response.statusText(), `In response, status text should be: ${message}`).toBe(message);
 });
 
-// Check response is true when authenticate or register success
 Then('Response of Login and Register API includes enough properties or keys', async function () {
     expect(this.responseBody).toHaveProperty('userId')
     expect(this.responseBody).toHaveProperty('isAdmin')
@@ -108,16 +139,16 @@ Then('UserId {} in the response of API is correct', async function (email) {
     expect(typeof (this.responseBody.isAdmin)).toBe('boolean')
     expect(typeof (this.responseBody.isRestrictAddCSV)).toBe('boolean')
     expect(typeof (this.responseBody.displayName)).toBe('string')
-    expect(this.responseBody.userId, 'Check UserId is not null').not.toBeNaN();
+    expect(this.responseBody.userId, 'Check UserId is not null').not.toBeNull();
     expect(this.responseBody.userId, 'Check UserId is correct').toBe(email);
 });
 
 Then('Check that API Login returns cookie value', async function () {
     console.log('Check that API Login returns cookie value-----------', this.cookie);
-    expect(this.cookie, 'Check cookie exists').not.toBeNaN();
+    expect(this.cookie, 'Check cookie exists').not.toBeNull();
 });
 
 Then('Check that API Register returns cookie value', async function () {
     console.log('Check that API Register returns cookie value-----------', this.cookie);
-    expect(this.cookie, 'Check cookie exists').not.toBeNaN();
+    expect(this.cookie, 'Check cookie exists').not.toBeNull();
 });
