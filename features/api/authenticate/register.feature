@@ -5,7 +5,7 @@ Feature: API /register
 	Scenario Outline: <id> - Verify POST /api/register with <scenario>
 		Given User sets POST register service api endpoint
 		And User sets request body with payload as firstName: "<firstName>" and lastName: "<lastName>" and companyName: "<companyName>" and companyType: "<companyType>" and phone: "<phone>" and email: "<email>" and password: "<password>"
-		When User sends a POST method to authenticate account
+		When User sends a POST method to register account
 		Then The expected status code should be <expectedStatus>
 		And Response of Login and Register API includes enough properties or keys
 		And UserId <email> in the response of API is correct
@@ -19,7 +19,7 @@ Feature: API /register
 	Scenario Outline: <id> - Verify POST /api/register with <scenario>
 		Given User sets POST register service api endpoint
 		And User sets request body with payload as firstName: "<firstName>" and lastName: "<lastName>" and companyName: "<companyName>" and companyType: "<companyType>" and phone: "<phone>" and email: "<email>" and password: "<password>"
-		When User sends a POST method to authenticate account
+		When User sends a POST method to register account
 		Then The expected status code should be <expectedStatus>
 		And The status text is "<expectedStatusText>"
 		
