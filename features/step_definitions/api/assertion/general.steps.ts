@@ -89,7 +89,7 @@ Then('The status text is {string}', function (message: string) {
     expect(this.response.statusText(), `In response, status text should be: ${message}`).toBe(message);
 });
 
-Then('Response of Login and Register API includes enough properties or keys', async function () {
+Then('Response of Login and Register API must match with API contract', async function () {
     expect(this.responseBody).toHaveProperty('userId')
     expect(this.responseBody).toHaveProperty('isAdmin')
     expect(this.responseBody).toHaveProperty('isRestrictAddCSV')

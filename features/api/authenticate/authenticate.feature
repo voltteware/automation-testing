@@ -1,4 +1,4 @@
-@test-api @api-login
+@test-api @api-login @demo
 Feature: API /login
 
 	@api-login-with-valid-payload
@@ -7,7 +7,7 @@ Feature: API /login
 		And She sets request body with payload as email: "<email>" and passowrd: "<password>"
 		When She sends a POST method to authenticate account
 		Then The expected status code should be <expectedStatus>
-		And Response of Login and Register API includes enough properties or keys
+		And Response of Login and Register API must match with API contract
 		And UserId <email> in the response of API is correct
 		And Check that API Login returns cookie value
 

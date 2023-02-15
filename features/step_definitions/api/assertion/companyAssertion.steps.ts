@@ -5,7 +5,7 @@ import logger from '../../../../src/Logger/logger';
 import { Links } from '../../../../src/utils/links';
 import _ from "lodash";
 
-Then('{} checks data type of common values in company object are correct', async function (actor: string) {
+Then('{} checks API contract essential types in company object are correct', async function (actor: string) {
     expect(typeof (this.responseBodyOfACompanyObject.companyType), 'Type of companyType value should be string').toBe("string");
     expect(typeof (this.responseBodyOfACompanyObject.companyKey), 'Type of companyKey value should be string').toBe("string");
     expect(typeof (this.responseBodyOfACompanyObject.companyName), 'Type of companyName value should be string').toBe("string");

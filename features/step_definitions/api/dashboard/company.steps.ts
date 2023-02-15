@@ -32,7 +32,7 @@ Then('{} picks random company in above response', async function (actor: string)
     this.attach(`Random company: ${JSON.stringify(this.randomCompany, undefined, 4)}`);
 })
 
-Then('{} checks data type of values in random company object are correct', async function (actor: string) {
+Then('{} checks API contract types in random company object are correct', async function (actor: string) {
     // Check companyType
     expect(typeof (this.randomCompany.companyType), 'Type of companyType value should be string').toBe("string");
     // Check companyKey is string 

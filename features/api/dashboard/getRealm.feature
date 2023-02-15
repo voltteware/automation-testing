@@ -1,4 +1,4 @@
-@test-api @api-user @api-realm
+@test-api @api-user @api-realm @demo
 Feature: API_User GET/realm
     @REALM001
     Scenario Outline: TC_REALM001 - Verify <email> could call this API to get company ey of his/her companies
@@ -8,7 +8,7 @@ Feature: API_User GET/realm
         When She sends a GET request to get company keys
         Then The expected status code should be <expectedStatus>
         And She picks random company in above response
-        And She checks data type of values in random company object are correct
+        And She checks API contract types in random company object are correct
         And She checks <email> and other values in response of random company are correct
         Examples:
             | user  | email              | password  | expectedStatus |

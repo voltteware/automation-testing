@@ -7,7 +7,7 @@ Feature: API /register
 		And User sets request body with payload as firstName: "<firstName>" and lastName: "<lastName>" and companyName: "<companyName>" and companyType: "<companyType>" and phone: "<phone>" and email: "<email>" and password: "<password>"
 		When User sends a POST method to register account
 		Then The expected status code should be <expectedStatus>
-		And Response of Login and Register API includes enough properties or keys
+		And Response of Login and Register API must match with API contract
 		And UserId <email> in the response of API is correct
 		And Check that API Register returns cookie value
 
