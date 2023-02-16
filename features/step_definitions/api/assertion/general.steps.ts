@@ -38,8 +38,8 @@ Then('user sends a POST login request to get valid cookie', async function (data
     this.cookie = responseHeaders['set-cookie'];
     console.log('Cookie----------', this.cookie)
     this.responseBody = JSON.parse(await response.text())
-    logger.log('info', 'Response Body:\n' + JSON.stringify(this.responseBody, undefined, 4))
-    this.attach(JSON.stringify(this.responseBody, undefined, 4))
+    //logger.log('info', 'Response Body:\n' + JSON.stringify(this.responseBody, undefined, 4))
+    //this.attach(JSON.stringify(this.responseBody, undefined, 4))
     this.authenticateResponseBody = this.responseBody
 })
 

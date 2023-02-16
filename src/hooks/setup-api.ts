@@ -1,9 +1,6 @@
 import { After, AfterAll, AfterStep, Before, BeforeAll, BeforeStep, ITestCaseHookParameter, ITestStepHookParameter } from "@cucumber/cucumber";
 import logger from '../Logger/logger';
 import { ActionWords } from "../utils/actionwords";
-import * as deleteUserRequest from './../../src/api/request/administration.service';
-import { Links } from '../../src/utils/links';
-
 
 let actionwords: ActionWords = new ActionWords()
 

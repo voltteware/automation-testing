@@ -10,8 +10,8 @@ Feature: API /register
 		And Response of Login and Register API must match with API contract
 		And UserId <email> in the response of API is correct
 		Given user sends a POST login request to get valid cookie
-            | username           | password  |
-            | may27pre@gmail.com | Test1111! |
+            |username          | password  | 
+            |may27pre@gmail.com| Test1111! |
         And User sets DELETE api endpoint to delete user keys
         And In Header of the request, user sets param Cookie as valid connect.sid
 		And User sends a DELETE method to delete user just created 
