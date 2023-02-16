@@ -6,7 +6,7 @@ export class Links {
     static API_USERS: string = '/api/users/';
     static API_USERS_EDIT: string = '/api/users/edit';
     static API_USERS_CHANGE_PASSWORD: string = '/api/users/change-password';
-
+    static API_USERS_RESET_PASSWORD: string = '/api/password-reset/';
     //API Admin
     static API_ADMIN_DELETE: string = '/api/admin/users/';
     static API_ADMIN_GET_COMPANIES: string = '/api/admin/companies';
