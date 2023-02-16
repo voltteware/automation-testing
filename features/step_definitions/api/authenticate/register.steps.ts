@@ -1,7 +1,7 @@
 import { When, Then, Given } from '@cucumber/cucumber';
 import { expect } from '@playwright/test';
 import * as registerRequest from '../../../../src/api/request/register.service';
-import * as deleteRequest from '../../../../src/api/request/administration.service';
+import * as adminRequest from '../../../../src/api/request/administration.service';
 import logger from '../../../../src/Logger/logger';
 import { Links } from '../../../../src/utils/links';
 
@@ -36,4 +36,12 @@ Then('User sends a POST method to register account', async function () {
     this.responseBody = JSON.parse(await this.response.text())
     registerResponseBody = this.responseBody;
   }
+})
+
+Then('User sends a DELETE method to delete user just created', async function () {
+  const options = {
+    headers: this.headers
+  }
+  const email = registerResponseBody.userId;
+  this.response = await adminRequest.deleteUser(this.request, Links.API_ADMIN_DELETE_USER, email, options);
 })

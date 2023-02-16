@@ -20,7 +20,7 @@ Feature: API_Admin GET/Companies
     Scenario Outline: COMPANIES002 - Verify <email> can't call this API to get all companies
         Given User has valid connect.sid of "<user>" after send a POST request with payload as email: "<email>" and password: "<password>"
         And User sets GET api endpoint to get companies keys
-        And In Header of the request, user sets param Cookie as valid connect.sid
+        But In Header of the request, user sets param Cookie as valid connect.sid
         When User sends a GET request to get companies keys
         Then The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
