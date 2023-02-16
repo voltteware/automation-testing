@@ -1,9 +1,9 @@
 @test-api @api-dashboard @api-company-info
 Feature: API_Dashboard GET /api/company/company key
     Background: Send GET /realm request to get all company keys of current logged in user before each test
-        Given user sends a POST login request to get valid cookie
-            |username          | password  | 
-            |may27pre@gmail.com| Test1111! |
+        Given user sends a POST login request to get valid cookie with role
+            | role  | username           | password  |
+            | admin | may27pre@gmail.com | Test1111! |
         And She sets GET api endpoint to get company keys
         And In Header of the request, she sets param Cookie as valid connect.sid
         When She sends a GET request to get company keys

@@ -10,5 +10,5 @@ export class Links {
     //API Admin
     static API_ADMIN_DELETE_USER: string = '/api/admin/users/';
     static API_ADMIN_GET_COMPANIES: string = '/api/admin/companies';
-    static API_ADMIN_GET_USER: string = '/api/admin/users?offset=0&limit=2000';
+    static API_ADMIN_GET_USER: string = '/api/admin/users?';
 }

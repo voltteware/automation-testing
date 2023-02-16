@@ -1,7 +1,7 @@
 @test-api @api-admin @api-deleteUser
 Feature: API_Admin DELETE/User
     Background: Send GET request to get users keys of current logged in user before each test
-        Given user sends a POST login request to get valid cookie
+        Given user sends a POST login request to get valid cookie with role
             | role  | username           | password  |
             | admin | may27pre@gmail.com | Test1111! |
         And User sets GET api endpoint to get user keys
@@ -12,7 +12,7 @@ Feature: API_Admin DELETE/User
             | email              |
             | testauto@gmail.com |
     @DU001
-    Scenario Outline: DU001 - Verify <user> could call this API to get all user
+    Scenario Outline: DU001 - Verify <user> could call this API to delete a user
         # Given User filters user to get user which he has the email
         Given User filters user to get user which has the email as <emailWantToDelete>
         And In Header of the request, user sets param Cookie as valid connect.sid
@@ -33,7 +33,7 @@ Feature: API_Admin DELETE/User
         Given User filters user to get user which has the email as <emailWantToDelete>
         Then User sets DELETE api endpoint to delete user keys
         But User sets Cookie in HEADER as <cookie>
-        When User sends a DELETE method to delete user
+        When User sends a DELETE method to delete user <emailWantToDelete>
         Then The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
 
@@ -50,7 +50,7 @@ Feature: API_Admin DELETE/User
         Then User has valid connect.sid of "<userA>" after send a POST request with payload as email: "<userA>" and password: "<password>"
         And User sets DELETE api endpoint to delete user keys
         And In Header of the request, user sets param Cookie as valid connect.sid
-        When User sends a DELETE method to delete user
+        When User sends a DELETE method to delete user <emailWantToDelete>
         Then The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
 
