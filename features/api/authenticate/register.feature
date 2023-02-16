@@ -9,8 +9,12 @@ Feature: API /register
 		Then The expected status code should be <expectedStatus>
 		And Response of Login and Register API must match with API contract
 		And UserId <email> in the response of API is correct
-		And Check that API Register returns cookie value
-
+		Given user sends a POST login request to get valid cookie
+            | username           | password  |
+            | may27pre@gmail.com | Test1111! |
+        And User sets DELETE api endpoint to delete user keys
+        And In Header of the request, user sets param Cookie as valid connect.sid
+		And User sends a DELETE method to delete user just created 
 		Examples:
 			| id   | scenario             												   | email             	| password  | firstName | lastName | companyName 		 | companyType | phone	    | expectedStatus |
 			| A001 | valid email/password/firstName/lastName/companyName/companyType/phone | testauto@gmail.com | Test1111! | Test      | Auto     | ITC-Company-Testing | ASC		   | 0355025511 | 201			 |
@@ -24,7 +28,7 @@ Feature: API /register
 		And The status text is "<expectedStatusText>"
 		
 		Examples:
-			| id   | scenario             												   			  	| email               | password  | firstName | lastName | companyName 		   | companyType  	 | phone	    | expectedStatus | expectedStatusText 	   						 |
-			| A002 | exist email and valid /password/firstName/lastName/companyName/companyType/phone 	| testauto@gmail.com  | Test1111! | Test      | Auto     | ITC-Company-Testing | ASC		     | 0355025511 	| 400			 | Username already exists 						 |
-			| A003 | invalid passowrd and valid /email/firstName/lastName/companyName/companyType/phone | testauto1@gmail.com | Test1111  | Test      | Auto     | ITC-Company-Testing | ASC		     | 0355025511 	| 400			 | Password does not meet strength requirements. |
-			| A004 | empty passowrd and valid /email/firstName/lastName/companyName/companyType/phone   | testauto1@gmail.com | 		  | Test      | Auto     | ITC-Company-Testing | ASC		     | 0355025511 	| 400			 | Password does not meet strength requirements. |
+			| id   | scenario             												   			  	| email                    | password  | firstName | lastName | companyName 		| companyType  	 | phone	    | expectedStatus | expectedStatusText 	   						 |
+			| A002 | exist email and valid /password/firstName/lastName/companyName/companyType/phone 	| testautoexist@gmail.com  | Test1111! | Test      | Auto     | ITC-Company-Testing | ASC		     | 0355025511 	| 400			 | Username already exists 						 |
+			| A003 | invalid passowrd and valid /email/firstName/lastName/companyName/companyType/phone | testauto1@gmail.com      | Test1111  | Test      | Auto     | ITC-Company-Testing | ASC		     | 0355025511 	| 400			 | Password does not meet strength requirements. |
+			| A004 | empty passowrd and valid /email/firstName/lastName/companyName/companyType/phone   | testauto1@gmail.com      | 		   | Test      | Auto     | ITC-Company-Testing | ASC		     | 0355025511 	| 400			 | Password does not meet strength requirements. |

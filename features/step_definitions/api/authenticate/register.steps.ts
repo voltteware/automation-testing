@@ -1,7 +1,7 @@
 import { When, Then, Given } from '@cucumber/cucumber';
 import { expect } from '@playwright/test';
 import * as registerRequest from '../../../../src/api/request/register.service';
-import * as deleteRequest from '../../../../src/api/request/administration.service';
+import * as adminRequest from '../../../../src/api/request/administration.service';
 import logger from '../../../../src/Logger/logger';
 import { Links } from '../../../../src/utils/links';
 
@@ -30,10 +30,18 @@ When('User sets request body with payload as firstName: {string} and lastName: {
 Then('User sends a POST method to register account', async function () {
   this.response = await registerRequest.sendPOSTRegisterRequest(this.request, link, this.payload);
   if (this.response.status() == 201) {
-    const responseHeaders = this.response.headers();
-    this.cookie = responseHeaders['set-cookie'];
-    console.log('Cookie----------', this.cookie)
+    // const responseHeaders = this.response.headers();
+    // this.cookie = responseHeaders['set-cookie'];
+    // console.log('Cookie----------', this.cookie)
     this.responseBody = JSON.parse(await this.response.text())
     registerResponseBody = this.responseBody;
   }
+})
+
+Then('User sends a DELETE method to delete user just created', async function () {
+  const options = {
+    headers: this.headers
+  }
+  const email = registerResponseBody.userId;
+  this.response = await adminRequest.deleteUser(this.request, Links.API_ADMIN_DELETE_USER, email, options);
 })

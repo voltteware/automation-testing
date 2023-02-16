@@ -1,6 +1,7 @@
 import { APIRequestContext, Browser } from "@playwright/test";
 import logger from '../../Logger/logger';
-async function sendDELETEUserRequest(request: APIRequestContext, linkApi:string, email:string, options?: object) {
+// Delete user
+async function deleteUser(request: APIRequestContext, linkApi:string, email:string, options?: object) {
     const url = `${linkApi}${email}`;
     logger.log('info',`Send DELETE request ${url}`);
     return await request.delete(url, options);
@@ -18,7 +19,7 @@ async function getUser(request: APIRequestContext, linkApi:string, options?: obj
     return await request.get(url, options);
 }
 export {
-    sendDELETEUserRequest,
+    deleteUser,
     getCompanies,
     getUser
 }
