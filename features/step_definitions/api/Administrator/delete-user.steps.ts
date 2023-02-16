@@ -99,9 +99,12 @@ Then('Check email exist in the system, if it does not exist will create user wit
         const options = {
             headers: this.cookieLogin
         }
-        getUsersResponse = await adminRequest.getUser(this.request, Links.API_ADMIN_GET_USER, options);
+
+        const endPointToGet100LatestUser = `${Links.API_ADMIN_GET_USER}offset=0&limit=100&sort=%5B%7B%22field%22:%22createdAt%22,%22direction%22:%22desc%22%7D%5D&where=%7B%22logic%22:%22and%22,%22filters%22:%5B%5D%7D`
+        getUsersResponse = await adminRequest.getUser(this.request, endPointToGet100LatestUser, options);
         if (getUsersResponse.status() == 200) {
             getUsersResponseBody = JSON.parse(await getUsersResponse.text());
+            expect(await getUsersResponseBody.length).toEqual(100);
         }
     }
 })

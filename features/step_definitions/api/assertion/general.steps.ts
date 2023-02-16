@@ -23,7 +23,8 @@ Then('{} has valid connect.sid of {} after send a POST request with payload as e
     this.authenticateResponseBody = this.responseBody
 })
 
-Then('user sends a POST login request to get valid cookie', async function (dataTable: DataTable) {
+Then('user sends a POST login request to get valid cookie with role', async function (dataTable: DataTable) {
+    var role: string = dataTable.hashes()[0].role
     var username: string = dataTable.hashes()[0].username
     var password: string = dataTable.hashes()[0].password
 
