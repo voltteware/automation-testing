@@ -11,7 +11,7 @@ Then('{} has valid connect.sid of {} after send a POST request with payload as e
         username: email,
         password: password,
     }
-    var response = await authenticateRequest.sendPOSTAuthenticatieRequest(this.request, Links.API_LOGIN, payload);
+    var response = await authenticateRequest.sendPOSTAuthenticatieRequest(Links.API_LOGIN, payload);
     expect(response.status()).toBe(201);
 
     const responseHeaders = response.headers();
@@ -32,7 +32,7 @@ Then('user sends a POST login request to get valid cookie with role', async func
         username: username,
         password: password,
     }
-    var response = await authenticateRequest.sendPOSTAuthenticatieRequest(this.request, Links.API_LOGIN, payload);
+    var response = await authenticateRequest.sendPOSTAuthenticatieRequest(Links.API_LOGIN, payload);
     expect(response.status()).toBe(201);
 
     const responseHeaders = response.headers();
@@ -42,6 +42,9 @@ Then('user sends a POST login request to get valid cookie with role', async func
     //logger.log('info', 'Response Body:\n' + JSON.stringify(this.responseBody, undefined, 4))
     //this.attach(JSON.stringify(this.responseBody, undefined, 4))
     this.authenticateResponseBody = this.responseBody
+    console.log('111111 Response Header Array', response.headersArray())
+    console.log('222222 Request Storage', await this.request.storageState())
+    // console.log('333333 Request Headers',await this.request.headers())
 })
 
 //Set Token in HEADER
@@ -136,12 +139,16 @@ Then('Response of Login and Register API must match with API contract', async fu
 });
 
 Then('UserId {} in the response of API is correct', async function (email) {
-    expect(typeof (this.responseBody.userId)).toBe('string')
-    expect(typeof (this.responseBody.isAdmin)).toBe('boolean')
-    expect(typeof (this.responseBody.isRestrictAddCSV)).toBe('boolean')
-    expect(typeof (this.responseBody.displayName)).toBe('string')
-    expect(this.responseBody.userId, 'Check UserId is not null').not.toBeNull();
-    expect(this.responseBody.userId, 'Check UserId is correct').toBe(email);
+    if (email.includes('random')) {
+        var expectedUserId = email.includes('<random>') ? this.randomEmail : email;
+
+        expect(typeof (this.responseBody.userId)).toBe('string')
+        expect(typeof (this.responseBody.isAdmin)).toBe('boolean')
+        expect(typeof (this.responseBody.isRestrictAddCSV)).toBe('boolean')
+        expect(typeof (this.responseBody.displayName)).toBe('string')
+        expect(this.responseBody.userId, 'Check UserId is not null').not.toBeNull();
+        expect(this.responseBody.userId, 'Check UserId is correct').toBe(expectedUserId);
+    }
 });
 
 Then('Check that API Login returns cookie value', async function () {

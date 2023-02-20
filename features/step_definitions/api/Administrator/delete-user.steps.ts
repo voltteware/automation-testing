@@ -43,14 +43,14 @@ Then('Check email exist in the system, if it does not exist will create user wit
             email: 'testauto@gmail.com',
             password: 'Test1111!',
         }
-        this.registerResponse = await registerRequest.sendPOSTRegisterRequest(this.request, Links.API_REGISTER, this.payload);
+        this.registerResponse = await registerRequest.sendPOSTRegisterRequest(Links.API_REGISTER, this.payload);
         this.registerResponseBody = JSON.parse(await this.registerResponse.text())
         // Login Admin after check
         this.payloadLogin = {
             username: 'may27pre@gmail.com',
             password: 'Test1111!',
         }
-        this.loginResponse = await authenticateRequest.sendPOSTAuthenticatieRequest(this.request, Links.API_LOGIN, this.payloadLogin);
+        this.loginResponse = await authenticateRequest.sendPOSTAuthenticatieRequest(Links.API_LOGIN, this.payloadLogin);
         if (this.loginResponse.status() == 201) {
             const responseHeaders = this.loginResponse.headers();
             this.cookieLogin = responseHeaders['set-cookie'];
@@ -82,14 +82,14 @@ Then('Check email exist in the system, if it does not exist will create user wit
             email: email,
             password: 'Test1111!',
         }
-        this.registerResponse = await registerRequest.sendPOSTRegisterRequest(this.request, Links.API_REGISTER, this.payload);
+        this.registerResponse = await registerRequest.sendPOSTRegisterRequest(Links.API_REGISTER, this.payload);
         this.registerResponseBody = JSON.parse(await this.registerResponse.text())
         // Login Admin after check
         this.payloadLogin = {
             username: 'may27pre@gmail.com',
             password: 'Test1111!',
         }
-        this.loginResponse = await authenticateRequest.sendPOSTAuthenticatieRequest(this.request, Links.API_LOGIN, this.payloadLogin);
+        this.loginResponse = await authenticateRequest.sendPOSTAuthenticatieRequest(Links.API_LOGIN, this.payloadLogin);
         if (this.loginResponse.status() == 201) {
             const responseHeaders = this.loginResponse.headers();
             this.cookieLogin = responseHeaders['set-cookie'];
@@ -130,12 +130,18 @@ Then('{} filters user to get user which has the email as {}', async function (ac
 //     deleteUsersResponseBody = JSON.parse(await this.response.text());
 // })
 
-Then('{} sends a DELETE method to delete user {}', async function (actor, expectedEmail: string) {
+Then('{} sends a DELETE method to delete user {}', async function (actor, email: string) {
     const options = {
         headers: this.headers
     }
-    // Check if user does not provide expectedEmail => Use email get from selectedUser.userId
-    var emailWantToDelete = expectedEmail != '' ? expectedEmail : selectedUser.userId;
+
+    var emailWantToDelete;
+    if (email == '') {
+        emailWantToDelete = selectedUser.userId;
+    }
+    else if (email != '') {
+        emailWantToDelete = email.includes('random') ? this.randomEmail : email;
+    }
 
     this.response = await adminRequest.deleteUser(this.request, Links.API_ADMIN_DELETE_USER, emailWantToDelete, options);
     deleteUsersResponseBody = JSON.parse(await this.response.text());
