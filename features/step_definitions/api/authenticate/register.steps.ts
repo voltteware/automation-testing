@@ -9,26 +9,31 @@ let link: any;
 let registerResponseBody: any;
 
 Given('User sets POST register service api endpoint', function () {
-    link = Links.API_REGISTER;
-    logger.log('info', `Link API: ${link}`)
+  link = Links.API_REGISTER;
+  logger.log('info', `Link API: ${link}`)
 });
 
 When('User sets request body with payload as firstName: {string} and lastName: {string} and companyName: {string} and companyType: {string} and phone: {string} and email: {string} and password: {string}',
- async function (firstName: string, lastName: string, companyName: string, companyType: string, phone: string, email: string, password: string) {
-  this.payload = {
-    firstName: firstName,
-    lastName: lastName,
-    companyName: companyName,
-    companyType: companyType,
-    phone: phone,
-    email: email,
-    password: password,
-  }
-  this.attach(`Payload: ${JSON.stringify(this.payload, undefined, 4)}`)
-});
+  async function (firstName: string, lastName: string, companyName: string, companyType: string, phone: string, email: string, password: string) {
+    this.randomEmail = email;
+    if (email.includes('<random>')) {
+      this.randomEmail = email.replace('<random>', Date.now().toString())
+    }
+
+    this.payload = {
+      firstName: firstName,
+      lastName: lastName,
+      companyName: companyName,
+      companyType: companyType,
+      phone: phone,
+      email: this.randomEmail,
+      password: password,
+    }
+    this.attach(`Payload: ${JSON.stringify(this.payload, undefined, 4)}`)
+  });
 
 Then('User sends a POST method to register account', async function () {
-  this.response = await registerRequest.sendPOSTRegisterRequest(this.request, link, this.payload);
+  this.response = await registerRequest.sendPOSTRegisterRequest(link, this.payload);
   if (this.response.status() == 201) {
     const responseHeaders = this.response.headers();
     this.cookie = responseHeaders['set-cookie'];
