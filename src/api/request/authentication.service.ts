@@ -11,9 +11,6 @@ async function sendPOSTAuthenticatieRequest(url: string, payLoad: any) {
     const authenticateResponse = await loginContext.post(url, {
         data: payLoad,
     });
-    console.log('111111',await loginContext.storageState())
-    console.log('222222',authenticateResponse.headersArray())
-    console.log('333333',authenticateResponse.headers())
     return authenticateResponse
 }
 //API Reset Password

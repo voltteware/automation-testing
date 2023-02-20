@@ -20,18 +20,8 @@ Then(`{} sets DELETE api endpoint to delete user keys`, async function (actor: s
     link = Links.API_ADMIN_DELETE_USER;
 });
 
-Then(`{} send request GET to get users keys`, async function (actor: string) {
-    const options = {
-        headers: this.headers
-    }
-    getUsersResponse = await adminRequest.getUser(this.request, Links.API_ADMIN_GET_USER, options);
-    if (getUsersResponse.status() == 200) {
-        getUsersResponseBody = JSON.parse(await getUsersResponse.text());
-    }
-});
-
 Then('Check email exist in the system, if it does not exist will create user with email <testauto@gmail.com>', async function () {
-    allUser = arrayHelper.flattenArray(getUsersResponseBody, 'data');
+    allUser = arrayHelper.flattenArray(this.get100LatestUsersResponseBody, 'data');
     const foundUser = allUser.find((element: { userId: any; }) => element.userId === `testauto@gmail.com`);
     if (typeof foundUser == 'undefined') {
         this.payload = {
@@ -58,11 +48,13 @@ Then('Check email exist in the system, if it does not exist will create user wit
         }
         //Get list users after register 
         const options = {
-            headers: this.cookieLogin
+            headers: {
+                'Cookie': this.cookieLogin
+            }
         }
-        getUsersResponse = await adminRequest.getUser(this.request, Links.API_ADMIN_GET_USER, options);
-        if (getUsersResponse.status() == 200) {
-            getUsersResponseBody = JSON.parse(await getUsersResponse.text());
+        this.get100LatestUsersResponse = await adminRequest.getUser(this.request, Links.API_ADMIN_GET_USER, options);
+        if (this.get100LatestUsersResponse.status() == 200) {
+            this.get100LatestUsersResponseBody = JSON.parse(await this.get100LatestUsersResponse.text());
         }
     }
 })
@@ -70,7 +62,7 @@ Then('Check email exist in the system, if it does not exist will create user wit
 Then('Check email exist in the system, if it does not exist will create user with below email', async function (dataTable: DataTable) {
     var email: string = dataTable.hashes()[0].email
 
-    allUser = arrayHelper.flattenArray(getUsersResponseBody, 'data');
+    allUser = arrayHelper.flattenArray(this.get100LatestUsersResponseBody, 'data');
     const foundUser = allUser.find((element: { userId: any; }) => element.userId === email);
     if (typeof foundUser == 'undefined') {
         this.payload = {
@@ -97,14 +89,17 @@ Then('Check email exist in the system, if it does not exist will create user wit
         }
         //Get list users after register 
         const options = {
-            headers: this.cookieLogin
+            headers: {
+                'Cookie': this.cookieLogin
+            }
         }
 
         const endPointToGet100LatestUser = `${Links.API_ADMIN_GET_USER}offset=0&limit=100&sort=%5B%7B%22field%22:%22createdAt%22,%22direction%22:%22desc%22%7D%5D&where=%7B%22logic%22:%22and%22,%22filters%22:%5B%5D%7D`
-        getUsersResponse = await adminRequest.getUser(this.request, endPointToGet100LatestUser, options);
-        if (getUsersResponse.status() == 200) {
-            getUsersResponseBody = JSON.parse(await getUsersResponse.text());
-            expect(await getUsersResponseBody.length).toEqual(100);
+        this.get100LatestUsersResponse = await adminRequest.getUser(this.request, endPointToGet100LatestUser, options);
+        if (this.get100LatestUsersResponse.status() == 200) {
+            this.get100LatestUsersResponseBody = JSON.parse(await this.get100LatestUsersResponse.text());
+            expect(await this.get100LatestUsersResponseBody.length).toEqual(100);
+            expect(this.get100LatestUsersResponseBody.map((user:any)=> user.userId)).toContain(email);
         }
     }
 })
@@ -116,9 +111,9 @@ Then('Check email exist in the system, if it does not exist will create user wit
 // })
 
 Then('{} filters user to get user which has the email as {}', async function (actor, expectedEmail: string) {
-    selectedUser = await getUsersResponseBody.find((us: any) => us.userId == expectedEmail)
-    logger.log('info', `Response Body before filter: ${JSON.stringify(selectedUser, undefined, 4)}`);
-    this.attach(`Response Body before filter: ${JSON.stringify(selectedUser, undefined, 4)}`);
+    selectedUser = await this.get100LatestUsersResponseBody.find((us: any) => us.userId == expectedEmail)
+    logger.log('info', `Response Body before filter: ${JSON.stringify(selectedUser.userId, undefined, 4)}`);
+    this.attach(`Response Body before filter: ${JSON.stringify(selectedUser.userId, undefined, 4)}`);
 })
 
 // Then('{} sends a DELETE method to delete user', async function (actor: string) {

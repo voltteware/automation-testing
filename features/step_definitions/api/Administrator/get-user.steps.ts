@@ -8,19 +8,19 @@ import _ from "lodash";
 let randomUser: any;
 let link: any;
 
-Then(`{} sets GET api endpoint to get user keys`, async function (actor: string) {
-    link = Links.API_ADMIN_GET_USER;
+Then(`{} sets GET api endpoint to get 100 users has just created`, async function (actor: string) {
+    link = `${Links.API_ADMIN_GET_USER}offset=0&limit=100&sort=%5B%7B%22field%22:%22createdAt%22,%22direction%22:%22desc%22%7D%5D&where=%7B%22logic%22:%22and%22,%22filters%22:%5B%5D%7D`;
 });
 
-Then('{} sends a GET request to get user keys', async function (actor: string) {
+Then('{} sends a GET request to get 100 latest users', async function (actor: string) {
     const options = {
         headers: this.headers
     }
-    this.response = await userRequest.getUser(this.request, link, options);
+    this.get100LatestUsersResponse = this.response = await userRequest.getUser(this.request, link, options);
     if (this.response.status() == 200) {
-        this.responseBody = JSON.parse(await this.response.text());
-        logger.log('info', `Response GET ${Links.API_ADMIN_GET_USER}` + JSON.stringify(this.responseBody, undefined, 4));
-        this.attach(`Response GET ${Links.API_ADMIN_GET_USER}` + JSON.stringify(this.responseBody, undefined, 4))
+        this.get100LatestUsersResponseBody = this.responseBody = JSON.parse(await this.response.text());
+        // logger.log('info', `Response GET ${Links.API_ADMIN_GET_USER}` + JSON.stringify(this.responseBody.userId, undefined, 4));
+        // this.attach(`Response GET ${Links.API_ADMIN_GET_USER}` + JSON.stringify(this.responseBody.userId, undefined, 4))
     }
 })
 

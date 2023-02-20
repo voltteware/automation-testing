@@ -18,8 +18,8 @@ Then('{} sends a GET request to get companies keys', async function (actor: stri
     this.response = await companiesRequest.getCompanies(this.request, link, options);
     if (this.response.status() == 200) {
         this.responseBody = JSON.parse(await this.response.text());
-        logger.log('info', `Response GET ${Links.API_ADMIN_GET_COMPANIES}` + JSON.stringify(this.responseBody, undefined, 4));
-        this.attach(`Response GET ${Links.API_ADMIN_GET_COMPANIES}` + JSON.stringify(this.responseBody, undefined, 4))
+        // logger.log('info', `Response GET ${Links.API_ADMIN_GET_COMPANIES}` + JSON.stringify(this.responseBody, undefined, 4));
+        // this.attach(`Response GET ${Links.API_ADMIN_GET_COMPANIES}` + JSON.stringify(this.responseBody, undefined, 4))
     }
 })
 

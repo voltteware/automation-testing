@@ -42,9 +42,6 @@ Then('user sends a POST login request to get valid cookie with role', async func
     //logger.log('info', 'Response Body:\n' + JSON.stringify(this.responseBody, undefined, 4))
     //this.attach(JSON.stringify(this.responseBody, undefined, 4))
     this.authenticateResponseBody = this.responseBody
-    console.log('111111 Response Header Array', response.headersArray())
-    console.log('222222 Request Storage', await this.request.storageState())
-    // console.log('333333 Request Headers',await this.request.headers())
 })
 
 //Set Token in HEADER

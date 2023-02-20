@@ -11,9 +11,6 @@ async function sendPOSTRegisterRequest(url: string, payLoad: any) {
     const registerResponse = await registerContext.post(url, {
         data: payLoad,
     });
-    console.log('111111', await registerContext.storageState())
-    console.log('222222', registerResponse.headersArray())
-    console.log('333333', registerResponse.headers())
     return registerResponse
 }
 

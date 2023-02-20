@@ -38,9 +38,6 @@ Then('User sends a POST method to register account', async function () {
     const responseHeaders = this.response.headers();
     this.cookie = responseHeaders['set-cookie'];
     console.log('Cookie----------', this.cookie)
-    console.log('111111 Response Header Array', await this.response.headersArray())
-    console.log('222222 Request Storage', await this.request.storageState())
-    // console.log('333333 Request Headers',await this.request.headers())
     this.responseBody = JSON.parse(await this.response.text())
     registerResponseBody = this.responseBody;
   }

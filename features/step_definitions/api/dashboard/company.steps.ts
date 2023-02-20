@@ -21,8 +21,8 @@ Then('{} sends a GET request to get company keys', async function (actor: string
     this.getRealmResponse = this.response = await companyRequest.getRealm(this.request, link, options);
     if (this.getRealmResponse.status() == 200) {
         this.getRealmResponseBody = JSON.parse(await this.getRealmResponse.text());
-        logger.log('info', `Response GET ${Links.API_REALM}` + JSON.stringify(this.getRealmResponseBody, undefined, 4));
-        this.attach(`Response GET ${Links.API_REALM}` + JSON.stringify(this.getRealmResponseBody, undefined, 4))
+        // logger.log('info', `Response GET ${Links.API_REALM}` + JSON.stringify(this.getRealmResponseBody, undefined, 4));
+        // this.attach(`Response GET ${Links.API_REALM}` + JSON.stringify(this.getRealmResponseBody, undefined, 4))
     }
 })
 
