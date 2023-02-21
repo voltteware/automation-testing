@@ -26,7 +26,7 @@ Feature: API_Admin DELETE/User
             | admin | testauto@gmail.com | 200            | OK                 |
 
     #Bug API in case DU002
-    @DU002
+    @DU002 @bug-permission
     Scenario Outline: DU002 - Verify error when user sends this API with <cookie> cookie
 
         # Given User filters user to get user which he has the email
@@ -43,7 +43,7 @@ Feature: API_Admin DELETE/User
             | may27user@gmail.com | invalid | 401            | Unauthorized       |
 
     #Bug API in case DU003
-    @DU003
+    @DU003 @bug-permission
     Scenario Outline: DU003 - Verify <user> can't call this API to delete user
         # Given User filters user to get user which he has the email
         Given User filters user to get user which has the email as <emailWantToDelete>

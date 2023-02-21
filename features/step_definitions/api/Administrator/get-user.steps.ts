@@ -17,10 +17,15 @@ Then('{} sends a GET request to get 100 latest users', async function (actor: st
         headers: this.headers
     }
     this.get100LatestUsersResponse = this.response = await userRequest.getUser(this.request, link, options);
-    if (this.response.status() == 200) {
+    const responseBodyText = await this.get100LatestUsersResponse.text();
+    if (this.get100LatestUsersResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
         this.get100LatestUsersResponseBody = this.responseBody = JSON.parse(await this.response.text());
         // logger.log('info', `Response GET ${Links.API_ADMIN_GET_USER}` + JSON.stringify(this.responseBody.userId, undefined, 4));
         // this.attach(`Response GET ${Links.API_ADMIN_GET_USER}` + JSON.stringify(this.responseBody.userId, undefined, 4))
+    }
+    else if (responseBodyText.includes('<!doctype html>')) {
+        logger.log('info', `Response GET ${Links.API_ADMIN_GET_USER} ${responseBodyText}`);
+        this.attach(`Response GET ${Links.API_ADMIN_GET_USER} returns html`)
     }
 })
 
@@ -34,7 +39,7 @@ Then('{} checks data type of values in random user object are correct', async fu
     //Check userId 
     expect(typeof (randomUser.userId), 'Type of userId value should be string').toBe("string");
     //Check password 
-    if(randomUser.password !== null){
+    if (randomUser.password !== null) {
         expect(typeof (randomUser.password), 'Type of password value should be string').toBe("string");
     }
     else {
@@ -71,14 +76,14 @@ Then('{} checks data type of values in random user object are correct', async fu
     //Check gridStatePoSaved
     expect(typeof (randomUser.gridStatePoSaved), 'Type of gridStatePoSaved value should be object').toBe("object");
     //Check resetPasswordToken
-    if(randomUser.resetPasswordToken !== null){
+    if (randomUser.resetPasswordToken !== null) {
         expect(typeof (randomUser.resetPasswordToken), 'Type of resetPasswordToken value should be string').toBe("string");
     }
     else {
         expect(randomUser.resetPasswordToken, 'resetPasswordToken value should be null').toBeNull();
     }
     //Check resetPasswordExpires
-    if(randomUser.resetPasswordExpires !== null){
+    if (randomUser.resetPasswordExpires !== null) {
         expect(typeof (randomUser.resetPasswordExpires), 'Type of resetPasswordExpires value should be string').toBe("string");
     }
     else {
@@ -87,14 +92,14 @@ Then('{} checks data type of values in random user object are correct', async fu
     //Check preferences
     expect(typeof (randomUser.preferences), 'Type of preferences value should be object').toBe("object");
     //Check addRequest
-    if(randomUser.addRequest !== null){
+    if (randomUser.addRequest !== null) {
         expect(typeof (randomUser.addRequest), 'Type of addRequest value should be object').toBe("object");
     }
     else {
         expect(randomUser.addRequest, 'addRequest value should be null').toBeNull();
     }
     //Check acceptedPrivacyPolicy
-    if(randomUser.acceptedPrivacyPolicy !== null){
+    if (randomUser.acceptedPrivacyPolicy !== null) {
         expect(typeof (randomUser.acceptedPrivacyPolicy), 'Type of acceptedPrivacyPolicy value should be boolean').toBe("boolean");
     }
     else {

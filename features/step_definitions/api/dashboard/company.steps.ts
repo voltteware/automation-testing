@@ -19,10 +19,15 @@ Then('{} sends a GET request to get company keys', async function (actor: string
         headers: this.headers
     }
     this.getRealmResponse = this.response = await companyRequest.getRealm(this.request, link, options);
-    if (this.getRealmResponse.status() == 200) {
+    const responseBodyText = await this.getRealmResponse.text();
+    if (this.getRealmResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
         this.getRealmResponseBody = JSON.parse(await this.getRealmResponse.text());
         // logger.log('info', `Response GET ${Links.API_REALM}` + JSON.stringify(this.getRealmResponseBody, undefined, 4));
         // this.attach(`Response GET ${Links.API_REALM}` + JSON.stringify(this.getRealmResponseBody, undefined, 4))
+    }
+    else if (responseBodyText.includes('<!doctype html>')) {
+        logger.log('info', `Response GET ${Links.API_REALM} ${responseBodyText}`);
+        this.attach(`Response GET ${Links.API_REALM} returns html`)
     }
 })
 
@@ -79,11 +84,17 @@ When(`{} sends a GET request to get company information of {} by company key`, a
     const options = {
         headers: this.headers
     }
-    // console.log(this.request.headers())
+
     this.getCompanyInfoResponse = this.response = await companyRequest.getCompanyInfo(this.request, link, options);
-    if (this.response.status() == 200) {
+    const responseBodyText = await this.getCompanyInfoResponse.text();
+    if (this.response.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
         this.responseBodyOfACompanyObject = JSON.parse(await this.getCompanyInfoResponse.text());
         logger.log('info', `Response GET ${link}` + JSON.stringify(this.responseBodyOfACompanyObject, undefined, 4));
         this.attach(`Response GET ${link}` + JSON.stringify(this.responseBodyOfACompanyObject, undefined, 4))
     }
+    else if (responseBodyText.includes('<!doctype html>')) {
+        logger.log('info', `Response GET ${link} ${responseBodyText}`);
+        this.attach(`Response GET ${link} returns html`)
+    }
+
 })

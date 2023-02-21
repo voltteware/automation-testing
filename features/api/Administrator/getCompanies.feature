@@ -16,7 +16,7 @@ Feature: API_Admin GET/Companies
             | admin | may27pre@gmail.com | Test1111! | 200            |
 
     #BUG API
-    @COMPANIES002
+    @COMPANIES002 @bug-permission
     Scenario Outline: COMPANIES002 - Verify <email> can't call this API to get all companies
         Given User has valid connect.sid of "<user>" after send a POST request with payload as email: "<email>" and password: "<password>"
         And User sets GET api endpoint to get companies keys
@@ -29,7 +29,7 @@ Feature: API_Admin GET/Companies
             | user | may27user@gmail.com | Test1111! | 401            | Unauthorized       |
 
     #BUG API
-    @COMPANIES003
+    @COMPANIES003 @bug-permission
     Scenario Outline: COMPANIES003 - Verify error when user sends this API with <cookie> cookie
         Given User sets GET api endpoint to get companies keys
         But User sets Cookie in HEADER as <cookie>
