@@ -24,7 +24,7 @@ Feature: API_Dashboard GET /api/company/company key
             | admin | may27pre@gmail.com | Test1111! | random     | 200            |
 
     # (Bug API) TC_C002_3 & TC_C002_4 Still return 200 even company Key and Type is invalid. Always 200 if cookie is valid => Incorrect
-    @TC_C002
+    @TC_C002 @bug-permission
     Scenario Outline: <scenario> - Verify error when user sends this API with <cookie> cookie, <companyKeyHeader> companyKey, <companyTypeHeader> companyType value in header
         Given she sets GET api endpoint to get information of a company belongs to <email> using company key <companyKey>
         But she sets <cookie> cookie of <email> and <companyKeyHeader> companyKey and <companyTypeHeader> companyType in the header

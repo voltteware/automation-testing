@@ -16,10 +16,15 @@ Then('{} sends a GET request to get companies keys', async function (actor: stri
         headers: this.headers
     }
     this.response = await companiesRequest.getCompanies(this.request, link, options);
-    if (this.response.status() == 200) {
+    const responseBodyText = await this.response.text();
+    if (this.response.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
         this.responseBody = JSON.parse(await this.response.text());
         // logger.log('info', `Response GET ${Links.API_ADMIN_GET_COMPANIES}` + JSON.stringify(this.responseBody, undefined, 4));
         // this.attach(`Response GET ${Links.API_ADMIN_GET_COMPANIES}` + JSON.stringify(this.responseBody, undefined, 4))
+    }
+    else if (responseBodyText.includes('<!doctype html>')) {
+        logger.log('info', `Response GET ${Links.API_ADMIN_GET_COMPANIES} ${responseBodyText}`);
+        this.attach(`Response GET ${Links.API_ADMIN_GET_COMPANIES} returns html`)
     }
 })
 
