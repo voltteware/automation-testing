@@ -7,9 +7,20 @@ import { faker } from '@faker-js/faker';
 import _ from "lodash";
 
 let link: any;
-let payload: { name?: string, description?: string, email?: string, moq?: Number, leadTime?: Number, orderInterval?: Number, serviceLevel?: Number } = {}
+let payload: {
+    name?: string,
+    description?: string,
+    email?: string,
+    moq?: Number,
+    leadTime?: Number,
+    orderInterval?: Number,
+    serviceLevel?: Number,
+    targetOrderValue?: Number,
+    freeFreightMinimum?: Number,
+    restockModel?: string,
+} = {}
 
-Then(`{} sets POST api endpoint to create suppliers keys`, async function (actor: string) {
+Then(`{} sets POST api endpoint to create suppliers`, async function (actor: string) {
     link = Links.API_CREATE_SUPPLIERS;
 });
 
@@ -24,6 +35,23 @@ Then('{} sets request body with payload as name: {string} and description: {stri
         payload.leadTime = leadTime;
         payload.orderInterval = orderInterval;
         payload.serviceLevel = serviceLevel;
+        this.attach(`Payload: ${JSON.stringify(payload, undefined, 4)}`)
+    });
+
+Then('{} sets request body with payload as name: {string} and description: {string} and email: {string} and moq: {int} and leadTime: {int} and orderInterval: {int} and serviceLevel: {int} and targetOrderValue: {int} and freeFreightMinimum: {int} and restockModel: {string}',
+    async function (actor, name, description, email: string, moq, leadTime, orderInterval, serviceLevel, targetOrderValue, freeFreightMinimum: Number, restockModel: string) {
+        if (name.includes('New Supplier Auto')) {
+            payload.name = `supplier auto ${faker.lorem.words(2)}`;
+        }
+        payload.description = description;
+        payload.email = email;
+        payload.moq = moq;
+        payload.leadTime = leadTime;
+        payload.orderInterval = orderInterval;
+        payload.serviceLevel = serviceLevel;
+        payload.targetOrderValue = targetOrderValue;
+        payload.freeFreightMinimum = freeFreightMinimum;
+        payload.restockModel = restockModel;
         this.attach(`Payload: ${JSON.stringify(payload, undefined, 4)}`)
     });
 
@@ -46,8 +74,8 @@ Then('{} sends a POST method to create supplier', async function (actor: string)
     console.log(responseBodyText);
     if (this.createSupplierResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
         this.responseBodyOfASupplierObject = JSON.parse(responseBodyText)
-        logger.log('info', `Response POST ${link}` + JSON.stringify(this.responseBodyOfACompanyObject, undefined, 4));
-        this.attach(`Response POST ${link}` + JSON.stringify(this.responseBodyOfACompanyObject, undefined, 4))
+        logger.log('info', `Response POST ${link}` + JSON.stringify(this.responseBodyOfASupplierObject, undefined, 4));
+        this.attach(`Response POST ${link}` + JSON.stringify(this.responseBodyOfASupplierObject, undefined, 4))
     }
     else if (responseBodyText.includes('<!doctype html>')) {
         logger.log('info', `Response POST ${link} ${responseBodyText}`);
@@ -85,5 +113,16 @@ Then('{} checks values in response of create supplier are correct', async functi
     expect(this.responseBodyOfASupplierObject.leadTime, `In response body, leadTime should be matched with the data request: ${expectedSupplierLeadTime}`).toBe(expectedSupplierLeadTime);
     expect(this.responseBodyOfASupplierObject.orderInterval, `In response body, orderInterval should be matched with the data request: ${expectedSupplierOrderInterval}`).toBe(expectedSupplierOrderInterval);
     expect(this.responseBodyOfASupplierObject.serviceLevel, `In response body, serviceLevel should be matched with the data request: ${expectedSupplierserviceLevel}`).toBe(expectedSupplierserviceLevel);
+    if (payload.targetOrderValue) {
+        expect(this.responseBodyOfASupplierObject.targetOrderValue, `In response body, targetOrderValue should be matched with the data request: ${payload.targetOrderValue}`).toBe(payload.targetOrderValue);
+    }
+
+    if (payload.freeFreightMinimum) {
+        expect(this.responseBodyOfASupplierObject.freeFreightMinimum, `In response body, freeFreightMinimum should be matched with the data request: ${payload.freeFreightMinimum}`).toBe(payload.freeFreightMinimum);
+    }
+
+    if (payload.restockModel) {
+        expect(this.responseBodyOfASupplierObject.restockModel, `In response body, restockModel should be matched with the data request: ${payload.restockModel}`).toBe(payload.restockModel);
+    }
 })
 

@@ -4,6 +4,7 @@ import * as authenticateRequest from '../../../../src/api/request/authentication
 import logger from "../../../../src/Logger/logger";
 import * as users from '../../../../src/data/users.json';
 import { Links } from "../../../../src/utils/links";
+import * as _ from "lodash";
 
 // Get Valid Token 
 Then('{} has valid connect.sid of {} after send a POST request with payload as email: {string} and password: {string}', async function (name, user: string, email: string, password: string) {
@@ -151,4 +152,22 @@ Then('UserId {} in the response of API is correct', async function (email) {
 Then('Check that API Login returns cookie value', async function () {
     console.log('Check that API Login returns cookie value-----------', this.cookie);
     expect(this.cookie, 'Check cookie exists').not.toBeNull();
+});
+
+Then('Check total items in the response should be less than or equal {}', async function (limitRow: string) {
+    const actualLength = await this.responseBody.length;
+    const expectLength = Number(limitRow);
+    expect(actualLength, `Check total items in the response should be less than or equal ${limitRow}`).toBeLessThanOrEqual(expectLength);
+});
+
+Then('Check items in the response should be sort by field {} with direction {}', async function (sortField, direction: string) {
+    if (direction == 'asc') {
+        const ascList = _.orderBy(this.responseBody, [`${sortField}`], ['asc'])
+        const expectedList = this.responseBody;
+        expect(this.responseBody, `Check items in the response should be sort by field ${sortField} with direction ${direction}`).toStrictEqual(ascList);
+    }
+    else if (direction == 'desc') {
+        const descList = _.orderBy(this.responseBody, [`${sortField}`], ['desc'])
+        expect(this.responseBody, `Check items in the response should be sort by field ${sortField} with direction ${direction}`).toStrictEqual(descList);
+    }
 });
