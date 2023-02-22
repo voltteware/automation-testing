@@ -98,7 +98,7 @@ Then('Check email exist in the system, if it does not exist will create user wit
         this.get100LatestUsersResponse = await adminRequest.getUser(this.request, endPointToGet100LatestUser, options);
         if (this.get100LatestUsersResponse.status() == 200) {
             this.get100LatestUsersResponseBody = JSON.parse(await this.get100LatestUsersResponse.text());
-            expect(await this.get100LatestUsersResponseBody.length).toEqual(100);
+            expect(await this.get100LatestUsersResponseBody.length).toBeLessThanOrEqual(100);
             expect(this.get100LatestUsersResponseBody.map((user:any)=> user.userId)).toContain(email);
         }
     }

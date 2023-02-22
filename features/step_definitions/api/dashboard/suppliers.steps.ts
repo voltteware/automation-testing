@@ -13,6 +13,10 @@ Then(`{} sets GET api endpoint to get suppliers keys`, async function (actor: st
     link = Links.API_SUPPLIERS;
 });
 
+Then(`{} sets GET api endpoint to get suppliers keys with limit row: {} and sort field: {} with direction: {}`, async function (actor, limitRow, sortField, direction: string) {
+    link = `${Links.API_SUPPLIERS}?offset=0&limit=${limitRow}&sort=%5B%7B%22field%22:%22${sortField}%22,%22direction%22:%22${direction}%22%7D%5D&where=%7B%22logic%22:%22and%22,%22filters%22:%5B%5D%7D`;
+});
+
 Then(`{} sends a GET request to get suppliers information of {} by company key and company type`, async function (actor, email: string) {
     const options = {
         headers: this.headers
@@ -20,9 +24,9 @@ Then(`{} sends a GET request to get suppliers information of {} by company key a
     this.getSupplierResponse = this.response = await supplierRequest.getSuppliers(this.request, link, options);
     const responseBodyText = await this.getSupplierResponse.text();
     if (this.getSupplierResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
-        this.getSupplierResponseBody = JSON.parse(await this.getSupplierResponse.text());
-        logger.log('info', `Response GET ${link}` + JSON.stringify(this.getSupplierResponseBody, undefined, 4));
-        this.attach(`Response GET ${link}` + JSON.stringify(this.getSupplierResponseBody, undefined, 4))
+        this.responseBody = this.getSupplierResponseBody = JSON.parse(await this.getSupplierResponse.text());
+        // logger.log('info', `Response GET ${link}` + JSON.stringify(this.getSupplierResponseBody, undefined, 4));
+        // this.attach(`Response GET ${link}` + JSON.stringify(this.getSupplierResponseBody, undefined, 4))
     }
     else if (responseBodyText.includes('<!doctype html>')) {
         logger.log('info', `Response GET ${link} ${responseBodyText}`);
