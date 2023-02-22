@@ -77,3 +77,19 @@ Then('{} checks values in response of random supplier are correct', async functi
     expect(this.responseBodyOfASupplierObject.companyName).not.toBeNull();
 })
 
+Then('Check items in the response should be sort by field leadTime with direction {}', async function (direction: string) {
+    if (direction == 'asc') {
+        const expectedList = this.responseBody;
+        // const sortedByAsc = _.orderBy(this.responseBody, [`${sortField}`], ['asc']);
+        const sortedByAsc = _.orderBy(this.responseBody, [(o) => { return o.leadTime || '' }], ['asc']);
+
+        console.log('22222', expectedList === this.responseBody);
+        expect(expectedList, `Check items in the response should be sort by field lead time with direction ${direction}`).toStrictEqual(sortedByAsc);
+    }
+    else if (direction == 'desc') {
+        const expectedList = this.responseBody;
+        const sortedByDesc = _.orderBy(this.responseBody, [(o) => { return o.leadTime || '' }], ['desc']);
+        expect(expectedList, `Check items in the response should be sort by field lead time with direction ${direction}`).toStrictEqual(sortedByDesc);
+    }
+});
+

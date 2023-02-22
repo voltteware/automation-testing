@@ -159,15 +159,3 @@ Then('Check total items in the response should be less than or equal {}', async 
     const expectLength = Number(limitRow);
     expect(actualLength, `Check total items in the response should be less than or equal ${limitRow}`).toBeLessThanOrEqual(expectLength);
 });
-
-Then('Check items in the response should be sort by field {} with direction {}', async function (sortField, direction: string) {
-    if (direction == 'asc') {
-        const ascList = _.orderBy(this.responseBody, [`${sortField}`], ['asc'])
-        const expectedList = this.responseBody;
-        expect(this.responseBody, `Check items in the response should be sort by field ${sortField} with direction ${direction}`).toStrictEqual(ascList);
-    }
-    else if (direction == 'desc') {
-        const descList = _.orderBy(this.responseBody, [`${sortField}`], ['desc'])
-        expect(this.responseBody, `Check items in the response should be sort by field ${sortField} with direction ${direction}`).toStrictEqual(descList);
-    }
-});

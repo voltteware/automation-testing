@@ -11,8 +11,8 @@ Feature: API_Admin DELETE/User
         And Check email exist in the system, if it does not exist will create user with below email
             | email              |
             | testauto@gmail.com |
-    @DU001
-    Scenario Outline: DU001 - Verify <user> could call this API to delete a user
+    @TC_DU001
+    Scenario Outline: TC_DU001 - Verify <user> could call this API to delete a user
         # Given User filters user to get user which he has the email
         Given User filters user to get user which has the email as <emailWantToDelete>
         And In Header of the request, user sets param Cookie as valid connect.sid
@@ -26,8 +26,8 @@ Feature: API_Admin DELETE/User
             | admin | testauto@gmail.com | 200            | OK                 |
 
     #Bug API in case DU002
-    @DU002 @bug-permission
-    Scenario Outline: DU002 - Verify error when user sends this API with <cookie> cookie
+    @TC_DU002 @bug-permission
+    Scenario Outline: TC_DU002 - Verify error when user sends this API with <cookie> cookie
 
         # Given User filters user to get user which he has the email
         Given User filters user to get user which has the email as <emailWantToDelete>
@@ -43,8 +43,8 @@ Feature: API_Admin DELETE/User
             | may27user@gmail.com | invalid | 401            | Unauthorized       |
 
     #Bug API in case DU003
-    @DU003 @bug-permission
-    Scenario Outline: DU003 - Verify <user> can't call this API to delete user
+    @TC_DU003 @bug-permission
+    Scenario Outline: TC_DU003 - Verify <user> can't call this API to delete user
         # Given User filters user to get user which he has the email
         Given User filters user to get user which has the email as <emailWantToDelete>
         Then User has valid connect.sid of "<userA>" after send a POST request with payload as email: "<userA>" and password: "<password>"
