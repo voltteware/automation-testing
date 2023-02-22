@@ -22,7 +22,7 @@ var options = {
     launchReport: true,
     columnLayout: 1,
     theme: "hierarchy",
-    name: 'ForcastRx Automation',
+    name: 'ForecastRx Automation',
     metadata: {
         "Test Environment": env,
         "Sprint": process.env.SPRINT,

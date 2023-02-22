@@ -18,6 +18,21 @@ let payload: {
     targetOrderValue?: Number,
     freeFreightMinimum?: Number,
     restockModel?: string,
+    addressData?: [
+        {
+            key?: string,
+            vendorKey?: string,
+            countryCode?: string,
+            fullName?: string,
+            addressLine1?: string,
+            addressLine2?: string,
+            city?: string,
+            stateOrProvinceCode?: string,
+            postalCode?: string,
+            phoneNumber?: string
+        }
+    ],
+
 } = {}
 
 Then(`{} sets POST api endpoint to create suppliers`, async function (actor: string) {
@@ -38,20 +53,89 @@ Then('{} sets request body with payload as name: {string} and description: {stri
         this.attach(`Payload: ${JSON.stringify(payload, undefined, 4)}`)
     });
 
-Then('{} sets request body with payload as name: {string} and description: {string} and email: {string} and moq: {int} and leadTime: {int} and orderInterval: {int} and serviceLevel: {int} and targetOrderValue: {int} and freeFreightMinimum: {int} and restockModel: {string}',
-    async function (actor, name, description, email: string, moq, leadTime, orderInterval, serviceLevel, targetOrderValue, freeFreightMinimum: Number, restockModel: string) {
+Then('{} sets request body with payload as name: {string} and description: {string} and email: {string} and moq: {string} and leadTime: {string} and orderInterval: {string} and serviceLevel: {string} and targetOrderValue: {string} and freeFreightMinimum: {string} and restockModel: {string}',
+    async function (actor, name, description, email, moq, leadTime, orderInterval, serviceLevel, targetOrderValue, freeFreightMinimum, restockModel: string) {
         if (name.includes('New Supplier Auto')) {
-            payload.name = `supplier auto ${faker.lorem.words(2)}`;
+            payload.name = `${faker.lorem.words(2)} auto`;
         }
         payload.description = description;
         payload.email = email;
-        payload.moq = moq;
-        payload.leadTime = leadTime;
-        payload.orderInterval = orderInterval;
-        payload.serviceLevel = serviceLevel;
-        payload.targetOrderValue = targetOrderValue;
-        payload.freeFreightMinimum = freeFreightMinimum;
+        if (moq == 'random') {
+            payload.moq = Number(faker.datatype.number({
+                'min': 1,
+                'max': 10
+            }));
+        }
+        else {
+            payload.moq = Number(moq);
+        }
+
+        if (leadTime == 'random') {
+            payload.leadTime = Number(faker.datatype.number({
+                'min': 1,
+                'max': 365
+            }));
+        }
+        else {
+            payload.leadTime = Number(leadTime);
+        }
+
+        if (orderInterval == 'random') {
+            payload.orderInterval = Number(faker.random.numeric());
+        }
+        else {
+            payload.orderInterval = Number(orderInterval);
+        }
+
+        if (serviceLevel == 'random') {
+            payload.serviceLevel = Number(faker.random.numeric(2));
+        }
+        else {
+            payload.serviceLevel = Number(serviceLevel);
+        }
+
+        if (targetOrderValue == 'random') {
+            payload.targetOrderValue = Number(faker.random.numeric(3));
+        }
+        else {
+            payload.targetOrderValue = Number(targetOrderValue);
+        }
+
+        if (freeFreightMinimum == 'random') {
+            payload.freeFreightMinimum = Number(faker.random.numeric(3));
+        }
+        else {
+            payload.freeFreightMinimum = Number(freeFreightMinimum);
+        }
         payload.restockModel = restockModel;
+
+        this.attach(`Payload: ${JSON.stringify(payload, undefined, 4)}`)
+    });
+
+Then('{} adds address information in the payload: address {string} and city {string} and stateOrProvinceCode {string} and postalCode {string} and countryCode {string} and phoneNumber {string}',
+    async function (actor, address, city, stateOrProvinceCode, postalCode, countryCode, phoneNumber: string) {
+        if (address == 'random') {
+            payload.addressData = [
+                {
+                    countryCode: countryCode,
+                    addressLine1: faker.address.streetAddress(),
+                    city: faker.address.city(),
+                    stateOrProvinceCode: faker.address.state(),
+                    postalCode: faker.address.zipCode()
+                }
+            ]
+        }
+        else {
+            payload.addressData = [
+                {
+                    countryCode: countryCode,
+                    addressLine1: address,
+                    city: city,
+                    stateOrProvinceCode: stateOrProvinceCode,
+                    postalCode: postalCode
+                }
+            ]
+        }
         this.attach(`Payload: ${JSON.stringify(payload, undefined, 4)}`)
     });
 
