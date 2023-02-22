@@ -135,7 +135,13 @@ Then('{} checks API contract essential types in company object are correct', asy
     else {
         expect(this.responseBodyOfACompanyObject.expediteItemLines, 'expediteItemLines value should be null').toBeNull();
     }
-    expect(this.responseBodyOfACompanyObject.jobInitiator, 'Type of jobInitiator value should be null').toBeNull();
+    if (this.responseBodyOfACompanyObject.jobInitiator !== null) {
+        expect(typeof (this.responseBodyOfACompanyObject.jobInitiator), 'Type of jobInitiator value should be string').toBe("string");
+    }
+    else {
+        expect(this.responseBodyOfACompanyObject.jobInitiator, 'Type of jobInitiator value should be null').toBeNull();
+    }
+    
     expect(this.responseBodyOfACompanyObject.qbfsSyncStatus, 'Type of qbfsSyncStatus value should be null').toBeNull();
     expect(typeof (this.responseBodyOfACompanyObject.isNotifyingAfterSync), 'Type of isNotifyingAfterSync value should be boolean').toBe("boolean");
     expect(typeof (this.responseBodyOfACompanyObject.isNotifyingAfterForecast), 'Type of isNotifyingAfterForecast value should be boolean').toBe("boolean");

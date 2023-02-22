@@ -11,7 +11,7 @@ export class Links {
     static API_COMPANY: string = '/api/company/';
     static API_SUPPLIERS: string = '/api/vendor';
     static API_CREATE_SUPPLIERS: string = '/api/vendor';
-
+    static API_UPDATE_COMPANY: string = '/api/company/';
     //API Admin
     static API_ADMIN_DELETE_USER: string = '/api/admin/users/';
     static API_ADMIN_GET_COMPANIES: string = '/api/admin/companies';
