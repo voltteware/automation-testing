@@ -1,4 +1,4 @@
-@test-api @api-register
+@test-api @api-register @api-authenticate
 Feature: API /register
 
 	@TC_R001 @api-register-with-valid-payload

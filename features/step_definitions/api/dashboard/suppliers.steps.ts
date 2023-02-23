@@ -1,6 +1,6 @@
 import { When, Then, Given } from '@cucumber/cucumber';
 import { expect } from '@playwright/test';
-import * as supplierRequest from '../../../../src/api/request/company.service';
+import * as supplierRequest from '../../../../src/api/request/vendor.service';
 import * as authenticateRequest from '../../../../src/api/request/authentication.service';
 import logger from '../../../../src/Logger/logger';
 import { Links } from '../../../../src/utils/links';
@@ -35,6 +35,17 @@ Then(`{} sends a GET request to get suppliers information of {} by company key a
     }
 })
 
+Then(`{} sends a GET request to get total of suppliers`, async function (actor: string) {
+    const link = `${Links.API_SUPPLIERS}/count?where=%7B%22logic%22:%22and%22,%22filters%22:%5B%5D%7D`
+    const options = {
+        headers: this.headers
+    }
+    this.getTotalSupplierResponse = this.response = await supplierRequest.getSuppliers(this.request, link, options);
+    this.totalSupplier = await this.getTotalSupplierResponse.text();
+    logger.log('info', `Response GET ${link} has status code ${this.response.status()} ${this.response.statusText()} and response body ${this.totalSupplier}`);
+    this.attach(`Response GET ${link} has status code ${this.response.status()} ${this.response.statusText()} and response body ${this.totalSupplier}`)
+})
+
 Then('Check supplier exist in the company, if it does not exist will create supplier', async function () {
 
     if (this.getSupplierResponseBody.length < 1) {
@@ -46,7 +57,7 @@ Then('Check supplier exist in the company, if it does not exist will create supp
         this.payload = {
             name: `new supplier ${faker.lorem.words(3)}`,
         }
-        this.createSupplierResponse = await supplierRequest.createSupplier(this.request, Links.API_CREATE_SUPPLIERS, this.payload, this.headers);
+        this.createSupplierResponse = await supplierRequest.createSupplier(this.request, Links.API_SUPPLIERS, this.payload, this.headers);
         this.createSupplierResponseBody = JSON.parse(await this.createSupplierResponse.text())
         logger.log('info', `Response after create ${link}` + JSON.stringify(this.createSupplierResponseBody, undefined, 4));
         this.attach(`Response after create ${link}` + JSON.stringify(this.createSupplierResponseBody, undefined, 4))
@@ -98,3 +109,37 @@ Then('Check items in the response should be sort by field leadTime with directio
     }
 });
 
+Then('{} filters {} suppliers which has the name includes {}', async function (actor, maximumSuppliers, supplierNameKeyword: string) {
+    const suppliers = this.selectedSuppliers = await this.getSupplierResponseBody.filter((su: any) => su.name.includes(supplierNameKeyword));
+    if (maximumSuppliers != 'all') {
+        this.selectedSuppliers = suppliers.slice(0, Number(maximumSuppliers))
+    }
+    logger.log('info', `Selected ${this.selectedSuppliers.length} suppliers which has the name includes ${supplierNameKeyword}`);
+    this.attach(`Selected ${this.selectedSuppliers.length} suppliers which has the name includes ${supplierNameKeyword}`);
+})
+
+Then('{} sends a DELETE method to delete supplier', async function (actor: string) {
+    var supplierKeys = this.selectedSuppliers.map((su: any) => su.key);
+
+    var payLoad = {
+        ids: supplierKeys
+    }
+
+    logger.log('info', `Suppliers will be deleted: ${supplierKeys}`);
+    this.attach(`Suppliers will be deleted: ${supplierKeys}`);
+
+    this.response = await supplierRequest.deleteSupplier(this.request, Links.API_SUPPLIERS, payLoad, this.headers);
+})
+
+Then('{} checks the total suppliers is correct', async function (actor: string) {
+    const link = `${Links.API_SUPPLIERS}/count?where=%7B%22logic%22:%22and%22,%22filters%22:%5B%5D%7D`;
+    const options = {
+        headers: this.headers
+    }
+    const response = await supplierRequest.getSuppliers(this.request, link, options);
+    const currentTotalSuppliers = Number(await response.text());
+    const beforeTotalSuppliers = Number(this.totalSupplier);
+    logger.log('info', `Current total suppliers: ${currentTotalSuppliers}`);
+    this.attach(`Current total suppliers: ${currentTotalSuppliers}`);
+    expect(currentTotalSuppliers).toEqual(beforeTotalSuppliers - this.selectedSuppliers.length);
+})

@@ -1,4 +1,4 @@
-@test-api @api-login @demo
+@test-api @api-login @api-authenticate
 Feature: API /login
 
 	@api-login-with-valid-payload
