@@ -22,9 +22,10 @@ Then('{} sends a GET request to get companies keys', async function (actor: stri
         // logger.log('info', `Response GET ${Links.API_ADMIN_GET_COMPANIES}` + JSON.stringify(this.responseBody, undefined, 4));
         // this.attach(`Response GET ${Links.API_ADMIN_GET_COMPANIES}` + JSON.stringify(this.responseBody, undefined, 4))
     }
-    else if (responseBodyText.includes('<!doctype html>')) {
-        logger.log('info', `Response GET ${Links.API_ADMIN_GET_COMPANIES} ${responseBodyText}`);
-        this.attach(`Response GET ${Links.API_ADMIN_GET_COMPANIES} returns html`)
+    else {
+        const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
+        logger.log('info', `Response GET ${Links.API_ADMIN_GET_COMPANIES} has status code ${this.response.status()} ${this.response.statusText()} and response body ${responseBodyText}`);
+        this.attach(`Response GET ${Links.API_ADMIN_GET_COMPANIES} has status code ${this.response.status()} ${this.response.statusText()} and response body ${actualResponseText}`)
     }
 })
 

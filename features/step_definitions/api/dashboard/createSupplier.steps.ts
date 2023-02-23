@@ -161,23 +161,12 @@ Then('{} sends a POST method to create supplier', async function (actor: string)
         logger.log('info', `Response POST ${link}` + JSON.stringify(this.responseBodyOfASupplierObject, undefined, 4));
         this.attach(`Response POST ${link}` + JSON.stringify(this.responseBodyOfASupplierObject, undefined, 4))
     }
-    else if (responseBodyText.includes('<!doctype html>')) {
-        logger.log('info', `Response POST ${link} ${responseBodyText}`);
-        this.attach(`Response POST ${link} returns html`)
+    else {
+        const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
+        logger.log('info', `Response ${link} has status code ${this.response.status()} ${this.response.statusText()} and response body ${responseBodyText}`);
+        this.attach(`Response ${link} has status code ${this.response.status()} ${this.response.statusText()} and response body ${actualResponseText}`)
     }
 })
-
-// Then('{} sends a POST method to create supplier with invalid', async function (actor: string) {
-//     this.headers = {
-//         'Cookie': this.cookieHeaderValue,
-//         'COMPANY-KEY': this.companyKeyHeaderValue,
-//         'COMPANY-TYPE': this.companyTypeHeaderValue,
-//     }
-//     this.createSupplierResponse = await supplierRequest.createSupplier(this.request, link, payload, this.headers);
-//     this.responseBodyOfASupplierObject = JSON.parse(await this.createSupplierResponse.text())
-//     logger.log('info', `Response POST ${link}` + JSON.stringify(this.responseBodyOfASupplierObject, undefined, 4));
-//     this.attach(`Response POST ${link}` + JSON.stringify(this.responseBodyOfASupplierObject, undefined, 4))
-// })
 
 Then('{} checks values in response of create supplier are correct', async function (actor: string) {
     const companyType = ['ASC', 'CSV', 'QBFS', 'QBO'];

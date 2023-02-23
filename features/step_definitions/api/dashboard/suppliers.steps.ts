@@ -28,9 +28,10 @@ Then(`{} sends a GET request to get suppliers information of {} by company key a
         // logger.log('info', `Response GET ${link}` + JSON.stringify(this.getSupplierResponseBody, undefined, 4));
         // this.attach(`Response GET ${link}` + JSON.stringify(this.getSupplierResponseBody, undefined, 4))
     }
-    else if (responseBodyText.includes('<!doctype html>')) {
-        logger.log('info', `Response GET ${link} ${responseBodyText}`);
-        this.attach(`Response GET ${link} returns html`)
+    else {
+        const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
+        logger.log('info', `Response GET ${link} has status code ${this.response.status()} ${this.response.statusText()} and response body ${responseBodyText}`);
+        this.attach(`Response GET ${link} has status code ${this.response.status()} ${this.response.statusText()} and response body ${actualResponseText}`)
     }
 })
 
@@ -54,13 +55,17 @@ Then('Check supplier exist in the company, if it does not exist will create supp
             headers: this.headers
         }
         this.getSupplierResponse = this.response = await supplierRequest.getSuppliers(this.request, link, options);
-        console.log("test ne", this.getSupplierResponse.status())
+        const responseBodyText = await this.getSupplierResponse.text();
         if (this.response.status() == 200) {
             this.getSupplierResponseBody = JSON.parse(await this.getSupplierResponse.text());
             logger.log('info', `Response GET ${link}` + JSON.stringify(this.getSupplierResponseBody, undefined, 4));
             this.attach(`Response GET ${link}` + JSON.stringify(this.getSupplierResponseBody, undefined, 4))
         }
-
+        else {
+            const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
+            logger.log('info', `Response GET ${link} has status code ${this.getSupplierResponse.status()} ${this.getSupplierResponse.statusText()} and response body ${responseBodyText}`);
+            this.attach(`Response GET ${link} has status code ${this.getSupplierResponse.status()} ${this.getSupplierResponse.statusText()} and response body ${actualResponseText}`)
+        }
     }
 })
 

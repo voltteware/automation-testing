@@ -23,9 +23,10 @@ Then('{} sends a GET request to get 100 latest users', async function (actor: st
         // logger.log('info', `Response GET ${Links.API_ADMIN_GET_USER}` + JSON.stringify(this.responseBody.userId, undefined, 4));
         // this.attach(`Response GET ${Links.API_ADMIN_GET_USER}` + JSON.stringify(this.responseBody.userId, undefined, 4))
     }
-    else if (responseBodyText.includes('<!doctype html>')) {
-        logger.log('info', `Response GET ${Links.API_ADMIN_GET_USER} ${responseBodyText}`);
-        this.attach(`Response GET ${Links.API_ADMIN_GET_USER} returns html`)
+    else {
+        const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
+        logger.log('info', `Response GET ${Links.API_ADMIN_GET_USER} has status code ${this.get100LatestUsersResponse.status()} ${this.get100LatestUsersResponse.statusText()} and response body ${responseBodyText}`);
+        this.attach(`Response GET ${Links.API_ADMIN_GET_USER} has status code ${this.get100LatestUsersResponse.status()} ${this.get100LatestUsersResponse.statusText()} and response body ${actualResponseText}`)
     }
 })
 

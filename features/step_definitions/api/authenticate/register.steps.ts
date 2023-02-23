@@ -34,12 +34,18 @@ When('User sets request body with payload as firstName: {string} and lastName: {
 
 Then('User sends a POST method to register account', async function () {
   this.response = await registerRequest.sendPOSTRegisterRequest(link, this.payload);
+  const responseBodyText = await this.response.text();
   if (this.response.status() == 201) {
     const responseHeaders = this.response.headers();
     this.cookie = responseHeaders['set-cookie'];
     console.log('Cookie----------', this.cookie)
     this.responseBody = JSON.parse(await this.response.text())
     registerResponseBody = this.responseBody;
+  }
+  else {
+    const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
+    logger.log('info', `Response ${link} has status code ${this.response.status()} ${this.response.statusText()} and response body ${responseBodyText}`);
+    this.attach(`Response ${link} has status code ${this.response.status()} ${this.response.statusText()} and response body ${actualResponseText}`)
   }
 })
 

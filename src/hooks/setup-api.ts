@@ -11,6 +11,7 @@ Before('@test-api', async function (scenario: ITestCaseHookParameter) {
 
 After('@test-api', async function (scenario: ITestCaseHookParameter) {
     logger.log(scenario.result?.status == 'PASSED' ? 'info' : 'error', scenario.result?.status + '\n')
+    await actionwords.storeLogFile()
 });
 
 BeforeStep('@test-api', async function (testStep: ITestStepHookParameter) {

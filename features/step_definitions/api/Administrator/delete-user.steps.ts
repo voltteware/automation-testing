@@ -75,7 +75,17 @@ Then('Check email exist in the system, if it does not exist will create user wit
             password: 'Test1111!',
         }
         this.registerResponse = await registerRequest.sendPOSTRegisterRequest(Links.API_REGISTER, this.payload);
-        this.registerResponseBody = JSON.parse(await this.registerResponse.text())
+        const registerStatusCode = this.registerResponse.status();
+        if (registerStatusCode == 201) {
+            this.registerResponseBody = JSON.parse(await this.registerResponse.text())
+            logger.log('info', `Response Register User ${Links.API_REGISTER}` + JSON.stringify(this.registerResponseBody, undefined, 4));
+            this.attach(`Response Register User ${Links.API_REGISTER}` + JSON.stringify(this.registerResponseBody, undefined, 4))
+        }
+        else {
+            logger.log('info', `Response Register User ${Links.API_REGISTER} has status code ${registerStatusCode} ${this.registerResponse.statusText()} and response body` + this.registerResponse.text());
+            this.attach(`Response Register User ${Links.API_REGISTER} has status code ${registerStatusCode} ${this.registerResponse.statusText()} and response body` + this.registerResponse.text());
+        }
+
         // Login Admin after check
         this.payloadLogin = {
             username: 'may27pre@gmail.com',
@@ -86,6 +96,8 @@ Then('Check email exist in the system, if it does not exist will create user wit
             const responseHeaders = this.loginResponse.headers();
             this.cookieLogin = responseHeaders['set-cookie'];
             this.loginResponseBody = JSON.parse(await this.loginResponse.text())
+            logger.log('info', 'Login with admin account to check new user is showed in the response of get all users');
+            this.attach('Login with admin account to check new user is showed in the response of get all users');
         }
         //Get list users after register 
         const options = {
@@ -99,16 +111,14 @@ Then('Check email exist in the system, if it does not exist will create user wit
         if (this.get100LatestUsersResponse.status() == 200) {
             this.get100LatestUsersResponseBody = JSON.parse(await this.get100LatestUsersResponse.text());
             expect(await this.get100LatestUsersResponseBody.length).toBeLessThanOrEqual(100);
-            expect(this.get100LatestUsersResponseBody.map((user:any)=> user.userId)).toContain(email);
+            expect(this.get100LatestUsersResponseBody.map((user: any) => user.userId)).toContain(email);
+        }
+        else {
+            logger.log('info', `Response Get 100 Users has status code ${this.get100LatestUsersResponse.status()} ${this.get100LatestUsersResponse.statusText()} and response body` + this.get100LatestUsersResponse.text());
+            this.attach(`Response Get 100 Users has status code ${this.get100LatestUsersResponse.status()} ${this.get100LatestUsersResponse.statusText()} and response body` + this.get100LatestUsersResponse.text());
         }
     }
 })
-
-// Then('{} filters user to get user which he has the email', async function (actor: string) {
-//     selectedUser = await getUsersResponseBody.find((us: any) => us.userId == `testauto@gmail.com`)
-//     logger.log('info', `Response Body before filter: ${JSON.stringify(selectedUser, undefined, 4)}`);
-//     this.attach(`Response Body before filter: ${JSON.stringify(selectedUser, undefined, 4)}`);
-// })
 
 Then('{} filters user to get user which has the email as {}', async function (actor, expectedEmail: string) {
     selectedUser = await this.get100LatestUsersResponseBody.find((us: any) => us.userId == expectedEmail)

@@ -7,7 +7,6 @@ Feature: API_Admin DELETE/User
         And User sets GET api endpoint to get 100 users has just created
         And In Header of the request, user sets param Cookie as valid connect.sid
         When User sends a GET request to get 100 latest users
-        # And Check email exist in the system, if it does not exist will create user with email <testauto@gmail.com>
         And Check email exist in the system, if it does not exist will create user with below email
             | email              |
             | testauto@gmail.com |

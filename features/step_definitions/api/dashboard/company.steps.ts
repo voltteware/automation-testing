@@ -25,9 +25,10 @@ Then('{} sends a GET request to get company keys', async function (actor: string
         // logger.log('info', `Response GET ${Links.API_REALM}` + JSON.stringify(this.getRealmResponseBody, undefined, 4));
         // this.attach(`Response GET ${Links.API_REALM}` + JSON.stringify(this.getRealmResponseBody, undefined, 4))
     }
-    else if (responseBodyText.includes('<!doctype html>')) {
-        logger.log('info', `Response GET ${Links.API_REALM} ${responseBodyText}`);
-        this.attach(`Response GET ${Links.API_REALM} returns html`)
+    else {
+        const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
+        logger.log('info', `Response ${link} has status code ${this.getRealmResponse.status()} ${this.getRealmResponse.statusText()} and response body ${responseBodyText}`);
+        this.attach(`Response ${link} has status code ${this.getRealmResponse.status()} ${this.getRealmResponse.statusText()} and response body ${actualResponseText}`)
     }
 })
 
@@ -99,14 +100,14 @@ When(`{} sends a GET request to get company information of {} by company key`, a
 
     this.getCompanyInfoResponse = this.response = await companyRequest.getCompanyInfo(this.request, link, options);
     const responseBodyText = await this.getCompanyInfoResponse.text();
-    if (this.response.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
+    if (this.getCompanyInfoResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
         this.responseBodyOfACompanyObject = JSON.parse(await this.getCompanyInfoResponse.text());
         logger.log('info', `Response GET ${link}` + JSON.stringify(this.responseBodyOfACompanyObject, undefined, 4));
         this.attach(`Response GET ${link}` + JSON.stringify(this.responseBodyOfACompanyObject, undefined, 4))
     }
-    else if (responseBodyText.includes('<!doctype html>')) {
-        logger.log('info', `Response GET ${link} ${responseBodyText}`);
-        this.attach(`Response GET ${link} returns html`)
+    else {
+        const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
+        logger.log('info', `Response ${link} has status code ${this.getCompanyInfoResponse.status()} ${this.getCompanyInfoResponse.statusText()} and response body ${responseBodyText}`);
+        this.attach(`Response ${link} has status code ${this.getCompanyInfoResponse.status()} ${this.getCompanyInfoResponse.statusText()} and response body ${actualResponseText}`)
     }
-
 })

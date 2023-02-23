@@ -14,8 +14,8 @@ Feature: API_Dashboard POST /api/vendor
         And User sets GET api endpoint to get information of a company belongs to <email> using company key <companyKey>
         And User sets POST api endpoint to create suppliers
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
-        When User sets request body with payload as name: "<supplierName>" and description: "<description>" and email: "<emailSupplier>" and moq: "<moq>" and leadTime: "<leadTime>" and orderInterval: "<orderInterval>" and serviceLevel: "<serviceLevel>" and targetOrderValue: "<targetOrderValue>" and freeFreightMinimum: "<freeFreightMinimum>" and restockModel: "<restockModel>"
-        And User sends a POST method to create supplier
+        And User sets request body with payload as name: "<supplierName>" and description: "<description>" and email: "<emailSupplier>" and moq: "<moq>" and leadTime: "<leadTime>" and orderInterval: "<orderInterval>" and serviceLevel: "<serviceLevel>" and targetOrderValue: "" and freeFreightMinimum: "" and restockModel: ""
+        When User sends a POST method to create supplier
         Then The expected status code should be <expectedStatus>
         And User checks API contract essential types in supplier object are correct
         And User checks values in response of create supplier are correct
@@ -29,7 +29,7 @@ Feature: API_Dashboard POST /api/vendor
         Given User picks random company in above response
         And User sets POST api endpoint to create suppliers
         But User sets <cookie> cookie of <email> and <companyKeyHeader> companyKey and <companyTypeHeader> companyType in the header
-        And User sets request body with payload as name: "<supplierName>" and description: "<description>" and email: "<emailSupplier>" and moq: "<moq>" and leadTime: "<leadTime>" and orderInterval: "<orderInterval>" and serviceLevel: "<serviceLevel>" and targetOrderValue: "<targetOrderValue>" and freeFreightMinimum: "<freeFreightMinimum>" and restockModel: "<restockModel>"
+        And User sets request body with payload as name: "<supplierName>" and description: "<description>" and email: "<emailSupplier>" and moq: "<moq>" and leadTime: "<leadTime>" and orderInterval: "<orderInterval>" and serviceLevel: "<serviceLevel>" and targetOrderValue: "" and freeFreightMinimum: "" and restockModel: ""
         When User sends a POST method to create supplier
         Then The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
@@ -45,10 +45,10 @@ Feature: API_Dashboard POST /api/vendor
         Given User picks random company in above response
         And User has valid connect.sid of "<userA>" after send a POST request with payload as email: "<userA>" and password: "<password>"
         And User sets GET api endpoint to get information of a company belongs to <userB> using company key <companyKey>
-        When User sets POST api endpoint to create suppliers
+        And User sets POST api endpoint to create suppliers
         But User sets valid cookie of <userA> and valid companyKey and valid companyType in the header
-        Then User sets request body with payload as name: "<supplierName>" and description: "<description>" and email: "<emailSupplier>" and moq: "<moq>" and leadTime: "<leadTime>" and orderInterval: "<orderInterval>" and serviceLevel: "<serviceLevel>" and targetOrderValue: "<targetOrderValue>" and freeFreightMinimum: "<freeFreightMinimum>" and restockModel: "<restockModel>"
-        And User sends a POST method to create supplier
+        And User sets request body with payload as name: "<supplierName>" and description: "<description>" and email: "<emailSupplier>" and moq: "<moq>" and leadTime: "<leadTime>" and orderInterval: "<orderInterval>" and serviceLevel: "<serviceLevel>" and targetOrderValue: "" and freeFreightMinimum: "" and restockModel: ""
+        When User sends a POST method to create supplier
         Then The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
         Examples:
@@ -61,8 +61,8 @@ Feature: API_Dashboard POST /api/vendor
         And User sets GET api endpoint to get information of a company belongs to <email> using company key <companyKey>
         And User sets POST api endpoint to create suppliers
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
-        When User sets request body with payload as name: "<supplierName>" and description: "<description>" and email: "<emailSupplier>" and moq: "<moq>" and leadTime: "<leadTime>" and orderInterval: "<orderInterval>" and serviceLevel: "<serviceLevel>" and targetOrderValue: "<targetOrderValue>" and freeFreightMinimum: "<freeFreightMinimum>" and restockModel: "<restockModel>"
-        And User sends a POST method to create supplier
+        And User sets request body with payload as name: "<supplierName>" and description: "<description>" and email: "<emailSupplier>" and moq: "<moq>" and leadTime: "<leadTime>" and orderInterval: "<orderInterval>" and serviceLevel: "<serviceLevel>" and targetOrderValue: "" and freeFreightMinimum: "" and restockModel: ""
+        When User sends a POST method to create supplier
         And User sends a POST method to create supplier
         Then The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
