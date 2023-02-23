@@ -2,7 +2,7 @@ import { LaunchOptions } from "@playwright/test";
 require('dotenv').config();
 const browserOptions: LaunchOptions = {
     slowMo: 100,
-    headless: false,
+    headless: true,
 }
 export const config = {
     browser: 'chromium' || 'firefox' || 'webkit',
