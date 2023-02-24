@@ -1,4 +1,4 @@
-@test-api @api-dashboard @api-createSupplier
+@test-api @api-dashboard @api-supplier @api-createSupplier
 Feature: API_Dashboard POST /api/vendor
     Background: Send GET /realm request to get all company keys of current logged in user before each test
         Given user sends a POST login request to get valid cookie with role

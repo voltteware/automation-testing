@@ -126,15 +126,6 @@ Then('{} filters user to get user which has the email as {}', async function (ac
     this.attach(`Response Body before filter: ${JSON.stringify(selectedUser.userId, undefined, 4)}`);
 })
 
-// Then('{} sends a DELETE method to delete user', async function (actor: string) {
-//     const options = {
-//         headers: this.headers
-//     }
-//     email = selectedUser.userId;
-//     this.response = await adminRequest.deleteUser(this.request, Links.API_ADMIN_DELETE_USER, email, options);
-//     deleteUsersResponseBody = JSON.parse(await this.response.text());
-// })
-
 Then('{} sends a DELETE method to delete user {}', async function (actor, email: string) {
     const options = {
         headers: this.headers

@@ -1,6 +1,6 @@
 import { When, Then, Given } from '@cucumber/cucumber';
 import { expect } from '@playwright/test';
-import * as supplierRequest from '../../../../src/api/request/company.service';
+import * as supplierRequest from '../../../../src/api/request/vendor.service';
 import logger from '../../../../src/Logger/logger';
 import { Links } from '../../../../src/utils/links';
 import { faker } from '@faker-js/faker';
@@ -36,7 +36,7 @@ let payload: {
 } = {}
 
 Then(`{} sets POST api endpoint to create suppliers`, async function (actor: string) {
-    link = Links.API_CREATE_SUPPLIERS;
+    link = Links.API_SUPPLIERS;
 });
 
 Then('{} sets request body with payload as name: {string} and description: {string} and email: {string} and moq: {int} and leadTime: {int} and orderInterval: {int} and serviceLevel: {int}',
@@ -56,7 +56,7 @@ Then('{} sets request body with payload as name: {string} and description: {stri
 Then('{} sets request body with payload as name: {string} and description: {string} and email: {string} and moq: {string} and leadTime: {string} and orderInterval: {string} and serviceLevel: {string} and targetOrderValue: {string} and freeFreightMinimum: {string} and restockModel: {string}',
     async function (actor, name, description, email, moq, leadTime, orderInterval, serviceLevel, targetOrderValue, freeFreightMinimum, restockModel: string) {
         if (name.includes('New Supplier Auto')) {
-            payload.name = `${faker.lorem.words(2)} auto`;
+            payload.name = `${faker.company.name()} Auto`;
         }
         payload.description = description;
         payload.email = email;
@@ -138,19 +138,6 @@ Then('{} adds address information in the payload: address {string} and city {str
         }
         this.attach(`Payload: ${JSON.stringify(payload, undefined, 4)}`)
     });
-
-// Then('{} sends a POST method to create supplier', async function (actor: string) {
-
-//     this.headers = {
-//         'Cookie': this.cookie,
-//         'COMPANY-KEY': this.companyKey,
-//         'COMPANY-TYPE': this.companyType,
-//     }
-//     this.createSupplierResponse = await supplierRequest.createSupplier(this.request, link, payload, this.headers);
-//     this.responseBodyOfASupplierObject = JSON.parse(await this.createSupplierResponse.text())
-//     logger.log('info', `Response POST ${link}` + JSON.stringify(this.responseBodyOfASupplierObject, undefined, 4));
-//     this.attach(`Response POST ${link}` + JSON.stringify(this.responseBodyOfASupplierObject, undefined, 4))
-// })
 
 Then('{} sends a POST method to create supplier', async function (actor: string) {
     this.response = this.createSupplierResponse = await supplierRequest.createSupplier(this.request, link, payload, this.headers);

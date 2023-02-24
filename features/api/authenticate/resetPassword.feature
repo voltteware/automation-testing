@@ -1,4 +1,4 @@
-@test-api @api-resetPassword
+@test-api @api-resetPassword @api-authenticate
 Feature: API /resetPassword
 
 	@api-resetPassword
