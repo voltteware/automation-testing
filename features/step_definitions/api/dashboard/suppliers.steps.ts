@@ -46,7 +46,7 @@ Then(`{} sends a GET request to get total of suppliers`, async function (actor: 
     this.attach(`Response GET ${link} has status code ${this.response.status()} ${this.response.statusText()} and response body ${this.totalSupplier}`)
 })
 
-Then('Check supplier exist in the company, if it does not exist will create supplier', async function () {
+Then('{} checks supplier auto exist in the system, if it does not exist will create new supplier', async function () {
 
     if (this.getSupplierResponseBody.length < 1) {
         this.headers = {
@@ -109,13 +109,51 @@ Then('Check items in the response should be sort by field leadTime with directio
     }
 });
 
+Then('{} checks {} supplier exist in the system, if it does not exist will create new supplier', async function (actor, supplierNameKeyword: string) {
+    var numberofSuppliers;
+
+    if (supplierNameKeyword != 'any') {
+        numberofSuppliers = await this.getSupplierResponseBody.filter((su: any) => su.name.includes(supplierNameKeyword)).length;
+    }
+    else {
+        numberofSuppliers = await this.getSupplierResponseBody.length;
+    }
+
+    if (numberofSuppliers < 1) {
+        const payload = {
+            name: `${faker.company.name()} Auto`
+        }
+        const createResponse = await supplierRequest.createSupplier(this.request, Links.API_SUPPLIERS, payload, this.headers);
+        const responseBodyText = await createResponse.text();
+        if (createResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
+            await this.getSupplierResponseBody.push(JSON.parse(responseBodyText));
+            logger.log('info', `Response POST ${Links.API_SUPPLIERS}` + JSON.stringify(responseBodyText, undefined, 4));
+            this.attach(`Response POST ${Links.API_SUPPLIERS}` + JSON.stringify(responseBodyText, undefined, 4))
+        }
+        else {
+            const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
+            logger.log('info', `Response POST ${Links.API_SUPPLIERS} has status code ${createResponse.status()} ${createResponse.statusText()} and response body ${responseBodyText}`);
+            this.attach(`Response POST ${Links.API_SUPPLIERS} has status code ${createResponse.status()} ${createResponse.statusText()} and response body ${actualResponseText}`)
+        }
+    }
+})
+
 Then('{} filters {} suppliers which has the name includes {}', async function (actor, maximumSuppliers, supplierNameKeyword: string) {
-    const suppliers = this.selectedSuppliers = await this.getSupplierResponseBody.filter((su: any) => su.name.includes(supplierNameKeyword));
+    if (supplierNameKeyword.includes('any character')) {
+        this.selectedSuppliers = await this.getSupplierResponseBody;
+    }
+    else {
+        this.selectedSuppliers = await this.getSupplierResponseBody.filter((su: any) => su.name.includes(supplierNameKeyword));
+    }
+
+    const suppliers = await this.selectedSuppliers;
     if (maximumSuppliers != 'all') {
         this.selectedSuppliers = suppliers.slice(0, Number(maximumSuppliers))
     }
-    logger.log('info', `Selected ${this.selectedSuppliers.length} suppliers which has the name includes ${supplierNameKeyword}`);
-    this.attach(`Selected ${this.selectedSuppliers.length} suppliers which has the name includes ${supplierNameKeyword}`);
+
+    logger.log('info', `Selected ${this.selectedSuppliers.length} suppliers which has the name includes ${supplierNameKeyword}` + JSON.stringify(await this.selectedSuppliers, undefined, 4));
+    this.attach(`Selected ${this.selectedSuppliers.length} suppliers which has the name includes ${supplierNameKeyword}` + JSON.stringify(await this.selectedSuppliers, undefined, 4));
+    expect(this.selectedSuppliers.length, 'Expect that there is at least user is selected').toBeGreaterThan(0);
 })
 
 Then('{} sends a DELETE method to delete supplier', async function (actor: string) {
@@ -125,10 +163,12 @@ Then('{} sends a DELETE method to delete supplier', async function (actor: strin
         ids: supplierKeys
     }
 
-    logger.log('info', `Suppliers will be deleted: ${supplierKeys}`);
-    this.attach(`Suppliers will be deleted: ${supplierKeys}`);
+    logger.log('info', `Payload` + JSON.stringify(payLoad, undefined, 4));
+    this.attach(`Payload` + JSON.stringify(payLoad, undefined, 4))
 
     this.response = await supplierRequest.deleteSupplier(this.request, Links.API_SUPPLIERS, payLoad, this.headers);
+    logger.log('info', `Response DELETE ${Links.API_SUPPLIERS} has status code ${this.response.status()} ${this.response.statusText()} and response body ${await this.response.text()}`);
+    this.attach(`Response DELETE ${Links.API_SUPPLIERS} has status code ${this.response.status()} ${this.response.statusText()} and response body ${await this.response.text()}`)
 })
 
 Then('{} checks the total suppliers is correct', async function (actor: string) {
@@ -141,5 +181,7 @@ Then('{} checks the total suppliers is correct', async function (actor: string) 
     const beforeTotalSuppliers = Number(this.totalSupplier);
     logger.log('info', `Current total suppliers: ${currentTotalSuppliers}`);
     this.attach(`Current total suppliers: ${currentTotalSuppliers}`);
+    expect(currentTotalSuppliers).not.toBeNaN();
+    expect(beforeTotalSuppliers).not.toBeNaN();
     expect(currentTotalSuppliers).toEqual(beforeTotalSuppliers - this.selectedSuppliers.length);
 })

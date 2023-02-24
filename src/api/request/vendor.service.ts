@@ -23,10 +23,11 @@ async function createSupplier(request: APIRequestContext, linkApi: string, payLo
 async function deleteSupplier(request: APIRequestContext, linkApi: string, payLoad: any, header?: any) {
     const url = `${linkApi}`;
     logger.log('info', `Send DELETE request ${url} with ${JSON.stringify(payLoad, undefined, 4)}`);
-    const deleteResponse = await request.delete(url, {
+    const options = {
         data: payLoad,
         headers: header
-    });
+    }
+    const deleteResponse = await request.delete(url, options);
     return deleteResponse;
 }
 

@@ -16,7 +16,7 @@ Feature: API_Dashboard GET /api/vendor
         And User sets GET api endpoint to get suppliers keys
         When User sends a GET request to get suppliers information of <email> by company key and company type
         Then The expected status code should be <expectedStatus>
-        And Check supplier exist in the company, if it does not exist will create supplier
+        And user checks any supplier exist in the system, if it does not exist will create new supplier
         Then User picks random suppliers in above response
         And User checks API contract essential types in supplier object are correct
         And User checks values in response of random supplier are correct

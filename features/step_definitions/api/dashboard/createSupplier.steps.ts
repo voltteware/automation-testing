@@ -56,7 +56,7 @@ Then('{} sets request body with payload as name: {string} and description: {stri
 Then('{} sets request body with payload as name: {string} and description: {string} and email: {string} and moq: {string} and leadTime: {string} and orderInterval: {string} and serviceLevel: {string} and targetOrderValue: {string} and freeFreightMinimum: {string} and restockModel: {string}',
     async function (actor, name, description, email, moq, leadTime, orderInterval, serviceLevel, targetOrderValue, freeFreightMinimum, restockModel: string) {
         if (name.includes('New Supplier Auto')) {
-            payload.name = `${faker.company.name()} auto`;
+            payload.name = `${faker.company.name()} Auto`;
         }
         payload.description = description;
         payload.email = email;
