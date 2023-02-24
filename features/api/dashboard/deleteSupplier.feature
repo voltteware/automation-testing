@@ -46,7 +46,7 @@ Feature: API_SUPPLIER DELETE /api/vendor
 
     #Bug API in case DS003
     @TC_DS003 @bug-permission
-    Scenario Outline: TC_DS003 - Verify <user> can't call this API to delete user
+    Scenario Outline: TC_DS003 - Verify <userA> can't call this API to delete supplier not belongs to her company
         Given User filters <numberOfSuppliers> suppliers which has the name includes <supplierNameKeyword>
         Then User has valid connect.sid of "<userA>" after send a POST request with payload as email: "<userA>" and password: "<password>"
         And User sets valid cookie of "<userA>" and valid companyKey and valid companyType in the header
