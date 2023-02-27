@@ -7,7 +7,7 @@ Feature: API_Dashboard GET /api/company/company key
         And She sets GET api endpoint to get company keys
         And In Header of the request, she sets param Cookie as valid connect.sid
         When She sends a GET request to get company keys
-        And She picks random company in above response
+        Then She picks random company in above response
 
     @TC_C001
     Scenario Outline: TC_C001 - Verify user <email> could call this API to get information of specific company by using company key

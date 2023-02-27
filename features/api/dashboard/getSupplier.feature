@@ -7,7 +7,7 @@ Feature: API_Dashboard GET /api/vendor
         And User sets GET api endpoint to get company keys
         And In Header of the request, she sets param Cookie as valid connect.sid
         When User sends a GET request to get company keys
-        And User picks random company in above response
+        Then User picks random company in above response
 
     @TC_GS001
     Scenario Outline: TC_GS001 - Verify user <email> could call this API to get information of specific supplier by using company key and company type
@@ -17,7 +17,7 @@ Feature: API_Dashboard GET /api/vendor
         When User sends a GET request to get suppliers information of <email> by company key and company type
         Then The expected status code should be <expectedStatus>
         And user checks any supplier exist in the system, if it does not exist will create new supplier
-        Then User picks random suppliers in above response
+        And User picks random suppliers in above response
         And User checks API contract essential types in supplier object are correct
         And User checks values in response of random supplier are correct
         Examples:
@@ -45,8 +45,8 @@ Feature: API_Dashboard GET /api/vendor
         Given User has valid connect.sid of "<userA>" after send a POST request with payload as email: "<userA>" and password: "<password>"
         And User sets GET api endpoint to get information of a company belongs to <userB> using company key <companyKey>
         But User sets valid cookie of <userA> and valid companyKey and valid companyType in the header
-        When User sets GET api endpoint to get suppliers keys
-        And User sends a GET request to get suppliers information of <email> by company key and company type
+        And User sets GET api endpoint to get suppliers keys
+        When User sends a GET request to get suppliers information of <email> by company key and company type
         Then The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
         Examples:

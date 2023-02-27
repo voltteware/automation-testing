@@ -7,13 +7,13 @@ Feature: API_SUPPLIER DELETE /api/vendor
         And User sets GET api endpoint to get company keys
         And In Header of the request, she sets param Cookie as valid connect.sid
         When User sends a GET request to get company keys
-        And User picks random company in above response
+        Then User picks random company in above response
         And User sets GET api endpoint to get information of a company belongs to testautoforecast@gmail.com using company key random
         And User sets valid cookie of testautoforecast@gmail.com and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get suppliers keys
-        And User sends a GET request to get suppliers information of testautoforecast@gmail.com by company key and company type
-        And user checks Auto supplier exist in the system, if it does not exist will create new supplier
-        And User sends a GET request to get total of suppliers
+        When User sends a GET request to get suppliers information of testautoforecast@gmail.com by company key and company type
+        Then user checks Auto supplier exist in the system, if it does not exist will create new supplier
+        When User sends a GET request to get total of suppliers
 
     @TC_DS001
     Scenario Outline: TC_DS001 - Verify <user> could call this API to delete suppliers of a company belongs to her
@@ -48,7 +48,7 @@ Feature: API_SUPPLIER DELETE /api/vendor
     @TC_DS003 @bug-permission
     Scenario Outline: TC_DS003 - Verify <userA> can't call this API to delete supplier not belongs to her company
         Given User filters <numberOfSuppliers> suppliers which has the name includes <supplierNameKeyword>
-        Then User has valid connect.sid of "<userA>" after send a POST request with payload as email: "<userA>" and password: "<password>"
+        And User has valid connect.sid of "<userA>" after send a POST request with payload as email: "<userA>" and password: "<password>"
         And User sets valid cookie of "<userA>" and valid companyKey and valid companyType in the header
         When User sends a DELETE method to delete supplier
         Then The expected status code should be <expectedStatus>

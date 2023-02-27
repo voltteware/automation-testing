@@ -13,7 +13,7 @@ Feature: API /register
 			| role  | username           | password  |
 			| admin | may27pre@gmail.com | Test1111! |
 		And In Header of the request, she sets param Cookie as valid connect.sid
-		And User sends a DELETE method to delete user <email>
+		When User sends a DELETE method to delete user <email>
 		Then The expected status code should be 200
 		Examples:
 			| id   | scenario                                                              | email                            | password  | firstName | lastName | companyName         | companyType | phone      | expectedStatus |

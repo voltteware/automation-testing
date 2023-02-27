@@ -13,9 +13,9 @@ Feature: API_Dashboard PUT /api/company
         Given User picks random company in above response
         And User sets GET api endpoint to get information of a company belongs to <email> using company key <companyKey>
         And User sets PUT api endpoint to update company keys
-        Then User sets valid cookie of <email> and valid companyKey and valid companyType in the header
-        When User sets request body with payload as leadTime: <leadTime> and companyKey, companyType
-        And User sends a PUT method to update company of "<email>" by company key
+        And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
+        And User sets request body with payload as leadTime: <leadTime> and companyKey, companyType
+        When User sends a PUT method to update company of "<email>" by company key
         Then The expected status code should be <expectedStatus>
         And User checks API contract essential types in company object are correct
         And User checks values of <properties> in response of update company are correct
@@ -28,9 +28,9 @@ Feature: API_Dashboard PUT /api/company
         Given User picks random company in above response
         And User sets GET api endpoint to get information of a company belongs to <email> using company key <companyKey>
         And User sets PUT api endpoint to update company keys
-        Then User sets valid cookie of <email> and valid companyKey and valid companyType in the header
-        When User sets request body with payload as orderInterval: <orderInterval> and companyKey, companyType
-        And User sends a PUT method to update company of "<email>" by company key
+        And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
+        And User sets request body with payload as orderInterval: <orderInterval> and companyKey, companyType
+        When User sends a PUT method to update company of "<email>" by company key
         Then The expected status code should be <expectedStatus>
         And User checks API contract essential types in company object are correct
         And User checks values of <properties> in response of update company are correct
@@ -43,9 +43,9 @@ Feature: API_Dashboard PUT /api/company
         Given User picks random company in above response
         And User sets GET api endpoint to get information of a company belongs to <email> using company key <companyKey>
         And User sets PUT api endpoint to update company keys
-        Then User sets valid cookie of <email> and valid companyKey and valid companyType in the header
-        When User sets request body with payload as serviceLevel: <serviceLevel> and companyKey, companyType
-        And User sends a PUT method to update company of "<email>" by company key
+        And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
+        And User sets request body with payload as serviceLevel: <serviceLevel> and companyKey, companyType
+        When User sends a PUT method to update company of "<email>" by company key
         Then The expected status code should be <expectedStatus>
         And User checks API contract essential types in company object are correct
         And User checks values of <properties> in response of update company are correct
@@ -58,9 +58,9 @@ Feature: API_Dashboard PUT /api/company
         Given User picks random company in above response
         And User sets GET api endpoint to get information of a company belongs to <email> using company key <companyKey>
         And User sets PUT api endpoint to update company keys
-        Then User sets valid cookie of <email> and valid companyKey and valid companyType in the header
-        When User sets request body with payload as isNotifyingAfterSync: "<isNotifyingAfterSync>" and companyKey, companyType
-        And User sends a PUT method to update company of "<email>" by company key
+        And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
+        And User sets request body with payload as isNotifyingAfterSync: "<isNotifyingAfterSync>" and companyKey, companyType
+        When User sends a PUT method to update company of "<email>" by company key
         Then The expected status code should be <expectedStatus>
         And User checks API contract essential types in company object are correct
         And User checks values of <properties> in response of update company are correct
@@ -74,9 +74,9 @@ Feature: API_Dashboard PUT /api/company
         Given User picks random company in above response
         And User sets GET api endpoint to get information of a company belongs to <email> using company key <companyKey>
         And User sets PUT api endpoint to update company keys
-        Then User sets valid cookie of <email> and valid companyKey and valid companyType in the header
-        When User sets request body with payload as isNotifyingAfterForecast: "<isNotifyingAfterForecast>" and companyKey, companyType
-        And User sends a PUT method to update company of "<email>" by company key
+        And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
+        And User sets request body with payload as isNotifyingAfterForecast: "<isNotifyingAfterForecast>" and companyKey, companyType
+        When User sends a PUT method to update company of "<email>" by company key
         Then The expected status code should be <expectedStatus>
         And User checks API contract essential types in company object are correct
         And User checks values of <properties> in response of update company are correct
@@ -90,9 +90,9 @@ Feature: API_Dashboard PUT /api/company
         Given User picks random company in above response
         And User sets GET api endpoint to get information of a company belongs to <email> using company key <companyKey>
         And User sets PUT api endpoint to update company keys
-        Then User sets valid cookie of <email> and valid companyKey and valid companyType in the header
-        When User sets request body with payload as isLostSaleTracking: "<isLostSaleTracking>" and companyKey, companyType
-        And User sends a PUT method to update company of "<email>" by company key
+        And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
+        And User sets request body with payload as isLostSaleTracking: "<isLostSaleTracking>" and companyKey, companyType
+        When User sends a PUT method to update company of "<email>" by company key
         Then The expected status code should be <expectedStatus>
         And User checks API contract essential types in company object are correct
         And User checks values of <properties> in response of update company are correct
@@ -105,9 +105,9 @@ Feature: API_Dashboard PUT /api/company
         Given User picks random company in above response
         And User sets GET api endpoint to get information of a company belongs to <email> using company key <companyKey>
         And User sets PUT api endpoint to update company keys
-        Then User sets valid cookie of <email> and valid companyKey and valid companyType in the header
-        When User sets request body with payload as isLostSaleTracking: "<isLostSaleTracking>" and without companyKey
-        And User sends a PUT method to update company of "<email>" by company key
+        And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
+        And User sets request body with payload as isLostSaleTracking: "<isLostSaleTracking>" and without companyKey
+        When User sends a PUT method to update company of "<email>" by company key
         Then The expected status code should be <expectedStatus>
         Examples:
             | scenario           | email                      | isLostSaleTracking | companyKey | expectedStatus | expectedStatusText                         |
@@ -118,9 +118,9 @@ Feature: API_Dashboard PUT /api/company
         Given User picks random company in above response
         And User sets GET api endpoint to get information of a company belongs to <email> using company key <companyKey>
         And User sets PUT api endpoint to update company keys
-        Then User sets valid cookie of <email> and valid companyKey and valid companyType in the header
-        When User sets request body with payload as isLostSaleTracking: "<isLostSaleTracking>" and without companyType
-        And User sends a PUT method to update company of "<email>" by company key
+        And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
+        And User sets request body with payload as isLostSaleTracking: "<isLostSaleTracking>" and without companyType
+        When User sends a PUT method to update company of "<email>" by company key
         Then The expected status code should be <expectedStatus>
         Examples:
             | scenario            | email                      | isLostSaleTracking | companyKey | expectedStatus | expectedStatusText                         |
@@ -132,8 +132,8 @@ Feature: API_Dashboard PUT /api/company
         And User sets GET api endpoint to get information of a company belongs to <email> using company key <companyKey>
         And User sets PUT api endpoint to update company keys
         And User sets Cookie in HEADER as <cookie>
-        When User sets request body with payload as isLostSaleTracking: "<isLostSaleTracking>" and companyKey, companyType
-        And User sends a PUT method to update company of "<email>" by company key
+        And User sets request body with payload as isLostSaleTracking: "<isLostSaleTracking>" and companyKey, companyType
+        When User sends a PUT method to update company of "<email>" by company key
         Then The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
         Examples:
@@ -145,9 +145,9 @@ Feature: API_Dashboard PUT /api/company
     Scenario Outline: <id> - Verify user <email> could call this API to update <properties> value for company type <companyType>
         Given User picks company with type ASC in above response
         And User sets PUT api endpoint to update company keys
-        Then User sets valid cookie of <email> and valid companyKey and valid companyType in the header
-        When User sets request body with payload as pendingOrderToggle: "<pendingOrderToggle>" and companyKey, companyType
-        And User sends a PUT method to update company of "<email>" by company key
+        And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
+        And User sets request body with payload as pendingOrderToggle: "<pendingOrderToggle>" and companyKey, companyType
+        When User sends a PUT method to update company of "<email>" by company key
         Then The expected status code should be <expectedStatus>
         And User checks API contract essential types in company object are correct
         And User checks values of <properties> in response of update company are correct
@@ -160,9 +160,9 @@ Feature: API_Dashboard PUT /api/company
     Scenario Outline: <id> - Verify user <email> could call this API to update <properties> value for company type <companyType>
         Given User picks company with type ASC in above response
         And User sets PUT api endpoint to update company keys
-        Then User sets valid cookie of <email> and valid companyKey and valid companyType in the header
-        When User sets request body with payload as inventorySourcePreference: "<inventorySourcePreference>" and companyKey, companyType
-        And User sends a PUT method to update company of "<email>" by company key
+        And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
+        And User sets request body with payload as inventorySourcePreference: "<inventorySourcePreference>" and companyKey, companyType
+        When User sends a PUT method to update company of "<email>" by company key
         Then The expected status code should be <expectedStatus>
         And User checks API contract essential types in company object are correct
         And User checks values of <properties> in response of update company are correct
@@ -176,9 +176,9 @@ Feature: API_Dashboard PUT /api/company
     Scenario Outline: <id> - Verify user <email> could call this API to update <properties> value for company type <companyType>
         Given User picks company with type ASC in above response
         And User sets PUT api endpoint to update company keys
-        Then User sets valid cookie of <email> and valid companyKey and valid companyType in the header
-        When User sets request body with payload purchasingSalesVelocitySettingData as percent2Day: <percent2Day> and percent7Day: <percent7Day> and percent30Day: <percent30Day> and percent60Day: <percent60Day> and percent90Day: <percent90Day> and percent180Day: <percent180Day> and percentForecasted: <percentForecasted> and companyKey, companyType
-        And User sends a PUT method to update company of "<email>" by company key
+        And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
+        And User sets request body with payload purchasingSalesVelocitySettingData as percent2Day: <percent2Day> and percent7Day: <percent7Day> and percent30Day: <percent30Day> and percent60Day: <percent60Day> and percent90Day: <percent90Day> and percent180Day: <percent180Day> and percentForecasted: <percentForecasted> and companyKey, companyType
+        When User sends a PUT method to update company of "<email>" by company key
         Then The expected status code should be <expectedStatus>
         And User checks API contract essential types in company object are correct
         And User checks values of <properties> in response of update company are correct
@@ -192,9 +192,9 @@ Feature: API_Dashboard PUT /api/company
     Scenario Outline: <id> - Verify error when user <email> updates total percentage in <properties> for company type <companyType> is greater than 100
         Given User picks company with type ASC in above response
         And User sets PUT api endpoint to update company keys
-        Then User sets valid cookie of <email> and valid companyKey and valid companyType in the header
-        When User sets request body with payload purchasingSalesVelocitySettingData as percent2Day: <percent2Day> and percent7Day: <percent7Day> and percent30Day: <percent30Day> and percent60Day: <percent60Day> and percent90Day: <percent90Day> and percent180Day: <percent180Day> and percentForecasted: <percentForecasted> and companyKey, companyType
-        And User sends a PUT method to update company of "<email>" by company key
+        And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
+        And User sets request body with payload purchasingSalesVelocitySettingData as percent2Day: <percent2Day> and percent7Day: <percent7Day> and percent30Day: <percent30Day> and percent60Day: <percent60Day> and percent90Day: <percent90Day> and percent180Day: <percent180Day> and percentForecasted: <percentForecasted> and companyKey, companyType
+        When User sends a PUT method to update company of "<email>" by company key
         Then The expected status code should be <expectedStatus>
         Examples:
             | id       | properties                         |  email                     | percent2Day | percent7Day | percent30Day | percent60Day | percent90Day | percent180Day | percentForecasted | companyKey  | companyType | expectedStatus |

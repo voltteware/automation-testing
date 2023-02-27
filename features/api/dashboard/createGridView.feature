@@ -14,14 +14,18 @@ Feature: API_Dashboard POST /api/grid-view
         And User sets GET api endpoint to get information of a company belongs to <email> using company key <companyKey>
         And User sets POST api endpoint to create grid view keys
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
-        When User sets request body with payload as name: "<nameOfGridView>" and itemType: "<itemType>" and dir: "<dir>" and field: "<field>"
-        And User sends a POST method to create gridview
+        And User sets request body with payload as name: "<nameOfGridView>" and itemType: "<itemType>" and dir: "<dir>" and field: "<field>"
+        When User sends a POST method to create gridview
         Then The expected status code should be <expectedStatus>
         And User checks API contract essential types in grid view object are correct
         And User checks values in response of create grid view are correct
+        And User sets DELETE api endpoint to delete gridview by key
+        And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
+        When User sends a DELETE method to delete grid view with key <key>
+		Then The expected status code should be 204
         Examples:
-            | email                      | nameOfGridView | itemType | dir | field | companyKey | expectedStatus |
-            | testautoforecast@gmail.com | random         | supplier | asc | name  | random     | 200            |
+            | email                      | nameOfGridView | itemType | dir | field | companyKey | key    | expectedStatus |
+            | testautoforecast@gmail.com | random         | supplier | asc | name  | random     | random | 200            |
 
     @TC_CGV002
     Scenario Outline: TC_CGV002 - Verify user <email> could call this API to create grid view for <itemType> with filter <field>
@@ -29,22 +33,26 @@ Feature: API_Dashboard POST /api/grid-view
         And User sets GET api endpoint to get information of a company belongs to <email> using company key <companyKey>
         And User sets POST api endpoint to create grid view keys
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
-        When User sets request body with payload as name: "<nameOfGridView>" and itemType: "<itemType>" and field: "<field>" and operator: "<operator>" and logic: "<logic>" and value: <value>
-        And User sends a POST method to create gridview
+        And User sets request body with payload as name: "<nameOfGridView>" and itemType: "<itemType>" and field: "<field>" and operator: "<operator>" and logic: "<logic>" and value: <value>
+        When User sends a POST method to create gridview
         Then The expected status code should be <expectedStatus>
         And User checks API contract essential types in grid view object are correct
         And User checks values in response of create grid view are correct
+        And User sets DELETE api endpoint to delete gridview by key
+        And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
+        When User sends a DELETE method to delete grid view with key <key>
+		Then The expected status code should be 204
         Examples:
-            | email                      | nameOfGridView | itemType | operator | field        | value  | logic  | companyKey | expectedStatus |
-            | testautoforecast@gmail.com | random         | supplier | eq       | serviceLevel | 15     | and    | random     | 200            |
+            | email                      | nameOfGridView | itemType | operator | field        | value  | logic  | companyKey | key    | expectedStatus |
+            | testautoforecast@gmail.com | random         | supplier | eq       | serviceLevel | 15     | and    | random     | random | 200            |
 
     @TC_CGV003
     Scenario Outline: TC_CGV003 - Verify error when user sends this API with <cookie> cookie, <companyKeyHeader> companyKey, <companyTypeHeader> companyType value in header
         Given User picks random company in above response
         And User sets POST api endpoint to create grid view keys
         And User sets <cookie> cookie of <email> and <companyKeyHeader> companyKey and <companyTypeHeader> companyType in the header
-        When User sets request body with payload as name: "<nameOfGridView>" and itemType: "<itemType>" and dir: "<dir>" and field: "<field>"
-        And User sends a POST method to create gridview
+        And User sets request body with payload as name: "<nameOfGridView>" and itemType: "<itemType>" and dir: "<dir>" and field: "<field>"
+        When User sends a POST method to create gridview
         Then The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
         Examples:
@@ -57,9 +65,9 @@ Feature: API_Dashboard POST /api/grid-view
         And User sets GET api endpoint to get information of a company belongs to <email> using company key <companyKey>
         And User sets POST api endpoint to create grid view keys
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
-        When User sets request body with payload as name: "<name>" and itemType: "<itemType>" and dir: "<dir>" and field: "<field>"
-        And User sends a POST method to create gridview
-        And User sends a POST method to create gridview
+        And User sets request body with payload as name: "<nameOfGridView>" and itemType: "<itemType>" and dir: "<dir>" and field: "<field>"
+        When User sends a POST method to create gridview
+        When User sends a POST method to create gridview
         Then The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
         Examples:
