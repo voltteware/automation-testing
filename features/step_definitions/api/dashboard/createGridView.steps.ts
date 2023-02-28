@@ -321,9 +321,9 @@ Then('{} sends a POST method to create gridview', async function (actor: string)
     const responseBodyText = await this.createGridViewResponse.text();
     console.log(responseBodyText);
     if (this.createGridViewResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
-        this.responseBodyOfAGridViewSupplierObject = JSON.parse(responseBodyText)
-        logger.log('info', `Response POST ${link}` + JSON.stringify(this.responseBodyOfAGridViewSupplierObject, undefined, 4));
-        this.attach(`Response POST ${link}` + JSON.stringify(this.responseBodyOfAGridViewSupplierObject, undefined, 4))
+        this.responseBodyOfAGridViewObject = JSON.parse(responseBodyText)
+        logger.log('info', `Response POST ${link}` + JSON.stringify(this.responseBodyOfAGridViewObject, undefined, 4));
+        this.attach(`Response POST ${link}` + JSON.stringify(this.responseBodyOfAGridViewObject, undefined, 4))
     }
     else if (responseBodyText.includes('<!doctype html>')) {
         logger.log('info', `Response POST ${link} ${responseBodyText}`);
@@ -335,8 +335,8 @@ Then('{} checks values in response of create grid view are correct', async funct
     const companyType = ['ASC', 'CSV', 'QBFS', 'QBO'];
     const expectedName = payload.name;
     const expecteditemType = payload.itemType;
-    expect(this.responseBodyOfAGridViewSupplierObject.name, `In response body, name should be matched with the data request: ${expectedName}`).toBe(expectedName);
-    expect(this.responseBodyOfAGridViewSupplierObject.itemType, `In response body, itemType should be matched with the data request: ${expecteditemType}`).toBe(expecteditemType);
-    expect(companyType, `Company Type should be one of ${companyType}`).toContain(this.responseBodyOfAGridViewSupplierObject.companyType);
-    expect(this.responseBodyOfAGridViewSupplierObject.companyKey).not.toBeNull();
+    expect(this.responseBodyOfAGridViewObject.name, `In response body, name should be matched with the data request: ${expectedName}`).toBe(expectedName);
+    expect(this.responseBodyOfAGridViewObject.itemType, `In response body, itemType should be matched with the data request: ${expecteditemType}`).toBe(expecteditemType);
+    expect(companyType, `Company Type should be one of ${companyType}`).toContain(this.responseBodyOfAGridViewObject.companyType);
+    expect(this.responseBodyOfAGridViewObject.companyKey).not.toBeNull();
 })
