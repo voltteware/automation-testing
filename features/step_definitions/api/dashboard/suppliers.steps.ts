@@ -14,6 +14,7 @@ Then(`{} sets GET api endpoint to get suppliers keys`, async function (actor: st
 });
 
 Then(`{} sets GET api endpoint to get suppliers keys with limit row: {} and sort field: {} with direction: {}`, async function (actor, limitRow, sortField, direction: string) {
+     // const encodedLink1 = `${Links.API_SUPPLIERS}?offset=0&limit=${limitRow}&sort=${encodeURIComponent(`[{"field"`)}:${encodeURIComponent(`"${sortField}"`)},${encodeURIComponent(`"direction"`)}:${encodeURIComponent(`"${direction}"}]`)}&where=${encodeURIComponent(`{"logic"`)}:${encodeURIComponent(`"and"`)},${encodeURIComponent(`"filters"`)}:${encodeURIComponent(`[]}`)}`
     link = `${Links.API_SUPPLIERS}?offset=0&limit=${limitRow}&sort=%5B%7B%22field%22:%22${sortField}%22,%22direction%22:%22${direction}%22%7D%5D&where=%7B%22logic%22:%22and%22,%22filters%22:%5B%5D%7D`;
 });
 
