@@ -15,7 +15,7 @@ Then('{} sends a DELETE method to delete grid view with key {}', async function 
         headers: this.headers
     }
     if(key == 'random'){
-        this.randomKey = this.responseBodyOfAGridViewSupplierObject.key;
+        this.randomKey = this.responseBodyOfAGridViewObject.key;
     }else{
         this.randomKey = key;
     }

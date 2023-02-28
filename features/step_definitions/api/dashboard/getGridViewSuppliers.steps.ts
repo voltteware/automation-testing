@@ -237,16 +237,16 @@ Then('Check grid view supplier exist in the company, if it does not exist will c
 })
 
 Then('{} picks random grid view of suppliers in above response', async function (actor: string) {
-    this.responseBodyOfAGridViewSupplierObject = await this.getGridViewSupplierResponseBody[Math.floor(Math.random() * this.getGridViewSupplierResponseBody.length)];
-    logger.log('info', `Random grid view supplier: ${JSON.stringify(this.responseBodyOfAGridViewSupplierObject, undefined, 4)}`);
-    this.attach(`Random grid view supplier: ${JSON.stringify(this.responseBodyOfAGridViewSupplierObject, undefined, 4)}`);
+    this.responseBodyOfAGridViewObject = await this.getGridViewSupplierResponseBody[Math.floor(Math.random() * this.getGridViewSupplierResponseBody.length)];
+    logger.log('info', `Random grid view supplier: ${JSON.stringify(this.responseBodyOfAGridViewObject, undefined, 4)}`);
+    this.attach(`Random grid view supplier: ${JSON.stringify(this.responseBodyOfAGridViewObject, undefined, 4)}`);
 })
 
 Then('{} checks values in response of get grid view supplier are correct', async function (actor: string) {
     const companyType = ['ASC', 'CSV', 'QBFS', 'QBO'];
     const expecteditemType = "supplier";
-    expect(this.responseBodyOfAGridViewSupplierObject.itemType, `In response body, itemType should be is: ${expecteditemType}`).toBe(expecteditemType);
-    expect(companyType, `Company Type should be one of ${companyType}`).toContain(this.responseBodyOfAGridViewSupplierObject.companyType);
-    expect(this.responseBodyOfAGridViewSupplierObject.companyKey).not.toBeNull();
+    expect(this.responseBodyOfAGridViewObject.itemType, `In response body, itemType should be is: ${expecteditemType}`).toBe(expecteditemType);
+    expect(companyType, `Company Type should be one of ${companyType}`).toContain(this.responseBodyOfAGridViewObject.companyType);
+    expect(this.responseBodyOfAGridViewObject.companyKey).not.toBeNull();
 })
 
