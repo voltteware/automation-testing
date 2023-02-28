@@ -63,7 +63,7 @@ Feature: API_Dashboard POST /api/vendor
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets request body with payload as name: "<supplierName>" and description: "<description>" and email: "<emailSupplier>" and moq: "<moq>" and leadTime: "<leadTime>" and orderInterval: "<orderInterval>" and serviceLevel: "<serviceLevel>" and targetOrderValue: "" and freeFreightMinimum: "" and restockModel: ""
         When User sends a POST method to create supplier
-        And User sends a POST method to create supplier
+        When User sends a POST method to create supplier
         Then The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
         Examples:
@@ -75,8 +75,8 @@ Feature: API_Dashboard POST /api/vendor
         Given User picks company with type ASC in above response
         And User sets POST api endpoint to create suppliers
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
-        When User sets request body with payload as name: "<supplierName>" and description: "<description>" and email: "<emailSupplier>" and moq: "<moq>" and leadTime: "<leadTime>" and orderInterval: "<orderInterval>" and serviceLevel: "<serviceLevel>" and targetOrderValue: "<targetOrderValue>" and freeFreightMinimum: "<freeFreightMinimum>" and restockModel: "<restockModel>"
-        And User sends a POST method to create supplier
+        And User sets request body with payload as name: "<supplierName>" and description: "<description>" and email: "<emailSupplier>" and moq: "<moq>" and leadTime: "<leadTime>" and orderInterval: "<orderInterval>" and serviceLevel: "<serviceLevel>" and targetOrderValue: "<targetOrderValue>" and freeFreightMinimum: "<freeFreightMinimum>" and restockModel: "<restockModel>"
+        When User sends a POST method to create supplier
         Then The expected status code should be <expectedStatus>
         And User checks API contract essential types in supplier object are correct
         And User checks values in response of create supplier are correct
@@ -91,9 +91,9 @@ Feature: API_Dashboard POST /api/vendor
         Given User picks company with type ASC in above response
         And User sets POST api endpoint to create suppliers
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
-        When User sets request body with payload as name: "<supplierName>" and description: "<description>" and email: "<emailSupplier>" and moq: "<moq>" and leadTime: "<leadTime>" and orderInterval: "<orderInterval>" and serviceLevel: "<serviceLevel>" and targetOrderValue: "<targetOrderValue>" and freeFreightMinimum: "<freeFreightMinimum>" and restockModel: "<restockModel>"
+        And User sets request body with payload as name: "<supplierName>" and description: "<description>" and email: "<emailSupplier>" and moq: "<moq>" and leadTime: "<leadTime>" and orderInterval: "<orderInterval>" and serviceLevel: "<serviceLevel>" and targetOrderValue: "<targetOrderValue>" and freeFreightMinimum: "<freeFreightMinimum>" and restockModel: "<restockModel>"
         And User adds address information in the payload: address "<addressLine1>" and city "<city>" and stateOrProvinceCode "<stateOrProvinceCode>" and postalCode "<postalCode>" and countryCode "<countryCode>" and phoneNumber "<phoneNumber>"
-        And User sends a POST method to create supplier
+        When User sends a POST method to create supplier
         Then The expected status code should be <expectedStatus>
         And User checks API contract essential types in supplier object are correct
         And User checks values in response of create supplier are correct

@@ -17,8 +17,14 @@ async function getGridViewSupplier(request: APIRequestContext, linkApi: string, 
     logger.log('info', `Send GET request ${url}`);
     return await request.get(url, options);
 }
-
+// Delete grid-view
+async function deleteGridView(request: APIRequestContext, linkApi:string, key:string, options?: object) {
+    const url = `${linkApi}${key}`;
+    logger.log('info',`Send DELETE request ${url}`);
+    return await request.delete(url, options);
+}
 export {
     createGridView,
-    getGridViewSupplier
+    getGridViewSupplier,
+    deleteGridView
 }
