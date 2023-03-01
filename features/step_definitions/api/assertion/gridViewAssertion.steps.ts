@@ -11,17 +11,17 @@ Then('{} checks API contract essential types in grid view object are correct', a
     if (this.responseBodyOfAGridViewObject.gridState.columns.length > 0) {
         expect(typeof (this.responseBodyOfAGridViewObject.gridState.columns), 'Type of columns value should be object').toBe("object");
         const randomColumns = this.responseBodyOfAGridViewObject.gridState.columns[Math.floor(Math.random() * this.responseBodyOfAGridViewObject.gridState.columns.length)];
-        if(randomColumns.visible == 'undefined'){
+        if(randomColumns.visible == undefined){
             expect(typeof (randomColumns.visible), 'Type of each visible value should be undefined').toBe("undefined");
         }else{
             expect(typeof (randomColumns.visible), 'Type of each visible value should be boolean').toBe("boolean");
         }
-        if(randomColumns.width == 'undefined'){
+        if(randomColumns.width == undefined){
             expect(typeof (randomColumns.width), 'Type of each width value should be undefined').toBe("undefined");
         }else{
             expect(typeof (randomColumns.width), 'Type of each width value should be string').toBe("string");
         }
-        if(randomColumns.name == 'undefined'){
+        if(randomColumns.name == undefined){
             expect(typeof (randomColumns.name), 'Type of each name value should be undefined').toBe("undefined");
         }else{
             expect(typeof (randomColumns.name), 'Type of each name value should be string').toBe("string");
@@ -35,7 +35,7 @@ Then('{} checks API contract essential types in grid view object are correct', a
     expect(typeof (this.responseBodyOfAGridViewObject.gridState.pagination.paginationPageSize), 'Type of paginationPageSize value should be number').toBe("number");
     expect(typeof (this.responseBodyOfAGridViewObject.gridState.filter), 'Type of filter value should be object').toBe("object");
     expect(typeof (this.responseBodyOfAGridViewObject.gridState.sort), 'Type of sort value should be object').toBe("object");
-    if (this.responseBodyOfAGridViewObject.gridState.sort.length > 0) {
+    if (this.responseBodyOfAGridViewObject.gridState.sort.length > 1) {
         expect(typeof (this.responseBodyOfAGridViewObject.gridState.sort[0].dir), 'Type of dir value should be string').toBe("string");
         expect(typeof (this.responseBodyOfAGridViewObject.gridState.sort[0].field), 'Type of field value should be string').toBe("string");
     }

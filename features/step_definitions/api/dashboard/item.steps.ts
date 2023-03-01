@@ -8,10 +8,33 @@ import _ from "lodash";
 
 let link: string;
 var linkGetAllItems: string;
+let linkLimitRow: string;
 
 Then(`{} sets GET api endpoint to get item summary`, async function (actor: string) {
     link = `${Links.API_ITEMS}?summary=true&companyKey=${this.companyKey}&companyType=${this.companyType}`;
 });
+
+Then(`{} sets GET api endpoint to get item with limit row: {}`, async function (actor, limitRow: string) {
+    linkLimitRow = `${Links.API_ITEMS}?offset=0&limit=${limitRow}`;
+});
+
+Then(`{} sends a GET request to get items information of {} by company key and company type`, async function (actor, email: string) {
+    const options = {
+        headers: this.headers
+    }
+    this.getItemsResponse = this.response = await itemRequest.getItem(this.request, linkLimitRow, options);
+    const responseBodyText = await this.getItemsResponse.text();
+    if (this.getItemsResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
+        this.responseBody = this.getItemsResponseBody = JSON.parse(await this.getItemsResponse.text());
+        // logger.log('info', `Response GET ${link}` + JSON.stringify(this.getSupplierResponseBody, undefined, 4));
+        // this.attach(`Response GET ${link}` + JSON.stringify(this.getSupplierResponseBody, undefined, 4))
+    }
+    else {
+        const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
+        logger.log('info', `Response GET ${link} has status code ${this.response.status()} ${this.response.statusText()} and response body ${responseBodyText}`);
+        this.attach(`Response GET ${link} has status code ${this.response.status()} ${this.response.statusText()} and response body ${actualResponseText}`)
+    }
+})
 
 Then(`{} sends GET api request to get all items`, async function (actor: string) {
     const linkGetItemCount = `${Links.API_ITEMS}/count`
