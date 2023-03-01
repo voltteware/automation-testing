@@ -7,6 +7,7 @@ import { faker } from '@faker-js/faker';
 import _ from "lodash";
 
 let link: any;
+let randomSupplier: any;
 let payload: {
     name?: string,
     asin?: string,
@@ -36,22 +37,26 @@ let payload: {
     average7DayPrice?: Number,
     isFbm?: Boolean,
     key?: string,
+    vendorKey?: string,
 } = {}
 
 Then(`{} sets POST api endpoint to create item`, async function (actor: string) {
     link = Links.API_ITEMS;
 });
 
-Then('{} sets request body with payload as name: {string} and description: {string} and vendorName: {string} and vendorPrice: {string} and moq: {string} and leadTime: {string} and orderInterval: {string} and serviceLevel: {string} and onHand: {string} and onHandMin: {string} and onHandThirdParty: {string} and onHandThirdPartyMin: {string} and lotMultipleQty: {string} and lotMultipleItemName: {string} and asin: {string} and fnsku: {string} and skuNotes: {string} and prepNotes: {string} and supplierRebate: {string} and inboundShippingCost: {string} and reshippingCost: {string} and repackagingMaterialCost: {string} and repackingLaborCost: {string} and rank: {string} and inventorySourcePreference: {string} and average7DayPrice: {string} and isFbm: {string} and key: {string}',
-    async function (actor, name, description, vendorName, vendorPrice, moq, leadTime, orderInterval, serviceLevel, onHand, onHandMin, onHandThirdParty, onHandThirdPartyMin, lotMultipleQty, lotMultipleItemName, asin, fnsku, skuNotes, prepNotes, supplierRebate, inboundShippingCost, reshippingCost, repackagingMaterialCost, repackingLaborCost, rank, inventorySourcePreference, average7DayPrice, isFbm, key: string) {
+Then('{} sets request body with payload as name: {string} and description: {string} and vendorName: {string} and vendorPrice: {string} and moq: {string} and leadTime: {string} and orderInterval: {string} and serviceLevel: {string} and onHand: {string} and onHandMin: {string} and onHandThirdParty: {string} and onHandThirdPartyMin: {string} and lotMultipleQty: {string} and lotMultipleItemName: {string} and asin: {string} and fnsku: {string} and skuNotes: {string} and prepNotes: {string} and supplierRebate: {string} and inboundShippingCost: {string} and reshippingCost: {string} and repackagingMaterialCost: {string} and repackingLaborCost: {string} and rank: {string} and inventorySourcePreference: {string} and average7DayPrice: {string} and isFbm: {string} and key: {string} and vendorKey: {string}',
+    async function (actor, name, description, vendorName, vendorPrice, moq, leadTime, orderInterval, serviceLevel, onHand, onHandMin, onHandThirdParty, onHandThirdPartyMin, lotMultipleQty, lotMultipleItemName, asin, fnsku, skuNotes, prepNotes, supplierRebate, inboundShippingCost, reshippingCost, repackagingMaterialCost, repackingLaborCost, rank, inventorySourcePreference, average7DayPrice, isFbm, key, vendorKey: string) {
         if (name.includes('New Item Auto')) {
             payload.name = `${faker.commerce.productName()} Auto`;
         }
         payload.description = description;
+        randomSupplier = this.getSupplierResponseBody[Math.floor(Math.random() * this.getSupplierResponseBody.length)]
         if(vendorName == 'random'){
-            payload.vendorName = this.getSupplierResponseBody[Math.floor(Math.random() * this.getSupplierResponseBody.length)].name;
+            payload.vendorName = randomSupplier.name;
         }
-
+        if(vendorKey == 'random'){
+            payload.vendorKey = randomSupplier.key;
+        }
         if (vendorPrice == 'random') {
             payload.vendorPrice = Number(faker.random.numeric());
         }
