@@ -26,8 +26,9 @@ Feature: API_DashBoard DELETE/deleteGridView
         Examples:
             | email                      | expectedStatus | expectedStatusText | key    |
             | testautoforecast@gmail.com | 204            | No Content         | random |
-
-    @TC_DGV002
+    
+    #TC_DGV002_1, TC_DGV002_2 fail due to bug api
+    @TC_DGV002 @bug-permission
     Scenario Outline: <TC_ID> - Verify error when user sends this API with <cookie> cookie and <companyKeyHeader> companyKeyHeader and <companyTypeHeader> companyTypeHeader
         Given Check grid view supplier exist in the company, if it does not exist will create grid view supplier
         And User picks random grid view of suppliers in above response
