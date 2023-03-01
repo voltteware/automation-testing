@@ -15,6 +15,7 @@ export class Links {
     static API_CREATE_GRIDVIEW: string = '/api/grid-view';
     static API_GET_GRIDVIEW_SUPPLIER: string = '/api/grid-view/supplier';
     static API_GET_GRIDVIEW_ITEM: string = '/api/grid-view/item';
+    static API_GET_GRIDVIEW_DEMAND: string = '/api/grid-view/demand';
     static API_DELETE_GRID_VIEW: string = '/api/grid-view/';
     //API Admin
     static API_ADMIN_DELETE_USER: string = '/api/admin/users/';
