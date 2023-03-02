@@ -5,35 +5,10 @@ import logger from '../../../../src/Logger/logger';
 import { Links } from '../../../../src/utils/links';
 import { faker } from '@faker-js/faker';
 import _ from "lodash";
+import { payLoadSupplier } from '../../../../src/utils/supplierPayLoad';
 
 let link: any;
-let payload: {
-    name?: string,
-    description?: string,
-    email?: string,
-    moq?: Number,
-    leadTime?: Number,
-    orderInterval?: Number,
-    serviceLevel?: Number,
-    targetOrderValue?: Number,
-    freeFreightMinimum?: Number,
-    restockModel?: string,
-    addressData?: [
-        {
-            key?: string,
-            vendorKey?: string,
-            countryCode?: string,
-            fullName?: string,
-            addressLine1?: string,
-            addressLine2?: string,
-            city?: string,
-            stateOrProvinceCode?: string,
-            postalCode?: string,
-            phoneNumber?: string
-        }
-    ],
-
-} = {}
+let payload: payLoadSupplier = {}
 
 Then(`{} sets POST api endpoint to create suppliers`, async function (actor: string) {
     link = Links.API_SUPPLIERS;

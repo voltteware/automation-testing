@@ -35,10 +35,17 @@ async function getGridViewDemand(request: APIRequestContext, linkApi: string, op
     logger.log('info', `Send GET request ${url}`);
     return await request.get(url, options);
 }
+// Get grid-view Demand
+async function getGridViewSupply(request: APIRequestContext, linkApi: string, options?: object) {
+    const url = `${linkApi}`;
+    logger.log('info', `Send GET request ${url}`);
+    return await request.get(url, options);
+}
 export {
     createGridView,
     getGridViewSupplier,
     getGridViewItem,
     getGridViewDemand,
-    deleteGridView
+    deleteGridView,
+    getGridViewSupply
 }
