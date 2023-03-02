@@ -8,8 +8,8 @@ Feature: API_Dashboard POST /api/vendor
         And In Header of the request, she sets param Cookie as valid connect.sid
         When User sends a GET request to get company keys
 
-    @TC_CS001
-    Scenario Outline: TC_CS001 - Verify user <email> could call this API to create supplier with <scenario>
+    @TC_CV001
+    Scenario Outline: TC_CV001 - Verify user <email> could call this API to create supplier with <scenario>
         Given User picks random company in above response
         And User sets GET api endpoint to get information of a company belongs to <email> using company key <companyKey>
         And User sets POST api endpoint to create suppliers
@@ -23,8 +23,8 @@ Feature: API_Dashboard POST /api/vendor
             | scenario            | email                      | supplierName      | description     | emailSupplier      | moq    | leadTime | orderInterval | serviceLevel | companyKey | expectedStatus |
             | Supplier name valid | testautoforecast@gmail.com | New Supplier Auto | New description | newemail@gmail.com | random | random   | random        | random       | random     | 200            |
 
-    #TC_CS002_1, TC_CS002_2 fail due to bug api
-    @TC_CS002 @bug-permission
+    #TC_CV002_1, TC_CV002_2 fail due to bug api
+    @TC_CV002 @bug-permission
     Scenario Outline: <scenario> - Verify error when user sends this API with <cookie> cookie, <companyKeyHeader> companyKey, <companyTypeHeader> companyType value in header
         Given User picks random company in above response
         And User sets POST api endpoint to create suppliers
@@ -35,13 +35,13 @@ Feature: API_Dashboard POST /api/vendor
         And The status text is "<expectedStatusText>"
         Examples:
             | scenario   | email                      | companyKey | cookie  | companyKeyHeader | companyTypeHeader | supplierName      | description     | emailSupplier      | moq | leadTime | orderInterval | serviceLevel | expectedStatus | expectedStatusText    |
-            | TC_CS002_1 | testautoforecast@gmail.com | random     | invalid | invalid          | invalid           | New Supplier Auto | New description | newemail@gmail.com | 1   | 8        | 15            | 6            | 401            | Unauthorized          |
-            | TC_CS002_2 | testautoforecast@gmail.com | random     | invalid | valid            | valid             | New Supplier Auto | New description | newemail@gmail.com | 1   | 8        | 15            | 6            | 401            | Unauthorized          |
-            | TC_CS002_3 | testautoforecast@gmail.com | random     | valid   | invalid          | invalid           | New Supplier Auto | New description | newemail@gmail.com | 1   | 8        | 15            | 6            | 400            | Company not found.    |
-            | TC_CS002_4 | testautoforecast@gmail.com | random     | valid   |                  |                   | New Supplier Auto | New description | newemail@gmail.com | 1   | 8        | 15            | 6            | 500            | Internal Server Error |
+            | TC_CV002_1 | testautoforecast@gmail.com | random     | invalid | invalid          | invalid           | New Supplier Auto | New description | newemail@gmail.com | 1   | 8        | 15            | 6            | 401            | Unauthorized          |
+            | TC_CV002_2 | testautoforecast@gmail.com | random     | invalid | valid            | valid             | New Supplier Auto | New description | newemail@gmail.com | 1   | 8        | 15            | 6            | 401            | Unauthorized          |
+            | TC_CV002_3 | testautoforecast@gmail.com | random     | valid   | invalid          | invalid           | New Supplier Auto | New description | newemail@gmail.com | 1   | 8        | 15            | 6            | 400            | Company not found.    |
+            | TC_CV002_4 | testautoforecast@gmail.com | random     | valid   |                  |                   | New Supplier Auto | New description | newemail@gmail.com | 1   | 8        | 15            | 6            | 500            | Internal Server Error |
 
-    @TC_CS003
-    Scenario Outline: TC_CS003 - Verify user <userA> could not call this API to create Supplier of company which does not belongs to her
+    @TC_CV003
+    Scenario Outline: TC_CV003 - Verify user <userA> could not call this API to create Supplier of company which does not belongs to her
         Given User picks random company in above response
         And User has valid connect.sid of "<userA>" after send a POST request with payload as email: "<userA>" and password: "<password>"
         And User sets GET api endpoint to get information of a company belongs to <userB> using company key <companyKey>
@@ -55,8 +55,8 @@ Feature: API_Dashboard POST /api/vendor
             | userA               | userB                      | password  | companyKey | supplierName      | description     | emailSupplier      | moq | leadTime | orderInterval | serviceLevel | expectedStatus | expectedStatusText |
             | may27user@gmail.com | testautoforecast@gmail.com | Test1111! | random     | New Supplier Auto | New description | newemail@gmail.com | 1   | 8        | 15            | 6            | 400            | Company not found. |
 
-    @TC_CS004
-    Scenario Outline: TC_CS004 - Verify error Vendor already exists
+    @TC_CV004
+    Scenario Outline: TC_CV004 - Verify error Vendor already exists
         Given User picks random company in above response
         And User sets GET api endpoint to get information of a company belongs to <email> using company key <companyKey>
         And User sets POST api endpoint to create suppliers
@@ -70,7 +70,7 @@ Feature: API_Dashboard POST /api/vendor
             | scenario            | email                      | supplierName      | description     | emailSupplier      | moq    | leadTime | orderInterval | serviceLevel | companyKey | expectedStatus | expectedStatusText     |
             | Supplier name valid | testautoforecast@gmail.com | New Supplier Auto | New description | newemail@gmail.com | random | random   | random        | random       | random     | 400            | Vendor already exists. |
 
-    @TC_CS005
+    @TC_CV005
     Scenario Outline: <TC_ID> - Verify user <email> could call this API to create supplier with <scenario>
         Given User picks company with type ASC in above response
         And User sets POST api endpoint to create suppliers
@@ -82,12 +82,12 @@ Feature: API_Dashboard POST /api/vendor
         And User checks values in response of create supplier are correct
         Examples:
             | TC_ID      | scenario                                                          | email                      | supplierName      | description     | emailSupplier      | moq    | leadTime | orderInterval | serviceLevel | targetOrderValue | freeFreightMinimum | restockModel | companyKey | expectedStatus |
-            | TC_CS005_1 | ASC company restockModel = Use Store Rule (Supplier Ships to FBA) | testautoforecast@gmail.com | New Supplier Auto | New description | newemail@gmail.com | 1      | 10       | 30            | 10           | 100              | 100                | GLOBAL       | random     | 200            |
-            | TC_CS005_2 | ASC company restockModel = Warehouse Ships to FBA                 | testautoforecast@gmail.com | New Supplier Auto | New description | newemail@gmail.com | random | random   | random        | random       | random           | random             | LOCAL        | random     | 200            |
-            | TC_CS005_3 | ASC company restockModel = Supplier Ships to FBA                  | testautoforecast@gmail.com | New Supplier Auto | New description | newemail@gmail.com | random | random   | random        | random       | random           | random             | DIRECT_SHIP  | random     | 200            |
+            | TC_CV005_1 | ASC company restockModel = Use Store Rule (Supplier Ships to FBA) | testautoforecast@gmail.com | New Supplier Auto | New description | newemail@gmail.com | 1      | 10       | 30            | 10           | 100              | 100                | GLOBAL       | random     | 200            |
+            | TC_CV005_2 | ASC company restockModel = Warehouse Ships to FBA                 | testautoforecast@gmail.com | New Supplier Auto | New description | newemail@gmail.com | random | random   | random        | random       | random           | random             | LOCAL        | random     | 200            |
+            | TC_CV005_3 | ASC company restockModel = Supplier Ships to FBA                  | testautoforecast@gmail.com | New Supplier Auto | New description | newemail@gmail.com | random | random   | random        | random       | random           | random             | DIRECT_SHIP  | random     | 200            |
 
-    @TC_CS006
-    Scenario Outline: TC_CS006 - Verify user <email> could call this API to add address information of supplier for ASC company
+    @TC_CV006
+    Scenario Outline: TC_CV006 - Verify user <email> could call this API to add address information of supplier for ASC company
         Given User picks company with type ASC in above response
         And User sets POST api endpoint to create suppliers
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
@@ -100,7 +100,7 @@ Feature: API_Dashboard POST /api/vendor
         # And TODO: check address is correct
         Examples:
             | TC_ID      | scenario                                                          | email                      | supplierName      | description     | emailSupplier      | moq    | leadTime | orderInterval | serviceLevel | targetOrderValue | freeFreightMinimum | restockModel | addressLine1 | city   | stateOrProvinceCode | postalCode | countryCode | phoneNumber | companyKey | expectedStatus |
-            | TC_CS005_1 | ASC company restockModel = Use Store Rule (Supplier Ships to FBA) | testautoforecast@gmail.com | New Supplier Auto | New description | newemail@gmail.com | random | random   | random        | random       | random           | random             | GLOBAL       | random       | random | random              | random     | VN          | random      | random     | 200            |
+            | TC_CV005_1 | ASC company restockModel = Use Store Rule (Supplier Ships to FBA) | testautoforecast@gmail.com | New Supplier Auto | New description | newemail@gmail.com | random | random   | random        | random       | random           | random             | GLOBAL       | random       | random | random              | random     | VN          | random      | random     | 200            |
 
 
 

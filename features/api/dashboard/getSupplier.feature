@@ -9,8 +9,8 @@ Feature: API_Dashboard GET /api/vendor
         When User sends a GET request to get company keys
         Then User picks random company in above response
 
-    @TC_GS001
-    Scenario Outline: TC_GS001 - Verify user <email> could call this API to get information of specific supplier by using company key and company type
+    @TC_GV001
+    Scenario Outline: TC_GV001 - Verify user <email> could call this API to get information of specific supplier by using company key and company type
         Given User sets GET api endpoint to get information of a company belongs to <email> using company key <companyKey>
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get suppliers keys
@@ -24,8 +24,8 @@ Feature: API_Dashboard GET /api/vendor
             | user  | email                      | password  | companyKey | expectedStatus |
             | admin | testautoforecast@gmail.com | Test1111! | random     | 200            |
 
-    #Bug TC_GS002_1 and TC_GS002_2, return status code 200 when cookie invalid.
-    @TC_GS002 @bug-permission
+    #Bug TC_GV002_1 and TC_GV002_2, return status code 200 when cookie invalid.
+    @TC_GV002 @bug-permission
     Scenario Outline: <scenario> - Verify error when user sends this API with <cookie> cookie, <companyKeyHeader> companyKey, <companyTypeHeader> companyType value in header
         Given User sets GET api endpoint to get information of a company belongs to <email> using company key <companyKey>
         But User sets <cookie> cookie of <email> and <companyKeyHeader> companyKey and <companyTypeHeader> companyType in the header
@@ -35,13 +35,13 @@ Feature: API_Dashboard GET /api/vendor
         And The status text is "<expectedStatusText>"
         Examples:
             | scenario   | email                      | companyKey | cookie  | companyKeyHeader | companyTypeHeader | expectedStatus | expectedStatusText    |
-            | TC_GS002_1 | testautoforecast@gmail.com | random     | invalid | invalid          | invalid           | 401            | Unauthorized          |
-            | TC_GS002_2 | testautoforecast@gmail.com | random     | invalid | valid            | valid             | 401            | Unauthorized          |
-            | TC_GS002_3 | testautoforecast@gmail.com | random     | valid   | invalid          | invalid           | 400            | Company not found.    |
-            | TC_GS002_4 | testautoforecast@gmail.com | random     | valid   |                  |                   | 500            | Internal Server Error |
+            | TC_GV002_1 | testautoforecast@gmail.com | random     | invalid | invalid          | invalid           | 401            | Unauthorized          |
+            | TC_GV002_2 | testautoforecast@gmail.com | random     | invalid | valid            | valid             | 401            | Unauthorized          |
+            | TC_GV002_3 | testautoforecast@gmail.com | random     | valid   | invalid          | invalid           | 400            | Company not found.    |
+            | TC_GV002_4 | testautoforecast@gmail.com | random     | valid   |                  |                   | 500            | Internal Server Error |
 
-    @TC_GS003 
-    Scenario Outline: TC_GS003 - Verify user <userA> could not call this API to get Supplier of company which does not belongs to her
+    @TC_GV003 
+    Scenario Outline: TC_GV003 - Verify user <userA> could not call this API to get Supplier of company which does not belongs to her
         Given User has valid connect.sid of "<userA>" after send a POST request with payload as email: "<userA>" and password: "<password>"
         And User sets GET api endpoint to get information of a company belongs to <userB> using company key <companyKey>
         But User sets valid cookie of <userA> and valid companyKey and valid companyType in the header
@@ -53,7 +53,7 @@ Feature: API_Dashboard GET /api/vendor
             | userA               | userB              | password  | companyKey | expectedStatus | expectedStatusText |
             | may27user@gmail.com | may27pre@gmail.com | Test1111! | random     | 400            | Company not found. |
 
-    @TC_GS004
+    @TC_GV004
     Scenario Outline: <TC_ID> - Verify user could set limit 100 in this API to get list suppliers sorted by Lead Time with direction <direction>
         Given User sets GET api endpoint to get information of a company belongs to <email> using company key <companyKey>
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
@@ -64,8 +64,8 @@ Feature: API_Dashboard GET /api/vendor
         And Check items in the response should be sort by field leadTime with direction <direction>
         Examples:
             | TC_ID      | user  | email                      | password  | limitRow | sortField | direction | companyKey | expectedStatus |
-            | TC_GS004_1 | admin | testautoforecast@gmail.com | Test1111! | 100      | leadTime  | asc       | random     | 200            |
-            | TC_GS004_2 | admin | testautoforecast@gmail.com | Test1111! | 100      | leadTime  | desc      | random     | 200            |
+            | TC_GV004_1 | admin | testautoforecast@gmail.com | Test1111! | 100      | leadTime  | asc       | random     | 200            |
+            | TC_GV004_2 | admin | testautoforecast@gmail.com | Test1111! | 100      | leadTime  | desc      | random     | 200            |
 
 
 

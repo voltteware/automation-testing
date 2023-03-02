@@ -7,12 +7,11 @@ Feature: API_Admin DELETE/User
         And User sets GET api endpoint to get 100 users has just created
         And In Header of the request, user sets param Cookie as valid connect.sid
         When User sends a GET request to get 100 latest users
-        Then Check email exist in the system, if it does not exist will create user with below email
-            | email              |
-            | testauto@gmail.com |
+
     @TC_DU001
     Scenario Outline: TC_DU001 - Verify <user> could call this API to delete a user
-        Given User filters user to get user which has the email as <emailWantToDelete>
+        Given Check <emailWantToDelete> exist in the system, if it does not exist will create user with below email
+        And User filters user to get user which has the email as <emailWantToDelete>
         And In Header of the request, user sets param Cookie as valid connect.sid
         When User sends a DELETE method to delete user <emailWantToDelete>
         Then The expected status code should be <expectedStatus>
@@ -25,7 +24,6 @@ Feature: API_Admin DELETE/User
     #Bug API in case DU002
     @TC_DU002 @bug-permission
     Scenario Outline: TC_DU002 - Verify error when user sends this API with <cookie> cookie
-
         Given User filters user to get user which has the email as <emailWantToDelete>
         And User sets DELETE api endpoint to delete user keys
         But User sets Cookie in HEADER as <cookie>

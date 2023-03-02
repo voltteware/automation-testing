@@ -59,9 +59,7 @@ Then('Check email exist in the system, if it does not exist will create user wit
     }
 })
 
-Then('Check email exist in the system, if it does not exist will create user with below email', async function (dataTable: DataTable) {
-    var email: string = dataTable.hashes()[0].email
-
+Then('Check {} exist in the system, if it does not exist will create user with below email', async function (email: string) {
     allUser = arrayHelper.flattenArray(this.get100LatestUsersResponseBody, 'data');
     const foundUser = allUser.find((element: { userId: any; }) => element.userId === email);
     if (typeof foundUser == 'undefined') {
@@ -140,6 +138,8 @@ Then('{} sends a DELETE method to delete user {}', async function (actor, email:
     }
 
     this.response = await adminRequest.deleteUser(this.request, Links.API_ADMIN_DELETE_USER, emailWantToDelete, options);
-    deleteUsersResponseBody = JSON.parse(await this.response.text());
+    const responseBodyText = await this.response.text();
+    logger.log('info', `Response Delete ${Links.API_ADMIN_DELETE_USER} has status code ${this.response.status()} ${this.response.statusText()} and response body ${responseBodyText}`);
+    this.attach(`Response Delete ${Links.API_ADMIN_DELETE_USER} has status code ${this.response.status()} ${this.response.statusText()} and response body ${responseBodyText}`)
 })
 
