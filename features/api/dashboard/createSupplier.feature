@@ -102,6 +102,20 @@ Feature: API_Dashboard POST /api/vendor
             | TC_ID      | scenario                                                          | email                      | supplierName      | description     | emailSupplier      | moq    | leadTime | orderInterval | serviceLevel | targetOrderValue | freeFreightMinimum | restockModel | addressLine1 | city   | stateOrProvinceCode | postalCode | countryCode | phoneNumber | companyKey | expectedStatus |
             | TC_CS005_1 | ASC company restockModel = Use Store Rule (Supplier Ships to FBA) | testautoforecast@gmail.com | New Supplier Auto | New description | newemail@gmail.com | random | random   | random        | random       | random           | random             | GLOBAL       | random       | random | random              | random     | VN          | random      | random     | 200            |
 
+@TC_CS007
+    Scenario Outline: TC_CS001 - Verify user <email> could call this API to create supplier with <scenario>
+        Given User picks random company in above response
+        And User sets GET api endpoint to get information of a company belongs to <email> using company key <companyKey>
+        And User sets POST api endpoint to create suppliers
+        And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
+        And User sets request body with payload as name: "<supplierName>"
+        When User sends a POST method to create supplier
+        Then The expected status code should be <expectedStatus>
+        And User checks API contract essential types in supplier object are correct
+        And User checks values in response of create supplier are correct
+        Examples:
+            | scenario                  | email                      | supplierName      | companyKey | expectedStatus |
+            | only input required field | testautoforecast@gmail.com | New Supplier Auto | random     | 200            |
 
 
 

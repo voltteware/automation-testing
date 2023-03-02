@@ -9,21 +9,49 @@ Then('{} checks API contract essential types in item object are correct', async 
     expect(typeof (this.responseBodyOfAItemObject.asin), 'Type of name value should be string').toBe("string");
     expect(typeof (this.responseBodyOfAItemObject.fnsku), 'Type of name value should be string').toBe("string");
     expect(typeof (this.responseBodyOfAItemObject.name), 'Type of name value should be string').toBe("string");
-    expect(typeof (this.responseBodyOfAItemObject.description), 'Type of description value should be string').toBe("string");
     expect(typeof (this.responseBodyOfAItemObject.packageWeight), 'Type of packageWeight value should be number').toBe("number"); 
-    expect(typeof (this.responseBodyOfAItemObject.vendorName), 'Type of vendorName value should be string').toBe("string");
     expect(typeof (this.responseBodyOfAItemObject.vendorPrice), 'Type of vendorPrice value should be number').toBe("number");
-    expect(typeof (this.responseBodyOfAItemObject.moq), 'Type of moq value should be number').toBe("number");
-    expect(typeof (this.responseBodyOfAItemObject.leadTime), 'Type of leadTime value should be number').toBe("number");
-    expect(typeof (this.responseBodyOfAItemObject.orderInterval), 'Type of orderInterval value should be number').toBe("number");
-    expect(typeof (this.responseBodyOfAItemObject.serviceLevel), 'Type of serviceLevel value should be number').toBe("number");
+    if (this.responseBodyOfAItemObject.moq !== null) {
+        expect(typeof (this.responseBodyOfAItemObject.moq), 'Type of moq value should be number').toBe("number");
+    }
+    else {
+        expect(this.responseBodyOfAItemObject.moq, 'moq value should be null').toBeNull();
+    }
+    if (this.responseBodyOfAItemObject.leadTime !== null) {
+        expect(typeof (this.responseBodyOfAItemObject.leadTime), 'Type of leadTime value should be number').toBe("number");
+    }
+    else {
+        expect(this.responseBodyOfAItemObject.leadTime, 'leadTime value should be null').toBeNull();
+    }
+    if (this.responseBodyOfAItemObject.orderInterval !== null) {
+        expect(typeof (this.responseBodyOfAItemObject.orderInterval), 'Type of orderInterval value should be number').toBe("number");
+    }
+    else {
+        expect(this.responseBodyOfAItemObject.orderInterval, 'orderInterval value should be null').toBeNull();
+    }
+    if (this.responseBodyOfAItemObject.serviceLevel !== null) {
+        expect(typeof (this.responseBodyOfAItemObject.serviceLevel), 'Type of serviceLevel value should be number').toBe("number");
+    }
+    else {
+        expect(this.responseBodyOfAItemObject.serviceLevel, 'serviceLevel value should be null').toBeNull();
+    }
+    if (this.responseBodyOfAItemObject.skuNotes !== null) {
+        expect(typeof (this.responseBodyOfAItemObject.skuNotes), 'Type of skuNotes value should be string').toBe("string");
+    }
+    else {
+        expect(this.responseBodyOfAItemObject.skuNotes, 'skuNotes value should be null').toBeNull();
+    }
+    if (this.responseBodyOfAItemObject.prepNotes !== null) {
+        expect(typeof (this.responseBodyOfAItemObject.prepNotes), 'Type of prepNotes value should be string').toBe("string");
+    }
+    else {
+        expect(this.responseBodyOfAItemObject.prepNotes, 'prepNotes value should be null').toBeNull();
+    }
     expect(typeof (this.responseBodyOfAItemObject.onHand), 'Type of onHand value should be number').toBe("number");
     expect(typeof (this.responseBodyOfAItemObject.onHandMin), 'Type of onHandMin value should be number').toBe("number");
     expect(typeof (this.responseBodyOfAItemObject.onHandThirdParty), 'Type of onHandThirdParty value should be number').toBe("number");
     expect(typeof (this.responseBodyOfAItemObject.onHandThirdPartyMin), 'Type of onHandThirdPartyMin value should be number').toBe("number");
     expect(typeof (this.responseBodyOfAItemObject.onHandFbm), 'Type of onHandFbm value should be number').toBe("number");
-    expect(typeof (this.responseBodyOfAItemObject.skuNotes), 'Type of skuNotes value should be string').toBe("string");
-    expect(typeof (this.responseBodyOfAItemObject.prepNotes), 'Type of prepNotes value should be string').toBe("string");
     expect(typeof (this.responseBodyOfAItemObject.supplierRebate), 'Type of supplierRebate value should be number').toBe("number");
     expect(typeof (this.responseBodyOfAItemObject.inboundShippingCost), 'Type of inboundShippingCost value should be number').toBe("number");
     expect(typeof (this.responseBodyOfAItemObject.reshippingCost), 'Type of reshippingCost value should be number').toBe("number");
@@ -31,11 +59,24 @@ Then('{} checks API contract essential types in item object are correct', async 
     expect(typeof (this.responseBodyOfAItemObject.repackingLaborCost), 'Type of repackingLaborCost value should be number').toBe("number");
     expect(typeof (this.responseBodyOfAItemObject.dimensionalWeight), 'Type of dimensionalWeight value should be number').toBe("number");
     expect(typeof (this.responseBodyOfAItemObject.forecastTags), 'Type of forecastTags value should be object').toBe("object");
+    if (this.responseBodyOfAItemObject.vendorName !== null) {
+        expect(typeof (this.responseBodyOfAItemObject.vendorName), 'Type of vendorName value should be string').toBe("string");
+    }
+    else {
+        expect(this.responseBodyOfAItemObject.vendorName, 'vendorName value should be null').toBeNull();
+    }
     if (this.responseBodyOfAItemObject.hazmat !== null) {
         expect(typeof (this.responseBodyOfAItemObject.hazmat), 'Type of hazmat value should be string').toBe("string");
     }
     else {
         expect(this.responseBodyOfAItemObject.hazmat, 'hazmat value should be null').toBeNull();
+    }
+    
+    if (this.responseBodyOfAItemObject.description !== null) {
+        expect(typeof (this.responseBodyOfAItemObject.description), 'Type of description value should be string').toBe("string");
+    }
+    else {
+        expect(this.responseBodyOfAItemObject.description, 'description value should be null').toBeNull();
     }
     if (this.responseBodyOfAItemObject.prepGuide !== null) {
         expect(typeof (this.responseBodyOfAItemObject.prepGuide), 'Type of prepGuide value should be string').toBe("string");
@@ -85,12 +126,17 @@ Then('{} checks API contract essential types in item object are correct', async 
     else {
         expect(this.responseBodyOfAItemObject.growthTrend, 'growthTrend value should be null').toBeNull();
     }
+    if (this.responseBodyOfAItemObject.lotMultipleItemName !== null) {
+        expect(typeof (this.responseBodyOfAItemObject.lotMultipleItemName), 'Type of lotMultipleItemName value should be string').toBe("string");
+    }
+    else {
+        expect(this.responseBodyOfAItemObject.lotMultipleItemName, 'lotMultipleItemName value should be null').toBeNull();
+    }
     expect(typeof (this.responseBodyOfAItemObject.rank), 'Type of rank value should be number').toBe("number");
     expect(typeof (this.responseBodyOfAItemObject.isHidden), 'Type of isHidden value should be boolean').toBe("boolean");
     expect(typeof (this.responseBodyOfAItemObject.useHistoryOverride), 'Type of useHistoryOverride value should be boolean').toBe("boolean");
     expect(typeof (this.responseBodyOfAItemObject.useLostSalesOverride), 'Type of useLostSalesOverride value should be boolean').toBe("boolean");
     expect(typeof (this.responseBodyOfAItemObject.lotMultipleQty), 'Type of lotMultipleQty value should be number').toBe("number");
-    expect(typeof (this.responseBodyOfAItemObject.lotMultipleItemName), 'Type of lotMultipleItemName value should be string').toBe("string");
     expect(typeof (this.responseBodyOfAItemObject.forecastDirty), 'Type of forecastDirty value should be boolean').toBe("boolean");
     expect(typeof (this.responseBodyOfAItemObject.tags), 'Type of tags value should be object').toBe("object");
     expect(typeof (this.responseBodyOfAItemObject.useBackfill), 'Type of useBackfill value should be boolean').toBe("boolean");

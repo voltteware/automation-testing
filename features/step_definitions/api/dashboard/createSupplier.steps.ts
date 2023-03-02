@@ -112,6 +112,12 @@ Then('{} sets request body with payload as name: {string} and description: {stri
         this.attach(`Payload: ${JSON.stringify(payload, undefined, 4)}`)
     });
 
+Then('{} sets request body with payload as name: {string}',async function (actor, name: string) {
+    if (name.includes('New Supplier Auto')) {
+        payload.name = `${faker.company.name()} Auto`;
+    }
+})
+
 Then('{} adds address information in the payload: address {string} and city {string} and stateOrProvinceCode {string} and postalCode {string} and countryCode {string} and phoneNumber {string}',
     async function (actor, address, city, stateOrProvinceCode, postalCode, countryCode, phoneNumber: string) {
         if (address == 'random') {
@@ -157,22 +163,29 @@ Then('{} sends a POST method to create supplier', async function (actor: string)
 
 Then('{} checks values in response of create supplier are correct', async function (actor: string) {
     const companyType = ['ASC', 'CSV', 'QBFS', 'QBO'];
-    const expectedSupplierName = payload.name;
-    const expectedSupplierDescription = payload.description;
-    const expectedSupplierEmail = payload.email;
-    const expectedSupplierMoq = payload.moq;
-    const expectedSupplierLeadTime = payload.leadTime;
-    const expectedSupplierOrderInterval = payload.orderInterval;
-    const expectedSupplierserviceLevel = payload.serviceLevel;
     expect(companyType, `Company Type should be one of ${companyType}`).toContain(this.responseBodyOfASupplierObject.companyType);
+    if(payload.name){
+        expect(this.responseBodyOfASupplierObject.name, `In response body, name should be matched with the data request: ${payload.name}`).toBe(payload.name);
+    }
+    if(payload.description){
+        expect(this.responseBodyOfASupplierObject.description, `In response body, description should be matched with the data request: ${payload.description}`).toBe(payload.description);
+    }
+    if(payload.email){
+        expect(this.responseBodyOfASupplierObject.email, `In response body, email should be matched with the data request: ${payload.email}`).toBe(payload.email);
+    }
+    if(payload.moq){
+        expect(this.responseBodyOfASupplierObject.moq, `In response body, moq should be matched with the data request: ${payload.moq}`).toBe(payload.moq);
+    }
+    if(payload.leadTime){
+        expect(this.responseBodyOfASupplierObject.leadTime, `In response body, leadTime should be matched with the data request: ${payload.leadTime}`).toBe(payload.leadTime);
+    }
+    if(payload.orderInterval){
+        expect(this.responseBodyOfASupplierObject.orderInterval, `In response body, orderInterval should be matched with the data request: ${payload.orderInterval}`).toBe(payload.orderInterval);
+    }
+    if(payload.serviceLevel){
+        expect(this.responseBodyOfASupplierObject.serviceLevel, `In response body, serviceLevel should be matched with the data request: ${payload.serviceLevel}`).toBe(payload.serviceLevel);
+    }
     expect(this.responseBodyOfASupplierObject.companyKey).not.toBeNull();
-    expect(this.responseBodyOfASupplierObject.name, `In response body, name should be matched with the data request: ${expectedSupplierName}`).toBe(expectedSupplierName);
-    expect(this.responseBodyOfASupplierObject.description, `In response body, description should be matched with the data request: ${expectedSupplierDescription}`).toBe(expectedSupplierDescription);
-    expect(this.responseBodyOfASupplierObject.email, `In response body, email should be matched with the data request: ${expectedSupplierEmail}`).toBe(expectedSupplierEmail);
-    expect(this.responseBodyOfASupplierObject.moq, `In response body, moq should be matched with the data request: ${expectedSupplierMoq}`).toBe(expectedSupplierMoq);
-    expect(this.responseBodyOfASupplierObject.leadTime, `In response body, leadTime should be matched with the data request: ${expectedSupplierLeadTime}`).toBe(expectedSupplierLeadTime);
-    expect(this.responseBodyOfASupplierObject.orderInterval, `In response body, orderInterval should be matched with the data request: ${expectedSupplierOrderInterval}`).toBe(expectedSupplierOrderInterval);
-    expect(this.responseBodyOfASupplierObject.serviceLevel, `In response body, serviceLevel should be matched with the data request: ${expectedSupplierserviceLevel}`).toBe(expectedSupplierserviceLevel);
     if (payload.targetOrderValue) {
         expect(this.responseBodyOfASupplierObject.targetOrderValue, `In response body, targetOrderValue should be matched with the data request: ${payload.targetOrderValue}`).toBe(payload.targetOrderValue);
     }

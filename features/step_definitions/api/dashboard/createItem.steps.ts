@@ -8,6 +8,7 @@ import _ from "lodash";
 
 let link: any;
 let randomSupplier: any;
+let randomItem: any;
 let payload: {
     name?: string,
     asin?: string,
@@ -38,19 +39,23 @@ let payload: {
     isFbm?: Boolean,
     key?: string,
     vendorKey?: string,
+    lotMultipleItemKey?: string,
 } = {}
 
 Then(`{} sets POST api endpoint to create item`, async function (actor: string) {
     link = Links.API_ITEMS;
 });
 
-Then('{} sets request body with payload as name: {string} and description: {string} and vendorName: {string} and vendorPrice: {string} and moq: {string} and leadTime: {string} and orderInterval: {string} and serviceLevel: {string} and onHand: {string} and onHandMin: {string} and onHandThirdParty: {string} and onHandThirdPartyMin: {string} and lotMultipleQty: {string} and lotMultipleItemName: {string} and asin: {string} and fnsku: {string} and skuNotes: {string} and prepNotes: {string} and supplierRebate: {string} and inboundShippingCost: {string} and reshippingCost: {string} and repackagingMaterialCost: {string} and repackingLaborCost: {string} and rank: {string} and inventorySourcePreference: {string} and average7DayPrice: {string} and isFbm: {string} and key: {string} and vendorKey: {string}',
-    async function (actor, name, description, vendorName, vendorPrice, moq, leadTime, orderInterval, serviceLevel, onHand, onHandMin, onHandThirdParty, onHandThirdPartyMin, lotMultipleQty, lotMultipleItemName, asin, fnsku, skuNotes, prepNotes, supplierRebate, inboundShippingCost, reshippingCost, repackagingMaterialCost, repackingLaborCost, rank, inventorySourcePreference, average7DayPrice, isFbm, key, vendorKey: string) {
+Then('{} sets request body with payload as name: {string} and description: {string} and vendorName: {string} and vendorPrice: {string} and moq: {string} and leadTime: {string} and orderInterval: {string} and serviceLevel: {string} and onHand: {string} and onHandMin: {string} and onHandThirdParty: {string} and onHandThirdPartyMin: {string} and lotMultipleQty: {string} and lotMultipleItemName: {string} and asin: {string} and fnsku: {string} and skuNotes: {string} and prepNotes: {string} and supplierRebate: {string} and inboundShippingCost: {string} and reshippingCost: {string} and repackagingMaterialCost: {string} and repackingLaborCost: {string} and rank: {string} and inventorySourcePreference: {string} and average7DayPrice: {string} and isFbm: {string} and key: {string} and vendorKey: {string} and lotMultipleItemKey: {string}',
+    async function (actor, name, description, vendorName, vendorPrice, moq, leadTime, orderInterval, serviceLevel, onHand, onHandMin, onHandThirdParty, onHandThirdPartyMin, lotMultipleQty, lotMultipleItemName, asin, fnsku, skuNotes, prepNotes, supplierRebate, inboundShippingCost, reshippingCost, repackagingMaterialCost, repackingLaborCost, rank, inventorySourcePreference, average7DayPrice, isFbm, key, vendorKey, lotMultipleItemKey: string) {
+        
+        randomItem = this.getItemsResponseBody[Math.floor(Math.random() * this.getItemsResponseBody.length)];
+        randomSupplier = this.getSupplierResponseBody[Math.floor(Math.random() * this.getSupplierResponseBody.length)]
+
         if (name.includes('New Item Auto')) {
-            payload.name = `${faker.commerce.productName()} Auto`;
+            payload.name = `${faker.random.alphaNumeric(10).toUpperCase()}-${faker.datatype.number(500)}-AUTO`;
         }
         payload.description = description;
-        randomSupplier = this.getSupplierResponseBody[Math.floor(Math.random() * this.getSupplierResponseBody.length)]
         if(vendorName == 'random'){
             payload.vendorName = randomSupplier.name;
         }
@@ -137,18 +142,26 @@ Then('{} sets request body with payload as name: {string} and description: {stri
         }
 
         if(lotMultipleItemName == 'random'){
-            payload.lotMultipleItemName = this.getItemsResponseBody[Math.floor(Math.random() * this.getItemsResponseBody.length)].name;
+            payload.lotMultipleItemName = randomItem.name;
+        }
+
+        if(lotMultipleItemKey == 'random'){
+            if(this.companyType == 'CSV'){
+                payload.lotMultipleItemKey = randomItem.key;
+            }else{
+                payload.lotMultipleItemKey = `${randomItem.asin}-${randomItem.name}`;
+            }
         }
 
         if (asin == 'random') {
-            payload.asin = `${faker.random.alphaNumeric(10)}`;
+            payload.asin = `${faker.random.alphaNumeric(10).toUpperCase()}`;
         }
         else {
             payload.asin = asin;
         }
 
         if (fnsku == 'random') {
-            payload.fnsku = `${faker.random.alphaNumeric(10)}`;
+            payload.fnsku = `${faker.random.alphaNumeric(10).toUpperCase()}`;
         }
         else {
             payload.fnsku = fnsku;
@@ -228,6 +241,26 @@ Then('{} sets request body with payload as name: {string} and description: {stri
         }
         this.attach(`Payload: ${JSON.stringify(payload, undefined, 4)}`)
     });
+Then('{} sets request body with payload as name: {string} and asin: {string} and fnsku: {string}', async function (actor, name, asin, fnsku: string) {
+    
+    if (name.includes('New Item Auto')) {
+        payload.name = `${faker.random.alphaNumeric(6).toUpperCase()}-${faker.datatype.number(500)}-AUTO`;
+    }
+
+    if (asin == 'random') {
+        payload.asin = `${faker.random.alphaNumeric(10).toUpperCase()}`;
+    }
+    else {
+        payload.asin = asin;
+    }
+
+    if (fnsku == 'random') {
+        payload.fnsku = `${faker.random.alphaNumeric(10).toUpperCase()}`;
+    }
+    else {
+        payload.fnsku = fnsku;
+    }
+})
 
 Then('{} sends a POST method to create item', async function (actor: string) {
     this.response = this.createItemResponse = await itemRequest.createItem(this.request, link, payload, this.headers);
@@ -249,34 +282,88 @@ Then('{} checks values in response of create item are correct', async function (
     const companyType = ['ASC', 'CSV', 'QBFS', 'QBO'];
     expect(companyType, `Company Type should be one of ${companyType}`).toContain(this.responseBodyOfAItemObject.companyType);
     expect(this.responseBodyOfAItemObject.companyKey).not.toBeNull();
-    expect(this.responseBodyOfAItemObject.name, `In response body, name should be matched with the data request: ${payload.name}`).toBe(payload.name);
-    expect(this.responseBodyOfAItemObject.description, `In response body, description should be matched with the data request: ${payload.description}`).toBe(payload.description);
-    expect(this.responseBodyOfAItemObject.vendorName, `In response body, vendorName should be matched with the data request: ${payload.vendorName}`).toBe(payload.vendorName);
-    expect(this.responseBodyOfAItemObject.vendorPrice, `In response body, vendorPrice should be matched with the data request: ${payload.vendorPrice}`).toBe(payload.vendorPrice);
-    expect(this.responseBodyOfAItemObject.moq, `In response body, moq should be matched with the data request: ${payload.moq}`).toBe(payload.moq);
-    expect(this.responseBodyOfAItemObject.leadTime, `In response body, leadTime should be matched with the data request: ${payload.leadTime}`).toBe(payload.leadTime);
-    expect(this.responseBodyOfAItemObject.orderInterval, `In response body, orderInterval should be matched with the data request: ${payload.orderInterval}`).toBe(payload.orderInterval);
-    expect(this.responseBodyOfAItemObject.serviceLevel, `In response body, serviceLevel should be matched with the data request: ${payload.serviceLevel}`).toBe(payload.serviceLevel);
-    expect(this.responseBodyOfAItemObject.onHand, `In response body, onHand should be matched with the data request: ${payload.onHand}`).toBe(payload.onHand);
-    expect(this.responseBodyOfAItemObject.onHandMin, `In response body, onHandMin should be matched with the data request: ${payload.onHandMin}`).toBe(payload.onHandMin);
-    expect(this.responseBodyOfAItemObject.onHandThirdParty, `In response body, onHandThirdParty should be matched with the data request: ${payload.onHandThirdParty}`).toBe(payload.onHandThirdParty);
-    expect(this.responseBodyOfAItemObject.onHandThirdPartyMin, `In response body, onHandThirdPartyMin should be matched with the data request: ${payload.onHandThirdPartyMin}`).toBe(payload.onHandThirdPartyMin);
-    expect(this.responseBodyOfAItemObject.lotMultipleQty, `In response body, lotMultipleQty should be matched with the data request: ${payload.lotMultipleQty}`).toBe(payload.lotMultipleQty);
-    expect(this.responseBodyOfAItemObject.lotMultipleItemName, `In response body, lotMultipleItemName should be matched with the data request: ${payload.lotMultipleItemName}`).toBe(payload.lotMultipleItemName);
+    if(payload.name){
+        expect(this.responseBodyOfAItemObject.name, `In response body, name should be matched with the data request: ${payload.name}`).toBe(payload.name);
+    }
+    if(payload.description){
+        expect(this.responseBodyOfAItemObject.description, `In response body, description should be matched with the data request: ${payload.description}`).toBe(payload.description);
+    }
+    if(payload.vendorName){
+        expect(this.responseBodyOfAItemObject.vendorName, `In response body, vendorName should be matched with the data request: ${payload.vendorName}`).toBe(payload.vendorName);
+    }
+    if(payload.vendorPrice){
+        expect(this.responseBodyOfAItemObject.vendorPrice, `In response body, vendorPrice should be matched with the data request: ${payload.vendorPrice}`).toBe(payload.vendorPrice);
+    }
+    if(payload.moq){
+        expect(this.responseBodyOfAItemObject.moq, `In response body, moq should be matched with the data request: ${payload.moq}`).toBe(payload.moq);
+    }
+    if(payload.leadTime){
+        expect(this.responseBodyOfAItemObject.leadTime, `In response body, leadTime should be matched with the data request: ${payload.leadTime}`).toBe(payload.leadTime);
+    }
+    if(payload.orderInterval){
+        expect(this.responseBodyOfAItemObject.orderInterval, `In response body, orderInterval should be matched with the data request: ${payload.orderInterval}`).toBe(payload.orderInterval);
+    }
+    if(payload.serviceLevel){
+        expect(this.responseBodyOfAItemObject.serviceLevel, `In response body, serviceLevel should be matched with the data request: ${payload.serviceLevel}`).toBe(payload.serviceLevel);
+    }
+    if(payload.onHand){
+        expect(this.responseBodyOfAItemObject.onHand, `In response body, onHand should be matched with the data request: ${payload.onHand}`).toBe(payload.onHand);
+    }
+    if(payload.onHandMin){
+        expect(this.responseBodyOfAItemObject.onHandMin, `In response body, onHandMin should be matched with the data request: ${payload.onHandMin}`).toBe(payload.onHandMin);
+    }
+    if(payload.onHandThirdParty){
+        expect(this.responseBodyOfAItemObject.onHandThirdParty, `In response body, onHandThirdParty should be matched with the data request: ${payload.onHandThirdParty}`).toBe(payload.onHandThirdParty);
+    }
+    if(payload.onHandThirdPartyMin){
+        expect(this.responseBodyOfAItemObject.onHandThirdPartyMin, `In response body, onHandThirdPartyMin should be matched with the data request: ${payload.onHandThirdPartyMin}`).toBe(payload.onHandThirdPartyMin);
+    }
+    if(payload.lotMultipleQty){
+        expect(this.responseBodyOfAItemObject.lotMultipleQty, `In response body, lotMultipleQty should be matched with the data request: ${payload.lotMultipleQty}`).toBe(payload.lotMultipleQty);
+    }
+    if(payload.lotMultipleItemName){
+        expect(this.responseBodyOfAItemObject.lotMultipleItemName, `In response body, lotMultipleItemName should be matched with the data request: ${payload.lotMultipleItemName}`).toBe(payload.lotMultipleItemName);
+    }
     if (this.companyType == "ASC") {
-    expect(this.responseBodyOfAItemObject.skuNotes, `In response body, skuNotes should be matched with the data request: ${payload.skuNotes}`).toBe(payload.skuNotes);
-    expect(this.responseBodyOfAItemObject.prepNotes, `In response body, prepNotes should be matched with the data request: ${payload.prepNotes}`).toBe(payload.prepNotes);
-    expect(this.responseBodyOfAItemObject.supplierRebate, `In response body, supplierRebate should be matched with the data request: ${payload.supplierRebate}`).toBe(payload.supplierRebate);
-    expect(this.responseBodyOfAItemObject.inboundShippingCost, `In response body, inboundShippingCost should be matched with the data request: ${payload.inboundShippingCost}`).toBe(payload.inboundShippingCost);
-    expect(this.responseBodyOfAItemObject.reshippingCost, `In response body, reshippingCost should be matched with the data request: ${payload.reshippingCost}`).toBe(payload.reshippingCost);
-    expect(this.responseBodyOfAItemObject.repackagingMaterialCost, `In response body, repackagingMaterialCost should be matched with the data request: ${payload.repackagingMaterialCost}`).toBe(payload.repackagingMaterialCost);
-    expect(this.responseBodyOfAItemObject.repackingLaborCost, `In response body, repackingLaborCost should be matched with the data request: ${payload.repackingLaborCost}`).toBe(payload.repackingLaborCost);
-    expect(this.responseBodyOfAItemObject.rank, `In response body, rank should be matched with the data request: ${payload.rank}`).toBe(payload.rank);
-    expect(this.responseBodyOfAItemObject.inventorySourcePreference, `In response body, inventorySourcePreference should be matched with the data request: ${payload.inventorySourcePreference}`).toBe(payload.inventorySourcePreference);
-    expect(this.responseBodyOfAItemObject.average7DayPrice, `In response body, average7DayPrice should be matched with the data request: ${payload.average7DayPrice}`).toBe(payload.average7DayPrice);
-    expect(this.responseBodyOfAItemObject.isFbm, `In response body, isFbm should be matched with the data request: ${payload.isFbm}`).toBe(payload.isFbm);
-    expect(this.responseBodyOfAItemObject.asin, `In response body, asin should be matched with the data request: ${payload.asin}`).toBe(payload.asin);
-    expect(this.responseBodyOfAItemObject.fnsku, `In response body, fnsku should be matched with the data request: ${payload.fnsku}`).toBe(payload.fnsku);
+        if(payload.skuNotes){
+            expect(this.responseBodyOfAItemObject.skuNotes, `In response body, skuNotes should be matched with the data request: ${payload.skuNotes}`).toBe(payload.skuNotes);
+        }
+        if(payload.prepNotes){
+            expect(this.responseBodyOfAItemObject.prepNotes, `In response body, prepNotes should be matched with the data request: ${payload.prepNotes}`).toBe(payload.prepNotes);
+        }
+        if(payload.supplierRebate){
+            expect(this.responseBodyOfAItemObject.supplierRebate, `In response body, supplierRebate should be matched with the data request: ${payload.supplierRebate}`).toBe(payload.supplierRebate);
+        }
+        if(payload.inboundShippingCost){
+            expect(this.responseBodyOfAItemObject.inboundShippingCost, `In response body, inboundShippingCost should be matched with the data request: ${payload.inboundShippingCost}`).toBe(payload.inboundShippingCost);
+        }
+        if(payload.reshippingCost){
+            expect(this.responseBodyOfAItemObject.reshippingCost, `In response body, reshippingCost should be matched with the data request: ${payload.reshippingCost}`).toBe(payload.reshippingCost);
+        }
+        if(payload.repackagingMaterialCost){
+            expect(this.responseBodyOfAItemObject.repackagingMaterialCost, `In response body, repackagingMaterialCost should be matched with the data request: ${payload.repackagingMaterialCost}`).toBe(payload.repackagingMaterialCost);
+        }
+        if(payload.repackingLaborCost){
+            expect(this.responseBodyOfAItemObject.repackingLaborCost, `In response body, repackingLaborCost should be matched with the data request: ${payload.repackingLaborCost}`).toBe(payload.repackingLaborCost);
+        }
+        if(payload.rank){
+            expect(this.responseBodyOfAItemObject.rank, `In response body, rank should be matched with the data request: ${payload.rank}`).toBe(payload.rank);
+        }
+        if(payload.inventorySourcePreference){
+            expect(this.responseBodyOfAItemObject.inventorySourcePreference, `In response body, inventorySourcePreference should be matched with the data request: ${payload.inventorySourcePreference}`).toBe(payload.inventorySourcePreference);
+        }
+        if(payload.average7DayPrice){
+            expect(this.responseBodyOfAItemObject.average7DayPrice, `In response body, average7DayPrice should be matched with the data request: ${payload.average7DayPrice}`).toBe(payload.average7DayPrice);
+        }
+        if(payload.isFbm){
+            expect(this.responseBodyOfAItemObject.isFbm, `In response body, isFbm should be matched with the data request: ${payload.isFbm}`).toBe(payload.isFbm);
+        }
+        if(payload.asin){
+            expect(this.responseBodyOfAItemObject.asin, `In response body, asin should be matched with the data request: ${payload.asin}`).toBe(payload.asin);
+        }
+        if(payload.fnsku){
+            expect(this.responseBodyOfAItemObject.fnsku, `In response body, fnsku should be matched with the data request: ${payload.fnsku}`).toBe(payload.fnsku);
+        }
     }
 })
 
