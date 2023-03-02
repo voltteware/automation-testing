@@ -11,18 +11,21 @@ Feature: API_Dashboard GET /api/vendor
 
     @TC_GIS001
     Scenario Outline: TC_GIS001 - Verify user <email> could call this API to get item summary by using company key and company type
-        # Given User sets GET api endpoint to get information of a company belongs to <email> using company key <companyKey>
+        Given User sets GET api endpoint to get information of a company belongs to <email> using company key <companyKey>
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get item summary
         When User sends a GET request to get item summary
         Then The expected status code should be <expectedStatus>
         And User checks API contract in item summary object are correct
         And User sends GET api request to get all items
-        And User checks item counts in response of item summary are correct
+        And User checks number Items Out of Stock in response of item summary is correct
+        And User checks number Items Out of Stock - Warehouse in response of item summary is correct
+        And User checks number New Items last 30 days in response of item summary is correct
+        And User checks number Items without Vendors Assigned in response of item summary is correct
 
         Examples:
             | user  | email                      | password  | companyKey | expectedStatus |
-            | admin | testautoforecast@gmail.com | Test1111! | random     | 200            |
+            | admin | testautoforecast@gmail.com | Test1111! | 828f461d-fb2f-44e8-b588-c96b8620eec9     | 200            |
 
     #Bug TC_GIS002 and TC_GIS002, return status code 200 when cookie invalid.
     @TC_GIS002 @bug-permission
