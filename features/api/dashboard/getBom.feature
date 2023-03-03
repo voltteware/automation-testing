@@ -40,11 +40,11 @@ Feature: API_Dashboard GET /api/bom
             | scenario   | email                      | companyKey | cookie  | companyKeyHeader | companyTypeHeader | expectedStatus | expectedStatusText    |
             | TC_GB002_1 | testautoforecast@gmail.com | random     | invalid | invalid          | invalid           | 401            | Unauthorized          |
             | TC_GB002_2 | testautoforecast@gmail.com | random     | invalid | valid            | valid             | 401            | Unauthorized          |
-            | TC_GB002_3 | testautoforecast@gmail.com | random     | valid   | invalid          | invalid           | 400            | Company not found.     |
+            | TC_GB002_3 | testautoforecast@gmail.com | random     | valid   | invalid          | invalid           | 400            | Company not found.    |
             | TC_GB002_4 | testautoforecast@gmail.com | random     | valid   |                  |                   | 500            | Internal Server Error |
     
     @TC_GB003 
-    Scenario Outline: TC_GB003 - Verify user <userA> could not call this API to get Supplier of company which does not belongs to her
+    Scenario Outline: TC_GB003 - Verify user <userA> could not call this API to get bom of company which does not belongs to her
         Given User has valid connect.sid of "<userA>" after send a POST request with payload as email: "<userA>" and password: "<password>"
         And User sets GET api endpoint to get information of a company belongs to <userB> using company key <companyKey>
         But User sets valid cookie of <userA> and valid companyKey and valid companyType in the header

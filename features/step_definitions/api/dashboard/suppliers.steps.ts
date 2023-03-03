@@ -1,7 +1,6 @@
-import { When, Then, Given } from '@cucumber/cucumber';
+import { Then } from '@cucumber/cucumber';
 import { expect } from '@playwright/test';
 import * as supplierRequest from '../../../../src/api/request/vendor.service';
-import * as authenticateRequest from '../../../../src/api/request/authentication.service';
 import logger from '../../../../src/Logger/logger';
 import { Links } from '../../../../src/utils/links';
 import { faker } from '@faker-js/faker';
@@ -14,8 +13,7 @@ Then(`{} sets GET api endpoint to get suppliers keys`, async function (actor: st
 });
 
 Then(`{} sets GET api endpoint to get suppliers keys with limit row: {} and sort field: {} with direction: {}`, async function (actor, limitRow, sortField, direction: string) {
-     // const encodedLink1 = `${Links.API_SUPPLIERS}?offset=0&limit=${limitRow}&sort=${encodeURIComponent(`[{"field"`)}:${encodeURIComponent(`"${sortField}"`)},${encodeURIComponent(`"direction"`)}:${encodeURIComponent(`"${direction}"}]`)}&where=${encodeURIComponent(`{"logic"`)}:${encodeURIComponent(`"and"`)},${encodeURIComponent(`"filters"`)}:${encodeURIComponent(`[]}`)}`
-    link = `${Links.API_SUPPLIERS}?offset=0&limit=${limitRow}&sort=%5B%7B%22field%22:%22${sortField}%22,%22direction%22:%22${direction}%22%7D%5D&where=%7B%22logic%22:%22and%22,%22filters%22:%5B%5D%7D`;
+    link = encodeURI(`${Links.API_SUPPLIERS}?offset=0&limit=${limitRow}&sort=[{"field":"${sortField}","direction":"${direction}"}]&where={"logic":"and","filters":[]}`);
 });
 
 Then(`{} sends a GET request to get suppliers information of {} by company key and company type`, async function (actor, email: string) {
@@ -48,7 +46,6 @@ Then(`{} sends a GET request to get total of suppliers`, async function (actor: 
 })
 
 Then('{} checks supplier auto exist in the system, if it does not exist will create new supplier', async function () {
-
     if (this.getSupplierResponseBody.length < 1) {
         this.headers = {
             'Cookie': this.cookie,
