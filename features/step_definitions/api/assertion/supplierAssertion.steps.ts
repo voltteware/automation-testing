@@ -74,13 +74,13 @@ Then('{} checks API contract essential types in supplier object are correct', as
         expect(this.responseBodyOfASupplierObject.website, 'website value should be null').toBeNull();
     }
     if (this.responseBodyOfASupplierObject.addressShippingUuid !== null) {
-        expect(this.responseBodyOfASupplierObject.addressShippingUuid, 'addressShippingUuid value should be string').toBe("string");
+        expect(typeof (this.responseBodyOfASupplierObject.addressShippingUuid), 'addressShippingUuid value should be string').toBe("string");
     }
     else {
         expect(this.responseBodyOfASupplierObject.addressShippingUuid, 'addressShippingUuid value should be null').toBeNull();
     }
     if (this.responseBodyOfASupplierObject.addressBillingUuid !== null) {
-        expect(this.responseBodyOfASupplierObject.addressBillingUuid, 'addressBillingUuid value should be string').toBe("string");
+        expect(typeof (this.responseBodyOfASupplierObject.addressBillingUuid), 'addressBillingUuid value should be string').toBe("string");
     }
     else {
         expect(this.responseBodyOfASupplierObject.addressBillingUuid, 'addressBillingUuid value should be null').toBeNull();

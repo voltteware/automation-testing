@@ -97,6 +97,5 @@ Then('Check bom in the response should be sort by field qty with direction {}', 
 });
 
 Then(`{} sets GET api endpoint to get bom keys with limit row: {} and sort field: {} with direction: {}`, async function (actor, limitRow, sortField, direction: string) {
-    const sort=[{"field": `${sortField}`,"direction":`${direction}`}];
-    link = `${Links.API_SUPPLIERS}?offset=0&limit=${limitRow}&${encodeURIComponent(`${sort}&where={"logic":"and","filters":[]}`)}`
+    link = encodeURI(`${Links.API_BOM}?offset=0&limit=${limitRow}&sort=[{"field":"${sortField}","direction":"${direction}"}]&where={"logic":"and","filters":[]}`);
 });
