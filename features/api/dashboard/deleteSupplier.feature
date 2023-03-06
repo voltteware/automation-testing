@@ -11,7 +11,7 @@ Feature: API_SUPPLIER DELETE /api/vendor
         And User sets GET api endpoint to get information of a company belongs to testautoforecast@gmail.com using company key random
         And User sets valid cookie of testautoforecast@gmail.com and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get suppliers keys
-        When User sends a GET request to get suppliers information of testautoforecast@gmail.com by company key and company type
+        When User sends a GET request to get list suppliers
         Then user checks Auto supplier exist in the system, if it does not exist will create new supplier
         When User sends a GET request to get total of suppliers
 

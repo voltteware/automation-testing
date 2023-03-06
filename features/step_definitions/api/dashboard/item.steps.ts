@@ -18,7 +18,7 @@ Then(`{} sets GET api endpoint to get item with limit row: {}`, async function (
     linkLimitRow = `${Links.API_ITEMS}?offset=0&limit=${limitRow}`;
 });
 
-Then(`{} sends a GET request to get items information of {} by company key and company type`, async function (actor, email: string) {
+Then(`{} sends a GET request to get list items`, async function (actor: string) {
     const options = {
         headers: this.headers
     }

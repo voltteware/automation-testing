@@ -13,10 +13,10 @@ Feature: API_Dashboard POST /api/supply
         Given User picks company with type <companyType> in above response
         But User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get suppliers keys
-        And User sends a GET request to get suppliers information of <email> by company key and company type
+        And User sends a GET request to get list suppliers
         And user checks Auto supplier exist in the system, if it does not exist will create new supplier
         And User sets GET api endpoint to get item with limit row: <limitRow>
-        And User sends a GET request to get items information of <email> by company key and company type
+        And User sends a GET request to get list items
         And User sets POST api endpoint to create supply
         And User sets request body with payload as supplyUuid: "<supplyUuid>" and refNum: "<refNum>" and vendorName: "<vendorName>" and vendorKey: "<vendorKey>" and docDate: "<docDate>" and dueDate: "<dueDate>" and itemName: "<itemName>" and itemKey: "<itemKey>" and orderQty: "<orderQty>" and openQty: "<openQty>" and orderKey: "<orderKey>" and rowKey: "<rowKey>"
         When User sends a POST method to create supply
@@ -34,10 +34,10 @@ Feature: API_Dashboard POST /api/supply
         Given User picks company with type <companyType> in above response
         But User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get suppliers keys
-        And User sends a GET request to get suppliers information of <email> by company key and company type
+        And User sends a GET request to get list suppliers
         And user checks Auto supplier exist in the system, if it does not exist will create new supplier
         And User sets GET api endpoint to get item with limit row: <limitRow>
-        And User sends a GET request to get items information of <email> by company key and company type
+        And User sends a GET request to get list items
         And User sets POST api endpoint to create supply
         But User sets <cookie> cookie of <email> and <companyKeyHeader> companyKey and <companyTypeHeader> companyType in the header
         And User sets request body with payload as supplyUuid: "<supplyUuid>" and refNum: "<refNum>" and vendorName: "<vendorName>" and vendorKey: "<vendorKey>" and docDate: "<docDate>" and dueDate: "<dueDate>" and itemName: "<itemName>" and itemKey: "<itemKey>" and orderQty: "<orderQty>" and openQty: "<openQty>" and orderKey: "<orderKey>" and rowKey: "<rowKey>"
@@ -56,10 +56,10 @@ Feature: API_Dashboard POST /api/supply
         Given User picks company with type ASC in above response
         But User sets valid cookie of <userB> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get suppliers keys
-        And User sends a GET request to get suppliers information of <userB> by company key and company type
+        And User sends a GET request to get list suppliers
         And user checks Auto supplier exist in the system, if it does not exist will create new supplier
         And User sets GET api endpoint to get item with limit row: <limitRow>
-        And User sends a GET request to get items information of <email> by company key and company type
+        And User sends a GET request to get list items
         And User has valid connect.sid of "<userA>" after send a POST request with payload as email: "<userA>" and password: "<password>"
         And User sets POST api endpoint to create supply
         But User sets valid cookie of <userA> and valid companyKey and valid companyType in the header
@@ -76,10 +76,10 @@ Feature: API_Dashboard POST /api/supply
         Given User picks company with type CSV in above response
         But User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get suppliers keys
-        And User sends a GET request to get suppliers information of <email> by company key and company type
+        And User sends a GET request to get list suppliers
         And user checks Auto supplier exist in the system, if it does not exist will create new supplier
         And User sets GET api endpoint to get item with limit row: <limitRow>
-        And User sends a GET request to get items information of <email> by company key and company type
+        And User sends a GET request to get list items
         And User sets POST api endpoint to create supply
         And User sets request body with payload as supplyUuid: "<supplyUuid>" and refNum: "<refNum>" and vendorName: "<vendorName>" and vendorKey: "<vendorKey>" and docDate: "<docDate>" and dueDate: "<dueDate>" and itemName: "<itemName>" and itemKey: "<itemKey>" and orderQty: "<orderQty>" and openQty: "<openQty>" and orderKey: "<orderKey>" and rowKey: "<rowKey>"
         When User sends a POST method to create supply
@@ -95,10 +95,10 @@ Feature: API_Dashboard POST /api/supply
         Given User picks company with type CSV in above response
         But User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get suppliers keys
-        And User sends a GET request to get suppliers information of <email> by company key and company type
+        And User sends a GET request to get list suppliers
         And user checks Auto supplier exist in the system, if it does not exist will create new supplier
         And User sets GET api endpoint to get item with limit row: <limitRow>
-        And User sends a GET request to get items information of <email> by company key and company type
+        And User sends a GET request to get list items
         And User sets POST api endpoint to create supply
         And User sets request body with payload as supplyUuid: "<supplyUuid>" and refNum: "<refNum>" and vendorName: "<vendorName>" and vendorKey: "<vendorKey>" and docDate: "<docDate>" and dueDate: "<dueDate>" and itemName: "<itemName>" and itemKey: "<itemKey>" and orderQty: "<orderQty>" and openQty: "<openQty>" and orderKey: "<orderKey>" and rowKey: "<rowKey>"
         When User sends a POST method to create supply
@@ -113,10 +113,10 @@ Feature: API_Dashboard POST /api/supply
         Given User picks company with type CSV in above response
         But User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get suppliers keys
-        And User sends a GET request to get suppliers information of <email> by company key and company type
+        And User sends a GET request to get list suppliers
         And user checks Auto supplier exist in the system, if it does not exist will create new supplier
         And User sets GET api endpoint to get item with limit row: <limitRow>
-        And User sends a GET request to get items information of <email> by company key and company type
+        And User sends a GET request to get list items
         And User sets POST api endpoint to create supply
         And User sets request body with payload as supplyUuid: "<supplyUuid>" and refNum: "<refNum>" and vendorName: "<vendorName>" and vendorKey: "<vendorKey>" and docDate: "<docDate>" and dueDate: "<dueDate>" and itemName: "<itemName>" and itemKey: "<itemKey>" and orderQty: "<orderQty>" and openQty: "<openQty>" and orderKey: "<orderKey>" and rowKey: "<rowKey>"
         When User sends a POST method to create supply
@@ -131,10 +131,10 @@ Feature: API_Dashboard POST /api/supply
         Given User picks company with type CSV in above response
         But User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get suppliers keys
-        And User sends a GET request to get suppliers information of <email> by company key and company type
+        And User sends a GET request to get list suppliers
         And user checks Auto supplier exist in the system, if it does not exist will create new supplier
         And User sets GET api endpoint to get item with limit row: <limitRow>
-        And User sends a GET request to get items information of <email> by company key and company type
+        And User sends a GET request to get list items
         And User sets POST api endpoint to create supply
         And User sets request body with payload as supplyUuid: "<supplyUuid>" and refNum: "<refNum>" and vendorName: "<vendorName>" and vendorKey: "<vendorKey>" and docDate: "<docDate>" and dueDate: "<dueDate>" and itemName: "<itemName>" and itemKey: "<itemKey>" and orderQty: "<orderQty>" and openQty: "<openQty>" and orderKey: "<orderKey>" and rowKey: "<rowKey>"
         When User sends a POST method to create supply
@@ -143,3 +143,24 @@ Feature: API_Dashboard POST /api/supply
         Examples:
             | email                      | limitRow | supplyUuid | refNum | vendorName | vendorKey | docDate | dueDate | itemName | itemKey | orderQty | openQty | orderKey | rowKey | expectedStatus | expectedStatusText       |
             | testautoforecast@gmail.com | 50       | random     | random | invalid    | invalid   | random  | random  | random   | random  | random   | random  | random   | random | 400            | Unable to create record. |
+
+    #Bug TC_CSL009,TC_CSL010 return status code 200 when call this API for company has type QBFS and QBO.
+    @TC_CSL009 @TC_CSL010
+    Scenario Outline: <scenario> - Verify user could not call this API with company has type <companyType>
+        Given User picks company with type <companyType> in above response
+        But User sets valid cookie of <email> and valid companyKey and valid companyType in the header
+        And User sets GET api endpoint to get suppliers keys
+        And User sends a GET request to get list suppliers
+        And user checks Auto supplier exist in the system, if it does not exist will create new supplier
+        And User sets GET api endpoint to get item with limit row: <limitRow>
+        And User sends a GET request to get list items
+        And User sets POST api endpoint to create supply
+        And User sets request body with payload as supplyUuid: "<supplyUuid>" and refNum: "<refNum>" and vendorName: "<vendorName>" and vendorKey: "<vendorKey>" and docDate: "<docDate>" and dueDate: "<dueDate>" and itemName: "<itemName>" and itemKey: "<itemKey>" and orderQty: "<orderQty>" and openQty: "<openQty>" and orderKey: "<orderKey>" and rowKey: "<rowKey>"
+        When User sends a POST method to create supply
+        Then The expected status code should be <expectedStatus>
+        And The status text is "<expectedStatusText>"
+        Examples:
+            | scenario  | companyType | email                      | limitRow | supplyUuid | refNum | vendorName | vendorKey | docDate | dueDate | itemName | itemKey | orderQty | openQty | orderKey | rowKey | expectedStatus | expectedStatusText |
+            | TC_CSL009 | QBFS        | testautoforecast@gmail.com | 50       | random     | random | random     | random    | random  | random  | random   | random  | random   | random  | random   | random | 400            | Bad Request        |
+            | TC_CSL010 | QBO         | testautoforecast@gmail.com | 50       | random     | random | random     | random    | random  | random  | random   | random  | random   | random  | random   | random | 400            | Bad Request        |
+   

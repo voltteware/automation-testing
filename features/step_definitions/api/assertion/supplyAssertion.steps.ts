@@ -49,6 +49,12 @@ Then('{} checks API contract essential types in supply object are correct', asyn
     else {
         expect(this.responseBodyOfASupplyObject.asin, 'asin value should be null').toBeNull();
     }
+    if(this.responseBodyOfASupplyObject.fnsku){
+        expect(typeof (this.responseBodyOfASupplyObject.fnsku), 'Type of fnsku value should be string').toBe("string");
+    }
+    if(this.responseBodyOfASupplyObject.imageUrl){
+        expect(typeof (this.responseBodyOfASupplyObject.imageUrl), 'Type of imageUrl value should be string').toBe("string");
+    }
     expect(Date.parse(this.responseBodyOfASupplyObject.dueDate), 'dueDate in response should be date').not.toBeNull();
     expect(Date.parse(this.responseBodyOfASupplyObject.docDate), 'docDate in response should be date').not.toBeNull();
 })
