@@ -4,7 +4,6 @@ import logger from '../../Logger/logger';
 //Create grid-view
 async function createGridView(request: APIRequestContext, linkApi: string, payLoad: any, header?: any) {
     const url = `${linkApi}`;
-    logger.log('info', `Send POST request ${url} with ${JSON.stringify(payLoad, undefined, 4)}`);
     const createResponse = await request.post(url, {
         data: payLoad,
         headers: header
@@ -35,8 +34,14 @@ async function getGridViewDemand(request: APIRequestContext, linkApi: string, op
     logger.log('info', `Send GET request ${url}`);
     return await request.get(url, options);
 }
-// Get grid-view Demand
+// Get grid-view Supply
 async function getGridViewSupply(request: APIRequestContext, linkApi: string, options?: object) {
+    const url = `${linkApi}`;
+    logger.log('info', `Send GET request ${url}`);
+    return await request.get(url, options);
+}
+// Get grid-view Bom
+async function getGridViewBom(request: APIRequestContext, linkApi: string, options?: object) {
     const url = `${linkApi}`;
     logger.log('info', `Send GET request ${url}`);
     return await request.get(url, options);
@@ -47,5 +52,6 @@ export {
     getGridViewItem,
     getGridViewDemand,
     deleteGridView,
-    getGridViewSupply
+    getGridViewSupply,
+    getGridViewBom
 }
