@@ -13,6 +13,7 @@ export class Links {
     static API_UPDATE_COMPANY: string = '/api/company/';
     static API_ITEMS: string = '/api/item';
     static API_BOM: string = '/api/bom';
+    static API_DEMAND: string = '/api/demand';
     static API_CREATE_GRIDVIEW: string = '/api/grid-view';
     static API_GET_GRIDVIEW_SUPPLIER: string = '/api/grid-view/supplier';
     static API_GET_GRIDVIEW_ITEM: string = '/api/grid-view/item';
