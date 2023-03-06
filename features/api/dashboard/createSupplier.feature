@@ -102,8 +102,8 @@ Feature: API_Dashboard POST /api/vendor
             | TC_ID      | scenario                                                          | email                      | supplierName      | description     | emailSupplier      | moq    | leadTime | orderInterval | serviceLevel | targetOrderValue | freeFreightMinimum | restockModel | addressLine1 | city   | stateOrProvinceCode | postalCode | countryCode | phoneNumber | companyKey | expectedStatus |
             | TC_CV005_1 | ASC company restockModel = Use Store Rule (Supplier Ships to FBA) | testautoforecast@gmail.com | New Supplier Auto | New description | newemail@gmail.com | random | random   | random        | random       | random           | random             | GLOBAL       | random       | random | random              | random     | VN          | random      | random     | 200            |
 
-@TC_CS007
-    Scenario Outline: TC_CS001 - Verify user <email> could call this API to create supplier with <scenario>
+    @TC_CV007
+    Scenario Outline: TC_CV007 - Verify user <email> could call this API to create supplier with <scenario>
         Given User picks random company in above response
         And User sets GET api endpoint to get information of a company belongs to <email> using company key <companyKey>
         And User sets POST api endpoint to create suppliers

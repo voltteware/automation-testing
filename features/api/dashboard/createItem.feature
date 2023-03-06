@@ -9,7 +9,7 @@ Feature: API_Dashboard POST /api/item
         When User sends a GET request to get company keys
 
     @TC_CI001
-    Scenario Outline: TC_CI001 - Verify user <email> could call this API to create item for supplier <supplier> with input all data valid
+    Scenario Outline: TC_CI001 - Verify user <email> could call this API to create item for company has type <companyType> with input all data valid
         Given User picks company with type CSV in above response
         But User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get suppliers keys
@@ -24,11 +24,11 @@ Feature: API_Dashboard POST /api/item
         And User checks API contract essential types in item object are correct
         And User checks values in response of create item are correct
         Examples:
-            | supplier | email                      | limitRow | itemName      | description     | vendorName | vendorPrice | moq    | leadTime | orderInterval | serviceLevel | onHand | onHandMin | onHandThirdParty | onHandThirdPartyMin | lotMultipleQty | lotMultipleItemName | vendorKey | lotMultipleItemKey | expectedStatus |
-            | CSV      | testautoforecast@gmail.com | 50       | New Item Auto | New description | random     | random      | random | random   | random        | random       | random | random    | random           |random               | random         | random              | random    | random             | 200            |
+            | companyType | email                      | limitRow | itemName      | description     | vendorName | vendorPrice | moq    | leadTime | orderInterval | serviceLevel | onHand | onHandMin | onHandThirdParty | onHandThirdPartyMin | lotMultipleQty | lotMultipleItemName | vendorKey | lotMultipleItemKey | expectedStatus |
+            | CSV         | testautoforecast@gmail.com | 50       | New Item Auto | New description | random     | random      | random | random   | random        | random       | random | random    | random           |random               | random         | random              | random    | random             | 200            |
 
     @TC_CI002
-    Scenario Outline: TC_CI002 - Verify user <email> could call this API to create item for supplier <supplier> with input all data valid
+    Scenario Outline: TC_CI002 - Verify user <email> could call this API to create item for company has type <companyType> with input all data valid
         Given User picks company with type ASC in above response
         But User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get suppliers keys
@@ -43,8 +43,8 @@ Feature: API_Dashboard POST /api/item
         And User checks API contract essential types in item object are correct
         And User checks values in response of create item are correct
         Examples:
-            | supplier | email                      | limitRow | itemName      | description     | vendorName | vendorPrice | moq    | leadTime | orderInterval | serviceLevel | onHand | onHandMin | onHandThirdParty | onHandThirdPartyMin | lotMultipleQty | lotMultipleItemName | asin   | fnsku  | skuNotes | prepNotes | supplierRebate | inboundShippingCost | reshippingCost | repackagingMaterialCost | repackingLaborCost | rank   | inventorySourcePreference | average7DayPrice | isFbm  | vendorKey | lotMultipleItemKey | expectedStatus |
-            | ASC      | testautoforecast@gmail.com | 50       | New Item Auto | New description | random     | random      | random | random   | random        | random       | random | random    | random           | random              | random         | random              | random | random | random   | random    | random         | random              | random         | random                  | random             | random | FBA + FBM                 | random           | random | random    | random             | 200            |
+            | companyType | email                      | limitRow | itemName      | description     | vendorName | vendorPrice | moq    | leadTime | orderInterval | serviceLevel | onHand | onHandMin | onHandThirdParty | onHandThirdPartyMin | lotMultipleQty | lotMultipleItemName | asin   | fnsku  | skuNotes | prepNotes | supplierRebate | inboundShippingCost | reshippingCost | repackagingMaterialCost | repackingLaborCost | rank   | inventorySourcePreference | average7DayPrice | isFbm  | vendorKey | lotMultipleItemKey | expectedStatus |
+            | ASC         | testautoforecast@gmail.com | 50       | New Item Auto | New description | random     | random      | random | random   | random        | random       | random | random    | random           | random              | random         | random              | random | random | random   | random    | random         | random              | random         | random                  | random             | random | FBA + FBM                 | random           | random | random    | random             | 200            |
 
     #TC_CI003_1, TC_CI003_2 fail due to bug api
     @TC_CI003 @bug-permission
@@ -77,7 +77,7 @@ Feature: API_Dashboard POST /api/item
         And User sends a GET request to get suppliers information of <userB> by company key and company type
         And user checks Auto supplier exist in the system, if it does not exist will create new supplier
         And User sets GET api endpoint to get item with limit row: <limitRow>
-        And User sends a GET request to get items information of <email> by company key and company type
+        And User sends a GET request to get items information of <userB> by company key and company type
         And User has valid connect.sid of "<userA>" after send a POST request with payload as email: "<userA>" and password: "<password>"
         And User sets POST api endpoint to create item
         But User sets valid cookie of <userA> and valid companyKey and valid companyType in the header
@@ -127,8 +127,8 @@ Feature: API_Dashboard POST /api/item
             | email                      | itemName      | limitRow | description     | vendorName | vendorPrice | moq    | leadTime | orderInterval | serviceLevel | onHand | onHandMin | onHandThirdParty | onHandThirdPartyMin | lotMultipleQty | lotMultipleItemName | vendorKey | lotMultipleItemKey | expectedStatus | expectedStatusText                                                 |
             | testautoforecast@gmail.com | New Item Auto | 50       | New description | random     | random      | random | random   | random        | random       | random | random    | random           |random               | random         | random              | random    | random             | 400            | Item with the same Item Name and same Supplier Name already exists |
 
-@TC_CI007
-    Scenario Outline: TC_CI007 - Verify user <email> could call this API to create item for supplier <supplier> with only required field
+    @TC_CI007
+    Scenario Outline: TC_CI007 - Verify user <email> could call this API to create item for company has type <companyType> with only input required field
         Given User picks company with type CSV in above response
         But User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets POST api endpoint to create item
@@ -138,11 +138,11 @@ Feature: API_Dashboard POST /api/item
         And User checks API contract essential types in item object are correct
         And User checks values in response of create item are correct
         Examples:
-            | supplier | email                      | itemName      | asin   | fnsku  | expectedStatus |
-            | CSV      | testautoforecast@gmail.com | New Item Auto | random | random | 200            |
+            | companyType | email                      | itemName      | asin   | fnsku  | expectedStatus |
+            | CSV         | testautoforecast@gmail.com | New Item Auto | random | random | 200            |
 
-@TC_CI008
-    Scenario Outline: TC_CI008 - Verify user <email> could call this API to create item for supplier <supplier> with only required field
+    @TC_CI008
+    Scenario Outline: TC_CI008 - Verify user <email> could call this API to create item for company has type <companyType> with only input required field
         Given User picks company with type ASC in above response
         But User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets POST api endpoint to create item
@@ -152,5 +152,5 @@ Feature: API_Dashboard POST /api/item
         And User checks API contract essential types in item object are correct
         And User checks values in response of create item are correct
         Examples:
-            | supplier | email                      | itemName      | asin   | fnsku  | expectedStatus |
-            | CSV      | testautoforecast@gmail.com | New Item Auto | random | random | 200            |
+            | companyType | email                      | itemName      | asin   | fnsku  | expectedStatus |
+            | ASC         | testautoforecast@gmail.com | New Item Auto | random | random | 200            |
