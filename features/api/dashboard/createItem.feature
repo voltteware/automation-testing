@@ -28,7 +28,21 @@ Feature: API_Dashboard POST /api/item
             | CSV         | testautoforecast@gmail.com | 50       | New Item Auto | New description | random     | random      | random | random   | random        | random       | random | random    | random           |random               | random         | random              | random    | random             | 200            |
 
     @TC_CI002
-    Scenario Outline: TC_CI002 - Verify user <email> could call this API to create item for company has type <companyType> with input all data valid
+    Scenario Outline: TC_CI002 - Verify user <email> could call this API to create item for company has type <companyType> with only input required field
+        Given User picks company with type CSV in above response
+        But User sets valid cookie of <email> and valid companyKey and valid companyType in the header
+        And User sets POST api endpoint to create item
+        And User sets request body with payload as name: "<itemName>" and asin: "" and fnsku: ""
+        When User sends a POST method to create item
+        Then The expected status code should be <expectedStatus>
+        And User checks API contract essential types in item object are correct
+        And User checks values in response of create item are correct
+        Examples:
+            | companyType | email                      | itemName      | asin   | fnsku  | expectedStatus |
+            | CSV         | testautoforecast@gmail.com | New Item Auto | random | random | 200            |
+
+    @TC_CI003
+    Scenario Outline: TC_CI003 - Verify user <email> could call this API to create item for company has type <companyType> with input all data valid
         Given User picks company with type ASC in above response
         But User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get suppliers keys
@@ -46,8 +60,22 @@ Feature: API_Dashboard POST /api/item
             | companyType | email                      | limitRow | itemName      | description     | vendorName | vendorPrice | moq    | leadTime | orderInterval | serviceLevel | onHand | onHandMin | onHandThirdParty | onHandThirdPartyMin | lotMultipleQty | lotMultipleItemName | asin   | fnsku  | skuNotes | prepNotes | supplierRebate | inboundShippingCost | reshippingCost | repackagingMaterialCost | repackingLaborCost | rank   | inventorySourcePreference | average7DayPrice | isFbm  | vendorKey | lotMultipleItemKey | expectedStatus |
             | ASC         | testautoforecast@gmail.com | 50       | New Item Auto | New description | random     | random      | random | random   | random        | random       | random | random    | random           | random              | random         | random              | random | random | random   | random    | random         | random              | random         | random                  | random             | random | FBA + FBM                 | random           | random | random    | random             | 200            |
 
-    #TC_CI003_1, TC_CI003_2 fail due to bug api
-    @TC_CI003 @bug-permission
+    @TC_CI004
+    Scenario Outline: TC_CI004 - Verify user <email> could call this API to create item for company has type <companyType> with only input required field
+        Given User picks company with type ASC in above response
+        But User sets valid cookie of <email> and valid companyKey and valid companyType in the header
+        And User sets POST api endpoint to create item
+        And User sets request body with payload as name: "<itemName>" and asin: "<asin>" and fnsku: "<fnsku>"
+        When User sends a POST method to create item
+        Then The expected status code should be <expectedStatus>
+        And User checks API contract essential types in item object are correct
+        And User checks values in response of create item are correct
+        Examples:
+            | companyType | email                      | itemName      | asin   | fnsku  | expectedStatus |
+            | ASC         | testautoforecast@gmail.com | New Item Auto | random | random | 200            |   
+
+    #TC_CI005_1, TC_CI005_2 fail due to bug api
+    @TC_CI005 @bug-permission
     Scenario Outline: <scenario> - Verify error when user sends this API with <cookie> cookie, <companyKeyHeader> companyKey, <companyTypeHeader> companyType value in header
         Given User picks company with type CSV in above response
         But User sets valid cookie of <email> and valid companyKey and valid companyType in the header
@@ -64,13 +92,13 @@ Feature: API_Dashboard POST /api/item
         And The status text is "<expectedStatusText>"
         Examples:
             | scenario   | email                      | limitRow | cookie  | companyKeyHeader | companyTypeHeader | itemName      | description     | vendorName | vendorPrice | moq    | leadTime | orderInterval | serviceLevel | onHand | onHandMin | onHandThirdParty | onHandThirdPartyMin | lotMultipleQty | lotMultipleItemName | vendorKey | lotMultipleItemKey | expectedStatus | expectedStatusText    |
-            | TC_CI003_1 | testautoforecast@gmail.com | 50       | invalid | invalid          | invalid           | New Item Auto | New description | random     | random      | random | random   | random        | random       | random | random    | random           |random               | random         | random              | random    | random             | 401            | Unauthorized          |
-            | TC_CI003_2 | testautoforecast@gmail.com | 50       | invalid | valid            | valid             | New Item Auto | New description | random     | random      | random | random   | random        | random       | random | random    | random           |random               | random         | random              | random    | random             | 401            | Unauthorized          |
-            | TC_CI003_3 | testautoforecast@gmail.com | 50       | valid   | invalid          | invalid           | New Item Auto | New description | random     | random      | random | random   | random        | random       | random | random    | random           |random               | random         | random              | random    | random             | 400            | Company not found.    |
-            | TC_CI003_4 | testautoforecast@gmail.com | 50       | valid   |                  |                   | New Item Auto | New description | random     | random      | random | random   | random        | random       | random | random    | random           |random               | random         | random              | random    | random             | 500            | Internal Server Error |
+            | TC_CI005_1 | testautoforecast@gmail.com | 50       | invalid | invalid          | invalid           | New Item Auto | New description | random     | random      | random | random   | random        | random       | random | random    | random           |random               | random         | random              | random    | random             | 401            | Unauthorized          |
+            | TC_CI005_2 | testautoforecast@gmail.com | 50       | invalid | valid            | valid             | New Item Auto | New description | random     | random      | random | random   | random        | random       | random | random    | random           |random               | random         | random              | random    | random             | 401            | Unauthorized          |
+            | TC_CI005_3 | testautoforecast@gmail.com | 50       | valid   | invalid          | invalid           | New Item Auto | New description | random     | random      | random | random   | random        | random       | random | random    | random           |random               | random         | random              | random    | random             | 400            | Company not found.    |
+            | TC_CI005_4 | testautoforecast@gmail.com | 50       | valid   |                  |                   | New Item Auto | New description | random     | random      | random | random   | random        | random       | random | random    | random           |random               | random         | random              | random    | random             | 500            | Internal Server Error |
 
-    @TC_CI004
-    Scenario Outline: TC_CI004 - Verify user <userA> could not call this API to create item of company which does not belongs to her
+    @TC_CI006
+    Scenario Outline: TC_CI006 - Verify user <userA> could not call this API to create item of company which does not belongs to her
         Given User picks company with type CSV in above response
         But User sets valid cookie of <userB> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get suppliers keys
@@ -88,9 +116,9 @@ Feature: API_Dashboard POST /api/item
         Examples:
             | userA               | userB                      | password  | limitRow | itemName      | description     | vendorName | vendorPrice | moq    | leadTime | orderInterval | serviceLevel | onHand | onHandMin | onHandThirdParty | onHandThirdPartyMin | lotMultipleQty | lotMultipleItemName | vendorKey | lotMultipleItemKey | expectedStatus | expectedStatusText    |
             | may27user@gmail.com | testautoforecast@gmail.com | Test1111! | 50       | New Item Auto | New description | random     | random      | random | random   | random        | random       | random | random    | random           |random               | random         | random              | random    | random             | 400            | Company not found.    |
-            
-    @TC_CI005
-    Scenario Outline: TC_CI005 - Verify error FNSKU already exists
+    
+    @TC_CI007
+    Scenario Outline: TC_CI007 - Verify error FNSKU already exists
         Given User picks company with type ASC in above response
         But User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get suppliers keys
@@ -108,8 +136,8 @@ Feature: API_Dashboard POST /api/item
             | email                      | itemName      | limitRow | description     | vendorName | vendorPrice | moq    | leadTime | orderInterval | serviceLevel | onHand | onHandMin | onHandThirdParty | onHandThirdPartyMin | lotMultipleQty | lotMultipleItemName | asin   | fnsku  | skuNotes | prepNotes | supplierRebate | inboundShippingCost | reshippingCost | repackagingMaterialCost | repackingLaborCost | rank   | inventorySourcePreference | average7DayPrice | isFbm  | vendorKey | lotMultipleItemKey | expectedStatus | expectedStatusText                      |
             | testautoforecast@gmail.com | New Item Auto | 50       | New description | random     | random      | random | random   | random        | random       | random | random    | random           | random              | random         | random              | random | random | random   | random    | random         | random              | random         | random                  | random             | random | FBA + FBM                 | random           | random | random    | random             | 400            | Item with the same FNSKU already exists |
 
-    @TC_CI006
-    Scenario Outline: TC_CI006 - Verify error Item Name and Supplier Name already exists
+    @TC_CI008
+    Scenario Outline: TC_CI008 - Verify error Item Name and Supplier Name already exists
         Given User picks company with type CSV in above response
         But User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get suppliers keys
@@ -127,30 +155,22 @@ Feature: API_Dashboard POST /api/item
             | email                      | itemName      | limitRow | description     | vendorName | vendorPrice | moq    | leadTime | orderInterval | serviceLevel | onHand | onHandMin | onHandThirdParty | onHandThirdPartyMin | lotMultipleQty | lotMultipleItemName | vendorKey | lotMultipleItemKey | expectedStatus | expectedStatusText                                                 |
             | testautoforecast@gmail.com | New Item Auto | 50       | New description | random     | random      | random | random   | random        | random       | random | random    | random           |random               | random         | random              | random    | random             | 400            | Item with the same Item Name and same Supplier Name already exists |
 
-    @TC_CI007
-    Scenario Outline: TC_CI007 - Verify user <email> could call this API to create item for company has type <companyType> with only input required field
-        Given User picks company with type CSV in above response
+    #Bug TC_CSL009,TC_CSL010 return status code 200 when call this API for company has type QBFS and QBO.
+    @TC_CI009 @TC_CI010
+    Scenario Outline: <scenario> - Verify user could not call this API with company has type <companyType>
+        Given User picks company with type <companyType> in above response
         But User sets valid cookie of <email> and valid companyKey and valid companyType in the header
+        And User sets GET api endpoint to get suppliers keys
+        And User sends a GET request to get suppliers information of <email> by company key and company type
+        And user checks Auto supplier exist in the system, if it does not exist will create new supplier
+        And User sets GET api endpoint to get item with limit row: <limitRow>
+        And User sends a GET request to get items information of <email> by company key and company type
         And User sets POST api endpoint to create item
-        And User sets request body with payload as name: "<itemName>" and asin: "" and fnsku: ""
+        And User sets request body with payload as name: "<itemName>" and description: "<description>" and vendorName: "<vendorName>" and vendorPrice: "<vendorPrice>" and moq: "<moq>" and leadTime: "<leadTime>" and orderInterval: "<orderInterval>" and serviceLevel: "<serviceLevel>" and onHand: "<onHand>" and onHandMin: "<onHandMin>" and onHandThirdParty: "<onHandThirdParty>" and onHandThirdPartyMin: "<onHandThirdPartyMin>" and lotMultipleQty: "<lotMultipleQty>" and lotMultipleItemName: "<lotMultipleItemName>" and asin: "" and fnsku: "" and skuNotes: "" and prepNotes: "" and supplierRebate: "" and inboundShippingCost: "" and reshippingCost: "" and repackagingMaterialCost: "" and repackingLaborCost: "" and rank: "" and inventorySourcePreference: "" and average7DayPrice: "" and isFbm: "" and key: "" and vendorKey: "<vendorKey>" and lotMultipleItemKey: "<lotMultipleItemKey>"
         When User sends a POST method to create item
         Then The expected status code should be <expectedStatus>
-        And User checks API contract essential types in item object are correct
-        And User checks values in response of create item are correct
+        And The status text is "<expectedStatusText>"
         Examples:
-            | companyType | email                      | itemName      | asin   | fnsku  | expectedStatus |
-            | CSV         | testautoforecast@gmail.com | New Item Auto | random | random | 200            |
-
-    @TC_CI008
-    Scenario Outline: TC_CI008 - Verify user <email> could call this API to create item for company has type <companyType> with only input required field
-        Given User picks company with type ASC in above response
-        But User sets valid cookie of <email> and valid companyKey and valid companyType in the header
-        And User sets POST api endpoint to create item
-        And User sets request body with payload as name: "<itemName>" and asin: "<asin>" and fnsku: "<fnsku>"
-        When User sends a POST method to create item
-        Then The expected status code should be <expectedStatus>
-        And User checks API contract essential types in item object are correct
-        And User checks values in response of create item are correct
-        Examples:
-            | companyType | email                      | itemName      | asin   | fnsku  | expectedStatus |
-            | ASC         | testautoforecast@gmail.com | New Item Auto | random | random | 200            |
+            | scenario  | companyType | email                      | limitRow | itemName      | description     | vendorName | vendorPrice | moq    | leadTime | orderInterval | serviceLevel | onHand | onHandMin | onHandThirdParty | onHandThirdPartyMin | lotMultipleQty | lotMultipleItemName | vendorKey | lotMultipleItemKey | expectedStatus | expectedStatusText |
+            | TC_CSL009 | QBFS        | testautoforecast@gmail.com | 50       | New Item Auto | New description | random     | random      | random | random   | random        | random       | random | random    | random           |random               | random         | random              | random    | random             | 400            | Bad Request        |
+            | TC_CSL010 | QBO         | testautoforecast@gmail.com | 50       | New Item Auto | New description | random     | random      | random | random   | random        | random       | random | random    | random           |random               | random         | random              | random    | random             | 400            | Bad Request        |

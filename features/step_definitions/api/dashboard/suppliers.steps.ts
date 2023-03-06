@@ -16,7 +16,7 @@ Then(`{} sets GET api endpoint to get suppliers keys with limit row: {} and sort
     link = encodeURI(`${Links.API_SUPPLIERS}?offset=0&limit=${limitRow}&sort=[{"field":"${sortField}","direction":"${direction}"}]&where={"logic":"and","filters":[]}`);
 });
 
-Then(`{} sends a GET request to get suppliers information of {} by company key and company type`, async function (actor, email: string) {
+Then(`{} sends a GET request to get list suppliers`, async function (actor) {
     const options = {
         headers: this.headers
     }
@@ -43,39 +43,6 @@ Then(`{} sends a GET request to get total of suppliers`, async function (actor: 
     this.totalSupplier = await this.getTotalSupplierResponse.text();
     logger.log('info', `Response GET ${link} has status code ${this.response.status()} ${this.response.statusText()} and response body ${this.totalSupplier}`);
     this.attach(`Response GET ${link} has status code ${this.response.status()} ${this.response.statusText()} and response body ${this.totalSupplier}`)
-})
-
-Then('{} checks supplier auto exist in the system, if it does not exist will create new supplier', async function () {
-    if (this.getSupplierResponseBody.length < 1) {
-        this.headers = {
-            'Cookie': this.cookie,
-            'COMPANY-KEY': this.companyKey,
-            'COMPANY-TYPE': this.companyType,
-        }
-        this.payload = {
-            name: `new supplier ${faker.lorem.words(3)}`,
-        }
-        this.createSupplierResponse = await supplierRequest.createSupplier(this.request, Links.API_SUPPLIERS, this.payload, this.headers);
-        this.createSupplierResponseBody = JSON.parse(await this.createSupplierResponse.text())
-        logger.log('info', `Response after create ${link}` + JSON.stringify(this.createSupplierResponseBody, undefined, 4));
-        this.attach(`Response after create ${link}` + JSON.stringify(this.createSupplierResponseBody, undefined, 4))
-        // Get list after create supplier new
-        const options = {
-            headers: this.headers
-        }
-        this.getSupplierResponse = this.response = await supplierRequest.getSuppliers(this.request, link, options);
-        const responseBodyText = await this.getSupplierResponse.text();
-        if (this.response.status() == 200) {
-            this.getSupplierResponseBody = JSON.parse(await this.getSupplierResponse.text());
-            logger.log('info', `Response GET ${link}` + JSON.stringify(this.getSupplierResponseBody, undefined, 4));
-            this.attach(`Response GET ${link}` + JSON.stringify(this.getSupplierResponseBody, undefined, 4))
-        }
-        else {
-            const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
-            logger.log('info', `Response GET ${link} has status code ${this.getSupplierResponse.status()} ${this.getSupplierResponse.statusText()} and response body ${responseBodyText}`);
-            this.attach(`Response GET ${link} has status code ${this.getSupplierResponse.status()} ${this.getSupplierResponse.statusText()} and response body ${actualResponseText}`)
-        }
-    }
 })
 
 Then('{} picks random suppliers in above response', async function (actor: string) {

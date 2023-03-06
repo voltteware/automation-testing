@@ -29,7 +29,7 @@ Then('{} sets request body with payload as supplyUuid: {string} and refNum: {str
         }
 
         if (refNum == 'random') {
-            payload.refNum = faker.random.numeric(4);
+            payload.refNum = `${faker.random.numeric(4)} AUTO`;
         }
         else {
             payload.refNum = refNum;
@@ -86,14 +86,14 @@ Then('{} sets request body with payload as supplyUuid: {string} and refNum: {str
         }
 
         if (orderKey == 'random') {
-            payload.orderKey = faker.datatype.uuid();;
+            payload.orderKey = faker.datatype.uuid();
         }
         else {
             payload.orderKey = orderKey;
         }
 
         if (rowKey == 'random') {
-            payload.rowKey = faker.datatype.uuid();;
+            payload.rowKey = faker.datatype.uuid();
         }
         else {
             payload.rowKey = rowKey;

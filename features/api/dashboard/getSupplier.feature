@@ -14,7 +14,7 @@ Feature: API_Dashboard GET /api/vendor
         Given User sets GET api endpoint to get information of a company belongs to <email> using company key <companyKey>
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get suppliers keys
-        When User sends a GET request to get suppliers information of <email> by company key and company type
+        When User sends a GET request to get list suppliers
         Then The expected status code should be <expectedStatus>
         And user checks any supplier exist in the system, if it does not exist will create new supplier
         And User picks random suppliers in above response
@@ -30,7 +30,7 @@ Feature: API_Dashboard GET /api/vendor
         Given User sets GET api endpoint to get information of a company belongs to <email> using company key <companyKey>
         But User sets <cookie> cookie of <email> and <companyKeyHeader> companyKey and <companyTypeHeader> companyType in the header
         And User sets GET api endpoint to get suppliers keys
-        When User sends a GET request to get suppliers information of <email> by company key and company type
+        When User sends a GET request to get list suppliers
         Then The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
         Examples:
@@ -46,7 +46,7 @@ Feature: API_Dashboard GET /api/vendor
         And User sets GET api endpoint to get information of a company belongs to <userB> using company key <companyKey>
         But User sets valid cookie of <userA> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get suppliers keys
-        When User sends a GET request to get suppliers information of <email> by company key and company type
+        When User sends a GET request to get list suppliers
         Then The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
         Examples:
@@ -58,7 +58,7 @@ Feature: API_Dashboard GET /api/vendor
         Given User sets GET api endpoint to get information of a company belongs to <email> using company key <companyKey>
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get suppliers keys with limit row: <limitRow> and sort field: <sortField> with direction: <direction>
-        When User sends a GET request to get suppliers information of <email> by company key and company type
+        When User sends a GET request to get list suppliers
         Then The expected status code should be <expectedStatus>
         And Check total items in the response should be less than or equal <limitRow>
         And Check items in the response should be sort by field leadTime with direction <direction>
