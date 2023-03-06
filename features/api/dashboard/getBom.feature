@@ -16,7 +16,7 @@ Feature: API_Dashboard GET /api/bom
         And User sends a GET request to get list items
         And User sets GET api endpoint to get bom keys
         And User sends a GET request to get bom information of <email> by company key and company type
-        And user checks any bom exist in the system, if it does not exist will create new bom
+        And User checks any bom exist in the system, if it does not exist will create new bom
         When User sends a GET request to get bom information of <email> by company key and company type
         Then The expected status code should be <expectedStatus>
         And User picks random bom in above response
