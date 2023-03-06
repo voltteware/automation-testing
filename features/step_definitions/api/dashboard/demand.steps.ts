@@ -9,7 +9,7 @@ import _ from "lodash";
 let link: any;
 let randomItem: any;
 
-Then(`{} sets GET api endpoint to get demand keys`, async function (actor: string) {
+Then(`{} sets GET api endpoint to get demand key`, async function (actor: string) {
     link = Links.API_DEMAND;
 });
 
