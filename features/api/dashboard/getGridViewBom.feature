@@ -9,7 +9,7 @@ Feature: API_Dashboard GET /api/grid-view/bom
         When User sends a GET request to get company keys
 
     @TC_GVB001
-    Scenario Outline: TC_GVB001 - Verify user <email> could call this API to get grid view bom by using company key and company type
+    Scenario Outline: TC_GVB001 - Verify user <email> could call this API to get grid view bom by using company key and CSV company type
         Given User picks company with type CSV in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get grid view boms
@@ -24,7 +24,7 @@ Feature: API_Dashboard GET /api/grid-view/bom
             | admin | testautoforecast@gmail.com | Test1111! | 200            |
 
     @TC_GVB002
-    Scenario Outline: TC_GVB002 - Verify user <email> could call this API to get grid view bom by using company key and company type
+    Scenario Outline: TC_GVB002 - Verify user <email> could call this API to get grid view bom by using company key and ASC company type
         Given User picks company with type ASC in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get grid view boms
