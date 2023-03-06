@@ -13,7 +13,7 @@ Then(`{} sets GET api endpoint to get bom keys`, async function (actor: string) 
     link = Links.API_BOM;
 });
 
-Then(`{} sends a GET request to get bom information of {} by company key and company type`, async function (actor, email: string) {
+Then(`{} sends a GET request to get list boms`, async function (actor: string) {
     const options = {
         headers: this.headers
     }
