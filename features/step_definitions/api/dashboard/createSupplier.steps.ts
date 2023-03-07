@@ -31,7 +31,7 @@ Then('{} sets request body with payload as name: {string} and description: {stri
 Then('{} sets request body with payload as name: {string} and description: {string} and email: {string} and moq: {string} and leadTime: {string} and orderInterval: {string} and serviceLevel: {string} and targetOrderValue: {string} and freeFreightMinimum: {string} and restockModel: {string}',
     async function (actor, name, description, email, moq, leadTime, orderInterval, serviceLevel, targetOrderValue, freeFreightMinimum, restockModel: string) {
         if (name.includes('New Supplier Auto')) {
-            payload.name = `${faker.company.name()} Auto`;
+            payload.name = `${faker.company.name()} ${faker.random.numeric(3)} Auto`;
         }
         payload.description = description;
         payload.email = email;
@@ -87,7 +87,7 @@ Then('{} sets request body with payload as name: {string} and description: {stri
         this.attach(`Payload: ${JSON.stringify(payload, undefined, 4)}`)
     });
 
-Then('{} sets request body with payload as name: {string}',async function (actor, name: string) {
+Then('{} sets request body with payload as name: {string}', async function (actor, name: string) {
     if (name.includes('New Supplier Auto')) {
         payload.name = `${faker.company.name()} Auto`;
     }
@@ -139,25 +139,25 @@ Then('{} sends a POST method to create supplier', async function (actor: string)
 Then('{} checks values in response of create supplier are correct', async function (actor: string) {
     const companyType = ['ASC', 'CSV', 'QBFS', 'QBO'];
     expect(companyType, `Company Type should be one of ${companyType}`).toContain(this.responseBodyOfASupplierObject.companyType);
-    if(payload.name){
+    if (payload.name) {
         expect(this.responseBodyOfASupplierObject.name, `In response body, name should be matched with the data request: ${payload.name}`).toBe(payload.name);
     }
-    if(payload.description){
+    if (payload.description) {
         expect(this.responseBodyOfASupplierObject.description, `In response body, description should be matched with the data request: ${payload.description}`).toBe(payload.description);
     }
-    if(payload.email){
+    if (payload.email) {
         expect(this.responseBodyOfASupplierObject.email, `In response body, email should be matched with the data request: ${payload.email}`).toBe(payload.email);
     }
-    if(payload.moq){
+    if (payload.moq) {
         expect(this.responseBodyOfASupplierObject.moq, `In response body, moq should be matched with the data request: ${payload.moq}`).toBe(payload.moq);
     }
-    if(payload.leadTime){
+    if (payload.leadTime) {
         expect(this.responseBodyOfASupplierObject.leadTime, `In response body, leadTime should be matched with the data request: ${payload.leadTime}`).toBe(payload.leadTime);
     }
-    if(payload.orderInterval){
+    if (payload.orderInterval) {
         expect(this.responseBodyOfASupplierObject.orderInterval, `In response body, orderInterval should be matched with the data request: ${payload.orderInterval}`).toBe(payload.orderInterval);
     }
-    if(payload.serviceLevel){
+    if (payload.serviceLevel) {
         expect(this.responseBodyOfASupplierObject.serviceLevel, `In response body, serviceLevel should be matched with the data request: ${payload.serviceLevel}`).toBe(payload.serviceLevel);
     }
     expect(this.responseBodyOfASupplierObject.companyKey).not.toBeNull();
