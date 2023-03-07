@@ -27,7 +27,7 @@ Feature: API_Dashboard GET /api/demand
         Given User picks company with type CSV in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get item with limit row: <limitRow>
-        And User sends a GET request to get items information of <email> by company key and company type
+        And User sends a GET request to get list items
         And User sets GET api endpoint to get demand key
         When User sends a GET request to get demand information of <email> by company key and company type
         And User checks any demand exist in the system, if it does not exist will create new demand
