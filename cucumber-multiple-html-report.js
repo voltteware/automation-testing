@@ -13,7 +13,7 @@ report.generate({
   // metadata: {
   //   browser: {
   //     name: "chrome",
-  //     version: "60",
+      version: "60",
   //   },
   //   device: "Local test machine",
   //   platform: {
