@@ -29,7 +29,7 @@ Then('{} sets request body with payload as supplyUuid: {string} and refNum: {str
         }
 
         if (refNum == 'random') {
-            payload.refNum = `${faker.random.numeric(4)} AUTO`;
+            payload.refNum = `${faker.random.numeric(4)} Auto`;
         }
         else {
             payload.refNum = refNum;

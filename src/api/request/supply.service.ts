@@ -19,7 +19,19 @@ async function createSupply(request: APIRequestContext, linkApi: string, payLoad
     return createResponse;
 }
 
+//Delete supply
+async function deleteSupply(request: APIRequestContext, linkApi: string, payLoad: any, header?: any) {
+    const url = `${linkApi}`;
+    logger.log('info', `Send DELETE request ${url} with ${JSON.stringify(payLoad, undefined, 4)}`);
+    const deleteResponse = await request.delete(url, {
+        data: payLoad,
+        headers: header
+    });
+    return deleteResponse;
+}
+
 export {
     getSupply,
-    createSupply
+    createSupply,
+    deleteSupply
 }
