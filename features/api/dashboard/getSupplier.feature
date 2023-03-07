@@ -10,7 +10,7 @@ Feature: API_Dashboard GET /api/vendor
         Then User picks random company in above response
 
     @TC_GV001
-    Scenario Outline: TC_GV001 - Verify user <email> could call this API to get information of specific supplier by using company key and company type
+    Scenario Outline: TC_GV001 - Verify user <email> could call this API to get list suppliers by using company key and company type
         Given User sets GET api endpoint to get information of a company belongs to <email> using company key <companyKey>
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get suppliers keys

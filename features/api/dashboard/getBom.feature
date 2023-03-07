@@ -9,15 +9,15 @@ Feature: API_Dashboard GET /api/bom
         Then User sends a GET request to get company keys
 
     @TC_GB001
-    Scenario Outline: TC_GB001 - Verify user <email> could call this API to get information of specific bom by using company key and company type
+    Scenario Outline: TC_GB001 - Verify user <email> could call this API to get list boms by using company key and company type
         Given User picks company with type CSV in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get item with limit row: <limitRow>
         And User sends a GET request to get list items
         And User sets GET api endpoint to get bom keys
-        And User sends a GET request to get bom information of <email> by company key and company type
+        And User sends a GET request to get list boms
         And User checks any bom exist in the system, if it does not exist will create new bom
-        When User sends a GET request to get bom information of <email> by company key and company type
+        When User sends a GET request to get list boms
         Then The expected status code should be <expectedStatus>
         And User picks random bom in above response
         And User checks API contract essential types in bom object are correct
@@ -32,7 +32,7 @@ Feature: API_Dashboard GET /api/bom
         Given User picks company with type ASC in above response
         But User sets <cookie> cookie of <email> and <companyKeyHeader> companyKey and <companyTypeHeader> companyType in the header
         And User sets GET api endpoint to get bom keys
-        When User sends a GET request to get bom information of <email> by company key and company type
+        When User sends a GET request to get list boms
         Then The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
         Examples:
@@ -49,7 +49,7 @@ Feature: API_Dashboard GET /api/bom
         And User sets GET api endpoint to get information of a company belongs to <userB> using company key <companyKey>
         But User sets valid cookie of <userA> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get bom keys
-        When User sends a GET request to get bom information of <email> by company key and company type
+        When User sends a GET request to get list boms
         Then The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
         Examples:
@@ -61,7 +61,7 @@ Feature: API_Dashboard GET /api/bom
         Given User picks company with type ASC in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get bom keys with limit row: <limitRow> and sort field: <sortField> with direction: <direction>
-        When User sends a GET request to get bom information of <email> by company key and company type
+        When User sends a GET request to get list boms
         Then The expected status code should be <expectedStatus>
         And Check total items in the response should be less than or equal <limitRow>
         And Check bom in the response should be sort by field qty with direction <direction>
@@ -75,7 +75,7 @@ Feature: API_Dashboard GET /api/bom
     Scenario Outline: TC_GB005 - Verify user could not call this API with company QBFS
         Given User picks company with type QBFS in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
-        When User sends a GET request to get bom information of <email> by company key and company type
+        When User sends a GET request to get list boms
         Then The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
         Examples:

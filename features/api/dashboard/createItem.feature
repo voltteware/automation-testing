@@ -13,10 +13,10 @@ Feature: API_Dashboard POST /api/item
         Given User picks company with type CSV in above response
         But User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get suppliers keys
-        And User sends a GET request to get suppliers information of <email> by company key and company type
+        And User sends a GET request to get list suppliers
         And user checks Auto supplier exist in the system, if it does not exist will create new supplier
         And User sets GET api endpoint to get item with limit row: <limitRow>
-        And User sends a GET request to get items information of <email> by company key and company type
+        And User sends a GET request to get list items
         And User sets POST api endpoint to create item
         And User sets request body with payload as name: "<itemName>" and description: "<description>" and vendorName: "<vendorName>" and vendorPrice: "<vendorPrice>" and moq: "<moq>" and leadTime: "<leadTime>" and orderInterval: "<orderInterval>" and serviceLevel: "<serviceLevel>" and onHand: "<onHand>" and onHandMin: "<onHandMin>" and onHandThirdParty: "<onHandThirdParty>" and onHandThirdPartyMin: "<onHandThirdPartyMin>" and lotMultipleQty: "<lotMultipleQty>" and lotMultipleItemName: "<lotMultipleItemName>" and asin: "" and fnsku: "" and skuNotes: "" and prepNotes: "" and supplierRebate: "" and inboundShippingCost: "" and reshippingCost: "" and repackagingMaterialCost: "" and repackingLaborCost: "" and rank: "" and inventorySourcePreference: "" and average7DayPrice: "" and isFbm: "" and key: "" and vendorKey: "<vendorKey>" and lotMultipleItemKey: "<lotMultipleItemKey>"
         When User sends a POST method to create item
@@ -46,10 +46,10 @@ Feature: API_Dashboard POST /api/item
         Given User picks company with type ASC in above response
         But User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get suppliers keys
-        And User sends a GET request to get suppliers information of <email> by company key and company type
+        And User sends a GET request to get list suppliers
         And user checks Auto supplier exist in the system, if it does not exist will create new supplier
         And User sets GET api endpoint to get item with limit row: <limitRow>
-        And User sends a GET request to get items information of <email> by company key and company type
+        And User sends a GET request to get list items
         And User sets POST api endpoint to create item
         And User sets request body with payload as name: "<itemName>" and description: "<description>" and vendorName: "<vendorName>" and vendorPrice: "<vendorPrice>" and moq: "<moq>" and leadTime: "<leadTime>" and orderInterval: "<orderInterval>" and serviceLevel: "<serviceLevel>" and onHand: "<onHand>" and onHandMin: "<onHandMin>" and onHandThirdParty: "<onHandThirdParty>" and onHandThirdPartyMin: "<onHandThirdPartyMin>" and lotMultipleQty: "<lotMultipleQty>" and lotMultipleItemName: "<lotMultipleItemName>" and asin: "<asin>" and fnsku: "<fnsku>" and skuNotes: "<skuNotes>" and prepNotes: "<prepNotes>" and supplierRebate: "<supplierRebate>" and inboundShippingCost: "<inboundShippingCost>" and reshippingCost: "<reshippingCost>" and repackagingMaterialCost: "<repackagingMaterialCost>" and repackingLaborCost: "<repackingLaborCost>" and rank: "<rank>" and inventorySourcePreference: "<inventorySourcePreference>" and average7DayPrice: "<average7DayPrice>" and isFbm: "<isFbm>" and key: "" and vendorKey: "<vendorKey>" and lotMultipleItemKey: "<lotMultipleItemKey>"
         When User sends a POST method to create item
@@ -80,10 +80,10 @@ Feature: API_Dashboard POST /api/item
         Given User picks company with type CSV in above response
         But User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get suppliers keys
-        And User sends a GET request to get suppliers information of <email> by company key and company type
+        And User sends a GET request to get list suppliers
         And user checks Auto supplier exist in the system, if it does not exist will create new supplier
         And User sets GET api endpoint to get item with limit row: <limitRow>
-        And User sends a GET request to get items information of <email> by company key and company type
+        And User sends a GET request to get list items
         And User sets POST api endpoint to create item
         But User sets <cookie> cookie of <email> and <companyKeyHeader> companyKey and <companyTypeHeader> companyType in the header
         And User sets request body with payload as name: "<itemName>" and description: "<description>" and vendorName: "<vendorName>" and vendorPrice: "<vendorPrice>" and moq: "<moq>" and leadTime: "<leadTime>" and orderInterval: "<orderInterval>" and serviceLevel: "<serviceLevel>" and onHand: "<onHand>" and onHandMin: "<onHandMin>" and onHandThirdParty: "<onHandThirdParty>" and onHandThirdPartyMin: "<onHandThirdPartyMin>" and lotMultipleQty: "<lotMultipleQty>" and lotMultipleItemName: "<lotMultipleItemName>" and asin: "" and fnsku: "" and skuNotes: "" and prepNotes: "" and supplierRebate: "" and inboundShippingCost: "" and reshippingCost: "" and repackagingMaterialCost: "" and repackingLaborCost: "" and rank: "" and inventorySourcePreference: "" and average7DayPrice: "" and isFbm: "" and key: "" and vendorKey: "<vendorKey>" and lotMultipleItemKey: "<lotMultipleItemKey>"
@@ -102,10 +102,10 @@ Feature: API_Dashboard POST /api/item
         Given User picks company with type CSV in above response
         But User sets valid cookie of <userB> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get suppliers keys
-        And User sends a GET request to get suppliers information of <userB> by company key and company type
+        And User sends a GET request to get list suppliers
         And user checks Auto supplier exist in the system, if it does not exist will create new supplier
         And User sets GET api endpoint to get item with limit row: <limitRow>
-        And User sends a GET request to get items information of <userB> by company key and company type
+        And User sends a GET request to get list items
         And User has valid connect.sid of "<userA>" after send a POST request with payload as email: "<userA>" and password: "<password>"
         And User sets POST api endpoint to create item
         But User sets valid cookie of <userA> and valid companyKey and valid companyType in the header
@@ -122,10 +122,10 @@ Feature: API_Dashboard POST /api/item
         Given User picks company with type ASC in above response
         But User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get suppliers keys
-        And User sends a GET request to get suppliers information of <email> by company key and company type
+        And User sends a GET request to get list suppliers
         And user checks Auto supplier exist in the system, if it does not exist will create new supplier
         And User sets GET api endpoint to get item with limit row: <limitRow>
-        And User sends a GET request to get items information of <email> by company key and company type
+        And User sends a GET request to get list items
         And User sets POST api endpoint to create item
         And User sets request body with payload as name: "<itemName>" and description: "<description>" and vendorName: "<vendorName>" and vendorPrice: "<vendorPrice>" and moq: "<moq>" and leadTime: "<leadTime>" and orderInterval: "<orderInterval>" and serviceLevel: "<serviceLevel>" and onHand: "<onHand>" and onHandMin: "<onHandMin>" and onHandThirdParty: "<onHandThirdParty>" and onHandThirdPartyMin: "<onHandThirdPartyMin>" and lotMultipleQty: "<lotMultipleQty>" and lotMultipleItemName: "<lotMultipleItemName>" and asin: "<asin>" and fnsku: "<fnsku>" and skuNotes: "<skuNotes>" and prepNotes: "<prepNotes>" and supplierRebate: "<supplierRebate>" and inboundShippingCost: "<inboundShippingCost>" and reshippingCost: "<reshippingCost>" and repackagingMaterialCost: "<repackagingMaterialCost>" and repackingLaborCost: "<repackingLaborCost>" and rank: "<rank>" and inventorySourcePreference: "<inventorySourcePreference>" and average7DayPrice: "<average7DayPrice>" and isFbm: "<isFbm>" and key: "" and vendorKey: "<vendorKey>" and lotMultipleItemKey: "<lotMultipleItemKey>"
         And User sends a POST method to create item
@@ -141,10 +141,10 @@ Feature: API_Dashboard POST /api/item
         Given User picks company with type CSV in above response
         But User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get suppliers keys
-        And User sends a GET request to get suppliers information of <email> by company key and company type
+        And User sends a GET request to get list suppliers
         And user checks Auto supplier exist in the system, if it does not exist will create new supplier
         And User sets GET api endpoint to get item with limit row: <limitRow>
-        And User sends a GET request to get items information of <email> by company key and company type
+        And User sends a GET request to get list items
         And User sets POST api endpoint to create item
         And User sets request body with payload as name: "<itemName>" and description: "<description>" and vendorName: "<vendorName>" and vendorPrice: "<vendorPrice>" and moq: "<moq>" and leadTime: "<leadTime>" and orderInterval: "<orderInterval>" and serviceLevel: "<serviceLevel>" and onHand: "<onHand>" and onHandMin: "<onHandMin>" and onHandThirdParty: "<onHandThirdParty>" and onHandThirdPartyMin: "<onHandThirdPartyMin>" and lotMultipleQty: "<lotMultipleQty>" and lotMultipleItemName: "<lotMultipleItemName>" and asin: "" and fnsku: "" and skuNotes: "" and prepNotes: "" and supplierRebate: "" and inboundShippingCost: "" and reshippingCost: "" and repackagingMaterialCost: "" and repackingLaborCost: "" and rank: "" and inventorySourcePreference: "" and average7DayPrice: "" and isFbm: "" and key: "" and vendorKey: "<vendorKey>" and lotMultipleItemKey: "<lotMultipleItemKey>"
         And User sends a POST method to create item
@@ -161,10 +161,10 @@ Feature: API_Dashboard POST /api/item
         Given User picks company with type <companyType> in above response
         But User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get suppliers keys
-        And User sends a GET request to get suppliers information of <email> by company key and company type
+        And User sends a GET request to get list suppliers
         And user checks Auto supplier exist in the system, if it does not exist will create new supplier
         And User sets GET api endpoint to get item with limit row: <limitRow>
-        And User sends a GET request to get items information of <email> by company key and company type
+        And User sends a GET request to get list items
         And User sets POST api endpoint to create item
         And User sets request body with payload as name: "<itemName>" and description: "<description>" and vendorName: "<vendorName>" and vendorPrice: "<vendorPrice>" and moq: "<moq>" and leadTime: "<leadTime>" and orderInterval: "<orderInterval>" and serviceLevel: "<serviceLevel>" and onHand: "<onHand>" and onHandMin: "<onHandMin>" and onHandThirdParty: "<onHandThirdParty>" and onHandThirdPartyMin: "<onHandThirdPartyMin>" and lotMultipleQty: "<lotMultipleQty>" and lotMultipleItemName: "<lotMultipleItemName>" and asin: "" and fnsku: "" and skuNotes: "" and prepNotes: "" and supplierRebate: "" and inboundShippingCost: "" and reshippingCost: "" and repackagingMaterialCost: "" and repackingLaborCost: "" and rank: "" and inventorySourcePreference: "" and average7DayPrice: "" and isFbm: "" and key: "" and vendorKey: "<vendorKey>" and lotMultipleItemKey: "<lotMultipleItemKey>"
         When User sends a POST method to create item
