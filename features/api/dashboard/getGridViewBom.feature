@@ -42,6 +42,7 @@ Feature: API_Dashboard GET /api/grid-view/bom
     @TC_GVB003 @bug-permission
     Scenario Outline: <scenario> - Verify error when user sends this API with <cookie> cookie, <companyKeyHeader> companyKey, <companyTypeHeader> companyType value in header
         Given User picks company with type ASC in above response
+        And User sets GET api endpoint to get grid view boms
         But User sets <cookie> cookie of <email> and <companyKeyHeader> companyKey and <companyTypeHeader> companyType in the header
         When User sends a GET request to get grid view boms of <email> by company key and company type
         Then The expected status code should be <expectedStatus>
@@ -55,10 +56,11 @@ Feature: API_Dashboard GET /api/grid-view/bom
 
     @TC_GVB004 
     Scenario Outline: TC_GVB004 - Verify user <userA> could not call this API to get grid view in the bom of company which does not belongs to her
-        Given User has valid connect.sid of "<userA>" after send a POST request with payload as email: "<userA>" and password: "<password>"
-        But User sets GET api endpoint to get information of a company belongs to <userB> using company key <companyKey>
+        Given User picks random company in above response
+        And User has valid connect.sid of "<userA>" after send a POST request with payload as email: "<userA>" and password: "<password>"
+        And User sets GET api endpoint to get information of a company belongs to <userB> using company key <companyKey>
         And User sets GET api endpoint to get grid view boms
-        And User sets valid cookie of <userA> and valid companyKey and valid companyType in the header
+        But User sets valid cookie of <userA> and valid companyKey and valid companyType in the header
         When User sends a GET request to get grid view boms of <userB> by company key and company type
         Then The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
@@ -68,7 +70,7 @@ Feature: API_Dashboard GET /api/grid-view/bom
 
     #Bug @TC_GVB005, return status code 200 when call this API for company QBFS.
     @TC_GVB005
-    Scenario Outline: TC_GVB004 - Verify user could not call this API with company QBFS
+    Scenario Outline: TC_GVB005 - Verify user could not call this API with company QBFS
         Given User picks company with type QBFS in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         Then The expected status code should be <expectedStatus>
