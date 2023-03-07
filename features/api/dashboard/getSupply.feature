@@ -21,7 +21,7 @@ Feature: API_Dashboard GET /api/supply
         And User sets GET api endpoint to get supply keys
         When User sends a GET request to get list supplies
         Then The expected status code should be <expectedStatus>
-        And user checks any supply exist in the system, if it does not exist will create new supply
+        And User checks any supply exist in the system, if it does not exist will create new supply
         And User picks random supply in above response
         And User checks API contract essential types in supply object are correct
         And User checks values in response of random supply are correct

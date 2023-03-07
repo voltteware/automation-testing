@@ -30,7 +30,7 @@ Feature: API_SUPPLIER DELETE /api/vendor
 
     #Bug API in case TC_DV002_1, TC_DV002_2
     @TC_DV002 @bug-permission
-    Scenario Outline: TC_DV002 - Verify error when user sends this API with <cookie> cookie and <companyKeyHeader> companyKeyHeader and <companyTypeHeader> companyTypeHeader
+    Scenario Outline: <TC_ID> - Verify error when user sends this API with <cookie> cookie and <companyKeyHeader> companyKeyHeader and <companyTypeHeader> companyTypeHeader
         Given User filters <numberOfSuppliers> suppliers which has the name includes <supplierNameKeyword>
         But she sets <cookie> cookie of <email> and <companyKeyHeader> companyKey and <companyTypeHeader> companyType in the header
         When User sends a DELETE method to delete supplier

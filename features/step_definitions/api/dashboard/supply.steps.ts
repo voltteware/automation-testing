@@ -38,21 +38,21 @@ Then(`{} sends a GET request to get list supplies`, async function (actor: strin
     }
 })
 
-Then('{} checks {} supply exist in the system, if it does not exist will create new supply', async function (actor, supplyNameKeyword: string) {
+Then('{} checks {} supply exist in the system, if it does not exist will create new supply', async function (actor, supplyRefnumKeyword: string) {
     var numberofSupplys;
-    randomItem = this.getItemsResponseBody[Math.floor(Math.random() * this.getItemsResponseBody.length)];
-    randomSupplier = this.getSupplierResponseBody[Math.floor(Math.random() * this.getSupplierResponseBody.length)]
-
-    if (supplyNameKeyword != 'any') {
-        numberofSupplys = await this.getSupplyResponseBody.filter((su: any) => su.name.includes(supplyNameKeyword)).length;
+    if (supplyRefnumKeyword != 'any') {
+        numberofSupplys = await this.getSupplyResponseBody.filter((su: any) => su.refNum.includes(supplyRefnumKeyword)).length;
     }
     else {
         numberofSupplys = await this.getSupplyResponseBody.length;
     }
     
     if (numberofSupplys < 1) {
+        randomItem = this.getItemsResponseBody[Math.floor(Math.random() * this.getItemsResponseBody.length)];
+        randomSupplier = this.getSupplierResponseBody[Math.floor(Math.random() * this.getSupplierResponseBody.length)]
+
         payload.supplyUuid = faker.datatype.uuid();
-        payload.refNum = `${faker.random.numeric(4)} AUTO`;
+        payload.refNum = `${faker.random.numeric(4)} Auto`;
         payload.vendorName = randomSupplier.name;        
         payload.vendorKey = randomSupplier.key;       
         payload.docDate = faker.date.recent();        
@@ -97,6 +97,63 @@ Then('Check items in the response should be sort by field refNum with direction 
         expect(expectedList, `Check items in the response should be sort by field refNum with direction ${direction}`).toStrictEqual(sortedByDesc);
     }
 });
+
+Then('{} filters {} supplies which has the refNum includes {}', async function (actor, maximumSupplies, supplyRefnumKeyword: string) {
+    if (supplyRefnumKeyword.includes('any character')) {
+        this.selectedSupplies = await this.getSupplyResponseBody;
+    }
+    else {
+        this.selectedSupplies = await this.getSupplyResponseBody.filter((su: any) => su.refNum.includes(supplyRefnumKeyword));
+    }
+
+    const supplies = await this.selectedSupplies;
+    if (maximumSupplies != 'all') {
+        this.selectedSupplies = supplies.slice(0, Number(maximumSupplies))
+    }
+
+    logger.log('info', `Selected ${this.selectedSupplies.length} supplies which has the name includes ${supplyRefnumKeyword}` + JSON.stringify(await this.selectedSupplies, undefined, 4));
+    this.attach(`Selected ${this.selectedSupplies.length} supplies which has the name includes ${supplyRefnumKeyword}` + JSON.stringify(await this.selectedSupplies, undefined, 4));
+    expect(this.selectedSupplies.length, 'Expect that there is at least supply is selected').toBeGreaterThan(0);
+})
+
+Then(`{} sends a GET request to get total of supplies`, async function (actor: string) {
+    const link = encodeURI(`${Links.API_SUPPLY}/count?where={"logic":"and","filters":[]}`);
+    const options = {
+        headers: this.headers
+    }
+    this.getTotalSupplyResponse = this.response = await supplyRequest.getSupply(this.request, link, options);
+    this.totalSupply = await this.getTotalSupplyResponse.text();
+    logger.log('info', `Response GET ${link} has status code ${this.response.status()} ${this.response.statusText()} and response body ${this.totalSupply}`);
+    this.attach(`Response GET ${link} has status code ${this.response.status()} ${this.response.statusText()} and response body ${this.totalSupply}`)
+})
+
+Then('{} sends a DELETE method to delete supply', async function (actor: string) {
+    const ids = this.selectedSupplies.map((su: any) => `${su.docType}/${su.orderKey}/${su.rowKey}`);
+    var payLoadDelete = {
+        ids
+    }
+    logger.log('info', `Payload` + JSON.stringify(payLoadDelete, undefined, 4));
+    this.attach(`Payload` + JSON.stringify(payLoadDelete, undefined, 4))
+
+    this.response = await supplyRequest.deleteSupply(this.request, Links.API_SUPPLY, payLoadDelete, this.headers);
+    logger.log('info', `Response DELETE ${Links.API_SUPPLY} has status code ${this.response.status()} ${this.response.statusText()} and response body ${await this.response.text()}`);
+    this.attach(`Response DELETE ${Links.API_SUPPLY} has status code ${this.response.status()} ${this.response.statusText()} and response body ${await this.response.text()}`)
+})
+
+Then('{} checks the total supplies is correct', async function (actor: string) {
+    const link = encodeURI(`${Links.API_SUPPLY}/count?where={"logic":"and","filters":[]}`);
+    const options = {
+        headers: this.headers
+    }
+    const response = await supplyRequest.getSupply(this.request, link, options);
+    const currentTotalSupplies = Number(await response.text());
+    const beforeTotalSupplies = Number(this.totalSupply);
+    logger.log('info', `Current total supplies: ${currentTotalSupplies}`);
+    this.attach(`Current total supplies: ${currentTotalSupplies}`);
+    expect(currentTotalSupplies).not.toBeNaN();
+    expect(beforeTotalSupplies).not.toBeNaN();
+    expect(currentTotalSupplies).toEqual(beforeTotalSupplies - this.selectedSupplies.length);
+})
 
 Then('{} checks values in response of random supply are correct', async function (actor: string) {
     const companyType = ['ASC', 'CSV', 'QBFS', 'QBO'];
