@@ -6,7 +6,7 @@ let actionwords: ActionWords = new ActionWords()
 
 Before('@test-api', async function (scenario: ITestCaseHookParameter) {
     logger.log('info', '==============' + scenario.pickle.name + '==============')
-    this.request = await actionwords.createRequestContext() 
+    this.request = await actionwords.createRequestContext()
 });
 
 After('@test-api', async function (scenario: ITestCaseHookParameter) {

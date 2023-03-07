@@ -4,6 +4,7 @@
 logs/
 reports/cucumber-report*
 reports/cucumber-html-report*
+reports/multiple-report
 videos/
 screenshots/
 ### Node ###
