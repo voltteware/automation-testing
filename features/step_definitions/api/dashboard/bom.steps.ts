@@ -55,17 +55,17 @@ Then('{} checks {} bom exist in the system, if it does not exist will create new
             qty: Math.floor(Math.random() * 101),
         }
         const createResponse = await bomRequest
-        .createBom(this.request, `${Links.API_BOM}/${randomParentItem.key}/${randomChildItem.key}`, payload, this.headers);
+        .createBom(this.request, link, payload, payload.parentKey, payload.childKey, this.headers);
         const responseBodyText = await createResponse.text();
         if (createResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
             await this.getBomResponseBody.push(JSON.parse(responseBodyText));
-            logger.log('info', `Response PUT ${Links.API_BOM}/${randomParentItem.key}/${randomChildItem.key}` + JSON.stringify(responseBodyText, undefined, 4));
-            this.attach(`Response PUT ${Links.API_BOM}/${randomParentItem.key}/${randomChildItem.key}` + JSON.stringify(responseBodyText, undefined, 4))
+            logger.log('info', `Response POST ${link}/${randomParentItem.key}/${randomChildItem.key}` + JSON.stringify(responseBodyText, undefined, 4));
+            this.attach(`Response POST ${link}/${randomParentItem.key}/${randomChildItem.key}` + JSON.stringify(responseBodyText, undefined, 4))
         }
         else {
             const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
-            logger.log('info', `Response PUT  ${Links.API_BOM}/${randomParentItem.key}/${randomChildItem.key} has status code ${createResponse.status()} ${createResponse.statusText()} and response body ${responseBodyText}`);
-            this.attach(`Response PUT  ${Links.API_BOM}/${randomParentItem.key}/${randomChildItem.key} has status code ${createResponse.status()} ${createResponse.statusText()} and response body ${actualResponseText}`)
+            logger.log('info', `Response POST ${link}/${randomParentItem.key}/${randomChildItem.key} has status code ${createResponse.status()} ${createResponse.statusText()} and response body ${responseBodyText}`);
+            this.attach(`Response POST ${link}/${randomParentItem.key}/${randomChildItem.key} has status code ${createResponse.status()} ${createResponse.statusText()} and response body ${actualResponseText}`)
         }
     }
 });
