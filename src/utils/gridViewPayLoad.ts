@@ -460,3 +460,298 @@ export class gridViewPayLoadBom{
     name?: string
     itemType?: string 
 };
+
+export class gridViewPayLoadCustomItems{
+    gridState?: {
+        columns?: [
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string,
+                sort?: {
+                    direction?: string
+                }
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            }
+        ],
+        scrollFocus?: {},
+        selection?: [],
+        grouping?: {},
+        treeView?: {},
+        pagination?: {
+            paginationCurrentPage?: number,
+            paginationPageSize?: number
+        },
+        filter?: {
+            logic?: string,
+            filters?: []
+        },
+        sort?: [
+            {
+                dir?: string,
+                field?: string
+            }
+        ]
+    }
+    name?: string
+    itemType?: string
+};
