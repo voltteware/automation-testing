@@ -28,7 +28,7 @@ Feature: API_Dashboard POST /api/supply
             | TC_CSL001 | CSV         | testautoforecast@gmail.com | 50       | random     | random | random     | random    | random  | random  | random   | random  | random   | random  | random   | random | 200            |
             | TC_CSL002 | ASC         | testautoforecast@gmail.com | 50       | random     | random | random     | random    | random  | random  | random   | random  | random   | random  | random   | random | 200            |
 
-    #TC_CI003_1, TC_CI003_2 fail due to bug api
+    #TC_CSL003_1, TC_CSL003_2 fail due to bug api
     @TC_CSL003
     Scenario Outline: <scenario> - Verify error when user sends this API with <cookie> cookie, <companyKeyHeader> companyKey, <companyTypeHeader> companyType value in header
         Given User picks company with type <companyType> in above response
