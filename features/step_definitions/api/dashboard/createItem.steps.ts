@@ -53,7 +53,7 @@ Then('{} sets request body with payload as name: {string} and description: {stri
         randomSupplier = this.getSupplierResponseBody[Math.floor(Math.random() * this.getSupplierResponseBody.length)]
 
         if (name.includes('New Item Auto')) {
-            payload.name = `${faker.random.alphaNumeric(10).toUpperCase()}-${faker.datatype.number(500)}-AUTO`;
+            payload.name = `${faker.random.alphaNumeric(10).toUpperCase()}-${faker.datatype.number(500)}-Auto`;
         }
         payload.description = description;
         if(vendorName == 'random'){
