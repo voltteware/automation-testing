@@ -49,12 +49,13 @@ Then('{} checks {} supply exist in the system, if it does not exist will create 
     
     if (numberofSupplys < 1) {
         randomItem = this.getItemsResponseBody[Math.floor(Math.random() * this.getItemsResponseBody.length)];
-        randomSupplier = this.getSupplierResponseBody[Math.floor(Math.random() * this.getSupplierResponseBody.length)]
+        // Can create supply with items unassigned supplier
+        // randomSupplier = this.getSupplierResponseBody[Math.floor(Math.random() * this.getSupplierResponseBody.length)]
 
         payload.supplyUuid = faker.datatype.uuid();
         payload.refNum = `${faker.random.numeric(4)} Auto`;
-        payload.vendorName = randomSupplier.name;        
-        payload.vendorKey = randomSupplier.key;       
+        // payload.vendorName = randomSupplier.name;        
+        // payload.vendorKey = randomSupplier.key;       
         payload.docDate = faker.date.recent();        
         payload.dueDate = faker.date.future();       
         payload.itemName = randomItem.name;       
@@ -64,7 +65,7 @@ Then('{} checks {} supply exist in the system, if it does not exist will create 
         payload.orderKey = faker.datatype.uuid();      
         payload.rowKey = faker.datatype.uuid();
 
-        const createResponse = await supplyRequest.createSupply(this.request, Links.API_CREATE_SUPPLY, payload, payload.vendorKey, payload.rowKey, this.headers);
+        const createResponse = await supplyRequest.createSupply(this.request, Links.API_CREATE_SUPPLY, payload, payload.orderKey, payload.rowKey, this.headers);
         const responseBodyText = await createResponse.text();
         if (createResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
             await this.getSupplyResponseBody.push(JSON.parse(responseBodyText));
