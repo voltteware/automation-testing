@@ -46,6 +46,12 @@ async function getGridViewBom(request: APIRequestContext, linkApi: string, optio
     logger.log('info', `Send GET request ${url}`);
     return await request.get(url, options);
 }
+// Get grid-view Custom Items
+async function getGridViewCustomItems(request: APIRequestContext, linkApi: string, options?: object) {
+    const url = `${linkApi}`;
+    logger.log('info', `Send GET request ${url}`);
+    return await request.get(url, options);
+}
 export {
     createGridView,
     getGridViewSupplier,
@@ -53,5 +59,6 @@ export {
     getGridViewDemand,
     deleteGridView,
     getGridViewSupply,
-    getGridViewBom
+    getGridViewBom,
+    getGridViewCustomItems
 }
