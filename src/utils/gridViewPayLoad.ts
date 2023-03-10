@@ -461,6 +461,60 @@ export class gridViewPayLoadBom{
     itemType?: string 
 };
 
+export class gridViewPayLoadSuggestedPos{
+    gridState?: {
+        columns?: [
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string,
+                sort?:{
+                    direction: string
+                }
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string,
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string,
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string,
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string,
+            },
+        ],
+        scrollFocus?: {},
+        selection?: [],
+        grouping?: {},
+        treeView?: {},
+        pagination?:{
+            paginationCurrentPage?: Number,
+            paginationPageSize?: Number
+        },
+        filter?: {
+            filters?: [],
+            logic?: string
+        },
+        sort?: [
+            {
+                dir?: string,
+                field?: string,
+            }
+        ]
+    }
+    name?: string
+    itemType?: string 
+};
 export class gridViewPayLoadCustomItems{
     gridState?: {
         columns?: [
