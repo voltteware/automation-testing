@@ -53,7 +53,7 @@ Feature: API_SUPPLY DELETE /api/supply
             | TC_DSL003_3 | testautoforecast@gmail.com | 1                 | Auto                | valid   | invalid          | invalid           | 400            | Company not found.    |
             | TC_DSL003_4 | testautoforecast@gmail.com | 1                 | Auto                | valid   |                  |                   | 500            | Internal Server Error |
 
-    @TC_DSL004 @bug-permission
+    @TC_DSL004
     Scenario Outline: TC_DSL004 - Verify <userA> can't call this API to delete supply not belongs to her company
         Given User picks company with type CSV in above response
         But User sets valid cookie of <userB> and valid companyKey and valid companyType in the header
