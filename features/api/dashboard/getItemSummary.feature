@@ -25,7 +25,7 @@ Feature: API_Dashboard GET /api/vendor
 
         Examples:
             | user  | email                      | password  | companyKey | expectedStatus |
-            | admin | testautoforecast@gmail.com | Test1111! | 828f461d-fb2f-44e8-b588-c96b8620eec9     | 200            |
+            | admin | testautoforecast@gmail.com | Test1111! | random     | 200            |
 
     #Bug TC_GIS002 and TC_GIS002, return status code 200 when cookie invalid.
     @TC_GIS002 @bug-permission

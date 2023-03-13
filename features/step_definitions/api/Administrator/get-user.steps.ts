@@ -8,11 +8,11 @@ import _ from "lodash";
 let randomUser: any;
 let link: any;
 
-Then(`{} sets GET api endpoint to get 100 users has just created`, async function (actor: string) {
-    link = `${Links.API_ADMIN_GET_USER}offset=0&limit=100&sort=%5B%7B%22field%22:%22createdAt%22,%22direction%22:%22desc%22%7D%5D&where=%7B%22logic%22:%22and%22,%22filters%22:%5B%5D%7D`;
+Then(`{} sets GET api endpoint to get {} users has just created`, async function (actor, limitRow: string) {
+    link = encodeURI(`${Links.API_ADMIN_GET_USER}offset=0&limit=${limitRow}&sort=[{"field":"createdAt","direction":"desc"}]&where={"logic":"and","filters":[]}`);
 });
 
-Then('{} sends a GET request to get 100 latest users', async function (actor: string) {
+Then('{} sends a GET request to get {} latest users', async function (actor, limitRow: string) {
     const options = {
         headers: this.headers
     }

@@ -59,6 +59,13 @@ async function getGridViewSuggestedPos(request: APIRequestContext, linkApi: stri
     logger.log('info', `Send GET request ${url}`);
     return await request.get(url, options);
 }
+
+// Get grid-view Suggested Pos
+async function getGridViewCustomAllAvailableItem(request: APIRequestContext, linkApi: string, options?: object) {
+    const url = `${linkApi}`;
+    logger.log('info', `Send GET request ${url}`);
+    return await request.get(url, options);
+}
 export {
     createGridView,
     getGridViewSupplier,
@@ -68,5 +75,6 @@ export {
     getGridViewSupply,
     getGridViewBom,
     getGridViewCustomItems,
-    getGridViewSuggestedPos
+    getGridViewSuggestedPos,
+    getGridViewCustomAllAvailableItem
 }

@@ -9,11 +9,15 @@ import _ from "lodash";
 let link: any;
 let randomItem: any;
 
-Then(`{} sets GET api endpoint to get demand key`, async function (actor: string) {
+Then(`{} sets GET api endpoint to get demand keys`, async function (actor: string) {
     link = Links.API_DEMAND;
 });
 
-Then(`{} sends a GET request to get demand information of {} by company key and company type`, async function (actor, email: string) {
+Then(`{} sets GET api endpoint to get demands with limit row: {}`, async function (actor, limitRow: string) {
+    link = encodeURI(`${Links.API_DEMAND}?offset=0&limit=${limitRow}`);
+});
+
+Then(`{} sends a GET request to get list demands`, async function (actor: string) {
     const options = {
         headers: this.headers
     }

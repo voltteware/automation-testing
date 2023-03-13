@@ -20,7 +20,10 @@ Then('{} sets request body with payload as supplyUuid: {string} and refNum: {str
     async function (actor, supplyUuid, refNum, vendorName, vendorKey, docDate, dueDate, itemName, itemKey, orderQty, openQty, orderKey, rowKey: string) {
 
         randomItem = this.getItemsResponseBody[Math.floor(Math.random() * this.getItemsResponseBody.length)];
-        randomSupplier = this.getSupplierResponseBody[Math.floor(Math.random() * this.getSupplierResponseBody.length)]
+        if(vendorName && vendorKey == 'random'){
+            randomSupplier = this.getSupplierResponseBody[Math.floor(Math.random() * this.getSupplierResponseBody.length)]
+        }
+        
         if (supplyUuid == 'random') {
             payload.supplyUuid = faker.datatype.uuid();
         }

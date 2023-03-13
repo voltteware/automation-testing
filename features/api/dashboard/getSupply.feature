@@ -13,12 +13,9 @@ Feature: API_Dashboard GET /api/supply
     Scenario Outline: TC_GSL001 - Verify user <email> could call this API to get list supplies by using company key and company type
         Given User sets GET api endpoint to get information of a company belongs to <email> using company key <companyKey>
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
-        And User sets GET api endpoint to get suppliers keys
-        And User sends a GET request to get list suppliers
-        And user checks Auto supplier exist in the system, if it does not exist will create new supplier
         And User sets GET api endpoint to get item with limit row: <limitRow>
         And User sends a GET request to get list items
-        And User sets GET api endpoint to get supply keys
+        And User sets GET api endpoint to get supplies with limit row: <limitRow>
         When User sends a GET request to get list supplies
         Then The expected status code should be <expectedStatus>
         And User checks any supply exist in the system, if it does not exist will create new supply
@@ -27,7 +24,7 @@ Feature: API_Dashboard GET /api/supply
         And User checks values in response of random supply are correct
         Examples:
             | user  | email                      | companyKey | limitRow | password  | expectedStatus |
-            | admin | testautoforecast@gmail.com | random     | 50       | Test1111! | 200            |
+            | admin | testautoforecast@gmail.com | random     | 10       | Test1111! | 200            |
 
     # Bug TC_GV002_1 and TC_GV002_2, return status code 200 when cookie invalid.
     @TC_GSL002 @bug-permission

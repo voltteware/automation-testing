@@ -15,6 +15,10 @@ Then(`{} sets GET api endpoint to get bom keys`, async function (actor: string) 
     link = Links.API_BOM;
 });
 
+Then(`{} sets GET api endpoint to get boms with limit row: {}`, async function (actor, limitRow: string) {
+    link = encodeURI(`${Links.API_BOM}?offset=0&limit=${limitRow}`);
+});
+
 Then(`{} sends a GET request to get list boms`, async function (actor: string) {
     const options = {
         headers: this.headers
