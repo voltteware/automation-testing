@@ -1,4 +1,4 @@
-export class gridViewPayLoadSupplier{
+export interface gridViewPayLoadSupplier{
     gridState?: {
         columns?: [
             {
@@ -104,7 +104,7 @@ export class gridViewPayLoadSupplier{
     itemType?: string 
 };
 
-export class gridViewPayLoadItem{
+export interface gridViewPayLoadItem{
     gridState?: {
         columns?: [
             {
@@ -390,7 +390,7 @@ export class gridViewPayLoadItem{
     itemType?: string 
 };
 
-export class gridViewPayLoadBom{
+export interface gridViewPayLoadBom{
     gridState?: {
         columns?: [
             {
@@ -461,7 +461,7 @@ export class gridViewPayLoadBom{
     itemType?: string 
 };
 
-export class gridViewPayLoadSuggestedPos{
+export interface gridViewPayLoadSuggestedPos{
     gridState?: {
         columns?: [
             {
@@ -515,7 +515,7 @@ export class gridViewPayLoadSuggestedPos{
     name?: string
     itemType?: string 
 };
-export class gridViewPayLoadCustomItems{
+export interface gridViewPayLoadCustomItems{
     gridState?: {
         columns?: [
             {
@@ -786,6 +786,231 @@ export class gridViewPayLoadCustomItems{
                 width?: string,
                 name?: string
             }
+        ],
+        scrollFocus?: {},
+        selection?: [],
+        grouping?: {},
+        treeView?: {},
+        pagination?: {
+            paginationCurrentPage?: number,
+            paginationPageSize?: number
+        },
+        filter?: {
+            logic?: string,
+            filters?: []
+        },
+        sort?: [
+            {
+                dir?: string,
+                field?: string
+            }
+        ]
+    }
+    name?: string
+    itemType?: string
+};
+
+export interface gridViewPayLoadCustomAllAvailableItems{
+    gridState?: {
+        columns?: [
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+                sort?: {
+                    direction?: string
+                }
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string,
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
+            {
+                visible?: boolean,
+                width?: string,
+                name?: string
+            },
         ],
         scrollFocus?: {},
         selection?: [],
