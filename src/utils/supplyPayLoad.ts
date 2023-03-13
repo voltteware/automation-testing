@@ -1,4 +1,4 @@
-export class payLoadSupply{
+export interface payLoadSupply{
     supplyUuid?: string
     refNum?: string
     vendorName?: string

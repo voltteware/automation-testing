@@ -1,4 +1,4 @@
-export class payLoadSupplier{
+export interface payLoadSupplier{
     name?: string
     description?: string
     email?: string

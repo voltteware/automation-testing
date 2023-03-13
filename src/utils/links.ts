@@ -26,6 +26,7 @@ export class Links {
     //API Purchasing
     static API_GET_GRIDVIEW_CUSTOM_ITEMS: string = '/api/grid-view/custom-items-in-po';
     static API_GET_GRIDVIEW_SUGGESTED_POS: string = '/api/grid-view/suggested-pos';
+    static API_GET_GRIDVIEW_CUSTOM_ALL_AVAILABLE_ITEMS: string = '/api/grid-view/custom-all-available-items';
     //API Admin
     static API_ADMIN_DELETE_USER: string = '/api/admin/users/';
     static API_ADMIN_GET_COMPANIES: string = '/api/admin/companies';
