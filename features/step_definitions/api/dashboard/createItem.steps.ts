@@ -14,7 +14,7 @@ let payload: {
     asin?: string,
     fnsku?: string,
     description?: string,
-    vendorName?: string,
+    vendorName?: string | null,
     vendorPrice?: Number,
     moq?: Number,
     leadTime?: Number,
@@ -38,7 +38,7 @@ let payload: {
     average7DayPrice?: Number,
     isFbm?: Boolean,
     key?: string,
-    vendorKey?: string,
+    vendorKey?: string | null,
     lotMultipleItemKey?: string,
 } = {}
 
@@ -49,19 +49,23 @@ Then(`{} sets POST api endpoint to create item`, async function (actor: string) 
 Then('{} sets request body with payload as name: {string} and description: {string} and vendorName: {string} and vendorPrice: {string} and moq: {string} and leadTime: {string} and orderInterval: {string} and serviceLevel: {string} and onHand: {string} and onHandMin: {string} and onHandThirdParty: {string} and onHandThirdPartyMin: {string} and lotMultipleQty: {string} and lotMultipleItemName: {string} and asin: {string} and fnsku: {string} and skuNotes: {string} and prepNotes: {string} and supplierRebate: {string} and inboundShippingCost: {string} and reshippingCost: {string} and repackagingMaterialCost: {string} and repackingLaborCost: {string} and rank: {string} and inventorySourcePreference: {string} and average7DayPrice: {string} and isFbm: {string} and key: {string} and vendorKey: {string} and lotMultipleItemKey: {string}',
     async function (actor, name, description, vendorName, vendorPrice, moq, leadTime, orderInterval, serviceLevel, onHand, onHandMin, onHandThirdParty, onHandThirdPartyMin, lotMultipleQty, lotMultipleItemName, asin, fnsku, skuNotes, prepNotes, supplierRebate, inboundShippingCost, reshippingCost, repackagingMaterialCost, repackingLaborCost, rank, inventorySourcePreference, average7DayPrice, isFbm, key, vendorKey, lotMultipleItemKey: string) {
         
-        randomItem = this.getItemsResponseBody[Math.floor(Math.random() * this.getItemsResponseBody.length)];
-        randomSupplier = this.getSupplierResponseBody[Math.floor(Math.random() * this.getSupplierResponseBody.length)]
-
         if (name.includes('New Item Auto')) {
             payload.name = `${faker.random.alphaNumeric(10).toUpperCase()}-${faker.datatype.number(500)}-Auto`;
         }
+
         payload.description = description;
-        if(vendorName == 'random'){
+
+        if(vendorName == 'random' && vendorKey == 'random' ){
+            randomSupplier = this.getSupplierResponseBody[Math.floor(Math.random() * this.getSupplierResponseBody.length)];
+            payload.vendorKey = randomSupplier.key;
             payload.vendorName = randomSupplier.name;
         }
-        if(vendorKey == 'random'){
-            payload.vendorKey = randomSupplier.key;
+
+        if(vendorName == null && vendorKey == null){
+            payload.vendorName = null;
+            payload.vendorKey =  null;
         }
+
         if (vendorPrice == 'random') {
             payload.vendorPrice = Number(faker.random.numeric());
         }
@@ -140,9 +144,15 @@ Then('{} sets request body with payload as name: {string} and description: {stri
         else {
             payload.lotMultipleQty = Number(lotMultipleQty);
         }
+        
+        if(lotMultipleItemName && lotMultipleItemKey == 'random'){
+            randomItem = this.getItemsResponseBody[Math.floor(Math.random() * this.getItemsResponseBody.length)];
+        }
 
         if(lotMultipleItemName == 'random'){
             payload.lotMultipleItemName = randomItem.name;
+        }else{
+            payload.lotMultipleItemName = lotMultipleItemName;
         }
 
         if(lotMultipleItemKey == 'random'){
@@ -151,6 +161,8 @@ Then('{} sets request body with payload as name: {string} and description: {stri
             }else{
                 payload.lotMultipleItemKey = `${randomItem.asin}-${randomItem.name}`;
             }
+        }else{
+            payload.lotMultipleItemKey = lotMultipleItemKey;
         }
 
         if (asin == 'random') {
