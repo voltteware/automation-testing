@@ -84,7 +84,7 @@ Feature: API_Dashboard POST /api/bom
 
         Examples:
             | email                      | limitRow | parentName | parentKey | childName  | childKey  | qty    | expectedStatus | expectedStatusText                        |
-            | testautoforecast@gmail.com | 30       | random     | random    | parentName | parentKey | random | 400            | Inserting would create a multi-level Kit. |
+            | testautoforecast@gmail.com | 50       | random     | random    | parentName | parentKey | random | 400            | Inserting would create a multi-level Kit. |
     
     @TC_CB006
     Scenario Outline: TC_CB006 - Verify user <userA> could not call this API to create bom of company which does not belongs to her
@@ -103,7 +103,7 @@ Feature: API_Dashboard POST /api/bom
         And The status text is "<expectedStatusText>"
         Examples:
             | userA               | userB                      | password  | limitRow | parentName | parentKey | childName | childKey | qty    | expectedStatus | expectedStatusText |
-            | may27user@gmail.com | testautoforecast@gmail.com | Test1111! | 30       | random     | random    | random    | random   | random | 400            | Company not found. |
+            | may27user@gmail.com | testautoforecast@gmail.com | Test1111! | 50       | random     | random    | random    | random   | random | 400            | Company not found. |
             
     @TC_CB007
     Scenario Outline: TC_CB007 - Verify error bom already exists
@@ -122,7 +122,7 @@ Feature: API_Dashboard POST /api/bom
 
         Examples:
             | email                      | limitRow | parentName | parentKey | childName | childKey | qty    | expectedStatus | expectedStatusText     |
-            | testautoforecast@gmail.com | 30       | random     | random    | random    | random   | random | 400            | Record already exists. |
+            | testautoforecast@gmail.com | 20       | random     | random    | random    | random   | random | 400            | Record already exists. |
 
     @TC_CB008
     Scenario Outline: TC_CB008 - Verify error when user input is missing one required field
@@ -140,7 +140,7 @@ Feature: API_Dashboard POST /api/bom
 
         Examples:
             | email                      | limitRow | parentName | parentKey | childName | childKey | qty    | expectedStatus | expectedStatusText         |
-            | testautoforecast@gmail.com | 30       |            |           | random    | random   | random | 400            | Missing required property. |
+            | testautoforecast@gmail.com | 20       |            |           | random    | random   | random | 400            | Missing required property. |
 
     #Bug TC_CB009,TC_CB010 return status code 200 when call this API for company has type QBFS and QBO.
     @TC_CB009 @TC_CB010
