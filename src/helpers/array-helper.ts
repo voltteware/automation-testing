@@ -12,6 +12,15 @@ function flattenArray(nestedArray: Array<any>, nestedPropName: string): Array<an
     return result;
 }
 
+function sortLocale(array: Array<any>, field: string, direction: 'asc' | 'desc' = 'asc') {
+    return array.sort((a, b) => {
+        const sortResult = a[field].localeCompare(b[field]);
+        // if direction = asc => sortResult else reverse sortResult
+        return direction === 'asc' ? sortResult : !sortResult;
+    });
+}
+
 export {
-    flattenArray
+    flattenArray,
+    sortLocale
 }
