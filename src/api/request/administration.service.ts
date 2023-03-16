@@ -18,8 +18,15 @@ async function getUser(request: APIRequestContext, linkApi:string, options?: obj
     logger.log('info',`Send GET request ${url}`);
     return await request.get(url, options);
 }
+// Delete company
+async function deleteCompany(request: APIRequestContext, linkApi:string, companyKey: string, companyType: string, options?: object) {
+    const url = `${linkApi}${companyKey}/${companyType}?deleteType=hard`;
+    logger.log('info',`Send DELETE request ${url}`);
+    return await request.delete(url, options);
+}
 export {
     deleteUser,
     getCompanies,
-    getUser
+    getUser,
+    deleteCompany
 }
