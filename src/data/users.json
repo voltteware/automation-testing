@@ -1,10 +1,16 @@
 {
-    "admin": {
-        "email": "may27pre@gmail.com",
-        "password": "Test1111!"
-    },
-    "user": {
-        "email": "restockuser@gmail.com",
-        "password": "Test1111!"
-    }
+    "usersPreprod": [
+        {
+            "username": "may27pre@gmail.com",
+            "password": "Test1111!"
+        },
+        {
+            "username": "thegreentree1217@gmail.com",
+            "password": "Test1111!"
+        },
+        {
+            "username": "testqaforecast@gmail.com",
+            "password": "Test1111!"
+        }
+    ]
 }

@@ -32,3 +32,9 @@ export class Links {
     static API_ADMIN_GET_COMPANIES: string = '/api/admin/companies';
     static API_ADMIN_GET_USER: string = '/api/admin/users?';
 }
+
+//URL for performance
+export class Url{
+    // static urlDev = 'https://dev-test.forecastrx.com';
+    static urlPreprod = 'https://preprod-my.forecastrx.com';
+}
