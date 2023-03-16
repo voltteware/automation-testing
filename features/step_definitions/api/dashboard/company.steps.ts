@@ -96,7 +96,7 @@ Then(`{} sets GET api endpoint to get information of a company belongs to {} usi
     this.attach(`COMPANY KEY: ${this.companyKey}`);
     logger.log('info', `companyType: ${this.companyType}`);
     this.attach(`COMPANY TYPE: ${this.companyType}`);
-    link = `${Links.API_COMPANY}${this.companyKey}`;
+    link = `${Links.API_UPDATE_COMPANY}${this.companyKey}`;
 });
 
 When(`{} sends a GET request to get company information of {} by company key`, async function (actor, email: string) {
