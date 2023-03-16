@@ -45,10 +45,10 @@ Feature: API_Dashboard POST /api/bom
         And The status text is "<expectedStatusText>"
         Examples:
             | TC_ID      | companyType | email                      | limitRow | cookie  | companyKeyHeader | companyTypeHeader | parentName | parentKey | childName | childKey | qty     | expectedStatus | expectedStatusText    |
-            | TC_CB003_1 | CSV         | testautoforecast@gmail.com | 50       | invalid | invalid          | invalid           | random     | random    | random    | random   | random  | 401            | Unauthorized          |
-            | TC_CB003_2 | ASC         | testautoforecast@gmail.com | 50       | invalid | valid            | valid             | random     | random    | random    | random   | random  | 401            | Unauthorized          |
-            | TC_CB003_3 | CSV         | testautoforecast@gmail.com | 50       | valid   | invalid          | invalid           | random     | random    | random    | random   | random  | 400            | Company not found.    |
-            | TC_CB003_4 | ASC         | testautoforecast@gmail.com | 50       | valid   |                  |                   | random     | random    | random    | random   | random  | 500            | Internal Server Error |  
+            | TC_CB003_1 | CSV         | testautoforecast@gmail.com | 30       | invalid | invalid          | invalid           | random     | random    | random    | random   | random  | 401            | Unauthorized          |
+            | TC_CB003_2 | ASC         | testautoforecast@gmail.com | 30       | invalid | valid            | valid             | random     | random    | random    | random   | random  | 401            | Unauthorized          |
+            | TC_CB003_3 | CSV         | testautoforecast@gmail.com | 30       | valid   | invalid          | invalid           | random     | random    | random    | random   | random  | 400            | Company not found.    |
+            | TC_CB003_4 | ASC         | testautoforecast@gmail.com | 30       | valid   |                  |                   | random     | random    | random    | random   | random  | 500            | Internal Server Error |  
 
     @TC_CB004
     Scenario Outline: TC_CB004 - Verify error when the item is a parent can't is a child
@@ -122,7 +122,7 @@ Feature: API_Dashboard POST /api/bom
 
         Examples:
             | email                      | limitRow | parentName | parentKey | childName | childKey | qty    | expectedStatus | expectedStatusText     |
-            | testautoforecast@gmail.com | 50       | random     | random    | random    | random   | random | 400            | Record already exists. |
+            | testautoforecast@gmail.com | 20       | random     | random    | random    | random   | random | 400            | Record already exists. |
 
     @TC_CB008
     Scenario Outline: TC_CB008 - Verify error when user input is missing one required field
@@ -140,7 +140,7 @@ Feature: API_Dashboard POST /api/bom
 
         Examples:
             | email                      | limitRow | parentName | parentKey | childName | childKey | qty    | expectedStatus | expectedStatusText         |
-            | testautoforecast@gmail.com | 50       |            |           | random    | random   | random | 400            | Missing required property. |
+            | testautoforecast@gmail.com | 20       |            |           | random    | random   | random | 400            | Missing required property. |
 
     #Bug TC_CB009,TC_CB010 return status code 200 when call this API for company has type QBFS and QBO.
     @TC_CB009 @TC_CB010
@@ -158,6 +158,6 @@ Feature: API_Dashboard POST /api/bom
         And The status text is "<expectedStatusText>"
         Examples:
             | TC_ID    | companyType | email                      | limitRow | parentName | parentKey | childName | childKey | qty    | expectedStatus | expectedStatusText |
-            | TC_CB009 | QBFS        | testautoforecast@gmail.com | 50       | random     | random    | random    | random   | random | 400            | Bad Request        |
-            | TC_CB010 | QBO         | testautoforecast@gmail.com | 50       | random     | random    | random    | random   | random | 400            | Bad Request        |
+            | TC_CB009 | QBFS        | testautoforecast@gmail.com | 30       | random     | random    | random    | random   | random | 400            | Bad Request        |
+            | TC_CB010 | QBO         | testautoforecast@gmail.com | 30       | random     | random    | random    | random   | random | 400            | Bad Request        |
    

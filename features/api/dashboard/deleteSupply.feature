@@ -15,7 +15,7 @@ Feature: API_SUPPLY DELETE /api/supply
         But User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get item with limit row: 5
         And User sends a GET request to get list items
-        And User sets GET api endpoint to get supply keys
+        And User sets GET api endpoint to get supplies with limit row: 5
         And User sends a GET request to get list supplies
         And User checks Auto supply exist in the system, if it does not exist will create new supply
         And User sends a GET request to get total of supplies
@@ -28,7 +28,7 @@ Feature: API_SUPPLY DELETE /api/supply
         Examples:
             | TC_ID     | companyType | numberOfSupplies | supplyRefnumKeyword  | expectedStatus | expectedStatusText | email                      |
             | TC_DSL001 | CSV         | 1                | Auto                 | 200            | OK                 | testautoforecast@gmail.com |
-            | TC_DSL002 | ASC         | 1               | Auto                 | 200            | OK                 | testautoforecast@gmail.com |
+            | TC_DSL002 | ASC         | 1                | Auto                 | 200            | OK                 | testautoforecast@gmail.com |
 
     #Bug API in case TC_DSL003_1, TC_DSL003_2
     @TC_DSL003 @bug-permission
@@ -37,7 +37,7 @@ Feature: API_SUPPLY DELETE /api/supply
         But User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get item with limit row: 5
         And User sends a GET request to get list items
-        And User sets GET api endpoint to get supply keys
+        And User sets GET api endpoint to get supplies with limit row: 5
         And User sends a GET request to get list supplies
         And User checks Auto supply exist in the system, if it does not exist will create new supply
         And User filters <numberOfSupplies> supplies which has the refNum includes <supplyRefnumKeyword>
@@ -59,7 +59,7 @@ Feature: API_SUPPLY DELETE /api/supply
         But User sets valid cookie of <userB> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get item with limit row: 5
         And User sends a GET request to get list items
-        And User sets GET api endpoint to get supply keys
+        And User sets GET api endpoint to get supplies with limit row: 5
         And User sends a GET request to get list supplies
         And User checks Auto supply exist in the system, if it does not exist will create new supply
         And User filters <numberOfSupplies> supplies which has the refNum includes <supplyRefnumKeyword>

@@ -8,9 +8,6 @@ import { Links } from '../../../../src/utils/links';
 import * as arrayHelper from "../../../../src/helpers/array-helper";
 import _ from "lodash";
 
-let getUsersResponse: any;
-let getUsersResponseBody: any;
-let deleteUsersResponseBody: any;
 let allUser: any;
 let email: any;
 let selectedUser: any;
@@ -21,7 +18,7 @@ Then(`{} sets DELETE api endpoint to delete user keys`, async function (actor: s
 });
 
 Then('Check email exist in the system, if it does not exist will create user with email <testauto@gmail.com>', async function () {
-    allUser = arrayHelper.flattenArray(this.get100LatestUsersResponseBody, 'data');
+    allUser = arrayHelper.flattenArray(this.get20LatestUsersResponseBody, 'data');
     const foundUser = allUser.find((element: { userId: any; }) => element.userId === `testauto@gmail.com`);
     if (typeof foundUser == 'undefined') {
         this.payload = {
@@ -52,15 +49,15 @@ Then('Check email exist in the system, if it does not exist will create user wit
                 'Cookie': this.cookieLogin
             }
         }
-        this.get100LatestUsersResponse = await adminRequest.getUser(this.request, Links.API_ADMIN_GET_USER, options);
-        if (this.get100LatestUsersResponse.status() == 200) {
-            this.get100LatestUsersResponseBody = JSON.parse(await this.get100LatestUsersResponse.text());
+        this.getLatestUsersResponse = await adminRequest.getUser(this.request, Links.API_ADMIN_GET_USER, options);
+        if (this.getLatestUsersResponse.status() == 200) {
+            this.getLatestUsersResponseBody = JSON.parse(await this.getLatestUsersResponse.text());
         }
     }
 })
 
 Then('Check {} exist in the system, if it does not exist will create user with below email', async function (email: string) {
-    allUser = arrayHelper.flattenArray(this.get100LatestUsersResponseBody, 'data');
+    allUser = arrayHelper.flattenArray(this.getLatestUsersResponseBody, 'data');
     const foundUser = allUser.find((element: { userId: any; }) => element.userId === email);
     if (typeof foundUser == 'undefined') {
         this.payload = {
@@ -104,22 +101,22 @@ Then('Check {} exist in the system, if it does not exist will create user with b
             }
         }
 
-        const endPointToGet100LatestUser = `${Links.API_ADMIN_GET_USER}offset=0&limit=100&sort=%5B%7B%22field%22:%22createdAt%22,%22direction%22:%22desc%22%7D%5D&where=%7B%22logic%22:%22and%22,%22filters%22:%5B%5D%7D`
-        this.get100LatestUsersResponse = await adminRequest.getUser(this.request, endPointToGet100LatestUser, options);
-        if (this.get100LatestUsersResponse.status() == 200) {
-            this.get100LatestUsersResponseBody = JSON.parse(await this.get100LatestUsersResponse.text());
-            expect(await this.get100LatestUsersResponseBody.length).toBeLessThanOrEqual(100);
-            expect(this.get100LatestUsersResponseBody.map((user: any) => user.userId)).toContain(email);
+        const endPointToGet20LatestUser = `${Links.API_ADMIN_GET_USER}offset=0&limit=20&sort=%5B%7B%22field%22:%22createdAt%22,%22direction%22:%22desc%22%7D%5D&where=%7B%22logic%22:%22and%22,%22filters%22:%5B%5D%7D`
+        this.get20LatestUsersResponse = await adminRequest.getUser(this.request, endPointToGet20LatestUser, options);
+        if (this.get20LatestUsersResponse.status() == 200) {
+            this.get20LatestUsersResponseBody = JSON.parse(await this.get20LatestUsersResponse.text());
+            expect(await this.get20LatestUsersResponseBody.length).toBeLessThanOrEqual(20);
+            expect(this.get20LatestUsersResponseBody.map((user: any) => user.userId)).toContain(email);
         }
         else {
-            logger.log('info', `Response Get 100 Users has status code ${this.get100LatestUsersResponse.status()} ${this.get100LatestUsersResponse.statusText()} and response body` + this.get100LatestUsersResponse.text());
-            this.attach(`Response Get 100 Users has status code ${this.get100LatestUsersResponse.status()} ${this.get100LatestUsersResponse.statusText()} and response body` + this.get100LatestUsersResponse.text());
+            logger.log('info', `Response Get 20 Users has status code ${this.get20LatestUsersResponse.status()} ${this.get20LatestUsersResponse.statusText()} and response body` + this.get20LatestUsersResponse.text());
+            this.attach(`Response Get 20 Users has status code ${this.get20LatestUsersResponse.status()} ${this.get20LatestUsersResponse.statusText()} and response body` + this.get20LatestUsersResponse.text());
         }
     }
 })
 
 Then('{} filters user to get user which has the email as {}', async function (actor, expectedEmail: string) {
-    selectedUser = await this.get100LatestUsersResponseBody.find((us: any) => us.userId == expectedEmail)
+    selectedUser = await this.get20LatestUsersResponseBody.find((us: any) => us.userId == expectedEmail)
     logger.log('info', `Response Body before filter: ${JSON.stringify(selectedUser.userId, undefined, 4)}`);
     this.attach(`Response Body before filter: ${JSON.stringify(selectedUser.userId, undefined, 4)}`);
 })

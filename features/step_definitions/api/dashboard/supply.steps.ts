@@ -8,7 +8,6 @@ import _ from "lodash";
 import { payLoadSupply } from '../../../../src/utils/supplyPayLoad';
 
 let link: any;
-let randomSupplier: any;
 let randomItem: any;
 let payload: payLoadSupply = {}
 
@@ -18,6 +17,10 @@ Then(`{} sets GET api endpoint to get supply keys`, async function (actor: strin
 
 Then(`{} sets GET api endpoint to get supply keys with limit row: {} and sort field: {} with direction: {}`, async function (actor, limitRow, sortField, direction: string) {
     link = encodeURI(`${Links.API_SUPPLY}?offset=0&limit=${limitRow}&sort=[{"field":"${sortField}","direction":"${direction}"}]&where={"logic":"and","filters":[]}`);
+});
+
+Then(`{} sets GET api endpoint to get supplies with limit row: {}`, async function (actor, limitRow: string) {
+    link = encodeURI(`${Links.API_SUPPLY}?offset=0&limit=${limitRow}`);
 });
 
 Then(`{} sends a GET request to get list supplies`, async function (actor: string) {
