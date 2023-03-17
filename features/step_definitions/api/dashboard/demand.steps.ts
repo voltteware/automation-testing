@@ -87,16 +87,3 @@ Then('{} checks {} demand exist in the system, if it does not exist will create 
 Then(`{} sets GET api endpoint to get demand keys with limit row: {} and sort field: {} with direction: {}`, async function (actor, limitRow, sortField, direction: string) {
     link = encodeURI(`${Links.API_DEMAND}?offset=0&limit=${limitRow}&sort=[{"field":"${sortField}","direction":"${direction}"}]&where={"logic":"and","filters":[]}`);
 });
-
-Then('Check demand in the response should be sort by field qty with direction {}', async function (direction: string) {
-    if (direction == 'asc') {
-        const expectedList = this.responseBody;
-        const sortedByAsc = _.orderBy(this.responseBody, [(o) => { return o.qty || '' }], ['asc']);
-        expect(expectedList, `Check demand in the response should be sort by field qty with direction ${direction}`).toStrictEqual(sortedByAsc);
-    }
-    else if (direction == 'desc') {
-        const expectedList = this.responseBody;
-        const sortedByDesc = _.orderBy(this.responseBody, [(o) => { return o.qty || '' }], ['desc']);
-        expect(expectedList, `Check demand in the response should be sort by field qty with direction ${direction}`).toStrictEqual(sortedByDesc);
-    }
-});

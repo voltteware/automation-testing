@@ -70,7 +70,7 @@ Feature: API_Dashboard GET /api/demand
             | may27user@gmail.com | may27pre@gmail.com | Test1111! | random     | 400            | Company not found. |
 
     @TC_GD004
-    Scenario Outline: <TC_ID> - Verify user could set limit 100 in this API to get list demand sorted by Date of Sales with direction <direction>
+    Scenario Outline: <TC_ID> - Verify user could set limit 10 in this API to get list demand sorted by Date of Sales with direction <direction>
         Given User picks random company in above response
         And User sets GET api endpoint to get information of a company belongs to <email> using company key <companyKey>
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
@@ -78,9 +78,13 @@ Feature: API_Dashboard GET /api/demand
         When User sends a GET request to get list demands
         Then The expected status code should be <expectedStatus>
         And Check total items in the response should be less than or equal <limitRow>
-        And Check demand in the response should be sort by field qty with direction <direction>
+        And Check items in the response should be sort by field <sortField> with direction <direction>
         Examples:
             | TC_ID      | user  | email                      | companyKey | password  | limitRow | sortField | direction |  expectedStatus |
-            | TC_GD004_1 | admin | testautoforecast@gmail.com | random     | Test1111! | 100      | dueDate   | asc       |  200            |
-            | TC_GD004_2 | admin | testautoforecast@gmail.com | random     | Test1111! | 100      | dueDate   | desc      |  200            |
+            | TC_GD004_1 | admin | testautoforecast@gmail.com | random     | Test1111! | 10       | dueDate   | asc       |  200            |
+            | TC_GD004_2 | admin | testautoforecast@gmail.com | random     | Test1111! | 10       | dueDate   | desc      |  200            |
+            | TC_GD004_3 | admin | testautoforecast@gmail.com | random     | Test1111! | 10       | fnsku     | asc       |  200            |
+            | TC_GD004_4 | admin | testautoforecast@gmail.com | random     | Test1111! | 10       | fnsku     | desc      |  200            |
+            | TC_GD004_5 | admin | testautoforecast@gmail.com | random     | Test1111! | 10       | openQty   | asc       |  200            |
+            | TC_GD004_6 | admin | testautoforecast@gmail.com | random     | Test1111! | 10       | openQty   | desc      |  200            |
     

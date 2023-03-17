@@ -57,18 +57,20 @@ Feature: API_Dashboard GET /api/bom
             | may27user@gmail.com | may27pre@gmail.com | Test1111! | random     | 400            | Company not found. |
 
     @TC_GB004
-    Scenario Outline: <TC_ID> - Verify user could set limit 100 in this API to get list bom sorted by Kit Qty with direction <direction>
+    Scenario Outline: <TC_ID> - Verify user could set limit 10 in this API to get list bom sorted by Kit Qty with direction <direction>
         Given User picks company with type ASC in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get bom keys with limit row: <limitRow> and sort field: <sortField> with direction: <direction>
         When User sends a GET request to get list boms
         Then The expected status code should be <expectedStatus>
         And Check total items in the response should be less than or equal <limitRow>
-        And Check bom in the response should be sort by field qty with direction <direction>
+        And Check items in the response should be sort by field <sortField> with direction <direction>
         Examples:
             | TC_ID      | user  | email                      | password  | limitRow | sortField | direction |  expectedStatus |
-            | TC_GB004_1 | admin | testautoforecast@gmail.com | Test1111! | 100      | qty       | asc       |  200            |
-            | TC_GB004_2 | admin | testautoforecast@gmail.com | Test1111! | 100      | qty       | desc      |  200            |
+            | TC_GB004_1 | admin | testautoforecast@gmail.com | Test1111! | 10       | qty       | asc       |  200            |
+            | TC_GB004_2 | admin | testautoforecast@gmail.com | Test1111! | 10       | qty       | desc      |  200            |
+            | TC_GB004_3 | admin | testautoforecast@gmail.com | Test1111! | 10       | childName | asc       |  200            |
+            | TC_GB004_4 | admin | testautoforecast@gmail.com | Test1111! | 10       | childName | desc      |  200            |
     
     #Bug TC_GB005, return status code 200 when call this API for company QBFS.
     @TC_GB005
