@@ -5,7 +5,6 @@ import logger from '../../../../src/Logger/logger';
 import { Links } from '../../../../src/utils/links';
 import { faker } from '@faker-js/faker';
 import _ from "lodash";
-import { sortLocale } from '../../../../src/helpers/array-helper';
 
 let link: any;
 
@@ -62,22 +61,6 @@ Then('{} checks values in response of random supplier are correct', async functi
     expect(this.responseBodyOfASupplierObject.companyKey).not.toBeNull();
     expect(this.responseBodyOfASupplierObject.companyName).not.toBeNull();
 })
-
-Then('Check items in the response should be sort by field leadTime with direction {}', async function (direction: string) {
-    if (direction == 'asc') {
-        const expectedList = this.responseBody;
-        // const sortedByAsc = _.orderBy(this.responseBody, [`${sortField}`], ['asc']);
-        const sortedByAsc = _.orderBy(this.responseBody, [(o) => { return o.leadTime || '' }], ['asc']);
-        
-        console.log('22222', expectedList === this.responseBody);
-        expect(expectedList, `Check items in the response should be sort by field lead time with direction ${direction}`).toStrictEqual(sortedByAsc);
-    }
-    else if (direction == 'desc') {
-        const expectedList = this.responseBody;
-        const sortedByDesc = _.orderBy(this.responseBody, [(o) => { return o.leadTime || '' }], ['desc']);
-        expect(expectedList, `Check items in the response should be sort by field lead time with direction ${direction}`).toStrictEqual(sortedByDesc);
-    }
-});
 
 Then('{} checks {} supplier exist in the system, if it does not exist will create new supplier', async function (actor, supplierNameKeyword: string) {
     var numberofSuppliers;
@@ -155,9 +138,3 @@ Then('{} checks the total suppliers is correct', async function (actor: string) 
     expect(beforeTotalSuppliers).not.toBeNaN();
     expect(currentTotalSuppliers).toEqual(beforeTotalSuppliers - this.selectedSuppliers.length);
 })
-
-Then('Check items in the response should be sort by field name with direction {}', async function (direction: 'asc' | 'desc') {
-        const expectedList = this.responseBody;
-        const sortResult = sortLocale(expectedList, 'name', direction);
-        expect(expectedList, `Check items in the response should be sort by field name with direction ${direction}`).toStrictEqual(sortResult);
-});

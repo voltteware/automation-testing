@@ -2,9 +2,9 @@ import { DataTable, Then } from "@cucumber/cucumber";
 import { expect } from "@playwright/test";
 import * as authenticateRequest from '../../../../src/api/request/authentication.service';
 import logger from "../../../../src/Logger/logger";
-import * as users from '../../../../src/data/users.json';
 import { Links } from "../../../../src/utils/links";
 import * as _ from "lodash";
+import { sortLocale } from '../../../../src/helpers/array-helper';
 
 // Get Valid Token 
 Then('{} has valid connect.sid of {} after send a POST request with payload as email: {string} and password: {string}', async function (name, user: string, email: string, password: string) {
@@ -158,4 +158,21 @@ Then('Check total items in the response should be less than or equal {}', async 
     const actualLength = await this.responseBody.length;
     const expectLength = Number(limitRow);
     expect(actualLength, `Check total items in the response should be less than or equal ${limitRow}`).toBeLessThanOrEqual(expectLength);
+});
+
+Then('Check items in the response should be sort by field {} with direction {}', async function (sortField: string, direction: 'asc' | 'desc') {
+    // Another way to sort
+    // if (direction == 'asc') {
+    //     const expectedList = this.responseBody;
+    //     const sortedByAsc = _.orderBy(this.responseBody, [(o) => { return o.refNum || '' }], ['asc']);
+    //     expect(expectedList, `Check items in the response should be sort by field refNum with direction ${direction}`).toStrictEqual(sortedByAsc);
+    // }
+    // else if (direction == 'desc') {
+    //     const expectedList = this.responseBody;
+    //     const sortedByDesc = _.orderBy(this.responseBody, [(o) => { return o.refNum || '' }], ['desc']);
+    //     expect(expectedList, `Check items in the response should be sort by field refNum with direction ${direction}`).toStrictEqual(sortedByDesc);
+    // }
+    const expectedList = this.responseBody;
+    const sortResult = sortLocale(expectedList, sortField, direction);
+    expect(expectedList, `Check items in the response should be sort by field ${sortField} with direction ${direction}`).toStrictEqual(sortResult);
 });

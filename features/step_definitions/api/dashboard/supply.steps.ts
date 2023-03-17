@@ -89,19 +89,6 @@ Then('{} picks random supply in above response', async function (actor: string) 
     this.attach(`Random supply: ${JSON.stringify(this.responseBodyOfASupplyObject, undefined, 4)}`);
 })
 
-Then('Check items in the response should be sort by field refNum with direction {}', async function (direction: string) {
-    if (direction == 'asc') {
-        const expectedList = this.responseBody;
-        const sortedByAsc = _.orderBy(this.responseBody, [(o) => { return o.refNum || '' }], ['asc']);
-        expect(expectedList, `Check items in the response should be sort by field refNum with direction ${direction}`).toStrictEqual(sortedByAsc);
-    }
-    else if (direction == 'desc') {
-        const expectedList = this.responseBody;
-        const sortedByDesc = _.orderBy(this.responseBody, [(o) => { return o.refNum || '' }], ['desc']);
-        expect(expectedList, `Check items in the response should be sort by field refNum with direction ${direction}`).toStrictEqual(sortedByDesc);
-    }
-});
-
 Then('{} filters {} supplies which has the refNum includes {}', async function (actor, maximumSupplies, supplyRefnumKeyword: string) {
     if (supplyRefnumKeyword.includes('any character')) {
         this.selectedSupplies = await this.getSupplyResponseBody;

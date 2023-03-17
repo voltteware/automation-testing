@@ -63,8 +63,12 @@ Feature: API_Dashboard GET /api/supply
         When User sends a GET request to get list supplies
         Then The expected status code should be <expectedStatus>
         And Check total items in the response should be less than or equal <limitRow>
-        And Check items in the response should be sort by field refNum with direction <direction>
+        And Check items in the response should be sort by field <sortField> with direction <direction>
         Examples:
             | TC_ID       | email                      | limitRow | sortField | direction | companyKey | expectedStatus |
-            | TC_GSL004_1 | testautoforecast@gmail.com | 50       | refNum    | asc       | random     | 200            |
-            | TC_GSL004_2 | testautoforecast@gmail.com | 50       | refNum    | desc      | random     | 200            |
+            | TC_GSL004_1 | testautoforecast@gmail.com | 10       | refNum    | asc       | random     | 200            |
+            | TC_GSL004_2 | testautoforecast@gmail.com | 10       | refNum    | desc      | random     | 200            |
+            | TC_GSL004_3 | testautoforecast@gmail.com | 10       | fnsku     | desc      | random     | 200            |
+            | TC_GSL004_4 | testautoforecast@gmail.com | 10       | fnsku     | asc       | random     | 200            |
+            | TC_GSL004_5 | testautoforecast@gmail.com | 10       | dueDate   | desc      | random     | 200            |
+            | TC_GSL004_6 | testautoforecast@gmail.com | 10       | dueDate   | asc       | random     | 200            |

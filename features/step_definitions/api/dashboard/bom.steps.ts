@@ -148,19 +148,6 @@ Then('{} checks values in response of random bom are correct', async function (a
     expect(this.responseBodyOfABomObject.companyName).not.toBeNull();
 });
 
-Then('Check bom in the response should be sort by field qty with direction {}', async function (direction: string) {
-    if (direction == 'asc') {
-        const expectedList = this.responseBody;
-        const sortedByAsc = _.orderBy(this.responseBody, [(o) => { return o.qty || '' }], ['asc']);
-        expect(expectedList, `Check bom in the response should be sort by field qty with direction ${direction}`).toStrictEqual(sortedByAsc);
-    }
-    else if (direction == 'desc') {
-        const expectedList = this.responseBody;
-        const sortedByDesc = _.orderBy(this.responseBody, [(o) => { return o.qty || '' }], ['desc']);
-        expect(expectedList, `Check bom in the response should be sort by field qty with direction ${direction}`).toStrictEqual(sortedByDesc);
-    }
-});
-
 Then('{} checks the total boms is correct', async function (actor: string) {
     const link = encodeURI(`${Links.API_BOM}/count?where={"logic":"and","filters":[]}`);
     const options = {
