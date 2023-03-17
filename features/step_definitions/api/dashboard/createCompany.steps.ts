@@ -5,19 +5,11 @@ import logger from '../../../../src/Logger/logger';
 import { Links } from '../../../../src/utils/links';
 import { faker } from '@faker-js/faker';
 import _ from "lodash";
+import { payLoadCompany } from '../../../../src/utils/companyPayLoad';
 
 let link: any;
 let arrCompanyType = ['ASC', 'CSV', 'QBFS', 'QBO'];
-let payload: {
-    companyKey ?: string
-    companyType?: string
-    companyName?: string
-    initialSyncDate?: Date
-    marketplaceId?: string
-    serviceLevel?: Number
-    leadTime?: Number
-    orderInterval?: Number
-} = {}
+let payload: payLoadCompany = {};
 
 Then(`{} sets POST api endpoint to create company`, async function (actor: string) {
     link = Links.API_CREATE_COMPANY;
