@@ -16,6 +16,10 @@ Then(`{} sets GET api endpoint to get suppliers keys with limit row: {} and sort
     link = encodeURI(`${Links.API_SUPPLIERS}?offset=0&limit=${limitRow}&sort=[{"field":"${sortField}","direction":"${direction}"}]&where={"logic":"and","filters":[]}`);
 });
 
+Then(`{} sets GET api endpoint to get suppliers with limit row: {}`, async function (actor, limitRow: string) {
+    link = encodeURI(`${Links.API_SUPPLIERS}?offset=0&limit=${limitRow}`);
+});
+
 Then(`{} sends a GET request to get list suppliers`, async function (actor) {
     const options = {
         headers: this.headers
@@ -45,7 +49,7 @@ Then(`{} sends a GET request to get total of suppliers`, async function (actor: 
     this.attach(`Response GET ${link} has status code ${this.response.status()} ${this.response.statusText()} and response body ${this.totalSupplier}`)
 })
 
-Then('{} picks random suppliers in above response', async function (actor: string) {
+Then('{} picks random supplier in above response', async function (actor: string) {
     this.responseBodyOfASupplierObject = await this.getSupplierResponseBody[Math.floor(Math.random() * this.getSupplierResponseBody.length)];
     logger.log('info', `Random supplier: ${JSON.stringify(this.responseBodyOfASupplierObject, undefined, 4)}`);
     this.attach(`Random supplier: ${JSON.stringify(this.responseBodyOfASupplierObject, undefined, 4)}`);
@@ -57,22 +61,6 @@ Then('{} checks values in response of random supplier are correct', async functi
     expect(this.responseBodyOfASupplierObject.companyKey).not.toBeNull();
     expect(this.responseBodyOfASupplierObject.companyName).not.toBeNull();
 })
-
-Then('Check items in the response should be sort by field leadTime with direction {}', async function (direction: string) {
-    if (direction == 'asc') {
-        const expectedList = this.responseBody;
-        // const sortedByAsc = _.orderBy(this.responseBody, [`${sortField}`], ['asc']);
-        const sortedByAsc = _.orderBy(this.responseBody, [(o) => { return o.leadTime || '' }], ['asc']);
-
-        console.log('22222', expectedList === this.responseBody);
-        expect(expectedList, `Check items in the response should be sort by field lead time with direction ${direction}`).toStrictEqual(sortedByAsc);
-    }
-    else if (direction == 'desc') {
-        const expectedList = this.responseBody;
-        const sortedByDesc = _.orderBy(this.responseBody, [(o) => { return o.leadTime || '' }], ['desc']);
-        expect(expectedList, `Check items in the response should be sort by field lead time with direction ${direction}`).toStrictEqual(sortedByDesc);
-    }
-});
 
 Then('{} checks {} supplier exist in the system, if it does not exist will create new supplier', async function (actor, supplierNameKeyword: string) {
     var numberofSuppliers;

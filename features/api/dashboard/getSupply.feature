@@ -13,12 +13,9 @@ Feature: API_Dashboard GET /api/supply
     Scenario Outline: TC_GSL001 - Verify user <email> could call this API to get list supplies by using company key and company type
         Given User sets GET api endpoint to get information of a company belongs to <email> using company key <companyKey>
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
-        And User sets GET api endpoint to get suppliers keys
-        And User sends a GET request to get list suppliers
-        And user checks Auto supplier exist in the system, if it does not exist will create new supplier
         And User sets GET api endpoint to get item with limit row: <limitRow>
         And User sends a GET request to get list items
-        And User sets GET api endpoint to get supply keys
+        And User sets GET api endpoint to get supplies with limit row: <limitRow>
         When User sends a GET request to get list supplies
         Then The expected status code should be <expectedStatus>
         And User checks any supply exist in the system, if it does not exist will create new supply
@@ -27,7 +24,7 @@ Feature: API_Dashboard GET /api/supply
         And User checks values in response of random supply are correct
         Examples:
             | user  | email                      | companyKey | limitRow | password  | expectedStatus |
-            | admin | testautoforecast@gmail.com | random     | 50       | Test1111! | 200            |
+            | admin | testautoforecast@gmail.com | random     | 10       | Test1111! | 200            |
 
     # Bug TC_GV002_1 and TC_GV002_2, return status code 200 when cookie invalid.
     @TC_GSL002 @bug-permission
@@ -35,7 +32,7 @@ Feature: API_Dashboard GET /api/supply
         Given User sets GET api endpoint to get information of a company belongs to <email> using company key <companyKey>
         But User sets <cookie> cookie of <email> and <companyKeyHeader> companyKey and <companyTypeHeader> companyType in the header
         And User sets GET api endpoint to get supply keys
-        When User sends a GET request to get list supplies
+        When User sends a GET request to get all supplies
         Then The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
         Examples:
@@ -51,7 +48,7 @@ Feature: API_Dashboard GET /api/supply
         And User sets GET api endpoint to get information of a company belongs to <userB> using company key <companyKey>
         But User sets valid cookie of <userA> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get supply keys
-        When User sends a GET request to get list supplies
+        When User sends a GET request to get all supplies
         Then The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
         Examples:
@@ -63,11 +60,15 @@ Feature: API_Dashboard GET /api/supply
         Given User sets GET api endpoint to get information of a company belongs to <email> using company key <companyKey>
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get supply keys with limit row: <limitRow> and sort field: <sortField> with direction: <direction>
-        When User sends a GET request to get list supplies
+        When User sends a GET request to get sorted supplies
         Then The expected status code should be <expectedStatus>
         And Check total items in the response should be less than or equal <limitRow>
-        And Check items in the response should be sort by field refNum with direction <direction>
+        And Check items in the response should be sort by field <sortField> with direction <direction>
         Examples:
             | TC_ID       | email                      | limitRow | sortField | direction | companyKey | expectedStatus |
-            | TC_GSL004_1 | testautoforecast@gmail.com | 50       | refNum    | asc       | random     | 200            |
-            | TC_GSL004_2 | testautoforecast@gmail.com | 50       | refNum    | desc      | random     | 200            |
+            | TC_GSL004_1 | testautoforecast@gmail.com | 10       | refNum    | asc       | random     | 200            |
+            | TC_GSL004_2 | testautoforecast@gmail.com | 10       | refNum    | desc      | random     | 200            |
+            | TC_GSL004_3 | testautoforecast@gmail.com | 10       | fnsku     | desc      | random     | 200            |
+            | TC_GSL004_4 | testautoforecast@gmail.com | 10       | fnsku     | asc       | random     | 200            |
+            | TC_GSL004_5 | testautoforecast@gmail.com | 10       | dueDate   | desc      | random     | 200            |
+            | TC_GSL004_6 | testautoforecast@gmail.com | 10       | dueDate   | asc       | random     | 200            |

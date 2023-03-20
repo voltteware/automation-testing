@@ -4,9 +4,9 @@ Feature: API_Admin DELETE/User
         Given user sends a POST login request to get valid cookie with role
             | role  | username           | password  |
             | admin | may27pre@gmail.com | Test1111! |
-        And User sets GET api endpoint to get 100 users has just created
+        And User sets GET api endpoint to get 20 users has just created
         And In Header of the request, user sets param Cookie as valid connect.sid
-        When User sends a GET request to get 100 latest users
+        When User sends a GET request to get 20 latest users
 
     @TC_DU001
     Scenario Outline: TC_DU001 - Verify <user> could call this API to delete a user

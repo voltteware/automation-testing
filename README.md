@@ -25,3 +25,9 @@ Then Show report with Cucumber-HTML-Reporter
     3. In the opened app root create (if absent) .vscode folder with settings.json file or just run mkdir .vscode && touch .vscode/settings.json
     4. Add all the needed settings to the settings.json file
     5. Reload app to apply all the extension changes
+
+## Run Performance:
+- To start Performance Test script, you need:
+    1. Run ```npm run start```
+    2. Copy file users.json into dist folder
+    3. Run ```npm run log-in ```

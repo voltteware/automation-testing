@@ -45,7 +45,7 @@ Feature: API_DashBoard DELETE/deleteGridView
             | TC_DGV002_3 | testautoforecast@gmail.com | random | valid   | invalid          | invalid           | 400            | Company not found.    |
             | TC_DGV002_4 | testautoforecast@gmail.com | random | valid   |                  |                   | 500            | Internal Server Error |    
  
-@TC_DGV003
+    @TC_DGV003
     Scenario Outline: TC_DGV003 - Verify <userA> can't call this API to delete grid view not belongs to her company
         Given Check grid view supplier exist in the company, if it does not exist will create grid view supplier
         And User picks random grid view of suppliers in above response
@@ -60,7 +60,7 @@ Feature: API_DashBoard DELETE/deleteGridView
             | userA               | password  | key    | expectedStatus | expectedStatusText |
             | may27user@gmail.com | Test1111! | random | 400            | Company not found. |
 
-@TC_DGV004
+    @TC_DGV004
     Scenario Outline: TC_DGV004 - Verify user <email> can't call this API to delete grid-view not exists in of a company
         Given Check grid view supplier exist in the company, if it does not exist will create grid view supplier
         And User picks random grid view of suppliers in above response

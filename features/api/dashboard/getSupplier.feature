@@ -13,16 +13,16 @@ Feature: API_Dashboard GET /api/vendor
     Scenario Outline: TC_GV001 - Verify user <email> could call this API to get list suppliers by using company key and company type
         Given User sets GET api endpoint to get information of a company belongs to <email> using company key <companyKey>
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
-        And User sets GET api endpoint to get suppliers keys
+        And User sets GET api endpoint to get suppliers with limit row: <limitRow>
         When User sends a GET request to get list suppliers
         Then The expected status code should be <expectedStatus>
         And user checks any supplier exist in the system, if it does not exist will create new supplier
-        And User picks random suppliers in above response
+        And User picks random supplier in above response
         And User checks API contract essential types in supplier object are correct
         And User checks values in response of random supplier are correct
         Examples:
-            | user  | email                      | password  | companyKey | expectedStatus |
-            | admin | testautoforecast@gmail.com | Test1111! | random     | 200            |
+            | user  | email                      | password  | companyKey | expectedStatus | limitRow |
+            | admin | testautoforecast@gmail.com | Test1111! | random     | 200            | 10       |
 
     #Bug TC_GV002_1 and TC_GV002_2, return status code 200 when cookie invalid.
     @TC_GV002 @bug-permission
@@ -54,21 +54,17 @@ Feature: API_Dashboard GET /api/vendor
             | may27user@gmail.com | may27pre@gmail.com | Test1111! | random     | 400            | Company not found. |
 
     @TC_GV004
-    Scenario Outline: <TC_ID> - Verify user could set limit 100 in this API to get list suppliers sorted by Lead Time with direction <direction>
+    Scenario Outline: <TC_ID> - Verify user could set limit 10 in this API to get list suppliers sorted by field <sortField> with direction <direction>
         Given User sets GET api endpoint to get information of a company belongs to <email> using company key <companyKey>
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get suppliers keys with limit row: <limitRow> and sort field: <sortField> with direction: <direction>
         When User sends a GET request to get list suppliers
         Then The expected status code should be <expectedStatus>
         And Check total items in the response should be less than or equal <limitRow>
-        And Check items in the response should be sort by field leadTime with direction <direction>
+        And Check items in the response should be sort by field <sortField> with direction <direction>
         Examples:
             | TC_ID      | user  | email                      | password  | limitRow | sortField | direction | companyKey | expectedStatus |
-            | TC_GV004_1 | admin | testautoforecast@gmail.com | Test1111! | 100      | leadTime  | asc       | random     | 200            |
-            | TC_GV004_2 | admin | testautoforecast@gmail.com | Test1111! | 100      | leadTime  | desc      | random     | 200            |
-
-
-
-
-
-
+            | TC_GV004_1 | admin | testautoforecast@gmail.com | Test1111! | 10       | name      | asc       | random     | 200            |
+            | TC_GV004_2 | admin | testautoforecast@gmail.com | Test1111! | 10       | name      | desc      | random     | 200            |
+            | TC_GV004_3 | admin | testautoforecast@gmail.com | Test1111! | 10       | leadTime  | asc       | random     | 200            |
+            | TC_GV004_4 | admin | testautoforecast@gmail.com | Test1111! | 10       | leadTime  | desc      | random     | 200            |

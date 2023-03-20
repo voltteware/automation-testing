@@ -8,7 +8,7 @@ export class Links {
     static API_USERS_RESET_PASSWORD: string = '/api/password-reset/';
     //API Dashboard
     static API_REALM: string = '/api/realm';
-    static API_COMPANY: string = '/api/company/';
+    static API_CREATE_COMPANY: string = '/api/company';
     static API_SUPPLIERS: string = '/api/vendor';
     static API_UPDATE_COMPANY: string = '/api/company/';
     static API_ITEMS: string = '/api/item';
@@ -20,11 +20,22 @@ export class Links {
     static API_GET_GRIDVIEW_DEMAND: string = '/api/grid-view/demand';
     static API_DELETE_GRID_VIEW: string = '/api/grid-view/';
     static API_GET_GRIDVIEW_SUPPLY: string = '/api/grid-view/supply';
+    static API_GET_GRIDVIEW_BOM: string = '/api/grid-view/bom';
     static API_SUPPLY: string = '/api/supply';
     static API_CREATE_SUPPLY: string = '/api/supply/manual/';
-    static API_GET_GRIDVIEW_BOM: string = '/api/grid-view/bom';
+    //API Purchasing
+    static API_GET_GRIDVIEW_CUSTOM_ITEMS: string = '/api/grid-view/custom-items-in-po';
+    static API_GET_GRIDVIEW_SUGGESTED_POS: string = '/api/grid-view/suggested-pos';
+    static API_GET_GRIDVIEW_CUSTOM_ALL_AVAILABLE_ITEMS: string = '/api/grid-view/custom-all-available-items';
     //API Admin
     static API_ADMIN_DELETE_USER: string = '/api/admin/users/';
     static API_ADMIN_GET_COMPANIES: string = '/api/admin/companies';
+    static API_ADMIN_DELETE_COMPANY: string = '/api/admin/companies/';
     static API_ADMIN_GET_USER: string = '/api/admin/users?';
+}
+
+//URL for performance
+export class Url{
+    // static urlDev = 'https://dev-test.forecastrx.com';
+    static urlPreprod = 'https://preprod-my.forecastrx.com';
 }

@@ -13,12 +13,9 @@ Feature: API_SUPPLY DELETE /api/supply
     Scenario Outline: <TC_ID> - Verify <user> could call this API to delete supply of a company has type <companyType> belongs to her
         Given User picks company with type <companyType> in above response
         But User sets valid cookie of <email> and valid companyKey and valid companyType in the header
-        And User sets GET api endpoint to get suppliers keys
-        And User sends a GET request to get list suppliers
-        And User checks Auto supplier exist in the system, if it does not exist will create new supplier
-        And User sets GET api endpoint to get item with limit row: 50
+        And User sets GET api endpoint to get item with limit row: 5
         And User sends a GET request to get list items
-        And User sets GET api endpoint to get supply keys
+        And User sets GET api endpoint to get supplies with limit row: 5
         And User sends a GET request to get list supplies
         And User checks Auto supply exist in the system, if it does not exist will create new supply
         And User sends a GET request to get total of supplies
@@ -30,20 +27,17 @@ Feature: API_SUPPLY DELETE /api/supply
 
         Examples:
             | TC_ID     | companyType | numberOfSupplies | supplyRefnumKeyword  | expectedStatus | expectedStatusText | email                      |
-            | TC_DSL001 | CSV         | 3                | Auto                 | 200            | OK                 | testautoforecast@gmail.com |
-            | TC_DSL002 | ASC         | 3                | Auto                 | 200            | OK                 | testautoforecast@gmail.com |
+            | TC_DSL001 | CSV         | 1                | Auto                 | 200            | OK                 | testautoforecast@gmail.com |
+            | TC_DSL002 | ASC         | 1                | Auto                 | 200            | OK                 | testautoforecast@gmail.com |
 
     #Bug API in case TC_DSL003_1, TC_DSL003_2
     @TC_DSL003 @bug-permission
     Scenario Outline: <TC_ID> - Verify error when user sends this API with <cookie> cookie and <companyKeyHeader> companyKeyHeader and <companyTypeHeader> companyTypeHeader
         Given User picks company with type CSV in above response
         But User sets valid cookie of <email> and valid companyKey and valid companyType in the header
-        And User sets GET api endpoint to get suppliers keys
-        And User sends a GET request to get list suppliers
-        And User checks Auto supplier exist in the system, if it does not exist will create new supplier
-        And User sets GET api endpoint to get item with limit row: 50
+        And User sets GET api endpoint to get item with limit row: 5
         And User sends a GET request to get list items
-        And User sets GET api endpoint to get supply keys
+        And User sets GET api endpoint to get supplies with limit row: 5
         And User sends a GET request to get list supplies
         And User checks Auto supply exist in the system, if it does not exist will create new supply
         And User filters <numberOfSupplies> supplies which has the refNum includes <supplyRefnumKeyword>
@@ -59,16 +53,13 @@ Feature: API_SUPPLY DELETE /api/supply
             | TC_DSL003_3 | testautoforecast@gmail.com | 1                 | Auto                | valid   | invalid          | invalid           | 400            | Company not found.    |
             | TC_DSL003_4 | testautoforecast@gmail.com | 1                 | Auto                | valid   |                  |                   | 500            | Internal Server Error |
 
-    @TC_DSL004 @bug-permission
+    @TC_DSL004
     Scenario Outline: TC_DSL004 - Verify <userA> can't call this API to delete supply not belongs to her company
         Given User picks company with type CSV in above response
         But User sets valid cookie of <userB> and valid companyKey and valid companyType in the header
-        And User sets GET api endpoint to get suppliers keys
-        And User sends a GET request to get list suppliers
-        And User checks Auto supplier exist in the system, if it does not exist will create new supplier
-        And User sets GET api endpoint to get item with limit row: 50
+        And User sets GET api endpoint to get item with limit row: 5
         And User sends a GET request to get list items
-        And User sets GET api endpoint to get supply keys
+        And User sets GET api endpoint to get supplies with limit row: 5
         And User sends a GET request to get list supplies
         And User checks Auto supply exist in the system, if it does not exist will create new supply
         And User filters <numberOfSupplies> supplies which has the refNum includes <supplyRefnumKeyword>

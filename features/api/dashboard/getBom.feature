@@ -12,9 +12,9 @@ Feature: API_Dashboard GET /api/bom
     Scenario Outline: TC_GB001 - Verify user <email> could call this API to get list boms by using company key and company type
         Given User picks company with type CSV in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
-        And User sets GET api endpoint to get item with limit row: <limitRow>
+        And User sets GET api endpoint to get item with limit row: 30
         And User sends a GET request to get list items
-        And User sets GET api endpoint to get bom keys
+        And User sets GET api endpoint to get boms with limit row: <limitRow>
         And User sends a GET request to get list boms
         And User checks any bom exist in the system, if it does not exist will create new bom
         When User sends a GET request to get list boms
@@ -24,7 +24,7 @@ Feature: API_Dashboard GET /api/bom
         And User checks values in response of random bom are correct
         Examples:
             | user  | email                      | password  | expectedStatus | limitRow | 
-            | admin | testautoforecast@gmail.com | Test1111! | 200            | 100      |
+            | admin | testautoforecast@gmail.com | Test1111! | 200            | 10       |
     
     #Bug TC_GB002_1 and TC_GB002_2, return status code 200 when cookie invalid.
     @TC_GB002 @bug-permission
@@ -57,18 +57,20 @@ Feature: API_Dashboard GET /api/bom
             | may27user@gmail.com | may27pre@gmail.com | Test1111! | random     | 400            | Company not found. |
 
     @TC_GB004
-    Scenario Outline: <TC_ID> - Verify user could set limit 100 in this API to get list bom sorted by Kit Qty with direction <direction>
+    Scenario Outline: <TC_ID> - Verify user could set limit 10 in this API to get list bom sorted by Kit Qty with direction <direction>
         Given User picks company with type ASC in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get bom keys with limit row: <limitRow> and sort field: <sortField> with direction: <direction>
         When User sends a GET request to get list boms
         Then The expected status code should be <expectedStatus>
         And Check total items in the response should be less than or equal <limitRow>
-        And Check bom in the response should be sort by field qty with direction <direction>
+        And Check items in the response should be sort by field <sortField> with direction <direction>
         Examples:
             | TC_ID      | user  | email                      | password  | limitRow | sortField | direction |  expectedStatus |
-            | TC_GB004_1 | admin | testautoforecast@gmail.com | Test1111! | 100      | qty       | asc       |  200            |
-            | TC_GB004_2 | admin | testautoforecast@gmail.com | Test1111! | 100      | qty       | desc      |  200            |
+            | TC_GB004_1 | admin | testautoforecast@gmail.com | Test1111! | 10       | qty       | asc       |  200            |
+            | TC_GB004_2 | admin | testautoforecast@gmail.com | Test1111! | 10       | qty       | desc      |  200            |
+            | TC_GB004_3 | admin | testautoforecast@gmail.com | Test1111! | 10       | childName | asc       |  200            |
+            | TC_GB004_4 | admin | testautoforecast@gmail.com | Test1111! | 10       | childName | desc      |  200            |
     
     #Bug TC_GB005, return status code 200 when call this API for company QBFS.
     @TC_GB005
