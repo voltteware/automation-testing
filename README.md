@@ -16,6 +16,7 @@ Or Run command line below to execute test only
 
 Then Show report with Cucumber-HTML-Reporter
 - npm run cucumber-html-reporter
+- npm run cucumber-multiple-html-reporter
 
 ## Install Extensions:
 
