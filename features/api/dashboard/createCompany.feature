@@ -2,8 +2,8 @@
 Feature: API_Dashboard POST /api/company
     Background: Send POST /login request to login before each test
         Given user sends a POST login request to get valid cookie with role
-            | role  | username                   | password  |
-            | admin | testautoforecast@gmail.com | Test1111! |
+            | role  | username                     | password  |
+            | admin | testuserforecastrx@gmail.com | Test1111! |
         And User sets POST api endpoint to create company
         
     @TC_CCP001
@@ -18,8 +18,8 @@ Feature: API_Dashboard POST /api/company
         And Check that the company just created exists in the current companies list of his
 
         Examples:
-            | TC_ID     | email                      | companyName | companyType | serviceLevel | leadTime | orderInterval | initialSyncDate | marketplaceId | expectedStatus | expectedStatusText |
-            | TC_CCP001 | testautoforecast@gmail.com | random      | ASC         | random       | random   | random        | currentDate     | random        | 201            | Created            |
+            | TC_ID     | email                        | companyName | companyType | serviceLevel | leadTime | orderInterval | initialSyncDate | marketplaceId | expectedStatus | expectedStatusText |
+            | TC_CCP001 | testuserforecastrx@gmail.com | random      | ASC         | random       | random   | random        | currentDate     | random        | 201            | Created            |
 
     @TC_CCP002 @TC_CCP003 @TC_CCP004
     Scenario Outline: <TC_ID> - Verify user <email> could call this API to create company with type <companyType> when input all data valid
@@ -32,10 +32,10 @@ Feature: API_Dashboard POST /api/company
         And User checks values in response of create company are correct
         And Check that the company just created exists in the current companies list of his
         Examples:
-            | TC_ID     | email                      | companyName | companyType | serviceLevel | leadTime | orderInterval | expectedStatus | expectedStatusText |
-            | TC_CCP002 | testautoforecast@gmail.com | random      | CSV         | random       | random   | random        | 201            | Created            |
-            | TC_CCP003 | testautoforecast@gmail.com | random      | QBO         | random       | random   | random        | 201            | Created            |
-            | TC_CCP004 | testautoforecast@gmail.com | random      | QBFS        | random       | random   | random        | 201            | Created            |
+            | TC_ID     | email                        | companyName | companyType | serviceLevel | leadTime | orderInterval | expectedStatus | expectedStatusText |
+            | TC_CCP002 | testuserforecastrx@gmail.com | random      | CSV         | random       | random   | random        | 201            | Created            |
+            | TC_CCP003 | testuserforecastrx@gmail.com | random      | QBO         | random       | random   | random        | 201            | Created            |
+            | TC_CCP004 | testuserforecastrx@gmail.com | random      | QBFS        | random       | random   | random        | 201            | Created            |
 
     @TC_CCP005
     Scenario Outline: <TC_ID> - Verify error when user sends this API with <cookie> cookie
@@ -45,9 +45,9 @@ Feature: API_Dashboard POST /api/company
         Then The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
         Examples:
-            | TC_ID       | email                      | companyName | companyType | serviceLevel | leadTime | orderInterval | cookie  | expectedStatus | expectedStatusText |
-            | TC_CCP005_1 | testautoforecast@gmail.com | random      | CSV         | random       | random   | random        | empty   | 401            | Unauthorized       |
-            | TC_CCP005_2 | testautoforecast@gmail.com | random      | CSV         | random       | random   | random        | invalid | 401            | Unauthorized       |
+            | TC_ID       | email                        | companyName | companyType | serviceLevel | leadTime | orderInterval | cookie  | expectedStatus | expectedStatusText |
+            | TC_CCP005_1 | testuserforecastrx@gmail.com | random      | CSV         | random       | random   | random        | empty   | 401            | Unauthorized       |
+            | TC_CCP005_2 | testuserforecastrx@gmail.com | random      | CSV         | random       | random   | random        | invalid | 401            | Unauthorized       |
 
     @TC_CCP006
     Scenario Outline: <TC_ID> - Verify error company already exists
@@ -58,5 +58,5 @@ Feature: API_Dashboard POST /api/company
         Then The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
         Examples:
-            | TC_ID     | email                      | companyName | companyType | serviceLevel | leadTime | orderInterval | expectedStatus | expectedStatusText                             |
-            | TC_CCP006 | testautoforecast@gmail.com | random      | CSV         | random       | random   | random        | 400            | Company name (or very similar) already exists. |
+            | TC_ID     | email                        | companyName | companyType | serviceLevel | leadTime | orderInterval | expectedStatus | expectedStatusText                             |
+            | TC_CCP006 | testuserforecastrx@gmail.com | random      | CSV         | random       | random   | random        | 400            | Company name (or very similar) already exists. |
