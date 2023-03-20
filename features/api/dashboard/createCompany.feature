@@ -16,6 +16,8 @@ Feature: API_Dashboard POST /api/company
         And User checks API contract essential types in company object are correct
         And User checks values in response of create company are correct
         And Check that the company just created exists in the current companies list of his
+        And And User sets DELETE api endpoint to delete company
+        And User sends a DELETE method to delete the created company
 
         Examples:
             | TC_ID     | email                      | companyName | companyType | serviceLevel | leadTime | orderInterval | initialSyncDate | marketplaceId | expectedStatus | expectedStatusText |
@@ -31,6 +33,8 @@ Feature: API_Dashboard POST /api/company
         And User checks API contract essential types in company object are correct
         And User checks values in response of create company are correct
         And Check that the company just created exists in the current companies list of his
+        And And User sets DELETE api endpoint to delete company
+        And User sends a DELETE method to delete the created company
         Examples:
             | TC_ID     | email                      | companyName | companyType | serviceLevel | leadTime | orderInterval | expectedStatus | expectedStatusText |
             | TC_CCP002 | testautoforecast@gmail.com | random      | CSV         | random       | random   | random        | 201            | Created            |

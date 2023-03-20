@@ -6,9 +6,14 @@ import { Links } from '../../../../src/utils/links';
 import _ from "lodash";
 
 let link: any;
+let linkGet20Companies: any;
 
 Then(`{} sets GET api endpoint to get companies keys`, async function (actor: string) {
     link = Links.API_ADMIN_GET_COMPANIES;
+});
+
+Then(`{} sets GET api endpoint to get 20 companies has just created`, async function (actor: string) {
+    linkGet20Companies = encodeURI(`${Links.API_ADMIN_GET_COMPANIES}?offset=0&limit=20&sort=[{"field":"createdAt","direction":"desc"}]&where={"logic":"and","filters":[]}`);
 });
 
 Then('{} sends a GET request to get companies keys', async function (actor: string) {
@@ -26,6 +31,24 @@ Then('{} sends a GET request to get companies keys', async function (actor: stri
         const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
         logger.log('info', `Response GET ${Links.API_ADMIN_GET_COMPANIES} has status code ${this.response.status()} ${this.response.statusText()} and response body ${responseBodyText}`);
         this.attach(`Response GET ${Links.API_ADMIN_GET_COMPANIES} has status code ${this.response.status()} ${this.response.statusText()} and response body ${actualResponseText}`)
+    }
+})
+
+Then('{} sends a GET request to get 20 latest companies', async function (actor: string) {
+    const options = {
+        headers: this.headers
+    }
+    this.get20LatestCompaniesResponse = this.response = await companiesRequest.getCompanies(this.request, linkGet20Companies, options);
+    const responseBodyText = await this.get20LatestCompaniesResponse.text();
+    if (this.get20LatestCompaniesResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
+        this.get20LatestCompaniesResponseBody = this.responseBody = JSON.parse(await this.response.text());
+        // logger.log('info', `Response GET ${linkGet20Companies}` + JSON.stringify(this.responseBody, undefined, 4));
+        this.attach(`Response GET ${linkGet20Companies}` + JSON.stringify(this.responseBody, undefined, 4))
+    }
+    else {
+        const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
+        logger.log('info', `Response GET ${linkGet20Companies} has status code ${this.get20LatestCompaniesResponse.status()} ${this.get20LatestCompaniesResponse.statusText()} and response body ${responseBodyText}`);
+        this.attach(`Response GET ${linkGet20Companies} has status code ${this.get20LatestCompaniesResponse.status()} ${this.get20LatestCompaniesResponse.statusText()} and response body ${actualResponseText}`)
     }
 })
 
