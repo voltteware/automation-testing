@@ -9,6 +9,7 @@
     "test-api": "npx cucumber-js --tags @test-api; node cucumber-report.js",
     "test-ui": "npx cucumber-js --tags @test-ui; node cucumber-report.js",
     "cucumber-html-reporter": "node cucumber-report.js",
+    "cucumber-multiple-html-reporter": "node cucumber-multiple-html-report.js",
     "start": "webpack",
     "log-in": "k6 run ./dist/fullflow-login.test.js"
   },

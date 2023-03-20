@@ -8,6 +8,6 @@ module.exports = {
     "--format json:./reports/cucumber-report.json",
     "--publish",
     "--retry 0",
-    "--parallel 4"
+    // "--parallel 4"
   ].join(" "),
 };
