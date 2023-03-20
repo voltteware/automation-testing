@@ -45,7 +45,7 @@ Feature: API_Dashboard GET /api/demand
         Given User picks company with type ASC in above response
         But User sets <cookie> cookie of <email> and <companyKeyHeader> companyKey and <companyTypeHeader> companyType in the header
         And User sets GET api endpoint to get demand keys
-        When User sends a GET request to get list demands
+        When User sends a GET request to get all demands
         Then The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
         Examples:
@@ -62,7 +62,7 @@ Feature: API_Dashboard GET /api/demand
         And User sets GET api endpoint to get information of a company belongs to <userB> using company key <companyKey>
         But User sets valid cookie of <userA> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get demand keys
-        When User sends a GET request to get list demands
+        When User sends a GET request to get all demands
         Then The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
         Examples:
@@ -70,12 +70,12 @@ Feature: API_Dashboard GET /api/demand
             | may27user@gmail.com | may27pre@gmail.com | Test1111! | random     | 400            | Company not found. |
 
     @TC_GD004
-    Scenario Outline: <TC_ID> - Verify user could set limit 10 in this API to get list demand sorted by Date of Sales with direction <direction>
+    Scenario Outline: <TC_ID> - Verify user could set limit 10 in this API to get list demands sorted by <sortField> with direction <direction>
         Given User picks random company in above response
         And User sets GET api endpoint to get information of a company belongs to <email> using company key <companyKey>
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
-        And User sets GET api endpoint to get demand keys with limit row: <limitRow> and sort field: <sortField> with direction: <direction>
-        When User sends a GET request to get list demands
+        And User sets GET api endpoint to get demand with limit row: <limitRow> and sort field: <sortField> with direction: <direction>
+        When User sends a GET request to get sorted demands
         Then The expected status code should be <expectedStatus>
         And Check total items in the response should be less than or equal <limitRow>
         And Check items in the response should be sort by field <sortField> with direction <direction>
@@ -87,4 +87,3 @@ Feature: API_Dashboard GET /api/demand
             | TC_GD004_4 | admin | testautoforecast@gmail.com | random     | Test1111! | 10       | fnsku     | desc      |  200            |
             | TC_GD004_5 | admin | testautoforecast@gmail.com | random     | Test1111! | 10       | openQty   | asc       |  200            |
             | TC_GD004_6 | admin | testautoforecast@gmail.com | random     | Test1111! | 10       | openQty   | desc      |  200            |
-    

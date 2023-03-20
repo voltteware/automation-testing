@@ -17,47 +17,8 @@ Then(`{} sets DELETE api endpoint to delete user keys`, async function (actor: s
     link = Links.API_ADMIN_DELETE_USER;
 });
 
-Then('Check email exist in the system, if it does not exist will create user with email <testauto@gmail.com>', async function () {
-    allUser = arrayHelper.flattenArray(this.get20LatestUsersResponseBody, 'data');
-    const foundUser = allUser.find((element: { userId: any; }) => element.userId === `testauto@gmail.com`);
-    if (typeof foundUser == 'undefined') {
-        this.payload = {
-            firstName: 'Test',
-            lastName: 'Auto',
-            companyName: 'ITC-Company-Testing',
-            companyType: 'ASC',
-            phone: '0355025511',
-            email: 'testauto@gmail.com',
-            password: 'Test1111!',
-        }
-        this.registerResponse = await registerRequest.sendPOSTRegisterRequest(Links.API_REGISTER, this.payload);
-        this.registerResponseBody = JSON.parse(await this.registerResponse.text())
-        // Login Admin after check
-        this.payloadLogin = {
-            username: 'may27pre@gmail.com',
-            password: 'Test1111!',
-        }
-        this.loginResponse = await authenticateRequest.sendPOSTAuthenticatieRequest(Links.API_LOGIN, this.payloadLogin);
-        if (this.loginResponse.status() == 201) {
-            const responseHeaders = this.loginResponse.headers();
-            this.cookieLogin = responseHeaders['set-cookie'];
-            this.loginResponseBody = JSON.parse(await this.loginResponse.text())
-        }
-        //Get list users after register 
-        const options = {
-            headers: {
-                'Cookie': this.cookieLogin
-            }
-        }
-        this.getLatestUsersResponse = await adminRequest.getUser(this.request, Links.API_ADMIN_GET_USER, options);
-        if (this.getLatestUsersResponse.status() == 200) {
-            this.getLatestUsersResponseBody = JSON.parse(await this.getLatestUsersResponse.text());
-        }
-    }
-})
-
 Then('Check {} exist in the system, if it does not exist will create user with below email', async function (email: string) {
-    allUser = arrayHelper.flattenArray(this.getLatestUsersResponseBody, 'data');
+    allUser = arrayHelper.flattenArray(this.get20LatestUsersResponseBody || [], 'data');
     const foundUser = allUser.find((element: { userId: any; }) => element.userId === email);
     if (typeof foundUser == 'undefined') {
         this.payload = {

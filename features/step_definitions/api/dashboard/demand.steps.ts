@@ -8,20 +8,22 @@ import _ from "lodash";
 
 let link: any;
 let randomItem: any;
+let linkLimitRow: any;
+let linkSorted: any;
 
 Then(`{} sets GET api endpoint to get demand keys`, async function (actor: string) {
     link = Links.API_DEMAND;
 });
 
 Then(`{} sets GET api endpoint to get demands with limit row: {}`, async function (actor, limitRow: string) {
-    link = encodeURI(`${Links.API_DEMAND}?offset=0&limit=${limitRow}`);
+    linkLimitRow = `${Links.API_DEMAND}?offset=0&limit=${limitRow}`;
 });
 
 Then(`{} sends a GET request to get list demands`, async function (actor: string) {
     const options = {
         headers: this.headers
     }
-    this.getDemandResponse = this.response = await demandRequest.getDemand(this.request, link, options);
+    this.getDemandResponse = this.response = await demandRequest.getDemand(this.request, linkLimitRow, options);
     const responseBodyText = await this.getDemandResponse.text();
     if (this.getDemandResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
         this.responseBody = this.getDemandResponseBody = JSON.parse(await this.getDemandResponse.text());
@@ -29,8 +31,8 @@ Then(`{} sends a GET request to get list demands`, async function (actor: string
     else {
         //if response include <!doctype html> => 'html', else => response
         const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
-        logger.log('info', `Response GET ${link} has status code ${this.response.status()} ${this.response.statusText()} and response body ${responseBodyText}`);
-        this.attach(`Response GET ${link} has status code ${this.response.status()} ${this.response.statusText()} and response body ${actualResponseText}`)
+        logger.log('info', `Response GET ${linkLimitRow} has status code ${this.response.status()} ${this.response.statusText()} and response body ${responseBodyText}`);
+        this.attach(`Response GET ${linkLimitRow} has status code ${this.response.status()} ${this.response.statusText()} and response body ${actualResponseText}`)
     }
 });
 
@@ -50,7 +52,6 @@ Then('{} checks values in response of random demand are correct', async function
 Then('{} checks {} demand exist in the system, if it does not exist will create new demand', async function (actor, demandQtyKeyword: string) {
     var numberofDemand;
     randomItem = this.getItemsResponseBody[Math.floor(Math.random() * this.getItemsResponseBody.length)];
-
     if (demandQtyKeyword != 'any') {
         numberofDemand = await this.getDemandResponseBody.filter((qty: any) => qty.orderQty.includes(demandQtyKeyword)).length;
     }
@@ -62,11 +63,22 @@ Then('{} checks {} demand exist in the system, if it does not exist will create 
             docType: "manual",
             dueDate: faker.date.future(),
             itemKey: randomItem.key,
+            refNum: "",
+            fnsku: "",
+            imageUrl: "",
+            asin: "",
             itemName: randomItem.itemName,
             openQty: Math.floor(Math.random() * 101),
             orderQty: Math.floor(Math.random() * 101),
             orderKey: faker.datatype.uuid(),
             rowKey: faker.datatype.uuid(),
+            lotMultipleItemKey: null,
+            lotMultipleItemName: null,
+            lotMultipleQty: null,
+            vendorKey: null,
+            vendorName: null,
+            onHandMin: "",
+            onHandThirdPartyMin: ""
         }
         const createResponse = await demandRequest
         .createDemand(this.request, `${Links.API_DEMAND}/manual/${payload.orderKey}/${payload.rowKey}`, payload, this.headers);
@@ -84,6 +96,40 @@ Then('{} checks {} demand exist in the system, if it does not exist will create 
     }
 });
 
-Then(`{} sets GET api endpoint to get demand keys with limit row: {} and sort field: {} with direction: {}`, async function (actor, limitRow, sortField, direction: string) {
-    link = encodeURI(`${Links.API_DEMAND}?offset=0&limit=${limitRow}&sort=[{"field":"${sortField}","direction":"${direction}"}]&where={"logic":"and","filters":[]}`);
+Then(`{} sets GET api endpoint to get demand with limit row: {} and sort field: {} with direction: {}`, async function (actor, limitRow, sortField, direction: string) {
+    linkSorted = encodeURI(`${Links.API_DEMAND}?offset=0&limit=${limitRow}&sort=[{"field":"${sortField}","direction":"${direction}"}]&where={"logic":"and","filters":[]}`);
+});
+
+Then(`{} sends a GET request to get all demands`, async function (actor: string) {
+    const options = {
+        headers: this.headers
+    }
+    this.getDemandResponse = this.response = await demandRequest.getDemand(this.request, link, options);
+    const responseBodyText = await this.getDemandResponse.text();
+    if (this.getDemandResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
+        this.responseBody = this.getDemandResponseBody = JSON.parse(await this.getDemandResponse.text());
+    }
+    else {
+        //if response include <!doctype html> => 'html', else => response
+        const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
+        logger.log('info', `Response GET ${link} has status code ${this.response.status()} ${this.response.statusText()} and response body ${responseBodyText}`);
+        this.attach(`Response GET ${link} has status code ${this.response.status()} ${this.response.statusText()} and response body ${actualResponseText}`)
+    }
+});
+
+Then(`{} sends a GET request to get sorted demands`, async function (actor: string) {
+    const options = {
+        headers: this.headers
+    }
+    this.getDemandResponse = this.response = await demandRequest.getDemand(this.request, linkSorted, options);
+    const responseBodyText = await this.getDemandResponse.text();
+    if (this.getDemandResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
+        this.responseBody = this.getDemandResponseBody = JSON.parse(await this.getDemandResponse.text());
+    }
+    else {
+        //if response include <!doctype html> => 'html', else => response
+        const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
+        logger.log('info', `Response GET ${linkSorted} has status code ${this.response.status()} ${this.response.statusText()} and response body ${responseBodyText}`);
+        this.attach(`Response GET ${linkSorted} has status code ${this.response.status()} ${this.response.statusText()} and response body ${actualResponseText}`)
+    }
 });

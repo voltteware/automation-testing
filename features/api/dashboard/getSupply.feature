@@ -32,7 +32,7 @@ Feature: API_Dashboard GET /api/supply
         Given User sets GET api endpoint to get information of a company belongs to <email> using company key <companyKey>
         But User sets <cookie> cookie of <email> and <companyKeyHeader> companyKey and <companyTypeHeader> companyType in the header
         And User sets GET api endpoint to get supply keys
-        When User sends a GET request to get list supplies
+        When User sends a GET request to get all supplies
         Then The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
         Examples:
@@ -48,7 +48,7 @@ Feature: API_Dashboard GET /api/supply
         And User sets GET api endpoint to get information of a company belongs to <userB> using company key <companyKey>
         But User sets valid cookie of <userA> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get supply keys
-        When User sends a GET request to get list supplies
+        When User sends a GET request to get all supplies
         Then The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
         Examples:
@@ -60,7 +60,7 @@ Feature: API_Dashboard GET /api/supply
         Given User sets GET api endpoint to get information of a company belongs to <email> using company key <companyKey>
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get supply keys with limit row: <limitRow> and sort field: <sortField> with direction: <direction>
-        When User sends a GET request to get list supplies
+        When User sends a GET request to get sorted supplies
         Then The expected status code should be <expectedStatus>
         And Check total items in the response should be less than or equal <limitRow>
         And Check items in the response should be sort by field <sortField> with direction <direction>

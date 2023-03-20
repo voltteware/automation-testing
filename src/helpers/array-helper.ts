@@ -3,7 +3,7 @@ function flattenArray(nestedArray: Array<any>, nestedPropName: string): Array<an
 
     nestedArray.forEach(item => {
         result.push(item);
-        // Kiem tra xem co item con hay khong
+        // Check if the item is still available
         if (Array.isArray(item[nestedPropName])) {
             result = result.concat(flattenArray(item[nestedPropName], nestedPropName));
         }
@@ -15,42 +15,41 @@ function flattenArray(nestedArray: Array<any>, nestedPropName: string): Array<an
 //Reference: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
 function sortLocale(array: Array<any>, field: string, direction: 'asc' | 'desc' = 'asc') {
     return array.sort((a, b) => {
+        if (field.includes("Date")) {
+            const valueA = new Date(a[field]);
+            const valueB = new Date(b[field]);
+
+            if (valueA === valueB) {
+                return 0;
+            }
+
+            if (direction === 'asc') {
+                return valueA > valueB ? 1 : -1;
+            }
+
+            if (direction === 'desc') {
+                return valueA < valueB ? 1 : -1;
+            }
+        }
         if (isNaN(a[field])) {
             const sortResult = a[field].localeCompare(b[field]);
             // if direction = asc => sortResult else reverse sortResult
             return direction === 'asc' ? sortResult : !sortResult;
         }
-        if (a[field].includes("Date")) {
-            const valueA = new Date (a[field]);
-            const valueB = new Date (b[field]);
 
-            if (valueA === valueB) {
-                return 0;
-            }
+        const valueA = a[field];
+        const valueB = b[field];
 
-            if (direction === 'asc') {
-                return valueA > valueB ? 1 : -1;
-            }
-
-            if (direction === 'desc') {
-                return valueA < valueB ? 1 : -1;
-            }
+        if (valueA === valueB) {
+            return 0;
         }
-        else {
-            const valueA = a[field];
-            const valueB = b[field];
 
-            if (valueA === valueB) {
-                return 0;
-            }
+        if (direction === 'asc') {
+            return valueA > valueB ? 1 : -1;
+        }
 
-            if (direction === 'asc') {
-                return valueA > valueB ? 1 : -1;
-            }
-
-            if (direction === 'desc') {
-                return valueA < valueB ? 1 : -1;
-            }
+        if (direction === 'desc') {
+            return valueA < valueB ? 1 : -1;
         }
     });
 }
