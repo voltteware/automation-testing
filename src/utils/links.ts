@@ -32,6 +32,8 @@ export class Links {
     static API_ADMIN_GET_COMPANIES: string = '/api/admin/companies';
     static API_ADMIN_DELETE_COMPANY: string = '/api/admin/companies/';
     static API_ADMIN_GET_USER: string = '/api/admin/users?';
+    //API Purchasing
+    static API_SUBSCRIPTIONS: string = '/api/billing/subscriptions';
 }
 
 //URL for performance

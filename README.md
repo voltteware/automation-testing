@@ -1,4 +1,4 @@
-# ForecastEx Automation Test
+# ForecastRx Automation Test
 
 ## How to run script from command line
 
