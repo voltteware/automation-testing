@@ -1,12 +1,25 @@
 import { After, AfterAll, AfterStep, Before, BeforeAll, BeforeStep, ITestCaseHookParameter, ITestStepHookParameter } from "@cucumber/cucumber";
 import logger from '../Logger/logger';
 import { ActionWords } from "../utils/actionwords";
+import { setParallelCanAssign, parallelCanAssignHelpers } from '@cucumber/cucumber'
+
+const { atMostOnePicklePerTag } = parallelCanAssignHelpers;
+const myTagRule = atMostOnePicklePerTag(['@api-createBom', '@api-createItem', '@api-createSupplier', '@api-createSupply']);
+
+setParallelCanAssign(function (pickleInQuestion, picklesInProgress) {
+    return (
+        myTagRule(pickleInQuestion, picklesInProgress)
+    )
+})
 
 let actionwords: ActionWords = new ActionWords()
 
 Before('@test-api', async function (scenario: ITestCaseHookParameter) {
+    // Only one pickle with @tag1 can run at a time
+    // AND only one pickle with @tag2 can run at a time
+    setParallelCanAssign(myTagRule)
     logger.log('info', '==============' + scenario.pickle.name + '==============')
-    this.request = await actionwords.createRequestContext() 
+    this.request = await actionwords.createRequestContext()
 });
 
 After('@test-api', async function (scenario: ITestCaseHookParameter) {
