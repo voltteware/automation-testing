@@ -15,7 +15,7 @@ Feature: API_Dashboard POST /api/bom
         And User sets GET api endpoint to get item with limit row: <limitRow>
         And User sends a GET request to get list items
         And User sets GET api endpoint to get bom keys
-        And User sends a GET request to get list boms
+        And User sends a GET request to get all boms
         And User sets POST api endpoint to create bom
         And User sets request body with payload as parentName: "<parentName>" and parentKey: "<parentKey>" and childName: "<childName>" and childKey: "<childKey>" and qty: "<qty>"
         When User sends a POST method to create bom
@@ -36,7 +36,7 @@ Feature: API_Dashboard POST /api/bom
         And User sets GET api endpoint to get item with limit row: <limitRow>
         And User sends a GET request to get list items
         And User sets GET api endpoint to get bom keys
-        And User sends a GET request to get list boms
+        And User sends a GET request to get all boms
         And User sets POST api endpoint to create bom
         But User sets <cookie> cookie of <email> and <companyKeyHeader> companyKey and <companyTypeHeader> companyType in the header
         And User sets request body with payload as parentName: "<parentName>" and parentKey: "<parentKey>" and childName: "<childName>" and childKey: "<childKey>" and qty: "<qty>"
@@ -57,7 +57,7 @@ Feature: API_Dashboard POST /api/bom
         And User sets GET api endpoint to get item with limit row: <limitRow>
         And User sends a GET request to get list items
         And User sets GET api endpoint to get bom keys
-        And User sends a GET request to get list boms
+        And User sends a GET request to get all boms
         And User sets POST api endpoint to create bom
         And User sets request body with payload as parentName: "<parentName>" and parentKey: "<parentKey>" and childName: "<childName>" and childKey: "<childKey>" and qty: "<qty>"
         When User sends a POST method to create bom
@@ -75,7 +75,7 @@ Feature: API_Dashboard POST /api/bom
         And User sets GET api endpoint to get item with limit row: <limitRow>
         And User sends a GET request to get list items
         And User sets GET api endpoint to get bom keys
-        And User sends a GET request to get list boms
+        And User sends a GET request to get all boms
         And User sets POST api endpoint to create bom
         And User sets request body with payload as parentName: "<parentName>" and parentKey: "<parentKey>" and childName: "<childName>" and childKey: "<childKey>" and qty: "<qty>"
         When User sends a POST method to create bom
@@ -93,7 +93,7 @@ Feature: API_Dashboard POST /api/bom
         And User sets GET api endpoint to get item with limit row: <limitRow>
         And User sends a GET request to get list items
         And User sets GET api endpoint to get bom keys
-        And User sends a GET request to get list boms
+        And User sends a GET request to get all boms
         And User has valid connect.sid of "<userA>" after send a POST request with payload as email: "<userA>" and password: "<password>"
         And User sets POST api endpoint to create bom
         But User sets valid cookie of <userA> and valid companyKey and valid companyType in the header
@@ -112,7 +112,7 @@ Feature: API_Dashboard POST /api/bom
         And User sets GET api endpoint to get item with limit row: <limitRow>
         And User sends a GET request to get list items
         And User sets GET api endpoint to get bom keys
-        And User sends a GET request to get list boms
+        And User sends a GET request to get all boms
         And User sets POST api endpoint to create bom
         And User sets request body with payload as parentName: "<parentName>" and parentKey: "<parentKey>" and childName: "<childName>" and childKey: "<childKey>" and qty: "<qty>"
         When User sends a POST method to create bom
@@ -131,7 +131,7 @@ Feature: API_Dashboard POST /api/bom
         And User sets GET api endpoint to get item with limit row: <limitRow>
         And User sends a GET request to get list items
         And User sets GET api endpoint to get bom keys
-        And User sends a GET request to get list boms
+        And User sends a GET request to get all boms
         And User sets POST api endpoint to create bom
         And User sets request body with payload as parentName: "<parentName>" and parentKey: "<parentKey>" and childName: "<childName>" and childKey: "<childKey>" and qty: "<qty>"
         When User sends a POST method to create bom
@@ -150,7 +150,7 @@ Feature: API_Dashboard POST /api/bom
         And User sets GET api endpoint to get item with limit row: <limitRow>
         And User sends a GET request to get list items
         And User sets GET api endpoint to get bom keys
-        And User sends a GET request to get list boms
+        And User sends a GET request to get all boms
         And User sets POST api endpoint to create bom
         And User sets request body with payload as parentName: "<parentName>" and parentKey: "<parentKey>" and childName: "<childName>" and childKey: "<childKey>" and qty: "<qty>"
         When User sends a POST method to create bom

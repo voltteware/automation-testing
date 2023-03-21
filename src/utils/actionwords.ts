@@ -1,7 +1,7 @@
 import { ITestCaseHookParameter, ITestStepHookParameter } from "@cucumber/cucumber";
 import { Browser, BrowserContext, chromium, firefox, Page, request, webkit } from "@playwright/test";
 import { existsSync, readdir, rename, rmSync } from "node:fs";
-import { config } from "../../config";
+import { config } from "../../playwright.config";
 
 export class ActionWords {
     timestamp = this.formatDate(new Date())

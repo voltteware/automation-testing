@@ -1,4 +1,3 @@
-
 @test-api @api-dashboard @api-bom @api-deleteBom
 Feature: API_Dashboard DELETE /api/bom
     Background: Send GET /realm request to get all company keys of current logged in user before each test
@@ -16,7 +15,7 @@ Feature: API_Dashboard DELETE /api/bom
         And User sets GET api endpoint to get item with limit row: 20
         And User sends a GET request to get list items
         And User sets GET api endpoint to get bom keys
-        And User sends a GET request to get list boms
+        And User sends a GET request to get all boms
         And User checks Auto bom exist in the system, if it does not exist will create new bom
         And User sends a GET request to get total of boms
         And User filters <numberOfBoms> boms which has the parentName includes <bomParentNameKeyword>
@@ -38,7 +37,7 @@ Feature: API_Dashboard DELETE /api/bom
         And User sets GET api endpoint to get item with limit row: 10
         And User sends a GET request to get list items
         And User sets GET api endpoint to get bom keys
-        And User sends a GET request to get list boms
+        And User sends a GET request to get all boms
         And User checks Auto bom exist in the system, if it does not exist will create new bom
         And User sends a GET request to get total of boms
         And User filters <numberOfBoms> boms which has the parentName includes <bomParentNameKeyword>
@@ -61,7 +60,7 @@ Feature: API_Dashboard DELETE /api/bom
         And User sets GET api endpoint to get item with limit row: 10
         And User sends a GET request to get list items
         And User sets GET api endpoint to get bom keys
-        And User sends a GET request to get list boms
+        And User sends a GET request to get all boms
         And User checks Auto bom exist in the system, if it does not exist will create new bom
         And User sends a GET request to get total of boms
         And User filters <numberOfBoms> boms which has the parentName includes <bomParentNameKeyword>
@@ -82,7 +81,7 @@ Feature: API_Dashboard DELETE /api/bom
         And User sets GET api endpoint to get item with limit row: 20
         And User sends a GET request to get list items
         And User sets GET api endpoint to get bom keys
-        And User sends a GET request to get list boms
+        And User sends a GET request to get all boms
         And User checks Auto bom exist in the system, if it does not exist will create new bom
         And User sends a GET request to get total of boms
         And User filters <numberOfBoms> boms which has the parentName includes <bomParentNameKeyword>

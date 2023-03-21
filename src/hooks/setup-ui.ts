@@ -2,7 +2,7 @@ import { After, AfterAll, AfterStep, Before, BeforeAll, ITestCaseHookParameter, 
 import { Browser } from "@playwright/test";
 import { ActionWords } from '../../src/utils/actionwords';
 import logger from '../../src/Logger/logger';
-import { config } from '../../config';
+import { config } from '../../playwright.config';
 
 let globalWithBrowser = global as typeof globalThis & { browser: Browser }
 let actionwords: ActionWords = new ActionWords();

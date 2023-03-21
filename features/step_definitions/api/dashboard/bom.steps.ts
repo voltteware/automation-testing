@@ -5,21 +5,39 @@ import logger from '../../../../src/Logger/logger';
 import { Links } from '../../../../src/utils/links';
 import _ from "lodash";
 
-let link: any;
+let link : any;
+let linkLimit: any;
 let randomChildItem: any;
 let randomParentItem: any;
 let payLoadDelete: any;
-let ids: any;
+let linkSorted: any;
 
 Then(`{} sets GET api endpoint to get bom keys`, async function (actor: string) {
     link = Links.API_BOM;
 });
 
 Then(`{} sets GET api endpoint to get boms with limit row: {}`, async function (actor, limitRow: string) {
-    link = encodeURI(`${Links.API_BOM}?offset=0&limit=${limitRow}`);
+    linkLimit = encodeURI(`${Links.API_BOM}?offset=0&limit=${limitRow}`);
 });
 
-Then(`{} sends a GET request to get list boms`, async function (actor: string) {
+Then(`{} sends a GET request to get list limited boms`, async function (actor: string) {
+    const options = {
+        headers: this.headers
+    }
+    this.getBomResponse = this.response = await bomRequest.getBom(this.request, linkLimit, options);
+    const responseBodyText = await this.getBomResponse.text();
+    if (this.getBomResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
+        this.responseBody = this.getBomResponseBody = JSON.parse(await this.getBomResponse.text());
+    }
+    else {
+        //if response include <!doctype html> => 'html', else => response
+        const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
+        logger.log('info', `Response GET ${linkLimit} has status code ${this.response.status()} ${this.response.statusText()} and response body ${responseBodyText}`);
+        this.attach(`Response GET ${linkLimit} has status code ${this.response.status()} ${this.response.statusText()} and response body ${actualResponseText}`)
+    }
+});
+
+Then(`{} sends a GET request to get all boms`, async function (actor: string) {
     const options = {
         headers: this.headers
     }
@@ -174,5 +192,22 @@ Then('{} check that the deleted BOM and its child are not included in the curren
 })
 
 Then(`{} sets GET api endpoint to get bom keys with limit row: {} and sort field: {} with direction: {}`, async function (actor, limitRow, sortField, direction: string) {
-    link = encodeURI(`${Links.API_BOM}?offset=0&limit=${limitRow}&sort=[{"field":"${sortField}","direction":"${direction}"}]&where={"logic":"and","filters":[]}`);
+    linkSorted = encodeURI(`${Links.API_BOM}?offset=0&limit=${limitRow}&sort=[{"field":"${sortField}","direction":"${direction}"}]&where={"logic":"and","filters":[]}`);
+});
+
+Then(`{} sends a GET request to get sorted boms`, async function (actor: string) {
+    const options = {
+        headers: this.headers
+    }
+    this.getBomResponse = this.response = await bomRequest.getBom(this.request, linkSorted, options);
+    const responseBodyText = await this.getBomResponse.text();
+    if (this.getBomResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
+        this.responseBody = this.getBomResponseBody = JSON.parse(await this.getBomResponse.text());
+    }
+    else {
+        //if response include <!doctype html> => 'html', else => response
+        const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
+        logger.log('info', `Response GET ${linkSorted} has status code ${this.response.status()} ${this.response.statusText()} and response body ${responseBodyText}`);
+        this.attach(`Response GET ${linkSorted} has status code ${this.response.status()} ${this.response.statusText()} and response body ${actualResponseText}`)
+    }
 });
