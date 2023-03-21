@@ -16,8 +16,3 @@ export const config = {
 }
 var { setDefaultTimeout } = require('@cucumber/cucumber');
 setDefaultTimeout(60 * 1000);
-
-export default defineConfig({
-    //By default, test files are run in parallel. Tests in a single file are run in order, in the same worker process.
-    fullyParallel: true,
-});
