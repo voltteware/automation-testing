@@ -1,10 +1,8 @@
-import { group, check, fail } from "k6";
-import http, { RequestBody } from "k6/http"
+import { check } from "k6";
+import http from "k6/http"
 import { Trend, Rate } from 'k6/metrics';
-
-import { PayloadLogin } from '../../src/utils/loginPayLoad'
-import { Links } from '../../src/utils/links';
-import { Url } from "../../src/utils/links";
+import { payloadLogin } from '../../src/utils/loginPayLoad'
+import { Links, Url } from '../../src/utils/links';
 
 const getLogin = new Trend('Get Login');
 const postLogin = new Trend('Post Login');
@@ -19,7 +17,9 @@ const usersPreprod = JSON.parse(open('./users.json') as any).usersPreprod;
 export default class LoginRequest {
     params: any;
     cookie: any;
-    
+    companyKey: any;
+    companyType: any;
+
     constructor() {
         this.params = {
             headers: {
@@ -38,12 +38,12 @@ export default class LoginRequest {
         }) || getLoginErrorRate.add(1);
         getLogin.add(getLoginResponse.timings.duration);
 
-        const payLoadLogin: PayloadLogin ={
+        const payload: payloadLogin ={
             password: userPreprod.password,
             username: userPreprod.username,
         }
 
-        let loginResponsePrepropd = http.post(`${Url.urlPreprod}${Links.API_LOGIN}`, JSON.stringify(payLoadLogin), this.params);
+        let loginResponsePrepropd = http.post(`${Url.urlPreprod}${Links.API_LOGIN}`, JSON.stringify(payload), this.params);
         this.cookie = loginResponsePrepropd.headers['Set-Cookie'];
         check(loginResponsePrepropd, {
             'Login is status 201': (r) => r.status === 201,
@@ -54,6 +54,10 @@ export default class LoginRequest {
 
     getRealm() {
         let getRealmResponse = http.get(`${Url.urlPreprod}${Links.API_REALM}`, this.params);
+        const tmp = Math.floor(Math.random() * 4);
+        const dataGetRealm = JSON.parse(getRealmResponse.body as any);
+        this.companyKey = dataGetRealm[tmp].companyKey;
+        this.companyType = dataGetRealm[tmp].companyType;
         check(getRealmResponse, {
             'Get Realm status is 200': (r) => r.status === 200,
         }) || getRealmErrorRate.add(1);

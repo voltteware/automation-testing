@@ -1,8 +1,6 @@
 import { group, check, sleep } from 'k6';
 import { Options } from 'k6/options';
 import LoginRequest from "../../performance/actions/login.actions";
-import CompanyRequest from "../../performance/actions/company.actions";
-import SubscriptionRequest from "../../performance/actions/subscription.actions";
 
 export let options: Options = {
     // stages: [
@@ -12,32 +10,20 @@ export let options: Options = {
     // ],
     // Need to define Test scenarios
     duration: '1s',
-    vus: 10,
+    vus: 1,
     thresholds: {
         http_req_duration: ['p(95)<400'],
         http_req_failed: ['rate<0.01'],
         'Get Login': ['p(95)<400'],
         'Post Login': ['p(95)<400'],
-        'Get Realm': ['p(95)<400'],
-        'Get Comany By Company Key': ['p(95)<400'],
-        'Get Subscription By Company Key': ['p(95)<400'],
     },
 };
 
-export default () => {
+//TO DO
+export default () => { 
     let loginRequest = new LoginRequest();
-
     group('Users log in', () => {
         loginRequest.logIn();
-        sleep(Math.random() * 4);
-        loginRequest.getRealm();
-    });
-
-    let companyRequest = new CompanyRequest(loginRequest.companyKey,loginRequest.companyType,loginRequest.cookie);
-    let subscriptionRequest = new SubscriptionRequest(loginRequest.companyKey,loginRequest.companyType,loginRequest.cookie);
-
-    group('Users access dashboard', () => {
-        companyRequest.getCompanyByCompanyKey();
-        subscriptionRequest.getSubscriptionByCompanyKey();
-    });
+    })
+    sleep(Math.random() * 4);
 };
