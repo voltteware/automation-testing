@@ -23,6 +23,7 @@ export class Links {
     static API_GET_GRIDVIEW_BOM: string = '/api/grid-view/bom';
     static API_SUPPLY: string = '/api/supply';
     static API_CREATE_SUPPLY: string = '/api/supply/manual/';
+    static API_SUBSCRIPTION: string = '/api/billing/subscription/'
     //API Purchasing
     static API_GET_GRIDVIEW_CUSTOM_ITEMS: string = '/api/grid-view/custom-items-in-po';
     static API_GET_GRIDVIEW_SUGGESTED_POS: string = '/api/grid-view/suggested-pos';

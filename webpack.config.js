@@ -5,11 +5,14 @@ const GlobEntries = require('webpack-glob-entries');
 
 module.exports = {
   mode: 'production',
-  entry: GlobEntries('./performance/flow/fullflow-login.test.ts'), // Generates multiple entry for each test
+  entry: {
+    fullflowlogin: './performance/flow/fullflow-login.test.ts',
+    fullflowregister: './performance/flow/fullflow-register.test.ts'
+  },
   output: {
     path: path.join(__dirname, 'dist'),
     libraryTarget: 'commonjs',
-    filename: '[name].js',
+    filename: '[name].test.js',
   },
   resolve: {
     extensions: ['.ts', '.js'],

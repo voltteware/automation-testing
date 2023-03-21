@@ -1,4 +1,4 @@
-export interface PayloadLogin{
+export interface payloadLogin{
     password?: string
     username?: string
 }
