@@ -32,6 +32,13 @@ export class Links {
     static API_ADMIN_GET_COMPANIES: string = '/api/admin/companies';
     static API_ADMIN_DELETE_COMPANY: string = '/api/admin/companies/';
     static API_ADMIN_GET_USER: string = '/api/admin/users?';
+    // API File
+    static API_FILE_GET_FILE: string = '/api/file/auth';
+    // API Shipment
+    static API_SHIPMENT_UPLOAD_INVENTORY: string = '/api/shipment/upload-inventory';
+    static API_SHIPMENT_UPDATE_SHIPMENT: string = '/api/shipment';
+    static API_SHIPMENT_GET_DETAIL: string = '/api/shipment-detail';
+    static API_SHIPMENT_GET_SHIPMENT_BY_KEY: string = '/api/shipment';
 }
 
 //URL for performance
