@@ -8,7 +8,7 @@ Feature: API_Admin DELETE/User
         And In Header of the request, user sets param Cookie as valid connect.sid
         When User sends a GET request to get 20 latest users
 
-    @TC_DU001
+    @TC_DU001 @regression-api
     Scenario Outline: TC_DU001 - Verify <user> could call this API to delete a user
         Given Check <emailWantToDelete> exist in the system, if it does not exist will create user with below email
         And User filters user to get user which has the email as <emailWantToDelete>

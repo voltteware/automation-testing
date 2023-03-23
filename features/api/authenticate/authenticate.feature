@@ -1,7 +1,7 @@
 @test-api @api-login @api-authenticate
 Feature: API /login
 
-	@api-login-with-valid-payload
+	@TC_L001 @api-login-with-valid-payload @regression-api
 	Scenario Outline: <id> - Verify POST /login with <scenario>
 		Given Nancy sets POST login service api endpoint
 		And She sets request body with payload as email: "<email>" and passowrd: "<password>"
