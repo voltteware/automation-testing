@@ -10,7 +10,8 @@ Feature: API_Admin DELETE/User
 
     @TC_DU001 @regression-api
     Scenario Outline: TC_DU001 - Verify <user> could call this API to delete a user
-        Given Check <emailWantToDelete> exist in the system, if it does not exist will create user with below email
+        Given Check <emailWantToDelete> exist in the system, if it does not exist will create user with same email
+        And Login with admin account to check new user <emailWantToDelete> is showed in the response of get all users
         And User filters user to get user which has the email as <emailWantToDelete>
         And In Header of the request, user sets param Cookie as valid connect.sid
         When User sends a DELETE method to delete user <emailWantToDelete>
