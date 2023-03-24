@@ -1,4 +1,4 @@
-@test-api @api-user @api-getUserInformation
+@test-api-extra @api-user @api-getUserInformation
 Feature: API_User Get/User
     Background:
         Given Check testautoprofile@gmail.com exist in the system, if it does not exist will create user with same email

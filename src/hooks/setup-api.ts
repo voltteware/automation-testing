@@ -14,7 +14,7 @@ setParallelCanAssign(function (pickleInQuestion, picklesInProgress) {
 
 let actionwords: ActionWords = new ActionWords()
 
-Before('@test-api', async function (scenario: ITestCaseHookParameter) {
+Before({ tags: "@test-api or @test-api-extra" }, async function (scenario: ITestCaseHookParameter) {
     // Only one pickle with @tag1 can run at a time
     // AND only one pickle with @tag2 can run at a time
     setParallelCanAssign(myTagRule)
@@ -22,16 +22,16 @@ Before('@test-api', async function (scenario: ITestCaseHookParameter) {
     this.request = await actionwords.createRequestContext()
 });
 
-After('@test-api', async function (scenario: ITestCaseHookParameter) {
+After({ tags: "@test-api or @test-api-extra" }, async function (scenario: ITestCaseHookParameter) {
     logger.log(scenario.result?.status == 'PASSED' ? 'info' : 'error', scenario.result?.status + '\n')
     await actionwords.storeLogFile()
 });
 
-BeforeStep('@test-api', async function (testStep: ITestStepHookParameter) {
+BeforeStep({ tags: "@test-api or @test-api-extra" }, async function (testStep: ITestStepHookParameter) {
     logger.log('info', testStep.pickleStep.text)
 })
 
-AfterStep('@test-api', async function (testStep: ITestStepHookParameter) {
+AfterStep({ tags: "@test-api or @test-api-extra" }, async function (testStep: ITestStepHookParameter) {
     let statusOfStep = testStep.result.status
     if (statusOfStep == 'PASSED') {
 
