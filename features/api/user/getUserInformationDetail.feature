@@ -1,7 +1,7 @@
 @test-api-extra @api-user @api-getUserInformation
 Feature: API_User Get/User
     Background:
-        Given Check testautoprofile@gmail.com exist in the system, if it does not exist will create user with same email
+        Given Check testprofile@gmail.com exist in the system, if it does not exist will create user with same email
 
     @TC_U001 @regression-api
     Scenario Outline: TC_DU001 - Verify <user> could call this API to get user information
@@ -16,8 +16,8 @@ Feature: API_User Get/User
         And UserId <email> in the response of API is correct
 
         Examples:
-            | email                     | password  | expectedStatus | expectedStatusText |
-            | testautoprofile@gmail.com | Test1111! | 200            | OK                 |
+            | email                 | password  | expectedStatus | expectedStatusText |
+            | testprofile@gmail.com | Test1111! | 200            | OK                 |
 
     #Bug API in case U002
     @TC_U002 @bug-permission @bug-1779
@@ -28,8 +28,8 @@ Feature: API_User Get/User
         And The status text is "<expectedStatusText>"
 
         Examples:
-            | email                     | cookie  | expectedStatus | expectedStatusText |
-            | testautoprofile@gmail.com | empty   | 401            | Unauthorized       |
-            | testautoprofile@gmail.com | invalid | 401            | Unauthorized       |
+            | email                 | cookie  | expectedStatus | expectedStatusText |
+            | testprofile@gmail.com | empty   | 401            | Unauthorized       |
+            | testprofile@gmail.com | invalid | 401            | Unauthorized       |
 
 
