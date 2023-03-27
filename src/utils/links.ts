@@ -11,6 +11,7 @@ export class Links {
     //API Dashboard
     static API_REALM: string = '/api/realm';
     static API_CREATE_COMPANY: string = '/api/company';
+    static API_GET_COMPANY: string = '/api/company';
     static API_SUPPLIERS: string = '/api/vendor';
     static API_UPDATE_COMPANY: string = '/api/company/';
     static API_ITEMS: string = '/api/item';
@@ -35,6 +36,8 @@ export class Links {
     static API_ADMIN_GET_COMPANIES: string = '/api/admin/companies';
     static API_ADMIN_DELETE_COMPANY: string = '/api/admin/companies/';
     static API_ADMIN_GET_USER: string = '/api/admin/users?';
+    //API General
+    static API_RUN_FORECAST: string = "/api/forecast";
 }
 
 //URL for performance

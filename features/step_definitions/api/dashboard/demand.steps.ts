@@ -60,38 +60,37 @@ Then('{} checks {} demand exist in the system, if it does not exist will create 
     }
     if (numberofDemand < 1) {
         const payload = {
+            asin: "",
             docType: "manual",
             dueDate: faker.date.future(),
-            itemKey: randomItem.key,
-            refNum: "",
             fnsku: "",
             imageUrl: "",
-            asin: "",
-            itemName: randomItem.itemName,
-            openQty: Math.floor(Math.random() * 101),
-            orderQty: Math.floor(Math.random() * 101),
-            orderKey: faker.datatype.uuid(),
-            rowKey: faker.datatype.uuid(),
+            itemKey: randomItem.key,
+            itemName: randomItem.name,
             lotMultipleItemKey: null,
             lotMultipleItemName: null,
             lotMultipleQty: null,
+            onHandMin: "",
+            onHandThirdPartyMin: "",
+            openQty: Math.floor(Math.random() * 101),
+            orderKey: faker.datatype.uuid(),
+            orderQty: Math.floor(Math.random() * 101),
+            refNum: "",
+            rowKey: faker.datatype.uuid(),
             vendorKey: null,
             vendorName: null,
-            onHandMin: "",
-            onHandThirdPartyMin: ""
         }
-        const createResponse = await demandRequest
-        .createDemand(this.request, `${Links.API_DEMAND}/manual/${payload.orderKey}/${payload.rowKey}`, payload, this.headers);
+        const createResponse = await demandRequest.createDemand(this.request, `${Links.API_DEMAND}/manual/${payload.orderKey}/${payload.rowKey}`, payload, this.headers);
         const responseBodyText = await createResponse.text();
         if (createResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
             await this.getDemandResponseBody.push(JSON.parse(responseBodyText));
             logger.log('info', `Response POST ${Links.API_DEMAND}/manual/${payload.orderKey}/${payload.rowKey}` + JSON.stringify(responseBodyText, undefined, 4));
-            this.attach(`Response POST ${Links.API_DEMAND}/${payload.orderKey}/${payload.rowKey}` + JSON.stringify(responseBodyText, undefined, 4))
+            this.attach(`Response POST ${Links.API_DEMAND}/manual/${payload.orderKey}/${payload.rowKey}` + JSON.stringify(responseBodyText, undefined, 4))
         }
         else {
             const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
             logger.log('info', `Response POST ${Links.API_DEMAND}/manual/${payload.orderKey}/${payload.rowKey}} has status code ${createResponse.status()} ${createResponse.statusText()} and response body ${responseBodyText}`);
-            this.attach(`Response POST ${Links.API_DEMAND}/manual/${payload.orderKey}/${payload.rowKey} has status code ${createResponse.status()} ${createResponse.statusText()} and response body ${actualResponseText}`)
+            this.attach(`Response POST ${Links.API_DEMAND}/manual/${payload.orderKey}/${payload.rowKey} has status code ${createResponse.status()} ${createResponse.statusText()} and response body ${actualResponseText}`);
         }
     }
 });
