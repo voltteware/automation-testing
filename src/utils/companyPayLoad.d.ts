@@ -1,5 +1,5 @@
-export interface payLoadCompany{
-    companyKey ?: string
+export interface payLoadCompany {
+    companyKey?: string
     companyType?: string
     companyName?: string
     initialSyncDate?: Date
@@ -7,4 +7,4 @@ export interface payLoadCompany{
     serviceLevel?: Number
     leadTime?: Number
     orderInterval?: Number
-}
+};
