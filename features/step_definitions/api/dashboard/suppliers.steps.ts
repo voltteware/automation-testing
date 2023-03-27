@@ -1,4 +1,4 @@
-import { Then } from '@cucumber/cucumber';
+import { Then, Given, DataTable } from '@cucumber/cucumber';
 import { expect } from '@playwright/test';
 import * as supplierRequest from '../../../../src/api/request/vendor.service';
 import logger from '../../../../src/Logger/logger';
@@ -7,6 +7,7 @@ import { faker } from '@faker-js/faker';
 import _ from "lodash";
 
 let link: any;
+let supplierKey: string;
 
 Then(`{} sets GET api endpoint to get suppliers keys`, async function (actor: string) {
     link = Links.API_SUPPLIERS;
@@ -138,3 +139,222 @@ Then('{} checks the total suppliers is correct', async function (actor: string) 
     expect(beforeTotalSuppliers).not.toBeNaN();
     expect(currentTotalSuppliers).toEqual(beforeTotalSuppliers - this.selectedSuppliers.length);
 })
+
+Then(`{} saves the supplier key`, async function (actor: string) {
+    supplierKey = this.responseBodyOfASupplierObject.key
+    logger.log('info', `Supplier key to edit: ${supplierKey}`);
+});
+
+Given('User sets PUT api endpoint to edit {} of the above supplier for company type {} with new value: {}', async function (editColumn: string, companyType: string, value: string) {
+    // Prepare endpoint for request to edit supplier
+    link = `${Links.API_SUPPLIERS}/${supplierKey}`
+
+    switch (editColumn) {
+        case 'supplierName':
+            if (value == 'random') {
+                this.newSupplierName = `${faker.company.name()} ${faker.random.numeric(3)} Auto`;
+            } else if (value.includes('Exist Supplier Name')) {
+                var randomSupplier = await this.getSupplierResponseBody.filter((su: any) => !(su.key.includes(supplierKey)))
+                this.newSupplierName = randomSupplier[1].name
+            }
+
+            logger.log('info', `New ${editColumn}: ${this.newSupplierName}`);
+            this.attach(`New ${editColumn}: ${this.newSupplierName}`);
+            break;
+        case 'leadTime':
+            if (value == 'random') {
+                this.leadTime = Number(faker.datatype.number({
+                    'min': 1,
+                    'max': 365
+                }));
+            }
+
+            logger.log('info', `New ${editColumn}: ${this.leadTime}`);
+            this.attach(`New ${editColumn}: ${this.leadTime}`);
+            break;
+        case 'serviceLevel':
+            if (value == 'random') {
+                this.serviceLevel = Number(faker.random.numeric(2));
+            }
+
+            logger.log('info', `New ${editColumn}: ${this.serviceLevel}`);
+            this.attach(`New ${editColumn}: ${this.serviceLevel}`);
+            break;
+        case 'orderInterval':
+            if (value == 'random') {
+                this.orderInterval = Number(faker.random.numeric());
+            }
+
+            logger.log('info', `New ${editColumn}: ${this.orderInterval}`);
+            this.attach(`New ${editColumn}: ${this.orderInterval}`);
+            break;
+        case 'description':
+            if (value == 'random') {
+                this.description = faker.lorem.words(3);
+            }
+
+            logger.log('info', `New ${editColumn}: ${this.description}`);
+            this.attach(`New ${editColumn}: ${this.description}`);
+            break;
+        case 'targetOrderValue':
+            if (value == 'random') {
+                this.targetOrderValue = Number(faker.random.numeric(3));
+            }
+
+            logger.log('info', `New ${editColumn}: ${this.targetOrderValue}`);
+            this.attach(`New ${editColumn}: ${this.targetOrderValue}`);
+            break;
+        case 'freeFreightMinimum':
+            if (value == 'random') {
+                this.freeFreightMinimum = Number(faker.random.numeric(3));
+            }
+
+            logger.log('info', `New ${editColumn}: ${this.freeFreightMinimum}`);
+            this.attach(`New ${editColumn}: ${this.freeFreightMinimum}`);
+            break;
+        case 'fabReplenishmentModel':
+            var restockModel = ['LOCAL', 'DIRECT_SHIP', 'GLOBAL'];
+            const excludedRestockModelValue = this.responseBodyOfASupplierObject.restockModel;
+
+            // Filter out the excluded RestockModel value from the restockModel array
+            const filteredArray = restockModel.filter((value) => value !== excludedRestockModelValue);
+            this.RestockModel = filteredArray[Math.floor(Math.random() * filteredArray.length)];
+
+            logger.log('info', `New ${editColumn}: ${this.RestockModel}`);
+            this.attach(`New ${editColumn}: ${this.RestockModel}`);
+            break;
+        default:
+            break;
+    }
+
+    // Prepare payload for request to edit supplier
+    if (companyType === 'CSV') {
+        this.payLoad = {
+            companyType: `${this.responseBodyOfASupplierObject.companyType}`,
+            companyKey: `${this.responseBodyOfASupplierObject.companyKey}`,
+            key: `${this.responseBodyOfASupplierObject.key}`,
+            name: this.newSupplierName === undefined ? this.responseBodyOfASupplierObject.name : this.newSupplierName,
+            description: `${this.description === undefined ? this.responseBodyOfASupplierObject.description : this.description}`,
+            isHidden: this.responseBodyOfASupplierObject.isHidden,
+            shipVia: this.responseBodyOfASupplierObject.shipVia,
+            email: `${this.responseBodyOfASupplierObject.email}`,
+            moq: this.responseBodyOfASupplierObject.moq,
+            leadTime: this.leadTime === undefined ? this.responseBodyOfASupplierObject.leadTime : this.leadTime,
+            orderInterval: this.orderInterval === undefined ? this.responseBodyOfASupplierObject.orderInterval : this.orderInterval,
+            serviceLevel: this.serviceLevel === undefined ? this.responseBodyOfASupplierObject.serviceLevel : this.serviceLevel,
+            forecastTags: this.responseBodyOfASupplierObject.forecastTags,
+            phone: this.responseBodyOfASupplierObject.phone,
+            fax: this.responseBodyOfASupplierObject.fax,
+            website: this.responseBodyOfASupplierObject.website,
+            addressShippingUuid: this.responseBodyOfASupplierObject.addressShippingUuid,
+            addressBillingUuid: this.responseBodyOfASupplierObject.addressBillingUuid,
+            targetOrderValue: this.targetOrderValue === undefined ? this.responseBodyOfASupplierObject.targetOrderValue : this.targetOrderValue,
+            freeFreightMinimum: this.freeFreightMinimum === undefined ? this.responseBodyOfASupplierObject.freeFreightMinimum : this.freeFreightMinimum,
+            averageHistoryLength: this.responseBodyOfASupplierObject.averageHistoryLength,
+            created_at: `${this.responseBodyOfASupplierObject.created_at}`,
+            updated_at: `${this.responseBodyOfASupplierObject.updated_at}`
+        }
+    } else if (companyType === 'ASC') {
+        this.payLoad = {
+            companyType: `${this.responseBodyOfASupplierObject.companyType}`,
+            companyKey: `${this.responseBodyOfASupplierObject.companyKey}`,
+            key: `${this.responseBodyOfASupplierObject.key}`,
+            name: this.newSupplierName === undefined ? this.responseBodyOfASupplierObject.name : this.newSupplierName,
+            description: `${this.description === undefined ? this.responseBodyOfASupplierObject.description : this.description}`,
+            isHidden: this.responseBodyOfASupplierObject.isHidden,
+            shipVia: this.responseBodyOfASupplierObject.shipVia,
+            email: `${this.responseBodyOfASupplierObject.email}`,
+            moq: this.responseBodyOfASupplierObject.moq,
+            leadTime: this.leadTime === undefined ? this.responseBodyOfASupplierObject.leadTime : this.leadTime,
+            orderInterval: this.orderInterval === undefined ? this.responseBodyOfASupplierObject.orderInterval : this.orderInterval,
+            serviceLevel: this.serviceLevel === undefined ? this.responseBodyOfASupplierObject.serviceLevel : this.serviceLevel,
+            forecastTags: this.responseBodyOfASupplierObject.forecastTags,
+            phone: this.responseBodyOfASupplierObject.phone,
+            fax: this.responseBodyOfASupplierObject.fax,
+            website: this.responseBodyOfASupplierObject.website,
+            addressShippingUuid: this.responseBodyOfASupplierObject.addressShippingUuid,
+            addressBillingUuid: this.responseBodyOfASupplierObject.addressBillingUuid,
+            targetOrderValue: this.targetOrderValue === undefined ? this.responseBodyOfASupplierObject.targetOrderValue : this.targetOrderValue,
+            freeFreightMinimum: this.freeFreightMinimum === undefined ? this.responseBodyOfASupplierObject.freeFreightMinimum : this.freeFreightMinimum,
+            restockModel: this.RestockModel === undefined ? this.responseBodyOfASupplierObject.restockModel : this.RestockModel,
+            averageHistoryLength: this.responseBodyOfASupplierObject.averageHistoryLength,
+            created_at: `${this.responseBodyOfASupplierObject.created_at}`,
+            updated_at: `${this.responseBodyOfASupplierObject.updated_at}`,
+            links: `${this.responseBodyOfASupplierObject.links === undefined ? "" : undefined}`
+        }
+    } else if (companyType === 'QBFS' || companyType === 'QBO') {
+        this.payLoad = {
+            companyType: `${this.responseBodyOfASupplierObject.companyType}`,
+            companyKey: `${this.responseBodyOfASupplierObject.companyKey}`,
+            key: `${this.responseBodyOfASupplierObject.key}`,
+            name: this.newSupplierName === undefined ? this.responseBodyOfASupplierObject.name : this.newSupplierName,
+            description: `${this.description === undefined ? this.responseBodyOfASupplierObject.description : this.description}`,
+            isHidden: this.responseBodyOfASupplierObject.isHidden,
+            shipVia: this.responseBodyOfASupplierObject.shipVia,
+            email: `${this.responseBodyOfASupplierObject.email}`,
+            moq: this.responseBodyOfASupplierObject.moq,
+            leadTime: this.leadTime === undefined ? this.responseBodyOfASupplierObject.leadTime : this.leadTime,
+            orderInterval: this.orderInterval === undefined ? this.responseBodyOfASupplierObject.orderInterval : this.orderInterval,
+            serviceLevel: this.serviceLevel === undefined ? this.responseBodyOfASupplierObject.serviceLevel : this.serviceLevel,
+            forecastTags: this.responseBodyOfASupplierObject.forecastTags,
+            phone: this.responseBodyOfASupplierObject.phone,
+            fax: this.responseBodyOfASupplierObject.fax,
+            website: this.responseBodyOfASupplierObject.website,
+            addressShippingUuid: this.responseBodyOfASupplierObject.addressShippingUuid,
+            addressBillingUuid: this.responseBodyOfASupplierObject.addressBillingUuid,
+            targetOrderValue: this.targetOrderValue === undefined ? this.responseBodyOfASupplierObject.targetOrderValue : this.targetOrderValue,
+            freeFreightMinimum: this.freeFreightMinimum === undefined ? this.responseBodyOfASupplierObject.freeFreightMinimum : this.freeFreightMinimum,
+            restockModel: this.RestockModel === undefined ? this.responseBodyOfASupplierObject.restockModel : this.RestockModel,
+            averageHistoryLength: this.responseBodyOfASupplierObject.averageHistoryLength,
+            created_at: `${this.responseBodyOfASupplierObject.created_at}`,
+            updated_at: `${this.responseBodyOfASupplierObject.updated_at}`,
+        }
+    }
+
+    logger.log('info', `Payload` + JSON.stringify(this.payLoad, undefined, 4));
+    this.attach(`Payload` + JSON.stringify(this.payLoad, undefined, 4))
+});
+
+Given('User sends a PUT request to edit the supplier', async function () {
+    // Send PUT request
+    this.response = await supplierRequest.editSupplier(this.request, link, this.payLoad, this.headers)
+    if (this.response.status() == 200) {
+        this.editSupplierResponseBody = JSON.parse(await this.response.text())
+        logger.log('info', `Edit Supplier Response edit ${link} has status code ${this.response.status()} ${this.response.statusText()} and editSupplierResponse body ${JSON.stringify(this.editSupplierResponseBody, undefined, 4)}`)
+        this.attach(`Edit Supplier Response edit ${link} has status code ${this.response.status()} ${this.response.statusText()} and editSupplierResponse body ${JSON.stringify(this.editSupplierResponseBody, undefined, 4)}`)
+    } else {
+        logger.log('info', `Edit Supplier Response edit ${link} has status code ${this.response.status()} ${this.response.statusText()}`)
+        this.attach(`Edit Supplier Response edit ${link} has status code ${this.response.status()} ${this.response.statusText()}`)
+    }
+});
+
+Then(`The new {} of supplier must be updated successfully`, async function (editColumn: string) {
+    switch (editColumn) {
+        case 'supplierName':
+            expect(this.newSupplierName).toEqual(this.editSupplierResponseBody.name)
+            break;
+        case 'leadTime':
+            expect(this.leadTime).toEqual(this.editSupplierResponseBody.leadTime)
+            break;
+        case 'serviceLevel':
+            expect(this.serviceLevel).toEqual(this.editSupplierResponseBody.serviceLevel)
+            break;
+        case 'orderInterval':
+            expect(this.orderInterval).toEqual(this.editSupplierResponseBody.orderInterval)
+            break;
+        case 'description':
+            expect(this.description).toEqual(this.editSupplierResponseBody.description)
+            break;
+        case 'targetOrderValue':
+            expect(this.targetOrderValue).toEqual(this.editSupplierResponseBody.targetOrderValue)
+            break;
+        case 'freeFreightMinimum':
+            expect(this.freeFreightMinimum).toEqual(this.editSupplierResponseBody.freeFreightMinimum)
+            break;
+        case 'fabReplenishmentModel':
+            expect(this.RestockModel).toEqual(this.editSupplierResponseBody.restockModel)
+            break;
+        default:
+            break;
+    }
+});
