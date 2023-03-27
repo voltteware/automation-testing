@@ -223,6 +223,26 @@ Given('User sets PUT api endpoint to edit {} of the above supplier for company t
             logger.log('info', `New ${editColumn}: ${this.RestockModel}`);
             this.attach(`New ${editColumn}: ${this.RestockModel}`);
             break;
+        case 'email':
+            if (value == 'random') {
+                const timeSendRequest = Date.now();
+                this.email = `auto_newemail${timeSendRequest}@gmail.com`;
+            }
+
+            logger.log('info', `New ${editColumn}: ${this.email}`);
+            this.attach(`New ${editColumn}: ${this.email}`);
+            break;
+        case 'moq':
+            if (value == 'random') {
+                this.moq = Number(faker.datatype.number({
+                    'min': 1,
+                    'max': 10
+                }));
+            }
+
+            logger.log('info', `New ${editColumn}: ${this.moq}`);
+            this.attach(`New ${editColumn}: ${this.moq}`);
+            break;
         default:
             break;
     }
@@ -237,8 +257,8 @@ Given('User sets PUT api endpoint to edit {} of the above supplier for company t
             description: `${this.description === undefined ? this.responseBodyOfASupplierObject.description : this.description}`,
             isHidden: this.responseBodyOfASupplierObject.isHidden,
             shipVia: this.responseBodyOfASupplierObject.shipVia,
-            email: `${this.responseBodyOfASupplierObject.email}`,
-            moq: this.responseBodyOfASupplierObject.moq,
+            email: `${this.email === undefined ? this.responseBodyOfASupplierObject.email : this.email}`,
+            moq: this.moq === undefined ? this.responseBodyOfASupplierObject.moq : this.moq,
             leadTime: this.leadTime === undefined ? this.responseBodyOfASupplierObject.leadTime : this.leadTime,
             orderInterval: this.orderInterval === undefined ? this.responseBodyOfASupplierObject.orderInterval : this.orderInterval,
             serviceLevel: this.serviceLevel === undefined ? this.responseBodyOfASupplierObject.serviceLevel : this.serviceLevel,
@@ -263,8 +283,8 @@ Given('User sets PUT api endpoint to edit {} of the above supplier for company t
             description: `${this.description === undefined ? this.responseBodyOfASupplierObject.description : this.description}`,
             isHidden: this.responseBodyOfASupplierObject.isHidden,
             shipVia: this.responseBodyOfASupplierObject.shipVia,
-            email: `${this.responseBodyOfASupplierObject.email}`,
-            moq: this.responseBodyOfASupplierObject.moq,
+            email: `${this.email === undefined ? this.responseBodyOfASupplierObject.email : this.email}`,
+            moq: this.moq === undefined ? this.responseBodyOfASupplierObject.moq : this.moq,
             leadTime: this.leadTime === undefined ? this.responseBodyOfASupplierObject.leadTime : this.leadTime,
             orderInterval: this.orderInterval === undefined ? this.responseBodyOfASupplierObject.orderInterval : this.orderInterval,
             serviceLevel: this.serviceLevel === undefined ? this.responseBodyOfASupplierObject.serviceLevel : this.serviceLevel,
@@ -291,8 +311,8 @@ Given('User sets PUT api endpoint to edit {} of the above supplier for company t
             description: `${this.description === undefined ? this.responseBodyOfASupplierObject.description : this.description}`,
             isHidden: this.responseBodyOfASupplierObject.isHidden,
             shipVia: this.responseBodyOfASupplierObject.shipVia,
-            email: `${this.responseBodyOfASupplierObject.email}`,
-            moq: this.responseBodyOfASupplierObject.moq,
+            email: `${this.email === undefined ? this.responseBodyOfASupplierObject.email : this.email}`,
+            moq: this.moq === undefined ? this.responseBodyOfASupplierObject.moq : this.moq,
             leadTime: this.leadTime === undefined ? this.responseBodyOfASupplierObject.leadTime : this.leadTime,
             orderInterval: this.orderInterval === undefined ? this.responseBodyOfASupplierObject.orderInterval : this.orderInterval,
             serviceLevel: this.serviceLevel === undefined ? this.responseBodyOfASupplierObject.serviceLevel : this.serviceLevel,
@@ -353,6 +373,12 @@ Then(`The new {} of supplier must be updated successfully`, async function (edit
             break;
         case 'fabReplenishmentModel':
             expect(this.RestockModel).toEqual(this.editSupplierResponseBody.restockModel)
+            break;
+        case 'email':
+            expect(this.email).toEqual(this.editSupplierResponseBody.email)
+            break;
+        case 'moq':
+            expect(this.moq).toEqual(this.editSupplierResponseBody.moq)
             break;
         default:
             break;
