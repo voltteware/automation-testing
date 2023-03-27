@@ -3,6 +3,7 @@ import { expect } from '@playwright/test';
 import * as companyRequest from '../../../../src/api/request/company.service';
 import logger from '../../../../src/Logger/logger';
 import { Links } from '../../../../src/utils/links';
+import { faker } from '@faker-js/faker';
 import _ from "lodash";
 
 let link: any;
@@ -10,8 +11,16 @@ Then(`{} sets PUT api endpoint to update company keys`, async function (actor: s
     link = Links.API_UPDATE_COMPANY;
 });
 //leadTime
-Then('{} sets request body with payload as leadTime: {int} and companyKey, companyType', async function (actor: string, leadTime: Number) {
-
+Then('{} sets request body with payload as leadTime: {} and companyKey, companyType', async function (actor: string, leadTime: any) {
+    if (leadTime == "random"){
+        leadTime = Number(faker.datatype.number({
+            'min': 1,
+            'max': 365
+        }));
+    }
+    else {
+        leadTime = Number(leadTime);
+    }
     this.payLoad = {
         leadTime: leadTime,
         companyKey: this.companyKey,

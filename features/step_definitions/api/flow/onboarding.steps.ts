@@ -3,29 +3,10 @@ import logger from "../../../../src/Logger/logger";
 import * as companyRequest from '../../../../src/api/request/company.service';
 import * as forecastRequest from '../../../../src/api/request/forecast.service';
 import { Links } from "../../../../src/utils/links";
-import { faker } from '@faker-js/faker';
 import * as _ from "lodash";
 
 let link: any;
 let linkPostForecast: any;
-
-Then('{} sets request body with payload as leadTime: {} and companyKey, companyType', async function (actor: string, leadTime: any) {
-    if (leadTime == "random"){
-        leadTime = Number(faker.datatype.number({
-            'min': 1,
-            'max': 365
-        }));
-    }
-    else {
-        leadTime = Number(leadTime);
-    }
-    this.payLoad = {
-        leadTime: leadTime,
-        companyKey: this.companyKey,
-        companyType: this.companyType,
-    }
-    this.attach(`Payload: ${JSON.stringify(this.payLoad, undefined, 4)}`)
-});
 
 Then('{} sends a PUT method to set a scheduled time meeting', async function (actor: string) {
     this.payLoad = {
