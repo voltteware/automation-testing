@@ -137,16 +137,22 @@ Then('Response of Login and Register API must match with API contract', async fu
 });
 
 Then('UserId {} in the response of API is correct', async function (email) {
-    if (email.includes('random')) {
-        var expectedUserId = email.includes('<random>') ? this.randomEmail : email;
-
-        expect(typeof (this.responseBody.userId)).toBe('string')
-        expect(typeof (this.responseBody.isAdmin)).toBe('boolean')
-        expect(typeof (this.responseBody.isRestrictAddCSV)).toBe('boolean')
-        expect(typeof (this.responseBody.displayName)).toBe('string')
-        expect(this.responseBody.userId, 'Check UserId is not null').not.toBeNull();
-        expect(this.responseBody.userId, 'Check UserId is correct').toBe(expectedUserId);
+    // if (email.includes('random')) {
+    var expectedUserId = email.includes('<random>') ? this.randomEmail : email;
+    // Somecase user object response is under object called model
+    var userInfo = this.responseBodyOfAUserObject;
+    if (userInfo == null) {
+        // This is case when user object is not under object model like register API or login API
+        userInfo = this.responseBody;
     }
+
+    expect(typeof (userInfo.userId)).toBe('string')
+    expect(typeof (userInfo.isAdmin)).toBe('boolean')
+    expect(typeof (userInfo.isRestrictAddCSV)).toBe('boolean')
+    expect(typeof (userInfo.displayName)).toBe('string')
+    expect(userInfo.userId, 'Check UserId is not null').not.toBeNull();
+    expect(userInfo.userId, 'Check UserId is correct').toBe(expectedUserId);
+    // }
 });
 
 Then('Check that API Login returns cookie value', async function () {
@@ -160,7 +166,7 @@ Then('Check total items in the response should be less than or equal {}', async 
     expect(actualLength, `Check total items in the response should be less than or equal ${limitRow}`).toBeLessThanOrEqual(expectLength);
 });
 
-Then('Check items in the response should be sort by field {} with direction {}', async function (sortField: string, direction: 'asc' | 'desc') {
+Then(`Check items in the response should be sort by field {} with direction {}`, async function (sortField: string, direction: 'asc' | 'desc') {
     // Another way to sort
     // if (direction == 'asc') {
     //     const expectedList = this.responseBody;

@@ -2,9 +2,11 @@ export class Links {
     //API Authenticate
     static API_LOGIN: string = '/login';
     static API_REGISTER: string ='/api/register'
+    //API User
     static API_USERS: string = '/api/users/';
+    static API_USER: string = '/api/user';
     static API_USERS_EDIT: string = '/api/users/edit';
-    static API_USERS_CHANGE_PASSWORD: string = '/api/users/change-password';
+    static API_USERS_CHANGE_PASSWORD: string = '/api/user/password';
     static API_USERS_RESET_PASSWORD: string = '/api/password-reset/';
     //API Dashboard
     static API_REALM: string = '/api/realm';

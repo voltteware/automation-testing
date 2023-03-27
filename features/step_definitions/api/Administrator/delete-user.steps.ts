@@ -17,7 +17,7 @@ Then(`{} sets DELETE api endpoint to delete user keys`, async function (actor: s
     link = Links.API_ADMIN_DELETE_USER;
 });
 
-Then('Check {} exist in the system, if it does not exist will create user with below email', async function (email: string) {
+Then('Check {} exist in the system, if it does not exist will create user with same email', async function (email: string) {
     allUser = arrayHelper.flattenArray(this.get20LatestUsersResponseBody || [], 'data');
     const foundUser = allUser.find((element: { userId: any; }) => element.userId === email);
     if (typeof foundUser == 'undefined') {
@@ -38,42 +38,77 @@ Then('Check {} exist in the system, if it does not exist will create user with b
             this.attach(`Response Register User ${Links.API_REGISTER}` + JSON.stringify(this.registerResponseBody, undefined, 4))
         }
         else {
-            logger.log('info', `Response Register User ${Links.API_REGISTER} has status code ${registerStatusCode} ${this.registerResponse.statusText()} and response body` + this.registerResponse.text());
-            this.attach(`Response Register User ${Links.API_REGISTER} has status code ${registerStatusCode} ${this.registerResponse.statusText()} and response body` + this.registerResponse.text());
+            logger.log('info', `Response Register User ${Links.API_REGISTER} has status code ${registerStatusCode} ${this.registerResponse.statusText()} and response body` + await this.registerResponse.text());
+            this.attach(`Response Register User ${Links.API_REGISTER} has status code ${registerStatusCode} ${this.registerResponse.statusText()} and response body` + await this.registerResponse.text());
         }
 
-        // Login Admin after check
-        this.payloadLogin = {
-            username: 'may27pre@gmail.com',
-            password: 'Test1111!',
-        }
-        this.loginResponse = await authenticateRequest.sendPOSTAuthenticatieRequest(Links.API_LOGIN, this.payloadLogin);
-        if (this.loginResponse.status() == 201) {
-            const responseHeaders = this.loginResponse.headers();
-            this.cookieLogin = responseHeaders['set-cookie'];
-            this.loginResponseBody = JSON.parse(await this.loginResponse.text())
-            logger.log('info', 'Login with admin account to check new user is showed in the response of get all users');
-            this.attach('Login with admin account to check new user is showed in the response of get all users');
-        }
-        //Get list users after register 
-        const options = {
-            headers: {
-                'Cookie': this.cookieLogin
-            }
-        }
+        // // Login Admin after check
+        // this.payloadLogin = {
+        //     username: 'may27pre@gmail.com',
+        //     password: 'Test1111!',
+        // }
+        // this.loginResponse = await authenticateRequest.sendPOSTAuthenticatieRequest(Links.API_LOGIN, this.payloadLogin);
+        // if (this.loginResponse.status() == 201) {
+        //     const responseHeaders = this.loginResponse.headers();
+        //     this.cookieLogin = responseHeaders['set-cookie'];
+        //     this.loginResponseBody = JSON.parse(await this.loginResponse.text())
+        //     logger.log('info', 'Login with admin account to check new user is showed in the response of get all users');
+        //     this.attach('Login with admin account to check new user is showed in the response of get all users');
+        // }
+        // //Get list users after register 
+        // const options = {
+        //     headers: {
+        //         'Cookie': this.cookieLogin
+        //     }
+        // }
 
-        const endPointToGet20LatestUser = `${Links.API_ADMIN_GET_USER}offset=0&limit=20&sort=%5B%7B%22field%22:%22createdAt%22,%22direction%22:%22desc%22%7D%5D&where=%7B%22logic%22:%22and%22,%22filters%22:%5B%5D%7D`
-        this.get20LatestUsersResponse = await adminRequest.getUser(this.request, endPointToGet20LatestUser, options);
-        if (this.get20LatestUsersResponse.status() == 200) {
-            this.get20LatestUsersResponseBody = JSON.parse(await this.get20LatestUsersResponse.text());
-            expect(await this.get20LatestUsersResponseBody.length).toBeLessThanOrEqual(20);
-            expect(this.get20LatestUsersResponseBody.map((user: any) => user.userId)).toContain(email);
-        }
-        else {
-            logger.log('info', `Response Get 20 Users has status code ${this.get20LatestUsersResponse.status()} ${this.get20LatestUsersResponse.statusText()} and response body` + this.get20LatestUsersResponse.text());
-            this.attach(`Response Get 20 Users has status code ${this.get20LatestUsersResponse.status()} ${this.get20LatestUsersResponse.statusText()} and response body` + this.get20LatestUsersResponse.text());
+        // const endPointToGet20LatestUser = `${Links.API_ADMIN_GET_USER}offset=0&limit=20&sort=%5B%7B%22field%22:%22createdAt%22,%22direction%22:%22desc%22%7D%5D&where=%7B%22logic%22:%22and%22,%22filters%22:%5B%5D%7D`
+        // this.get20LatestUsersResponse = await adminRequest.getUser(this.request, endPointToGet20LatestUser, options);
+        // if (this.get20LatestUsersResponse.status() == 200) {
+        //     this.get20LatestUsersResponseBody = JSON.parse(await this.get20LatestUsersResponse.text());
+        //     expect(await this.get20LatestUsersResponseBody.length).toBeLessThanOrEqual(20);
+        //     expect(this.get20LatestUsersResponseBody.map((user: any) => user.userId)).toContain(email);
+        // }
+        // else {
+        //     logger.log('info', `Response Get 20 Users has status code ${this.get20LatestUsersResponse.status()} ${this.get20LatestUsersResponse.statusText()} and response body` + this.get20LatestUsersResponse.text());
+        //     this.attach(`Response Get 20 Users has status code ${this.get20LatestUsersResponse.status()} ${this.get20LatestUsersResponse.statusText()} and response body` + this.get20LatestUsersResponse.text());
+        // }
+    }
+})
+
+Then('Login with admin account to check new user {} is showed in the response of get all users', async function (email: string) {
+    // Login Admin after check
+    this.payloadLogin = {
+        username: 'may27pre@gmail.com',
+        password: 'Test1111!',
+    }
+    this.loginResponse = await authenticateRequest.sendPOSTAuthenticatieRequest(Links.API_LOGIN, this.payloadLogin);
+    if (this.loginResponse.status() == 201) {
+        const responseHeaders = this.loginResponse.headers();
+        this.cookieLogin = responseHeaders['set-cookie'];
+        this.loginResponseBody = JSON.parse(await this.loginResponse.text())
+        logger.log('info', 'Login with admin account to check new user is showed in the response of get all users');
+        this.attach('Login with admin account to check new user is showed in the response of get all users');
+    }
+    //Get list users after register 
+    const options = {
+        headers: {
+            'Cookie': this.cookieLogin
         }
     }
+
+    const endPointToGet20LatestUser = `${Links.API_ADMIN_GET_USER}offset=0&limit=20&sort=%5B%7B%22field%22:%22createdAt%22,%22direction%22:%22desc%22%7D%5D&where=%7B%22logic%22:%22and%22,%22filters%22:%5B%5D%7D`
+    this.get20LatestUsersResponse = await adminRequest.getUser(this.request, endPointToGet20LatestUser, options);
+    if (this.get20LatestUsersResponse.status() == 200) {
+        this.get20LatestUsersResponseBody = JSON.parse(await this.get20LatestUsersResponse.text());
+        expect(await this.get20LatestUsersResponseBody.length).toBeLessThanOrEqual(20);
+        expect(this.get20LatestUsersResponseBody.map((user: any) => user.userId)).toContain(email);
+    }
+    else {
+        logger.log('info', `Response Get 20 Users has status code ${this.get20LatestUsersResponse.status()} ${this.get20LatestUsersResponse.statusText()} and response body` + this.get20LatestUsersResponse.text());
+        this.attach(`Response Get 20 Users has status code ${this.get20LatestUsersResponse.status()} ${this.get20LatestUsersResponse.statusText()} and response body` + this.get20LatestUsersResponse.text());
+    }
+
 })
 
 Then('{} filters user to get user which has the email as {}', async function (actor, expectedEmail: string) {

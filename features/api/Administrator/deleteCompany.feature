@@ -8,8 +8,8 @@ Feature: API_Admin DELETE/company
         And In Header of the request, user sets param Cookie as valid connect.sid
         When User sends a GET request to get 20 latest companies
 
-    @TC_DCP001
-    Scenario Outline: TC_DCP001 - Verify <user> could call this API to delete a company
+    @TC_DCP001 @regression-api
+    Scenario Outline: TC_DCP001 - Verify <user> could call this API to hard delete a company
         Given Check <companyNameKeyWord> company exist in the system, if it does not exist will create company
         And User filters company to get company which has the company name included <companyNameKeyWord>
         And User sets DELETE api endpoint to delete company

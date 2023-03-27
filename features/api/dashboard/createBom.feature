@@ -8,7 +8,7 @@ Feature: API_Dashboard POST /api/bom
         And In Header of the request, she sets param Cookie as valid connect.sid
         When User sends a GET request to get company keys
 
-    @TC_CB001
+    @TC_CB001 @regression-api @csv @asc
     Scenario Outline: <TC_ID> - Verify user <email> could call this API to create bom for company has type <companyType> with input all data valid
         Given User picks company with type <companyType> in above response
         But User sets valid cookie of <email> and valid companyKey and valid companyType in the header

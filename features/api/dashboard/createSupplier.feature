@@ -8,10 +8,10 @@ Feature: API_Dashboard POST /api/vendor
         And In Header of the request, she sets param Cookie as valid connect.sid
         When User sends a GET request to get company keys
 
-    @TC_CV001
+    @TC_CV001 @regression-api @csv
     Scenario Outline: TC_CV001 - Verify user <email> could call this API to create supplier with <scenario>
-        Given User picks random company in above response
-        And User sets GET api endpoint to get information of a company belongs to <email> using company key <companyKey>
+        Given User picks company with type CSV in above response
+        # And User sets GET api endpoint to get information of a company belongs to <email> using company key <companyKey>
         And User sets POST api endpoint to create suppliers
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets request body with payload as name: "<supplierName>" and description: "<description>" and email: "<emailSupplier>" and moq: "<moq>" and leadTime: "<leadTime>" and orderInterval: "<orderInterval>" and serviceLevel: "<serviceLevel>" and targetOrderValue: "" and freeFreightMinimum: "" and restockModel: ""
@@ -20,8 +20,8 @@ Feature: API_Dashboard POST /api/vendor
         And User checks API contract essential types in supplier object are correct
         And User checks values in response of create supplier are correct
         Examples:
-            | scenario            | email                      | supplierName      | description     | emailSupplier      | moq    | leadTime | orderInterval | serviceLevel | companyKey | expectedStatus |
-            | Supplier name valid | testautoforecast@gmail.com | New Supplier Auto | New description | newemail@gmail.com | random | random   | random        | random       | random     | 200            |
+            | scenario            | email                      | supplierName      | description     | emailSupplier      | moq    | leadTime | orderInterval | serviceLevel | companyKey              | expectedStatus |
+            | Supplier name valid | testautoforecast@gmail.com | New Supplier Auto | New description | newemail@gmail.com | random | random   | random        | random       | of any company type CSV | 200            |
 
     @TC_CV002
     Scenario Outline: TC_CV002 - Verify user <email> could call this API to create supplier with <scenario>
@@ -85,7 +85,7 @@ Feature: API_Dashboard POST /api/vendor
             | scenario            | email                      | supplierName      | description     | emailSupplier      | moq    | leadTime | orderInterval | serviceLevel | companyKey | expectedStatus | expectedStatusText     |
             | Supplier name valid | testautoforecast@gmail.com | New Supplier Auto | New description | newemail@gmail.com | random | random   | random        | random       | random     | 400            | Vendor already exists. |
 
-    @TC_CV006
+    @TC_CV006 @regression-api @asc
     Scenario Outline: <TC_ID> - Verify user <email> could call this API to create supplier with <scenario>
         Given User picks company with type ASC in above response
         And User sets POST api endpoint to create suppliers
@@ -101,7 +101,7 @@ Feature: API_Dashboard POST /api/vendor
             | TC_CV006_2 | ASC company restockModel = Warehouse Ships to FBA                 | testautoforecast@gmail.com | New Supplier Auto | New description | newemail@gmail.com | random | random   | random        | random       | random           | random             | LOCAL        | random     | 200            |
             | TC_CV006_3 | ASC company restockModel = Supplier Ships to FBA                  | testautoforecast@gmail.com | New Supplier Auto | New description | newemail@gmail.com | random | random   | random        | random       | random           | random             | DIRECT_SHIP  | random     | 200            |
 
-    @TC_CV007
+    @TC_CV007 @regression-api @asc
     Scenario Outline: <TC_ID> - Verify user <email> could call this API to add address information of supplier for ASC company
         Given User picks company with type ASC in above response
         And User sets POST api endpoint to create suppliers
@@ -117,7 +117,7 @@ Feature: API_Dashboard POST /api/vendor
             | TC_ID      | scenario                                                          | email                      | supplierName      | description     | emailSupplier      | moq    | leadTime | orderInterval | serviceLevel | targetOrderValue | freeFreightMinimum | restockModel | addressLine1 | city   | stateOrProvinceCode | postalCode | countryCode | phoneNumber | companyKey | expectedStatus |
             | TC_CV007_1 | ASC company restockModel = Use Store Rule (Supplier Ships to FBA) | testautoforecast@gmail.com | New Supplier Auto | New description | newemail@gmail.com | random | random   | random        | random       | random           | random             | GLOBAL       | random       | random | random              | random     | VN          | random      | random     | 200            |
 
-    
+
 
 
 
