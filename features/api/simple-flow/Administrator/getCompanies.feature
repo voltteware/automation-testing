@@ -13,7 +13,7 @@ Feature: API_Admin GET/Companies
         And User checks values in response of company are correct
         Examples:
             | user  | email              | password  | expectedStatus |
-            | admin | may27pre@gmail.com | Test1111! | 200            |
+            | admin | may27pre@gmail.com | Test1111# | 200            |
 
     #BUG API
     @COMPANIES002 @bug-permission
@@ -26,7 +26,7 @@ Feature: API_Admin GET/Companies
         And The status text is "<expectedStatusText>"
         Examples:
             | user | email               | password  | expectedStatus | expectedStatusText |
-            | user | may27user@gmail.com | Test1111! | 401            | Unauthorized       |
+            | user | may27user@gmail.com | Test1111# | 401            | Unauthorized       |
 
     #BUG API
     @COMPANIES003 @bug-permission

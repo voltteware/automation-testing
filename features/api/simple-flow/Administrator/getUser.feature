@@ -14,7 +14,7 @@ Feature: API_Admin GET/Users
 
         Examples:
             | user  | email              | password  | expectedStatus |
-            | admin | may27pre@gmail.com | Test1111! | 200            |
+            | admin | may27pre@gmail.com | Test1111# | 200            |
     # BUG_API
     @TC_AU002 @bug-permission
     Scenario Outline: TC_AU002 - Verify <email> can't call this API to get all user
@@ -26,7 +26,7 @@ Feature: API_Admin GET/Users
         And The status text is "<expectedStatusText>"
         Examples:
             | user | email               | password  | expectedStatus | expectedStatusText |
-            | user | may27user@gmail.com | Test1111! | 401            | Unauthorized       |
+            | user | may27user@gmail.com | Test1111# | 401            | Unauthorized       |
 
     @TC_AU003 @bug-permission
     Scenario Outline: TC_AU003 - Verify error when user sends this API with <cookie> cookie

@@ -3,7 +3,7 @@ Feature: API_Dashboard DELETE /api/bom
     Background: Send GET /realm request to get all company keys of current logged in user before each test
     Given user sends a POST login request to get valid cookie with role
             | role  | username                   | password  |
-            | admin | testautoforecast@gmail.com | Test1111! |
+            | admin | testautoforecast@gmail.com | Test1111# |
     And User sets GET api endpoint to get company keys
     And In Header of the request, she sets param Cookie as valid connect.sid
     When User sends a GET request to get company keys
@@ -72,7 +72,7 @@ Feature: API_Dashboard DELETE /api/bom
 
         Examples:
             | numberOfBoms | bomParentNameKeyword | userA               | userB                      | password  | expectedStatus | expectedStatusText |
-            | 1            | Auto                 | may27user@gmail.com | testautoforecast@gmail.com | Test1111! | 400            | Company not found. |
+            | 1            | Auto                 | may27user@gmail.com | testautoforecast@gmail.com | Test1111# | 400            | Company not found. |
 
     @TC_DB005 @TC_DB006
         Scenario Outline: <TC_ID> - Verify <user> could call this API to delete bom and his child of a company has type <companyType> belongs to her

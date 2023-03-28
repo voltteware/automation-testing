@@ -3,7 +3,7 @@ Feature: API_Dashboard GET /api/company/company key
     Background: Send GET /realm request to get all company keys of current logged in user before each test
         Given user sends a POST login request to get valid cookie with role
             | role  | username           | password  |
-            | admin | may27pre@gmail.com | Test1111! |
+            | admin | may27pre@gmail.com | Test1111# |
         And She sets GET api endpoint to get company keys
         And In Header of the request, she sets param Cookie as valid connect.sid
         When She sends a GET request to get company keys
@@ -21,7 +21,7 @@ Feature: API_Dashboard GET /api/company/company key
         And She checks values in response of company are correct
         Examples:
             | user  | email              | password  | companyKey | expectedStatus |
-            | admin | may27pre@gmail.com | Test1111! | random     | 200            |
+            | admin | may27pre@gmail.com | Test1111# | random     | 200            |
 
     # (Bug API) TC_C002_3 & TC_C002_4 Still return 200 even company Key and Type is invalid. Always 200 if cookie is valid => Incorrect
     @TC_C002 @bug-permission
@@ -48,7 +48,7 @@ Feature: API_Dashboard GET /api/company/company key
         And The status text is "<expectedStatusText>"
         Examples:
             | userA               | userB              | password  | companyKey | expectedStatus | expectedStatusText |
-            | may27user@gmail.com | may27pre@gmail.com | Test1111! | random     | 400            | Company not found. |
+            | may27user@gmail.com | may27pre@gmail.com | Test1111# | random     | 400            | Company not found. |
 
 
 

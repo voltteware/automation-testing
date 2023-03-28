@@ -28,7 +28,7 @@ Then('Check {} exist in the system, if it does not exist will create user with s
             companyType: 'ASC',
             phone: '0355025511',
             email: email,
-            password: 'Test1111!',
+            password: 'Test1111#',
         }
         this.registerResponse = await registerRequest.sendPOSTRegisterRequest(Links.API_REGISTER, this.payload);
         const registerStatusCode = this.registerResponse.status();
@@ -45,7 +45,7 @@ Then('Check {} exist in the system, if it does not exist will create user with s
         // // Login Admin after check
         // this.payloadLogin = {
         //     username: 'may27pre@gmail.com',
-        //     password: 'Test1111!',
+        //     password: 'Test1111#',
         // }
         // this.loginResponse = await authenticateRequest.sendPOSTAuthenticatieRequest(Links.API_LOGIN, this.payloadLogin);
         // if (this.loginResponse.status() == 201) {
@@ -80,7 +80,7 @@ Then('Login with admin account to check new user {} is showed in the response of
     // Login Admin after check
     this.payloadLogin = {
         username: 'may27pre@gmail.com',
-        password: 'Test1111!',
+        password: 'Test1111#',
     }
     this.loginResponse = await authenticateRequest.sendPOSTAuthenticatieRequest(Links.API_LOGIN, this.payloadLogin);
     if (this.loginResponse.status() == 201) {

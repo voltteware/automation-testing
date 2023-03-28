@@ -3,7 +3,7 @@ Feature: API_Admin DELETE/company
     Background: Send GET request to get companies keys of current logged in user before each test
         Given user sends a POST login request to get valid cookie with role
             | role  | username                   | password  |
-            | admin | testautoforecast@gmail.com | Test1111! |
+            | admin | testautoforecast@gmail.com | Test1111# |
         And User sets GET api endpoint to get 20 companies has just created
         And In Header of the request, user sets param Cookie as valid connect.sid
         When User sends a GET request to get 20 latest companies
@@ -51,4 +51,4 @@ Feature: API_Admin DELETE/company
 
         Examples:
             | companyNameKeyWord | user | userA               | password  | expectedStatus | expectedStatusText |
-            | AutoTest           | user | may27user@gmail.com | Test1111! | 401            | Unauthorized       |
+            | AutoTest           | user | may27user@gmail.com | Test1111# | 401            | Unauthorized       |

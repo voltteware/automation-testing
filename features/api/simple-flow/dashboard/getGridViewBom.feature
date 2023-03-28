@@ -3,7 +3,7 @@ Feature: API_Dashboard GET /api/grid-view/bom
     Background: Send GET /realm request to get all company keys of current logged in user before each test
         Given user sends a POST login request to get valid cookie with role
             | role  | username                   | password  |
-            | admin | testautoforecast@gmail.com | Test1111! |
+            | admin | testautoforecast@gmail.com | Test1111# |
         And User sets GET api endpoint to get company keys
         And In Header of the request, she sets param Cookie as valid connect.sid
         When User sends a GET request to get company keys
@@ -21,7 +21,7 @@ Feature: API_Dashboard GET /api/grid-view/bom
         And User checks values in response of get grid view bom are correct
         Examples:
             | user  | email                      | password  | expectedStatus |
-            | admin | testautoforecast@gmail.com | Test1111! | 200            |
+            | admin | testautoforecast@gmail.com | Test1111# | 200            |
 
     @TC_GVB002
     Scenario Outline: TC_GVB002 - Verify user <email> could call this API to get grid view bom by using company key and ASC company type
@@ -36,7 +36,7 @@ Feature: API_Dashboard GET /api/grid-view/bom
         And User checks values in response of get grid view bom are correct
         Examples:
             | user  | email                      | password  | expectedStatus |
-            | admin | testautoforecast@gmail.com | Test1111! | 200            |
+            | admin | testautoforecast@gmail.com | Test1111# | 200            |
 
     # Bug TC_GVB003_1 and TC_GVB003_2, return status code 200 when cookie invalid.
     @TC_GVB003 @bug-permission
@@ -66,7 +66,7 @@ Feature: API_Dashboard GET /api/grid-view/bom
         And The status text is "<expectedStatusText>"
         Examples:
             | userA               | userB                      | password  | companyKey | expectedStatus | expectedStatusText |
-            | may27user@gmail.com | testautoforecast@gmail.com | Test1111! | random     | 400            | Company not found. |
+            | may27user@gmail.com | testautoforecast@gmail.com | Test1111# | random     | 400            | Company not found. |
 
     #Bug @TC_GVB005, return status code 200 when call this API for company QBFS.
     @TC_GVB005
@@ -77,4 +77,4 @@ Feature: API_Dashboard GET /api/grid-view/bom
         And The status text is "<expectedStatusText>"
         Examples:
             | user  | email                      | password  | expectedStatus | expectedStatusText |
-            | admin | testautoforecast@gmail.com | Test1111! | 400            | Bad request        |
+            | admin | testautoforecast@gmail.com | Test1111# | 400            | Bad request        |

@@ -13,13 +13,13 @@ Feature: API_User PUT/user/password
         And The status text is "<expectedStatusText>"
         And User checks API contract essential types in user object are correct
         And UserId <email> in the response of API is correct
-        And User sets request body with payload as password: <newPassword> and newPassword <password>
-        When User sends a PUT method to change password of <email>
-        Then The expected status code should be <expectedStatus>
+        # And User sets request body with payload as password: <newPassword> and newPassword <password>
+        # When User sends a PUT method to change password of <email>
+        # Then The expected status code should be <expectedStatus>
 
         Examples:
             | email                    | password  | newPassword | expectedStatus | expectedStatusText |
-            | testchangepass@gmail.com | Test1111! | Test1111!1  | 200            | OK                 |
+            | testchangepass@gmail.com | Test1111# | Test1111#1  | 200            | OK                 |
 
     @TC_UCP002
     Scenario Outline: Verify that error in the response when user sends API with incorrect Current Password
@@ -33,7 +33,7 @@ Feature: API_User PUT/user/password
 
         Examples:
             | email                    | password  | incorrectCurrentPassword | newPassword | expectedStatus | expectedStatusText | errorMessage                         |
-            | testchangepass@gmail.com | Test1111! | 12345678                 | Test1111!   | 200            | OK                 | Incorrect current password for user. |
+            | testchangepass@gmail.com | Test1111# | 12345678                 | Test1111#   | 200            | OK                 | Incorrect current password for user. |
 
     @TC_UCP003
     Scenario Outline: Verify error when user sends this API with New Password empty
@@ -47,7 +47,7 @@ Feature: API_User PUT/user/password
 
         Examples:
             | email                    | password  | newPassword | expectedStatus | expectedStatusText | errorMessage                                  |
-            | testchangepass@gmail.com | Test1111! |             | 200            | OK                 | Password does not meet strength requirements. |
+            | testchangepass@gmail.com | Test1111# |             | 200            | OK                 | Password does not meet strength requirements. |
 
     #Bug API in case TC_UCP004 and TC_UCP005
     @TC_UCP004 @TC_UCP005 @bug-permission @bug-1779

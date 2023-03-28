@@ -12,7 +12,7 @@ Feature: API_User GET/realm
         And She checks <email> and other values in response of random company are correct
         Examples:
             | user  | email              | password  | expectedStatus |
-            | admin | may27pre@gmail.com | Test1111! | 200            |
+            | admin | may27pre@gmail.com | Test1111# | 200            |
 
     @REALM002
     Scenario Outline: TC_REALM002 - Verify error when user sends this API with <cookie> cookie
