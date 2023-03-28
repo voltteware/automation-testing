@@ -11,13 +11,13 @@ Feature: API /register
 		And UserId <email> in the response of API is correct
 		Given user sends a POST login request to get valid cookie with role
 			| role  | username           | password  |
-			| admin | may27pre@gmail.com | Test1111! |
+			| admin | may27pre@gmail.com | Test1111# |
 		And In Header of the request, she sets param Cookie as valid connect.sid
 		When User sends a DELETE method to delete user <email>
 		Then The expected status code should be 200
 		Examples:
 			| id      | scenario                                                              | email                            | password  | firstName | lastName | companyName         | companyType | phone      | expectedStatus |
-			| TC_R001 | valid email/password/firstName/lastName/companyName/companyType/phone | testautocreate<random>@gmail.com | Test1111! | Test      | Auto     | ITC-Company-Testing | ASC         | 0355025511 | 201            |
+			| TC_R001 | valid email/password/firstName/lastName/companyName/companyType/phone | testautocreate<random>@gmail.com | Test1111# | Test      | Auto     | ITC-Company-Testing | ASC         | 0355025511 | 201            |
 
 	@api-register-with-invalid-payload
 	Scenario Outline: <id> - Verify POST /api/register with <scenario>
@@ -29,6 +29,6 @@ Feature: API /register
 
 		Examples:
 			| id      | scenario                                                                           | email                   | password  | firstName | lastName | companyName         | companyType | phone      | expectedStatus | expectedStatusText                            |
-			| TC_R002 | exist email and valid /password/firstName/lastName/companyName/companyType/phone   | testautoexist@gmail.com | Test1111! | Test      | Auto     | ITC-Company-Testing | ASC         | 0355025511 | 400            | Username already exists                       |
+			| TC_R002 | exist email and valid /password/firstName/lastName/companyName/companyType/phone   | testautoexist@gmail.com | Test1111# | Test      | Auto     | ITC-Company-Testing | ASC         | 0355025511 | 400            | Username already exists                       |
 			| TC_R003 | invalid passowrd and valid /email/firstName/lastName/companyName/companyType/phone | testauto1@gmail.com     | Test1111  | Test      | Auto     | ITC-Company-Testing | ASC         | 0355025511 | 400            | Password does not meet strength requirements. |
 			| TC_R004 | empty passowrd and valid /email/firstName/lastName/companyName/companyType/phone   | testauto1@gmail.com     |           | Test      | Auto     | ITC-Company-Testing | ASC         | 0355025511 | 400            | Password does not meet strength requirements. |

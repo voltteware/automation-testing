@@ -3,7 +3,7 @@ Feature: API_Dashboard POST /api/company
     Background: Send POST /login request to login before each test
         Given user sends a POST login request to get valid cookie with role
             | role  | username                     | password  |
-            | admin | testuserforecastrx@gmail.com | Test1111! |
+            | admin | testuserforecastrx@gmail.com | Test1111# |
         And User sets POST api endpoint to create company
         
     @TC_CCP001 @regression-api @asc

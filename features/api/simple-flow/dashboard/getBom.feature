@@ -3,7 +3,7 @@ Feature: API_Dashboard GET /api/bom
     Background: Send GET /realm request to get all company keys of current logged in user before each test
         Given user sends a POST login request to get valid cookie with role
             | role  | username                   | password  |
-            | admin | testautoforecast@gmail.com | Test1111! |
+            | admin | testautoforecast@gmail.com | Test1111# |
         And User sets GET api endpoint to get company keys
         When In Header of the request, she sets param Cookie as valid connect.sid
         Then User sends a GET request to get company keys
@@ -24,7 +24,7 @@ Feature: API_Dashboard GET /api/bom
         And User checks values in response of random bom are correct
         Examples:
             | user  | email                      | password  | expectedStatus | limitRow | 
-            | admin | testautoforecast@gmail.com | Test1111! | 200            | 10       |
+            | admin | testautoforecast@gmail.com | Test1111# | 200            | 10       |
     
     # #Bug TC_GB002_1 and TC_GB002_2, return status code 200 when cookie invalid.
     @TC_GB002 @bug-permission
@@ -54,7 +54,7 @@ Feature: API_Dashboard GET /api/bom
         And The status text is "<expectedStatusText>"
         Examples:
             | userA               | userB              | password  | companyKey | expectedStatus | expectedStatusText |
-            | may27user@gmail.com | may27pre@gmail.com | Test1111! | random     | 400            | Company not found. |
+            | may27user@gmail.com | may27pre@gmail.com | Test1111# | random     | 400            | Company not found. |
 
     @TC_GB004
     Scenario Outline: <TC_ID> - Verify user could set limit 10 in this API to get list bom sorted by Kit Qty with direction <direction>
@@ -67,10 +67,10 @@ Feature: API_Dashboard GET /api/bom
         And Check items in the response should be sort by field <sortField> with direction <direction>
         Examples:
             | TC_ID      | user  | email                      | password  | limitRow | sortField | direction |  expectedStatus |
-            | TC_GB004_1 | admin | testautoforecast@gmail.com | Test1111! | 10       | qty       | asc       |  200            |
-            | TC_GB004_2 | admin | testautoforecast@gmail.com | Test1111! | 10       | qty       | desc      |  200            |
-            | TC_GB004_3 | admin | testautoforecast@gmail.com | Test1111! | 10       | childName | asc       |  200            |
-            | TC_GB004_4 | admin | testautoforecast@gmail.com | Test1111! | 10       | childName | desc      |  200            |
+            | TC_GB004_1 | admin | testautoforecast@gmail.com | Test1111# | 10       | qty       | asc       |  200            |
+            | TC_GB004_2 | admin | testautoforecast@gmail.com | Test1111# | 10       | qty       | desc      |  200            |
+            | TC_GB004_3 | admin | testautoforecast@gmail.com | Test1111# | 10       | childName | asc       |  200            |
+            | TC_GB004_4 | admin | testautoforecast@gmail.com | Test1111# | 10       | childName | desc      |  200            |
     
     #Bug TC_GB005, return status code 200 when call this API for company QBFS.
     @TC_GB005
@@ -82,4 +82,4 @@ Feature: API_Dashboard GET /api/bom
         And The status text is "<expectedStatusText>"
         Examples:
             | user  | email                      | password  | expectedStatus | expectedStatusText |
-            | admin | testautoforecast@gmail.com | Test1111! | 400            | Bad request        |
+            | admin | testautoforecast@gmail.com | Test1111# | 400            | Bad request        |

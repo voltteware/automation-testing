@@ -13,7 +13,7 @@ Feature: API /login
 
 		Examples:
 			| id      | scenario             | email              | password  | expectedStatus |
-			| TC_L001 | valid email/password | may27pre@gmail.com | Test1111! | 201            |
+			| TC_L001 | valid email/password | may27pre@gmail.com | Test1111# | 201            |
 
 	@api-login-with-invalid-payload
 	Scenario Outline: <id> - Verify POST /login with <scenario>
@@ -26,10 +26,10 @@ Feature: API /login
 		Examples:
 			| id      | scenario                              | email              | password  | expectedStatus | expectedStatusText           |
 			| TC_L002 | correct email/incorrect password      | may27pre@gmail.com | wedDW23!@ | 400            | Invalid username or password |
-			| TC_L003 | incorrect email/correct password      | maypre@gmail.com   | Test1111! | 400            | Invalid username or password |
+			| TC_L003 | incorrect email/correct password      | maypre@gmail.com   | Test1111# | 400            | Invalid username or password |
 			| TC_L004 | empty email and empty password        |                    |           | 400            | Invalid username or password |
-			| TC_L005 | empty email/correct password          |                    | Test1111! | 400            | Invalid username or password |
-			| TC_L006 | invalid format email/correct password | email.example.com  | Test1111! | 400            | Invalid username or password |
+			| TC_L005 | empty email/correct password          |                    | Test1111# | 400            | Invalid username or password |
+			| TC_L006 | invalid format email/correct password | email.example.com  | Test1111# | 400            | Invalid username or password |
 
 
 

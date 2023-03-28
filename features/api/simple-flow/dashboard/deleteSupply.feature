@@ -4,7 +4,7 @@ Feature: API_SUPPLY DELETE /api/supply
     Background: Send GET request to get supply of random company
     Given user sends a POST login request to get valid cookie with role
             | role  | username                   | password  |
-            | admin | testautoforecast@gmail.com | Test1111! |
+            | admin | testautoforecast@gmail.com | Test1111# |
     And User sets GET api endpoint to get company keys
     And In Header of the request, she sets param Cookie as valid connect.sid
     When User sends a GET request to get company keys
@@ -71,4 +71,4 @@ Feature: API_SUPPLY DELETE /api/supply
 
         Examples:
             | numberOfSupplies  | supplyRefnumKeyword | userA               | userB                      | password  | expectedStatus | expectedStatusText |
-            | 1                 | Auto                | may27user@gmail.com | testautoforecast@gmail.com | Test1111! | 400            | Company not found. |
+            | 1                 | Auto                | may27user@gmail.com | testautoforecast@gmail.com | Test1111# | 400            | Company not found. |

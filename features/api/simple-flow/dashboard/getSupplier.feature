@@ -3,7 +3,7 @@ Feature: API_Dashboard GET /api/vendor
     Background: Send GET /realm request to get all company keys of current logged in user before each test
         Given user sends a POST login request to get valid cookie with role
             | role  | username                   | password  |
-            | admin | testautoforecast@gmail.com | Test1111! |
+            | admin | testautoforecast@gmail.com | Test1111# |
         And User sets GET api endpoint to get company keys
         And In Header of the request, she sets param Cookie as valid connect.sid
         When User sends a GET request to get company keys
@@ -22,7 +22,7 @@ Feature: API_Dashboard GET /api/vendor
         And User checks values in response of random supplier are correct
         Examples:
             | user  | email                      | password  | companyKey | expectedStatus | limitRow |
-            | admin | testautoforecast@gmail.com | Test1111! | random     | 200            | 10       |
+            | admin | testautoforecast@gmail.com | Test1111# | random     | 200            | 10       |
 
     #Bug TC_GV002_1 and TC_GV002_2, return status code 200 when cookie invalid.
     @TC_GV002 @bug-permission
@@ -51,7 +51,7 @@ Feature: API_Dashboard GET /api/vendor
         And The status text is "<expectedStatusText>"
         Examples:
             | userA               | userB              | password  | companyKey | expectedStatus | expectedStatusText |
-            | may27user@gmail.com | may27pre@gmail.com | Test1111! | random     | 400            | Company not found. |
+            | may27user@gmail.com | may27pre@gmail.com | Test1111# | random     | 400            | Company not found. |
 
     @TC_GV004
     Scenario Outline: <TC_ID> - Verify user could set limit 10 in this API to get list suppliers sorted by field <sortField> with direction <direction>
@@ -64,7 +64,7 @@ Feature: API_Dashboard GET /api/vendor
         And Check items in the response should be sort by field <sortField> with direction <direction>
         Examples:
             | TC_ID      | user  | email                      | password  | limitRow | sortField | direction | companyKey | expectedStatus |
-            | TC_GV004_1 | admin | testautoforecast@gmail.com | Test1111! | 10       | name      | asc       | random     | 200            |
-            | TC_GV004_2 | admin | testautoforecast@gmail.com | Test1111! | 10       | name      | desc      | random     | 200            |
-            | TC_GV004_3 | admin | testautoforecast@gmail.com | Test1111! | 10       | leadTime  | asc       | random     | 200            |
-            | TC_GV004_4 | admin | testautoforecast@gmail.com | Test1111! | 10       | leadTime  | desc      | random     | 200            |
+            | TC_GV004_1 | admin | testautoforecast@gmail.com | Test1111# | 10       | name      | asc       | random     | 200            |
+            | TC_GV004_2 | admin | testautoforecast@gmail.com | Test1111# | 10       | name      | desc      | random     | 200            |
+            | TC_GV004_3 | admin | testautoforecast@gmail.com | Test1111# | 10       | leadTime  | asc       | random     | 200            |
+            | TC_GV004_4 | admin | testautoforecast@gmail.com | Test1111# | 10       | leadTime  | desc      | random     | 200            |

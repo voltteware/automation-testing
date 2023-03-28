@@ -8,7 +8,7 @@ Feature: Login to the ForecastRx
 		Then Verify user is on Dashboard page
 		Examples:
 			| scenario                 | email              | password  |
-			| valid email and password | may27pre@gmail.com | Test1111! |
+			| valid email and password | may27pre@gmail.com | Test1111# |
 
 	@LI002-LI003
 	Scenario Outline: <id> - Verify login unsuccessfuly with <scenario>
@@ -19,7 +19,7 @@ Feature: Login to the ForecastRx
 		Examples:
 			| id    | scenario                             | email                 | password   | alertMessage                                 |
 			| LI002 | valid email and incorrect password   | may27pre@gmail.com    | Test11111! | User credentials could not be authenticated. |
-			| LI003 | incorrect email and correct password | may27pre123@gmail.com | Test1111!  | User credentials could not be authenticated. |
+			| LI003 | incorrect email and correct password | may27pre123@gmail.com | Test1111#  | User credentials could not be authenticated. |
 
 	@LI004
 	Scenario Outline: <id> - Verify that the system will show an error message when user <scenario>
@@ -30,7 +30,7 @@ Feature: Login to the ForecastRx
 		Examples:
 			| id    | scenario                                                                  | email              | password  | errorEmail                   | errorPassword      |
 			| LI004 | Sign in with correct Email and empty password                             | may27pre@gmail.com |           |                              | Password required. |
-			| LI004 | Sign in with empty Email and correct password                             |                    | Test1111! | Email address required.      |                    |
+			| LI004 | Sign in with empty Email and correct password                             |                    | Test1111# | Email address required.      |                    |
 			| LI004 | click on email and password empty and click out but do not input anything |                    |           | Email address required.      | Password required. |
 			| LI004 | enter email with incorrect format                                         | @example.com       |           | Enter a valid email address. | Password required. |
 			| LI004 | enter email with incorrect format                                         | email.example.com  |           | Enter a valid email address. | Password required. |

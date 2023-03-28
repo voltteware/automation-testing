@@ -13,7 +13,7 @@ Feature: Profile Information
         And Check Display Name field is disabled and shows correct value
         Examples:
             | username                   | currentPassword |
-            | thegreentree1217@gmail.com | Test1111!       |
+            | thegreentree1217@gmail.com | Test1111#       |
 
     @CP001
     Scenario Outline: <id> - Verify that the user could change password successfully
@@ -36,8 +36,8 @@ Feature: Profile Information
         And User clicks Submit button then check toast "<message>" displayed
 
         Examples:
-            | id    | username        | currentPassword | newPassword  | message                                  |
-            | CP001 | oct11@gmail.com | Test1111!       | Testing1111! | Success! Your password has been updated. |
+            | id    | username        | currentPassword | newPassword | message                                  |
+            | CP001 | oct11@gmail.com | Test1111#       | Test1111#1  | Success! Your password has been updated. |
 
     @CP002
     Scenario Outline: CP002 - Verify that error when user enters incorrect Current Password
@@ -51,7 +51,7 @@ Feature: Profile Information
         Then User clicks Submit button then check toast "<message>" displayed
         Examples:
             | username                   | incorrectCurrentPassword | currentPassword | message                              |
-            | thegreentree1217@gmail.com | 12345678                 | Test1111!       | Incorrect current password for user. |
+            | thegreentree1217@gmail.com | 12345678                 | Test1111#       | Incorrect current password for user. |
 
     @CP003
     Scenario Outline: CP003 - Verify error when user leaves New Password and Confirm New Password empty
@@ -66,4 +66,4 @@ Feature: Profile Information
         And Submit button should be disabled
         Examples:
             | username                   | currentPassword | newPassword    | confirmPassword |
-            | thegreentree1217@gmail.com | Test1111!       | invalid format | not match       |
+            | thegreentree1217@gmail.com | Test1111#       | invalid format | not match       |

@@ -1,7 +1,7 @@
 export class Links {
     //API Authenticate
     static API_LOGIN: string = '/login';
-    static API_REGISTER: string ='/api/register'
+    static API_REGISTER: string = '/api/register'
     //API User
     static API_USERS: string = '/api/users/';
     static API_USER: string = '/api/user';
@@ -31,6 +31,8 @@ export class Links {
     static API_GET_GRIDVIEW_CUSTOM_ITEMS: string = '/api/grid-view/custom-items-in-po';
     static API_GET_GRIDVIEW_SUGGESTED_POS: string = '/api/grid-view/suggested-pos';
     static API_GET_GRIDVIEW_CUSTOM_ALL_AVAILABLE_ITEMS: string = '/api/grid-view/custom-all-available-items';
+    static API_GET_COUNT_SUMMARY_BY_VENDOR = '/api/summarybyvendor';
+    static API_SUMMARY_VENDOR_ITEMS_IN_PO = '/api/summary/vendor';
     //API Admin
     static API_ADMIN_DELETE_USER: string = '/api/admin/users/';
     static API_ADMIN_GET_COMPANIES: string = '/api/admin/companies';
@@ -38,10 +40,12 @@ export class Links {
     static API_ADMIN_GET_USER: string = '/api/admin/users?';
     //API General
     static API_RUN_FORECAST: string = "/api/forecast";
+    // API Count Summary
+    static API_SUMMARY_COUNT: string = "/api/summary/count";
 }
 
 //URL for performance
-export class Url{
+export class Url {
     // static urlDev = 'https://dev-test.forecastrx.com';
     static urlPreprod = 'https://preprod-my.forecastrx.com';
 }
