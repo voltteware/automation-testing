@@ -1,4 +1,4 @@
-import { Then } from '@cucumber/cucumber';
+import { Then, When } from '@cucumber/cucumber';
 import { expect } from '@playwright/test';
 import * as supplyRequest from '../../../../src/api/request/supply.service';
 import logger from '../../../../src/Logger/logger';
@@ -87,7 +87,7 @@ Then('{} checks {} supply exist in the system, if it does not exist will create 
     else {
         numberofSupplys = await this.getSupplyResponseBody.length;
     }
-    
+
     if (numberofSupplys < 1) {
         randomItem = this.getItemsResponseBody[Math.floor(Math.random() * this.getItemsResponseBody.length)];
         // Can create supply with items unassigned supplier
@@ -97,13 +97,13 @@ Then('{} checks {} supply exist in the system, if it does not exist will create 
         payload.refNum = `${faker.random.numeric(4)} Auto`;
         // payload.vendorName = randomSupplier.name;        
         // payload.vendorKey = randomSupplier.key;       
-        payload.docDate = faker.date.recent();        
-        payload.dueDate = faker.date.future();       
-        payload.itemName = randomItem.name;       
-        payload.itemKey = randomItem.key;          
-        payload.orderQty = Number(faker.random.numeric(2));        
-        payload.openQty = Number(faker.random.numeric(2));        
-        payload.orderKey = faker.datatype.uuid();      
+        payload.docDate = faker.date.recent();
+        payload.dueDate = faker.date.future();
+        payload.itemName = randomItem.name;
+        payload.itemKey = randomItem.key;
+        payload.orderQty = Number(faker.random.numeric(2));
+        payload.openQty = Number(faker.random.numeric(2));
+        payload.orderKey = faker.datatype.uuid();
         payload.rowKey = faker.datatype.uuid();
 
         const createResponse = await supplyRequest.createSupply(this.request, Links.API_CREATE_SUPPLY, payload, payload.orderKey, payload.rowKey, this.headers);
@@ -189,4 +189,185 @@ Then('{} checks values in response of random supply are correct', async function
     expect(companyType, `Company Type should be one of ${companyType}`).toContain(this.responseBodyOfASupplyObject.companyType);
     expect(this.responseBodyOfASupplyObject.companyKey).not.toBeNull();
     expect(this.responseBodyOfASupplyObject.companyName).not.toBeNull();
+});
+
+When('User picks a random supply in above list supplies', async function () {
+    this.responseBodyOfASupplyObject = await this.getSupplyResponseBody[Math.floor(Math.random() * this.getSupplyResponseBody.length)];
+    logger.log('info', `Random Supply: ${JSON.stringify(this.responseBodyOfASupplyObject, undefined, 4)}`);
+    this.attach(`Random Supply: ${JSON.stringify(this.responseBodyOfASupplyObject, undefined, 4)}`);
+});
+
+When('User saves the supply key and order key', function () {
+    this.supplyKey = this.responseBodyOfASupplyObject.rowKey
+    logger.log('info', `Supply key to edit: ${this.supplyKey}`);
+    this.attach(`Supply key to edit: ${this.supplyKey}`)
+
+    this.orderkey = this.responseBodyOfASupplyObject.orderKey
+    logger.log('info', `Order key to edit: ${this.orderkey}`);
+    this.attach(`Order key to edit: ${this.orderkey}`)
+});
+
+When('User sets PUT api endpoint to edit {} of the above supply for company type {} with new value: {}', function (editColumn: string, compantType: string, value: string) {
+    // Prepare endpoint for request to edit demand
+    link = `${Links.API_SUPPLY}/manual/${this.orderkey}/${this.supplyKey}`;
+
+    switch (editColumn) {
+        case 'poNum':
+            if (value == 'random') {
+                this.refNum = `${faker.random.numeric(4)} Auto`;
+            }
+
+            logger.log('info', `New ${editColumn}: ${this.refNum}`);
+            this.attach(`New ${editColumn}: ${this.refNum}`);
+            break;
+        case 'suppliername':
+            if (value == 'random') {
+                const excludedSupplierKey = this.responseBodyOfASupplyObject.vendorKey
+
+                // Filter out the excluded supplier have excludedSupplierKey from the list suppliers
+                const filteredArray = this.getSupplierResponseBody.filter((supplier: any) => supplier.key !== excludedSupplierKey);
+                const randomSupplier = filteredArray[Math.floor(Math.random() * this.getSupplierResponseBody.length)];
+
+                this.vendorKey = randomSupplier.key;
+                this.vendorName = randomSupplier.name;
+            }
+
+            logger.log('info', `New ${editColumn}: ${this.vendorName}`);
+            this.attach(`New ${editColumn}: ${this.vendorName}`);
+            logger.log('info', `New ${editColumn}: ${this.vendorKey}`);
+            this.attach(`New ${editColumn}: ${this.vendorKey}`);
+            break;
+        case 'receiveDate':
+            // Receive date greater PO Date
+            if (value == 'random') {
+                const poDate = new Date(this.responseBodyOfASupplyObject.docDate);                
+                const daysToAdd = Math.floor(Math.random() * 30) + 1;
+                const receiveDate = new Date(poDate);
+                receiveDate.setDate(poDate.getDate() + daysToAdd); 
+                
+                // Outputs a date string in the format "mm/dd/yyyy"
+                // The expected due date have format "mm/dd/yyyy" because after edit the reponsebody return due date with format mm/dd/yyyy
+                this.expectedDueDate = receiveDate.toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' });
+
+                // And  the due date in request body have format yyyy-mm-dd
+                const year = receiveDate.getFullYear();
+                const month = ('0' + (receiveDate.getMonth() + 1)).slice(-2);
+                const day = ('0' + receiveDate.getDate()).slice(-2);
+                this.dueDate = `${year}-${month}-${day}`;
+            }
+
+            logger.log('info', `New ${editColumn}: ${this.dueDate}`);
+            this.attach(`New ${editColumn}: ${this.dueDate}`);
+            break;
+        case 'poDate':
+            if (value == 'random') {
+                const poDate = new Date(this.responseBodyOfASupplyObject.dueDate);                
+                const daysToSubtract = Math.floor(Math.random() * 30) + 1;
+                const receiveDate = new Date(poDate);
+                receiveDate.setDate(poDate.getDate() - daysToSubtract); 
+                
+                // And  the due date in request body have format yyyy-mm-dd
+                const year = receiveDate.getFullYear();
+                const month = ('0' + (receiveDate.getMonth() + 1)).slice(-2);
+                const day = ('0' + receiveDate.getDate()).slice(-2);
+                this.docDate = `${year}-${month}-${day}`;
+                this.expectedDocDate = new Date(this.docDate).toISOString();
+            }
+
+            logger.log('info', `New ${editColumn}: ${this.docDate}`);
+            this.attach(`New ${editColumn}: ${this.docDate}`);
+            break;
+        case 'orderQty':
+            if (value == 'random') {
+                this.orderQty = Math.floor(Math.random() * 101);
+            }
+
+            logger.log('info', `New ${editColumn}: ${this.orderQty}`);
+            this.attach(`New ${editColumn}: ${this.orderQty}`);
+            break;
+        case 'openQty':
+            if (value == 'random') {
+                this.openQty = Math.floor(Math.random() * 101);
+            }
+
+            logger.log('info', `New ${editColumn}: ${this.openQty}`);
+            this.attach(`New ${editColumn}: ${this.openQty}`);
+            break;
+        case 'asin':
+            if (value == 'random') {
+                this.asin = `${faker.random.alphaNumeric(10).toUpperCase()}`;
+            }
+
+            logger.log('info', `New ${editColumn}: ${this.asin}`);
+            this.attach(`New ${editColumn}: ${this.asin}`);
+            break;
+
+        default:
+            break;
+    }
+
+    this.payLoad = {
+        "companyType": `${this.responseBodyOfASupplyObject.companyType}`,
+        "companyKey": `${this.responseBodyOfASupplyObject.companyKey}`,
+        "supplyUuid": `${this.responseBodyOfASupplyObject.supplyUuid}`,
+        "docType": `${this.responseBodyOfASupplyObject.docType}`,
+        "orderKey": `${this.responseBodyOfASupplyObject.orderKey}`,
+        "rowKey": `${this.responseBodyOfASupplyObject.rowKey}`,
+        "refNum": `${this.refNum === undefined ? this.responseBodyOfASupplyObject.refNum : this.refNum}`,
+        "vendorKey": `${this.vendorKey === undefined ? this.responseBodyOfASupplyObject.vendorKey : this.vendorKey}`,
+        "vendorName": `${this.vendorName === undefined ? this.responseBodyOfASupplyObject.vendorName : this.vendorName}`,
+        "dueDate": `${this.dueDate === undefined ? this.responseBodyOfASupplyObject.dueDate : this.dueDate}`,
+        "docDate": `${this.docDate === undefined ? this.responseBodyOfASupplyObject.docDate : this.docDate}`,
+        "itemKey": `${this.responseBodyOfASupplyObject.itemKey}`,
+        "itemName": `${this.responseBodyOfASupplyObject.itemName}`,
+        "asin": `${this.asin === undefined ? this.responseBodyOfASupplyObject.asin : this.asin}`,
+        "orderQty": this.orderQty === undefined ? this.responseBodyOfASupplyObject.orderQty : this.orderQty,
+        "openQty": this.openQty === undefined ? this.responseBodyOfASupplyObject.openQty : this.openQty,
+        "purchasingSummariesUuid": this.responseBodyOfASupplyObject.purchasingSummariesUuid,
+        "documentUuid": this.responseBodyOfASupplyObject.documentUuid,
+        "reconciledStatus": this.responseBodyOfASupplyObject.reconciledStatus,
+        "fnsku": `${this.responseBodyOfASupplyObject.fnsku}`,
+        "imageUrl": this.responseBodyOfASupplyObject.imageUrl,
+    }
+});
+
+When('User sends a PUT request to edit the supply', async function () {
+    // Send PUT request
+    this.response = await supplyRequest.editSupply(this.request, link, this.payLoad, this.headers)
+    if (this.response.status() == 200) {
+        this.editSupplyResponseBody = JSON.parse(await this.response.text())
+        logger.log('info', `Edit Supply Response edit ${link} has status code ${this.response.status()} ${this.response.statusText()} and editSupplyResponse body ${JSON.stringify(this.editSupplyResponseBody, undefined, 4)}`)
+        this.attach(`Edit Supply Response edit ${link} has status code ${this.response.status()} ${this.response.statusText()} and editSupplyResponse body ${JSON.stringify(this.editSupplyResponseBody, undefined, 4)}`)
+    } else {
+        logger.log('info', `Edit Supply Response edit ${link} has status code ${this.response.status()} ${this.response.statusText()}`)
+        this.attach(`Edit Supply Response edit ${link} has status code ${this.response.status()} ${this.response.statusText()}`)
+    }
+});
+
+Then('The new {} of supply must be updated successfully', function (editColumn: string) {
+    switch (editColumn) {
+        case 'poNum':
+            expect(this.refNum).toEqual(this.editSupplyResponseBody.refNum)
+            break;
+        case 'suppliername':
+            expect(this.vendorName).toEqual(this.editSupplyResponseBody.vendorName)
+            break;
+        case 'receiveDate':
+            expect(this.editSupplyResponseBody.dueDate).toEqual(this.expectedDueDate)
+            break;
+        case 'poDate':
+            expect(this.editSupplyResponseBody.docDate).toEqual(this.expectedDocDate)
+            break;
+        case 'orderQty':
+            expect(this.orderQty).toEqual(this.editSupplyResponseBody.orderQty)
+            break;
+        case 'openQty':
+            expect(this.openQty).toEqual(this.editSupplyResponseBody.openQty)
+            break;
+        case 'asin':
+            expect(this.asin).toEqual(this.editSupplyResponseBody.asin)
+            break;
+        default:
+            break;
+    }
 });
