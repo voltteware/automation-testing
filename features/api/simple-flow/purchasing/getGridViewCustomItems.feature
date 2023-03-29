@@ -3,7 +3,7 @@ Feature: API_Purchasing GET api/grid-view/custom-items-in-po
     Background: Send GET /realm request to get all company keys of current logged in user before each test
         Given user sends a POST login request to get valid cookie with role
             | role  | username                   | password  |
-            | admin | testautoforecast@gmail.com | Test1111! |
+            | admin | testautoforecast@gmail.com | Test1111# |
         And User sets GET api endpoint to get company keys
         And In Header of the request, she sets param Cookie as valid connect.sid
         When User sends a GET request to get company keys
@@ -22,7 +22,7 @@ Feature: API_Purchasing GET api/grid-view/custom-items-in-po
         And User checks values in response of get grid view custom items in PO are correct
         Examples:
             | user  | email                      | password  | companyKey | expectedStatus |
-            | admin | testautoforecast@gmail.com | Test1111! | random     | 200            |
+            | admin | testautoforecast@gmail.com | Test1111# | random     | 200            |
 
     # Bug TC_GVCI002_1 and TC_GVCI002_2, return status code 200 when cookie invalid.
     @TC_GVCI002 @bug-permission
@@ -50,5 +50,5 @@ Feature: API_Purchasing GET api/grid-view/custom-items-in-po
         And The status text is "<expectedStatusText>"
         Examples:
             | userA               | userB                      | password  | companyKey | expectedStatus | expectedStatusText |
-            | may27user@gmail.com | testautoforecast@gmail.com | Test1111! | random     | 400            | Company not found. |
+            | may27user@gmail.com | testautoforecast@gmail.com | Test1111# | random     | 400            | Company not found. |
     

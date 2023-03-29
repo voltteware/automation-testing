@@ -17,7 +17,7 @@ Feature: API_User Get/User
 
         Examples:
             | email                 | password  | expectedStatus | expectedStatusText |
-            | testprofile@gmail.com | Test1111! | 200            | OK                 |
+            | testprofile@gmail.com | Test1111# | 200            | OK                 |
 
     #Bug API in case U002
     @TC_U002 @bug-permission @bug-1779

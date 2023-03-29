@@ -3,7 +3,7 @@ Feature: API_SUPPLIER DELETE /api/vendor
     Background: Send GET request to get suppliers of random company
         Given user sends a POST login request to get valid cookie with role
             | role  | username                   | password  |
-            | admin | testautoforecast@gmail.com | Test1111! |
+            | admin | testautoforecast@gmail.com | Test1111# |
         And User sets GET api endpoint to get company keys
         And In Header of the request, she sets param Cookie as valid connect.sid
         When User sends a GET request to get company keys
@@ -56,6 +56,6 @@ Feature: API_SUPPLIER DELETE /api/vendor
 
         Examples:
             | numberOfSuppliers | supplierNameKeyword | user | userA               | password  | expectedStatus | expectedStatusText |
-            | 1                 | Auto                | user | may27user@gmail.com | Test1111! | 400            | Company not found. |
+            | 1                 | Auto                | user | may27user@gmail.com | Test1111# | 400            | Company not found. |
 
 
