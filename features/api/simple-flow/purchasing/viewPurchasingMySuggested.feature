@@ -8,8 +8,8 @@ Feature: API_Purchasing My Suggested
         And In Header of the request, she sets param Cookie as valid connect.sid
         When User sends a GET request to get company keys
 
-    @TC_PMS001 @regression-api @purchasing-mysuggested-total-pos
-    Scenario Outline: <TC_ID> - Verify the totals on Suggested POs tab on <companyType>
+    @TC_PMS001-4 @regression-api @api-purchasing-mysuggested
+    Scenario Outline: <TC_ID> - Verify Purchasing My Suggested POs and Items in PO on <companyType>
         Given User picks company with type <companyType> in above response
         But User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get count summary by vendor
@@ -28,10 +28,11 @@ Feature: API_Purchasing My Suggested
         And User checks total cost of suggested purchase orders is correct
         And User checks total unique items on suggested purchase orders is correct
         And User checks total units on suggested purchase orders is correct
-        And User checks total items in PO is matched with total in suggested PO of Items Without Supplier and Forecast Recommended Qty > 0
+        And User checks total items in PO is matched with total in suggested PO of Items Without Supplier and Forecast Recommended Qty > 0 and only show Active Items
         And User checks API contract get count items by vendor key are correct
         And User checks API contract get items in po by vendor key are correct
-        And User checks total items in PO is matched with total in suggested PO of random supplier if any and Forecast Recommended Qty > 0
+        And User checks API contract of item object is purchasing is correct
+        And User checks total items in PO is matched with total in suggested PO of random supplier if any and Forecast Recommended Qty > 0 and only show Active Items
         Examples:
             | TC_ID     | user  | email                      | password  | companyType | expectedStatus |
             | TC_PMS001 | admin | testautoforecast@gmail.com | Test1111# | CSV         | 200            |

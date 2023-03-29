@@ -15,8 +15,8 @@ async function getItemCount(request: APIRequestContext, linkApi: string, options
     return await request.get(url, options);
 }
 
-//get item
-async function getItem(request: APIRequestContext, linkApi: string, options?: object) {
+//get items
+async function getItems(request: APIRequestContext, linkApi: string, options?: object) {
     const url = `${linkApi}`;
     logger.log('info', `Send GET request ${url}`);
     return await request.get(url, options);
@@ -44,10 +44,18 @@ async function editItem(request: APIRequestContext, linkApi: string, payLoad: an
     return editResponse;
 }
 
+//get item detail
+async function getItemDetail(request: APIRequestContext, linkApi: string, options?: object) {
+    const url = `${linkApi}`;
+    logger.log('info', `Send GET request ${url}`);
+    return await request.get(url, options);
+}
+
 export {
     getItemSummary,
     getItemCount,
     createItem,
-    getItem,
-    editItem
+    getItems,
+    editItem,
+    getItemDetail
 }
