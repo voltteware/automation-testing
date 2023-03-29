@@ -9,7 +9,9 @@ export class HeaderComponent {
     readonly profileLink: Locator;
     readonly logOutLink: Locator;
     userInfoJSON;
-    subscriptionsJSON;
+    subscriptionsJSON: any;
+    subscriptionsTransform: any;
+    company: any;
 
     constructor(page: Page) {
         this.page = page;
@@ -26,9 +28,14 @@ export class HeaderComponent {
         await this.userName.click();
     }
 
-    async navigateToCreateCompanyPage() {
+    async clickOnAddCompany() {
         await this.companyName.selectOption('0: Object');
         await expect(this.page).toHaveURL(/.*create/);
+    }
+
+    async switchToAnotherCompany(companyName: string) {
+        await this.companyName.selectOption(companyName);
+        await expect(this.page).toHaveURL(/.*subscriptions/);
     }
 
     async clickProfileLink() {
@@ -43,7 +50,7 @@ export class HeaderComponent {
         this.userInfoJSON = await getUserInfoResponse.text();
     }
 
-    async clickSubscriptionsLink() {
+    async clickSubscriptionsLink(nameOfCompany: any) {
         const [getSubscriptionsResponse] = await Promise.all([
             // Waits for the next response matching some conditions
             this.page.waitForResponse(response => (response.url().includes("/api/billing/subscriptions"))),
@@ -53,7 +60,13 @@ export class HeaderComponent {
 
         await expect(this.page).toHaveURL(/.*subscriptions/);
         this.subscriptionsJSON = await getSubscriptionsResponse.text();
-        console.log("----here---", this.subscriptionsJSON);
+        this.subscriptionsTransform = JSON.parse(this.subscriptionsJSON);
+        console.log("subscriptionsTransform: ", this.subscriptionsTransform)
+        for(let i = 0; i < this.subscriptionsTransform.length; i++) {
+            if(this.subscriptionsTransform[i].company.companyName == nameOfCompany) {
+                return [this.subscriptionsTransform[i].id, this.subscriptionsTransform[i].customer, this.subscriptionsTransform[i].company.companyKey, this.subscriptionsTransform[i].trial_end];
+            }
+        }
     }
 
     async clickLogOut() {
