@@ -1,11 +1,11 @@
-import { Then } from '@cucumber/cucumber';
+import { Given, Then, When } from '@cucumber/cucumber';
 import { expect } from '@playwright/test';
 import * as bomRequest from '../../../../src/api/request/bom.service';
 import logger from '../../../../src/Logger/logger';
 import { Links } from '../../../../src/utils/links';
 import _ from "lodash";
 
-let link : any;
+let link: any;
 let linkLimit: any;
 let randomChildItem: any;
 let randomParentItem: any;
@@ -17,7 +17,7 @@ Then(`{} sets GET api endpoint to get bom keys`, async function (actor: string) 
 });
 
 Then(`{} sets GET api endpoint to get boms with limit row: {}`, async function (actor, limitRow: string) {
-    linkLimit = encodeURI(`${Links.API_BOM}?offset=0&limit=${limitRow}`);
+    linkLimit = encodeURI(`${Links.API_BOM}?offset=0&limit=${limitRow}&where={"filters":[],"logic":"and"}`);
 });
 
 Then(`{} sends a GET request to get list limited boms`, async function (actor: string) {
@@ -28,6 +28,9 @@ Then(`{} sends a GET request to get list limited boms`, async function (actor: s
     const responseBodyText = await this.getBomResponse.text();
     if (this.getBomResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
         this.responseBody = this.getBomResponseBody = JSON.parse(await this.getBomResponse.text());
+
+        logger.log('info', `Get Boms Response  ${link} has status code ${this.response.status()} ${this.response.statusText()} and get list bom body ${JSON.stringify(this.getBomResponseBody, undefined, 4)}`)
+        this.attach(`Get Boms Response  ${link} has status code ${this.response.status()} ${this.response.statusText()} and get list bom body ${JSON.stringify(this.getBomResponseBody, undefined, 4)}`)
     }
     else {
         //if response include <!doctype html> => 'html', else => response
@@ -45,6 +48,8 @@ Then(`{} sends a GET request to get all boms`, async function (actor: string) {
     const responseBodyText = await this.getBomResponse.text();
     if (this.getBomResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
         this.responseBody = this.getBomResponseBody = JSON.parse(await this.getBomResponse.text());
+        logger.log('info', `Get Boms Response  ${link} has status code ${this.response.status()} ${this.response.statusText()} and get list bom body ${JSON.stringify(this.getBomResponseBody, undefined, 4)}`)
+        this.attach(`Get Boms Response  ${link} has status code ${this.response.status()} ${this.response.statusText()} and get list bom body ${JSON.stringify(this.getBomResponseBody, undefined, 4)}`)
     }
     else {
         //if response include <!doctype html> => 'html', else => response
@@ -59,21 +64,21 @@ Then('{} checks {} bom exist in the system, if it does not exist will create new
     randomChildItem = this.getItemsResponseBody[Math.floor(Math.random() * this.getItemsResponseBody.length)];
     randomParentItem = this.getItemsResponseBody[Math.floor(Math.random() * this.getItemsResponseBody.length)];
     // check parent can't be child
-    for(var i = 0; i < this.getBomResponseBody.length; i++) {
+    for (var i = 0; i < this.getBomResponseBody.length; i++) {
         if (randomParentItem.key == this.getBomResponseBody[i].childKey) {
             randomParentItem = this.getItemsResponseBody[Math.floor(Math.random() * this.getItemsResponseBody.length)];
         }
     }
     // check child can't be parent
-    for(var i = 0; i < this.getBomResponseBody.length; i++) {
+    for (var i = 0; i < this.getBomResponseBody.length; i++) {
         if (randomChildItem.key == this.getBomResponseBody[i].parentKey) {
             randomChildItem = this.getItemsResponseBody[Math.floor(Math.random() * this.getItemsResponseBody.length)];
         }
     }
     // compare parent item and child item
-    if (randomParentItem.key == randomChildItem.key){
+    if (randomParentItem.key == randomChildItem.key) {
         randomParentItem = this.getItemsResponseBody[Math.floor(Math.random() * this.getItemsResponseBody.length)];
-    }       
+    }
     if (bomParentNameKeyword != 'any') {
         numberofBom = await this.getBomResponseBody.filter((bo: any) => bo.parentName.includes(bomParentNameKeyword)).length;
     }
@@ -86,12 +91,12 @@ Then('{} checks {} bom exist in the system, if it does not exist will create new
             childName: randomChildItem.name,
             companyKey: this.getRealmResponseBody.companyKey,
             companyType: this.getRealmResponseBody.companyType,
-            parentKey : randomParentItem.key,
+            parentKey: randomParentItem.key,
             parentName: randomParentItem.name,
             qty: Math.floor(Math.random() * 101),
         }
         const createResponse = await bomRequest
-        .createBom(this.request, link, payload, payload.parentKey, payload.childKey, this.headers);
+            .createBom(this.request, link, payload, payload.parentKey, payload.childKey, this.headers);
         const responseBodyText = await createResponse.text();
         if (createResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
             await this.getBomResponseBody.push(JSON.parse(responseBodyText));
@@ -142,13 +147,13 @@ Then(`{} sends a GET request to get total of boms`, async function (actor: strin
 })
 
 Then('{} sends a DELETE method to delete bom {}', async function (actor, bomKey: string) {
-    if(bomKey == 'child'){
-        payLoadDelete = { 
-            ids : this.selectedBoms.map((bo: any) => `${bo.parentKey}/${bo.childKey}`), 
+    if (bomKey == 'child') {
+        payLoadDelete = {
+            ids: this.selectedBoms.map((bo: any) => `${bo.parentKey}/${bo.childKey}`),
         }
-    }else{
-        payLoadDelete = { 
-            ids : this.selectedBoms.map((bo: any) => `${bo.parentKey}`),
+    } else {
+        payLoadDelete = {
+            ids: this.selectedBoms.map((bo: any) => `${bo.parentKey}`),
         }
     }
     logger.log('info', `Payload` + JSON.stringify(payLoadDelete, undefined, 4));
@@ -209,5 +214,116 @@ Then(`{} sends a GET request to get sorted boms`, async function (actor: string)
         const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
         logger.log('info', `Response GET ${linkSorted} has status code ${this.response.status()} ${this.response.statusText()} and response body ${responseBodyText}`);
         this.attach(`Response GET ${linkSorted} has status code ${this.response.status()} ${this.response.statusText()} and response body ${actualResponseText}`)
+    }
+});
+
+Given('User picks a random bom in above list boms', async function () {
+    this.responseBodyOfABomObject = await this.getBomResponseBody[Math.floor(Math.random() * this.getBomResponseBody.length)];
+    logger.log('info', `Random Bom: ${JSON.stringify(this.responseBodyOfABomObject, undefined, 4)}`);
+    this.attach(`Random Bom: ${JSON.stringify(this.responseBodyOfABomObject, undefined, 4)}`);
+});
+
+Given('User saves the parentKey key and childKey key', function () {
+    this.parentKey = this.responseBodyOfABomObject.parentKey
+    logger.log('info', `Parent key to edit: ${this.parentKey}`);
+    this.attach(`Parent key to edit: ${this.parentKey}`)
+
+    this.childKey = this.responseBodyOfABomObject.childKey
+    logger.log('info', `Child key to edit: ${this.childKey}`);
+    this.attach(`Child key to edit: ${this.childKey}`)
+});
+
+Given('User sets PUT api endpoint to edit {} of the above bom for company type {} with new value: {}', function (editColumn: string, companyType: string, value: string) {
+    // Prepare endpoint for request to edit demand
+    link = `${Links.API_BOM}/${this.parentKey}/${this.childKey}`;
+
+    switch (editColumn) {
+        case 'parentName':
+            if (value == 'random') {
+                const excludedItemKey = this.childKey
+                const listParentKey = this.getBomResponseBody.map((bom: any) => bom.parentKey)
+                console.log('beeeee'+listParentKey)
+
+                // Filter out the excluded item have excludedItemKey and item that is a parent from the list items 
+                const filteredArray = this.getItemsResponseBody.filter((item: any) => ((item.key !== excludedItemKey) && (!listParentKey.includes(item.key))));
+                const randomItem = filteredArray[Math.floor(Math.random() * filteredArray.length)];
+
+                this.parentName = randomItem.name
+                this.parentKey = randomItem.key
+            }
+
+            logger.log('info', `New ${editColumn}: ${this.parentName}`);
+            this.attach(`New ${editColumn}: ${this.parentName}`);
+            break;
+        case 'componentName':
+            if (value == 'random') {
+                const excludedItemKey = this.childKey
+                const listParentKey = this.getBomResponseBody.map((bom: any) => bom.parentKey)
+
+                // Filter out the excluded item have excludedItemKey and item that is a parent from the list items
+                const filteredArray = this.getItemsResponseBody.filter((item: any) => ((item.key !== excludedItemKey) && (!listParentKey.includes(item.key))));
+                const randomItem = filteredArray[Math.floor(Math.random() * filteredArray.length)];
+
+                this.childName = randomItem.name
+                this.childKey = randomItem.key
+            }
+
+            logger.log('info', `New ${editColumn}: ${this.childName}`);
+            this.attach(`New ${editColumn}: ${this.childName}`);
+            break;
+        case 'kitQty':
+            if (value == 'random') {
+                this.kitQty = Math.floor(Math.random() * 101)
+            }
+
+            logger.log('info', `New ${editColumn}: ${this.kitQty}`);
+            this.attach(`New ${editColumn}: ${this.kitQty}`);
+            break;
+        default:
+            break;
+    }
+
+    this.payLoad = {
+        "companyType": `${this.responseBodyOfABomObject.companyType}`,
+        "companyKey": `${this.responseBodyOfABomObject.companyKey}`,
+        "parentKey": `${this.parentKey === undefined ? this.responseBodyOfABomObject.parentKey : this.parentKey}`,
+        "parentName": `${this.parentName === undefined ? this.responseBodyOfABomObject.parentName : this.parentName}`,
+        "childKey": `${this.childKey === undefined ? this.responseBodyOfABomObject.childKey : this.childKey}`,
+        "childName": `${this.childName === undefined ? this.responseBodyOfABomObject.childName : this.childName}`,
+        "qty": this.kitQty === undefined ? this.responseBodyOfABomObject.qty : this.kitQty,
+        "created_at": `${this.responseBodyOfABomObject.created_at}`,
+        "updated_at": `${this.responseBodyOfABomObject.updated_at}`,
+    }
+
+    logger.log('info', `Payload` + JSON.stringify(this.payLoad, undefined, 4));
+    this.attach(`Payload` + JSON.stringify(this.payLoad, undefined, 4))
+});
+
+When('User sends a PUT request to edit the bom', async function () {
+    // Send PUT request
+    this.response = await bomRequest.editBom(this.request, link, this.payLoad, this.headers)
+    if (this.response.status() == 200) {
+        this.editBomResponseBody = JSON.parse(await this.response.text())
+        logger.log('info', `Edit Bom Response edit ${link} has status code ${this.response.status()} ${this.response.statusText()} and editBomResponse body ${JSON.stringify(this.editBomResponseBody, undefined, 4)}`)
+        this.attach(`Edit Bom Response edit ${link} has status code ${this.response.status()} ${this.response.statusText()} and editBomResponse body ${JSON.stringify(this.editBomResponseBody, undefined, 4)}`)
+    } else {
+        logger.log('info', `Edit Bom Response edit ${link} has status code ${this.response.status()} ${this.response.statusText()}`)
+        this.attach(`Edit Bom Response edit ${link} has status code ${this.response.status()} ${this.response.statusText()}`)
+    }
+});
+
+Then('The new {} of bom must be updated successfully', function (editColumn: string) {
+    switch (editColumn) {
+        case 'parentName':
+            expect(this.editBomResponseBody.parentName).toEqual(this.parentName)
+            break;
+        case 'componentName':
+            expect(this.editBomResponseBody.childName).toEqual(this.childName)
+            break;
+        case 'kitQty':
+            expect(this.editBomResponseBody.qty).toEqual(this.kitQty)
+            break;
+        default:
+            break;
     }
 });

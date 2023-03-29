@@ -29,8 +29,21 @@ async function deleteBom(request: APIRequestContext, linkApi: string, payLoad: a
     });
     return deleteResponse;
 }
+
+//Edit bom
+async function editBom(request: APIRequestContext, linkApi: string, payLoad: any, header?: any) {
+    const url = `${linkApi}`;    
+    logger.log('info', `Send PUT request ${url} with ${JSON.stringify(payLoad, undefined, 4)}`);
+    const editResponse = await request.put(url, {
+        data: payLoad,
+        headers: header
+    });
+    return editResponse;
+}
+
 export {
     getBom,
     createBom,
-    deleteBom
+    deleteBom,
+    editBom
 }

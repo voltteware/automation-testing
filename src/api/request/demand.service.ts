@@ -19,7 +19,19 @@ async function createDemand(request: APIRequestContext, linkApi: string, payLoad
     return createResponse;
 }
 
+//Edit demand
+async function editDemand(request: APIRequestContext, linkApi: string, payLoad: any, header?: any) {
+    const url = `${linkApi}`;    
+    logger.log('info', `Send PUT request ${url} with ${JSON.stringify(payLoad, undefined, 4)}`);
+    const editResponse = await request.put(url, {
+        data: payLoad,
+        headers: header
+    });
+    return editResponse;
+}
+
 export {
     getDemand,
-    createDemand
+    createDemand,
+    editDemand
 }
