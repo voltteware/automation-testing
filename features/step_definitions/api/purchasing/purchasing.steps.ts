@@ -1,5 +1,5 @@
 import { Then, Given, DataTable } from '@cucumber/cucumber';
-import { expect } from '@playwright/test';
+import { APIRequestContext, expect } from '@playwright/test';
 import * as vendorRequest from '../../../../src/api/request/vendor.service';
 import * as itemRequest from '../../../../src/api/request/item.service';
 import logger from '../../../../src/Logger/logger';
@@ -8,7 +8,7 @@ import { faker } from '@faker-js/faker';
 import _ from "lodash";
 
 let linkCountSummary: string, linkSummaryVendor: string, linkSummaryVendorWithTotalQtyAndTotalPrice: string, linkCountItemsInPO: string, linkItemsInPO: string;
-let supplierKey: string;
+let linkCountItemsInPurchasingCustom: string, linkGetItemsInPurchasingCustom: string;
 
 // My Suggested POs
 Then(`{} sets GET api endpoint to get count summary by vendor`, async function (actor: string) {
@@ -89,7 +89,7 @@ Then(`{} selects any suggested purchase orders above that has supplier name`, as
     }
 });
 
-// Items in PO
+// My Suggested - Items in PO
 Then(`{} sets GET api endpoint to get count items in PO by vendor key {}`, async function (actor, vendorKey: string) {
     if (vendorKey == 'null') {
         this.selectedVendorKey = null;
@@ -195,6 +195,7 @@ Then('{} checks total items in PO is matched with total in suggested PO of {} an
         const getItemsinPOResponseText = await this.getItemsinPOResponse.text();
         if (this.getItemsinPOResponse.status() == 200 && !getItemsinPOResponseText.includes('<!doctype html>')) {
             this.responseBody = this.getItemsinPOResponseBody = JSON.parse(await this.getItemsinPOResponse.text());
+            this.randomAItemObject = this.getItemsinPOResponseBody.model[Math.floor(Math.random() * this.getItemsinPOResponseBody.model.length)];
             logger.log('info', `Response POST ${linkItemsInPO} >>>>>>` + JSON.stringify(this.getItemsinPOResponseBody, undefined, 4));
             this.attach(`Response POST ${linkItemsInPO} >>>>>>` + JSON.stringify(this.getItemsinPOResponseBody, undefined, 4))
         }
@@ -237,6 +238,82 @@ Then('{} checks total items in PO is matched with total in suggested PO of {} an
                 logger.log('info', `Response GET ${detailItemLink} has status code ${itemDetailResponse.status()} ${itemDetailResponse.statusText()} and response body >>>>>> ${itemDetailResponseText}`);
                 this.attach(`Response GET ${detailItemLink} has status code ${itemDetailResponse.status()} ${itemDetailResponse.statusText()} and response body >>>>>> ${actualResponseText}`)
             }
+        }
+    }
+})
+
+// Custom
+Then(`{} sets GET api endpoint to get count items in Purchasing Custom`, async function (actor: string) {
+    linkCountItemsInPurchasingCustom = encodeURI(`${Links.API_SUMMARY_COUNT}?where={"logic":"and","filters":[]}`);
+
+    console.log(linkCountItemsInPurchasingCustom);
+});
+
+Then(`{} sends a GET request to get count items in Purchasing Custom`, async function (actor) {
+    const options = {
+        headers: this.headers
+    }
+    this.getCountItemsinPurchasingCustomResponse = this.response = await vendorRequest.getCountItemsinPurchasingCustom(this.request, linkCountItemsInPurchasingCustom, options);
+    const responseBodyText = await this.getCountItemsinPurchasingCustomResponse.text();
+    if (this.getCountItemsinPurchasingCustomResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
+        this.responseBody = this.getCountItemsinPurchasingCustomResponseBody = JSON.parse(await this.getCountItemsinPurchasingCustomResponse.body());
+        logger.log('info', `Response GET ${linkCountItemsInPurchasingCustom} >>>>>>` + JSON.stringify(this.getCountItemsinPurchasingCustomResponseBody, undefined, 4));
+        this.attach(`Response GET ${linkCountItemsInPurchasingCustom} >>>>>>` + JSON.stringify(this.getCountItemsinPurchasingCustomResponseBody, undefined, 4))
+    }
+    else {
+        const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
+        logger.log('info', `Response GET ${linkCountItemsInPurchasingCustom} has status code ${this.response.status()} ${this.response.statusText()} and response body >>>>>> ${responseBodyText}`);
+        this.attach(`Response GET ${linkCountItemsInPurchasingCustom} has status code ${this.response.status()} ${this.response.statusText()} and response body >>>>>> ${actualResponseText}`)
+    }
+})
+
+Then(`{} sets GET api endpoint to get items in Purchasing Custom`, async function (actor: string) {
+    linkGetItemsInPurchasingCustom = encodeURI(`${Links.API_SUMMARY_ITEMS_IN_PURCHASING_CUSTOM}?offset=0&limit=100&where={"logic":"and","filters":[]}`);
+
+    console.log(linkGetItemsInPurchasingCustom);
+});
+
+Then(`{} sends a GET request to get items in Purchasing Custom`, async function (actor) {
+    const options = {
+        headers: this.headers
+    }
+    this.getItemsinPurchasingCustomResponse = this.response = await vendorRequest.getItemsinPurchasingCustom(this.request, linkGetItemsInPurchasingCustom, options);
+    const responseBodyText = await this.getItemsinPurchasingCustomResponse.text();
+    if (this.getItemsinPurchasingCustomResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
+        this.responseBody = this.getItemsinPurchasingCustomResponseBody = JSON.parse(await this.getItemsinPurchasingCustomResponse.body());
+        this.randomAItemObject = this.getItemsinPurchasingCustomResponseBody[Math.floor(Math.random() * this.getItemsinPurchasingCustomResponseBody.length)];
+        logger.log('info', `Response GET ${linkGetItemsInPurchasingCustom} >>>>>>` + JSON.stringify(this.getItemsinPurchasingCustomResponseBody, undefined, 4));
+        this.attach(`Response GET ${linkGetItemsInPurchasingCustom} >>>>>>` + JSON.stringify(this.getItemsinPurchasingCustomResponseBody, undefined, 4))
+    }
+    else {
+        const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
+        logger.log('info', `Response GET ${linkGetItemsInPurchasingCustom} has status code ${this.response.status()} ${this.response.statusText()} and response body >>>>>> ${responseBodyText}`);
+        this.attach(`Response GET ${linkGetItemsInPurchasingCustom} has status code ${this.response.status()} ${this.response.statusText()} and response body >>>>>> ${actualResponseText}`)
+    }
+})
+
+Then(`{} checks random items in Purchasing Custom has status is Active`, async function (actor) {
+    const options = {
+        headers: this.headers
+    }
+
+    const maxRandomItemNumbers = this.getCountItemsinPurchasingCustomResponseBody > 10 ? 10 : this.getCountItemsinPurchasingCustomResponseBody;
+    const randomMax10Items: any = _.sampleSize(this.getItemsinPurchasingCustomResponseBody, maxRandomItemNumbers);
+    for await (const item of randomMax10Items) {
+        const itemKey = item.itemKey;
+        const detailItemLink = `${Links.API_ITEMS}/${itemKey}`;
+        var itemDetailResponse = await itemRequest.getItems(this.request, detailItemLink, options);
+        var itemDetailResponseText = await itemDetailResponse.text();
+        if (itemDetailResponse.status() == 200 && !itemDetailResponseText.includes('<!doctype html>')) {
+            const itemDetailResponseBody = JSON.parse(itemDetailResponseText);
+            logger.log('info', `Response GET ${detailItemLink} >>>>>>` + JSON.stringify(itemDetailResponseBody, undefined, 4));
+            this.attach(`Response GET ${detailItemLink} >>>>>>` + JSON.stringify(itemDetailResponseBody, undefined, 4))
+            expect(itemDetailResponseBody.isHidden, `Check item ${itemKey} has isHidden = false`).toBeFalsy();
+        }
+        else {
+            const actualResponseText = itemDetailResponseText.includes('<!doctype html>') ? 'html' : itemDetailResponseText;
+            logger.log('info', `Response GET ${detailItemLink} has status code ${itemDetailResponse.status()} ${itemDetailResponse.statusText()} and response body >>>>>> ${itemDetailResponseText}`);
+            this.attach(`Response GET ${detailItemLink} has status code ${itemDetailResponse.status()} ${itemDetailResponse.statusText()} and response body >>>>>> ${actualResponseText}`)
         }
     }
 })
