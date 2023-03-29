@@ -1,6 +1,7 @@
 import { Then, Given, DataTable } from '@cucumber/cucumber';
 import { expect } from '@playwright/test';
 import * as vendorRequest from '../../../../src/api/request/vendor.service';
+import * as itemRequest from '../../../../src/api/request/item.service';
 import logger from '../../../../src/Logger/logger';
 import { Links } from '../../../../src/utils/links';
 import { faker } from '@faker-js/faker';
@@ -146,7 +147,7 @@ Then(`{} sends a POST request to get list items in PO by vendor by vendor key`, 
     }
 })
 
-Then('{} checks total items in PO is matched with total in suggested PO of {} and Forecast Recommended Qty > 0', async function (actor, supplierName: string) {
+Then('{} checks total items in PO is matched with total in suggested PO of {} and Forecast Recommended Qty > 0 and only show Active Items', async function (actor, supplierName: string) {
     if (supplierName == 'Items Without Supplier') {
         this.selectedVendorKey = null;
     }
@@ -205,14 +206,37 @@ Then('{} checks total items in PO is matched with total in suggested PO of {} an
 
         var expectedTotalItemsInPO = Number(await this.getSummaryByVendorResponseBody.find((v: { vendorKey: any; }) => v.vendorKey == this.selectedVendorKey).uniqueItems);
         const actualTotalItemsInPO = this.getCountItemsinPOResponseBody;
-        const itemsInPOListFromSummaryVendorAPI = await this.getItemsinPOResponseBody.model.length;
+        const itemsInPOListFromSummaryVendorAPI = await this.getItemsinPOResponseBody.model;
+        const totalItemsInPOListFromSummaryVendorAPI = itemsInPOListFromSummaryVendorAPI.length;
         expect(expectedTotalItemsInPO, `total items in PO is matched with total in suggested PO of ${supplierName}: ${expectedTotalItemsInPO}`).toEqual(actualTotalItemsInPO);
-        expect(itemsInPOListFromSummaryVendorAPI, `Total item listed in PO ${itemsInPOListFromSummaryVendorAPI} is matched with then number of Total Products in My Suggested of ${supplierName}: ${expectedTotalItemsInPO}`).toEqual(expectedTotalItemsInPO);
+        expect(totalItemsInPOListFromSummaryVendorAPI, `Total item listed in PO ${totalItemsInPOListFromSummaryVendorAPI} is matched with then number of Total Products in My Suggested of ${supplierName}: ${expectedTotalItemsInPO}`).toEqual(expectedTotalItemsInPO);
 
         // Check Forecast Recommended Qty is greater than 0
         var forecastRecommendedQtyOfPOs = await this.getItemsinPOResponseBody.model.map((v: { consolidatedQty: any; }) => v.consolidatedQty);
         forecastRecommendedQtyOfPOs.forEach((qty: any) => {
             expect(qty, `Forecast Recommended Qty ${qty} is greater than 0.`).toBeGreaterThan(0);
         })
+
+        // Check Item must be active 
+        // get max 10 items only
+        const maxRandomItemNumbers = totalItemsInPOListFromSummaryVendorAPI > 10 ? 10 : totalItemsInPOListFromSummaryVendorAPI;
+        const randomMax10Items: any = _.sampleSize(itemsInPOListFromSummaryVendorAPI, maxRandomItemNumbers);
+        for await (const item of randomMax10Items) {
+            const itemKey = item.itemKey;
+            const detailItemLink = `${Links.API_ITEMS}/${itemKey}`;
+            var itemDetailResponse = await itemRequest.getItems(this.request, detailItemLink, options);
+            var itemDetailResponseText = await itemDetailResponse.text();
+            if (itemDetailResponse.status() == 200 && !itemDetailResponseText.includes('<!doctype html>')) {
+                const itemDetailResponseBody = JSON.parse(itemDetailResponseText);
+                logger.log('info', `Response GET ${detailItemLink} >>>>>>` + JSON.stringify(itemDetailResponseBody, undefined, 4));
+                this.attach(`Response GET ${detailItemLink} >>>>>>` + JSON.stringify(itemDetailResponseBody, undefined, 4))
+                expect(itemDetailResponseBody.isHidden, `Check item ${itemKey} has isHidden = false`).toBeFalsy();
+            }
+            else {
+                const actualResponseText = itemDetailResponseText.includes('<!doctype html>') ? 'html' : itemDetailResponseText;
+                logger.log('info', `Response GET ${detailItemLink} has status code ${itemDetailResponse.status()} ${itemDetailResponse.statusText()} and response body >>>>>> ${itemDetailResponseText}`);
+                this.attach(`Response GET ${detailItemLink} has status code ${itemDetailResponse.status()} ${itemDetailResponse.statusText()} and response body >>>>>> ${actualResponseText}`)
+            }
+        }
     }
 })

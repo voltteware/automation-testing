@@ -22,7 +22,7 @@ Then(`{} sends a GET request to get list items`, async function (actor: string) 
     const options = {
         headers: this.headers
     }
-    this.getItemsResponse = this.response = await itemRequest.getItem(this.request, linkLimitRow, options);
+    this.getItemsResponse = this.response = await itemRequest.getItems(this.request, linkLimitRow, options);
     const responseBodyText = await this.getItemsResponse.text();
     if (this.getItemsResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
         this.responseBody = this.getItemsResponseBody = JSON.parse(await this.getItemsResponse.text());
