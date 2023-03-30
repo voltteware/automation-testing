@@ -71,7 +71,7 @@ Feature: API_Dashboard PUT /api/item
             | TC_UI001_24 | ASC         | testautoforecast@gmail.com | 10       | useHistoryOverride        | random | 200            |
             | TC_UI001_25 | ASC         | testautoforecast@gmail.com | 10       | casePackQty               | random | 200            |
             | TC_UI001_26 | ASC         | testautoforecast@gmail.com | 10       | inventorySourcePreference | random | 200            |
-            | TC_UI001_27 | ASC         | testautoforecast@gmail.com | 10       | purchaseAs                | random | 200            |
+            | TC_UI001_27 | ASC         | testautoforecast@gmail.com | 100      | purchaseAs                | random | 200            |
             | TC_UI001_28 | CSV         | testautoforecast@gmail.com | 10       | itemName                  | random | 200            |
             | TC_UI001_30 | CSV         | testautoforecast@gmail.com | 10       | supplierName              | random | 200            |
             | TC_UI001_31 | CSV         | testautoforecast@gmail.com | 10       | supplierPrice             | random | 200            |
@@ -86,7 +86,7 @@ Feature: API_Dashboard PUT /api/item
             | TC_UI001_40 | CSV         | testautoforecast@gmail.com | 10       | isHidden                  | random | 200            |
             | TC_UI001_41 | CSV         | testautoforecast@gmail.com | 10       | useHistoryOverride        | random | 200            |
             | TC_UI001_42 | CSV         | testautoforecast@gmail.com | 10       | casePackQty               | random | 200            |
-            | TC_UI001_43 | CSV         | testautoforecast@gmail.com | 10       | purchaseAs                | random | 200            |
+            | TC_UI001_43 | CSV         | testautoforecast@gmail.com | 100      | purchaseAs                | random | 200            |
             | TC_UI001_44 | QBFS        | testautoforecast@gmail.com | 10       | description               | random | 200            |
             | TC_UI001_45 | QBFS        | testautoforecast@gmail.com | 10       | supplierName              | random | 200            |
             | TC_UI001_47 | QBFS        | testautoforecast@gmail.com | 10       | moq                       | random | 200            |
@@ -100,6 +100,6 @@ Feature: API_Dashboard PUT /api/item
             | TC_UI001_55 | QBFS        | testautoforecast@gmail.com | 10       | isHidden                  | random | 200            |
             | TC_UI001_56 | QBFS        | testautoforecast@gmail.com | 10       | useHistoryOverride        | random | 200            |
             | TC_UI001_57 | QBFS        | testautoforecast@gmail.com | 10       | casePackQty               | random | 200            |
-            | TC_UI001_58 | QBFS        | testautoforecast@gmail.com | 10       | purchaseAs                | random | 200            |
+            | TC_UI001_58 | QBFS        | testautoforecast@gmail.com | 100      | purchaseAs                | random | 200            |
 
 
