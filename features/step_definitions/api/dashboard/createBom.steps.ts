@@ -24,9 +24,17 @@ Then(`{} sets POST api endpoint to create bom`, async function (actor: string) {
 
 Then('{} sets request body with payload as parentName: {string} and parentKey: {string} and childName: {string} and childKey: {string} and qty: {string}',
     async function (actor, parentName, parentKey, childName, childKey, qty: string) {
-        randomParentItem = this.getItemsResponseBody[Math.floor(Math.random() * this.getItemsResponseBody.length)];
-        randomChildItem = this.getItemsResponseBody[Math.floor(Math.random() * this.getItemsResponseBody.length)];
-        randomBom = this.getBomResponseBody[Math.floor(Math.random() * this.getBomResponseBody.length)];
+        if(this.getItemsResponseBody.length < 3){ //This step for onboarding flow. Because not enough Item
+            randomParentItem = this.getItemsResponseBody[0];
+            randomChildItem = this.getItemsResponseBody[1];
+            randomBom = this.getBomResponseBody[Math.floor(Math.random() * this.getBomResponseBody.length)];
+        }
+        else{
+            randomParentItem = this.getItemsResponseBody[Math.floor(Math.random() * this.getItemsResponseBody.length)];
+            randomChildItem = this.getItemsResponseBody[Math.floor(Math.random() * this.getItemsResponseBody.length)];
+            randomBom = this.getBomResponseBody[Math.floor(Math.random() * this.getBomResponseBody.length)];
+        }
+        
         // check parent can't be child
         for(var i = 0; i < this.getBomResponseBody.length; i++) {
             if (randomParentItem.key == this.getBomResponseBody[i].childKey) {
