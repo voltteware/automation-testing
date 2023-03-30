@@ -8,10 +8,7 @@ Feature: API_Dashboard PUT /api/bom
         And In Header of the request, she sets param Cookie as valid connect.sid
         When User sends a GET request to get company keys
 
-    # Notes: Only kits of company type CSV and ASC can edit
-
-    # FAILED: TC_UB001_1, TC_UB001_2, TC_UB001_3, TC_UB001_4, TC_UB001_5, TC_UB001_6
-    # Error: status code 400 Inserting would create a multi-level Kit.
+    # Notes: Only kits of company type CSV and ASC can edit    
     @TC_UB001
     Scenario Outline: <TC_ID> - Verify user <email> could call this API to update "<editColumn>" of a kit for company type (<companyType>)
         Given User picks company with type <companyType> in above response
@@ -37,8 +34,8 @@ Feature: API_Dashboard PUT /api/bom
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get item with limit row: <limitRow>
         And User sends a GET request to get list items
-        And User sets GET api endpoint to get boms with limit row: <limitRow>
-        And User sends a GET request to get list limited boms
+        And User sets GET api endpoint to get bom keys
+        And User sends a GET request to get all boms
         And User picks a random bom in above list boms
         And User saves the parentKey key and childKey key
         And User sets PUT api endpoint to edit <editColumn> of the above bom for company type <companyType> with new value: <value>

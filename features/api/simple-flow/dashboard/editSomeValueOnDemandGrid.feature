@@ -30,7 +30,7 @@ Feature: API_Dashboard PUT /api/demand/manual
             | TC_ID      | companyType | email                      | limitRow | editColumn | value  | expectedStatus |
             | TC_UD001_1 | CSV         | testautoforecast@gmail.com | 10       | itemName   | random | 200            |
 
-    # Test case TC_UD001_2 FAILED: actual date will be less than expected date 1 day
+    # Test case TC_UD001_2 FAILED: The Date is pushed back 1 day when editing - Bug_ID: 1325
     @TC_UD001 @regression-api 
     Scenario Outline: <TC_ID> - Verify user <email> could call this API to update "<editColumn>" of a demand for company type (<companyType>)
         Given User picks company with type <companyType> in above response
