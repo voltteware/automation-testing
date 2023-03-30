@@ -16,7 +16,7 @@ Feature: API_Dashboard POST /api/company
         And User checks API contract essential types in company object are correct
         And User checks values in response of create company are correct
         And Check that the company just created exists in the current companies list of his
-        And And User sets DELETE api endpoint to delete company
+        And User sets DELETE api endpoint to delete company
         And User sends a DELETE method to delete the created company
 
         Examples:
@@ -33,7 +33,7 @@ Feature: API_Dashboard POST /api/company
         And User checks API contract essential types in company object are correct
         And User checks values in response of create company are correct
         And Check that the company just created exists in the current companies list of his
-        And And User sets DELETE api endpoint to delete company
+        And User sets DELETE api endpoint to delete company
         And User sends a DELETE method to delete the created company
         Examples:
             | TC_ID     | email                        | companyName | companyType | serviceLevel | leadTime | orderInterval | expectedStatus | expectedStatusText |
@@ -44,7 +44,7 @@ Feature: API_Dashboard POST /api/company
     @TC_CCP005
     Scenario Outline: <TC_ID> - Verify error when user sends this API with <cookie> cookie
         Given User sets Cookie in HEADER as <cookie>
-        And And User sets request body with payload as companyName: "<companyName>" and companyKey: "" and companyType: "<companyType>" and serviceLevel: "<serviceLevel>" and leadTime: "<leadTime>" and orderInterval: "<orderInterval>" and initialSyncDate: "" and marketplaceId: ""
+        And User sets request body with payload as companyName: "<companyName>" and companyKey: "" and companyType: "<companyType>" and serviceLevel: "<serviceLevel>" and leadTime: "<leadTime>" and orderInterval: "<orderInterval>" and initialSyncDate: "" and marketplaceId: ""
         When User sends a POST method to create company
         Then The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"

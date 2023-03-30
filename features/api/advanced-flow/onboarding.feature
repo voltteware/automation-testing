@@ -49,7 +49,7 @@ Feature: API_Regression User can create company
         When The expected status code should be <expectedStatus>
         Then The status text is "<expectedStatusText>"
         # And Check that the company just created exists in the current companies list of his
-        # And And User sets DELETE api endpoint to delete company
+        # And User sets DELETE api endpoint to delete company
         # And User sends a DELETE method to delete the created company
         Examples:   
             | TC_ID    | email                        | companyName | companyType | serviceLevel | leadTime | orderInterval | expectedStatus | expectedStatusText | supplierName      | description     | emailSupplier      | moq    | itemName      | description     | vendorName | vendorPrice | onHand | onHandMin | onHandThirdParty | onHandThirdPartyMin | lotMultipleQty | lotMultipleItemName | vendorKey | limitRow | parentName | parentKey | childName | childKey | qty    | supplyUuid | refNum | docDate | dueDate | itemKey | orderQty | openQty | orderKey | rowKey |
@@ -91,7 +91,7 @@ Feature: API_Regression User can create company
             When The expected status code should be <expectedStatus>
             Then The status text is "<expectedStatusText>"
             # And Check that the company just created exists in the current companies list of his
-            # And And User sets DELETE api endpoint to delete company
+            # And User sets DELETE api endpoint to delete company
             # And User sends a DELETE method to delete the created company
 
         Examples:
