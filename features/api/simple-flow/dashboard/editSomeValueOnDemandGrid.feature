@@ -31,7 +31,7 @@ Feature: API_Dashboard PUT /api/demand/manual
             | TC_UD001_1 | CSV         | testautoforecast@gmail.com | 10       | itemName   | random | 200            |
 
     # Test case TC_UD001_2 FAILED: actual date will be less than expected date 1 day
-    @TC_UD001 @regression-api 
+    @TC_UD001 @regression-api @TC_UD001_2-bug-1325
     Scenario Outline: <TC_ID> - Verify user <email> could call this API to update "<editColumn>" of a demand for company type (<companyType>)
         Given User picks company with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
