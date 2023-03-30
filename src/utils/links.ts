@@ -33,6 +33,7 @@ export class Links {
     static API_GET_GRIDVIEW_CUSTOM_ALL_AVAILABLE_ITEMS: string = '/api/grid-view/custom-all-available-items';
     static API_GET_COUNT_SUMMARY_BY_VENDOR = '/api/summarybyvendor';
     static API_SUMMARY_VENDOR_ITEMS_IN_PO = '/api/summary/vendor';
+    static API_SUMMARY_ITEMS_IN_PURCHASING_CUSTOM = '/api/summary';
     //API Admin
     static API_ADMIN_DELETE_USER: string = '/api/admin/users/';
     static API_ADMIN_GET_COMPANIES: string = '/api/admin/companies';
