@@ -92,8 +92,7 @@ Then('{} sends a GET request to get company information by company key', async f
     const responseBodyText = await this.getCompanyInfoResponse.text();
     if (this.getCompanyInfoResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
         this.getCompanyInfoResponseBody = JSON.parse(await this.getCompanyInfoResponse.text());
-        this.lastForecastDate = this.getCompanyInfoResponseBody.lastForecastDate;
-        console.log(this.lastForecastDate);
+        this.marketplaceId = this.getCompanyInfoResponseBody.marketplaceId;
         logger.log('info', `Response GET ${link}` + JSON.stringify(this.getCompanyInfoResponseBody, undefined, 4));
         this.attach(`Response GET ${link}` + JSON.stringify(this.getCompanyInfoResponseBody, undefined, 4))
     }
