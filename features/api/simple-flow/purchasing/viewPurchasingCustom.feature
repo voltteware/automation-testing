@@ -16,6 +16,9 @@ Feature: API_Purchasing Custom
         When User sends a GET request to get count items in Purchasing Custom
         Then The expected status code should be <expectedStatus>
         And User checks API contract get count items in purchasing custom are correct
+        And User sets GET api endpoint to count items that is active and have lotMultipleItemKey is NULL
+        And User sends a GET request to get count items active and have lotMultipleItemKey is NULL
+        And User checks total items in Custom EQUALS total items active and have lotMultipleItemKey is NULL
         And User sets GET api endpoint to get items in Purchasing Custom
         And User sends a GET request to get items in Purchasing Custom
         And The expected status code should be <expectedStatus>

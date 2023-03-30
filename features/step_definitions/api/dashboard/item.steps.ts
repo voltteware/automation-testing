@@ -9,6 +9,7 @@ import _ from "lodash";
 let link: string;
 var linkGetAllItems: string;
 let linkLimitRow: string;
+var linkGetActiveAndHaslotMultipleItemKeyNullItem: string;
 
 Then(`{} sets GET api endpoint to get item summary`, async function (actor: string) {
     link = `${Links.API_ITEMS}?summary=true&companyKey=${this.companyKey}&companyType=${this.companyType}`;
@@ -17,6 +18,28 @@ Then(`{} sets GET api endpoint to get item summary`, async function (actor: stri
 Then(`{} sets GET api endpoint to get item with limit row: {}`, async function (actor, limitRow: string) {
     linkLimitRow = `${Links.API_ITEMS}?offset=0&limit=${limitRow}`;
 });
+
+Then(`{} sets GET api endpoint to count items that is active and have lotMultipleItemKey is NULL`, async function (actor, limitRow: string) {
+    linkGetActiveAndHaslotMultipleItemKeyNullItem = encodeURI(`${Links.API_ITEM_COUNT}?where={"filters":[{"filters":[{"field":"isHidden","operator":"eq","value":false},{"field":"isHidden","operator":"eq","value":null},{"field":"isHidden","operator":"eq","value":null}],"logic":"or"},{"filters":[{"field":"lotMultipleItemName","operator":"isnull","value":null}],"logic":"and"}],"logic":"and"}`);
+});
+
+Then(`{} sends a GET request to get count items active and have lotMultipleItemKey is NULL`, async function (actor: string) {
+    const options = {
+        headers: this.headers
+    }
+    this.getCountItemsActiveAndHasLotMultipleItemKeyNullResponse = this.response = await itemRequest.getItems(this.request, linkGetActiveAndHaslotMultipleItemKeyNullItem, options);
+    const responseBodyText = await this.getCountItemsActiveAndHasLotMultipleItemKeyNullResponse.text();
+    if (this.getCountItemsActiveAndHasLotMultipleItemKeyNullResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
+        this.responseBody = this.getCountItemsActiveAndHasLotMultipleItemKeyNullResponseBody = JSON.parse(await this.getCountItemsActiveAndHasLotMultipleItemKeyNullResponse.body());
+        logger.log('info', `Response GET ${linkGetActiveAndHaslotMultipleItemKeyNullItem}>>>>>` + JSON.stringify(this.getCountItemsActiveAndHasLotMultipleItemKeyNullResponseBody, undefined, 4));
+        this.attach(`Response GET ${linkGetActiveAndHaslotMultipleItemKeyNullItem}>>>>>>` + JSON.stringify(this.getCountItemsActiveAndHasLotMultipleItemKeyNullResponseBody, undefined, 4))
+    }
+    else {
+        const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
+        logger.log('info', `Response GET ${linkGetActiveAndHaslotMultipleItemKeyNullItem} has status code ${this.response.status()} ${this.response.statusText()} and response body >>>>>>${responseBodyText}`);
+        this.attach(`Response GET ${linkGetActiveAndHaslotMultipleItemKeyNullItem} has status code ${this.response.status()} ${this.response.statusText()} and response body >>>>>>${actualResponseText}`)
+    }
+})
 
 Then(`{} sends a GET request to get list items`, async function (actor: string) {
     const options = {
