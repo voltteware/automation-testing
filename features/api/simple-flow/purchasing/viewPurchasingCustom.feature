@@ -24,7 +24,7 @@ Feature: API_Purchasing Custom
 
         Examples:
             | TC_ID    | user  | email                      | password  | companyType | expectedStatus |
-            # | TC_PC001 | admin | testautoforecast@gmail.com | Test1111# | CSV         | 200            |
+            | TC_PC001 | admin | testautoforecast@gmail.com | Test1111# | CSV         | 200            |
             | TC_PC002 | admin | testautoforecast@gmail.com | Test1111# | ASC         | 200            |
-            # | TC_PC003 | admin | testautoforecast@gmail.com | Test1111# | QBFS        | 200            |
-            # | TC_PC004 | admin | testautoforecast@gmail.com | Test1111# | QBO         | 200            |
+            | TC_PC003 | admin | testautoforecast@gmail.com | Test1111# | QBFS        | 200            |
+            | TC_PC004 | admin | testautoforecast@gmail.com | Test1111# | QBO         | 200            |
