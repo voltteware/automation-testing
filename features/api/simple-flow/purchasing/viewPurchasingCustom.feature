@@ -12,6 +12,11 @@ Feature: API_Purchasing Custom
     Scenario Outline: <TC_ID> - Verify items on Purchasing Custom of company <companyType>
         Given User picks company with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
+        And user sets GET api endpoint to get company information by company key
+        And User sends a GET request to get company information by company key
+        And User sets POST api to run forecast
+        And User sends a POST request to run forecast
+        And User checks that the lastForecastDate field was updated in company detail information after running forecast
         And User sets GET api endpoint to get count items in Purchasing Custom
         When User sends a GET request to get count items in Purchasing Custom
         Then The expected status code should be <expectedStatus>

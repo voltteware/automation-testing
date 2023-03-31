@@ -19,7 +19,7 @@ Then(`{} sets GET api endpoint to get item with limit row: {}`, async function (
     linkLimitRow = `${Links.API_ITEMS}?offset=0&limit=${limitRow}`;
 });
 
-Then(`{} sets GET api endpoint to count items that is active and have lotMultipleItemKey is NULL`, async function (actor, limitRow: string) {
+Then(`{} sets GET api endpoint to count items that is active and have lotMultipleItemKey is NULL`, async function (actor: string) {
     linkGetActiveAndHaslotMultipleItemKeyNullItem = encodeURI(`${Links.API_ITEM_COUNT}?where={"filters":[{"filters":[{"field":"isHidden","operator":"eq","value":false},{"field":"isHidden","operator":"eq","value":null},{"field":"isHidden","operator":"eq","value":null}],"logic":"or"},{"filters":[{"field":"lotMultipleItemName","operator":"isnull","value":null}],"logic":"and"}],"logic":"and"}`);
 });
 

@@ -117,3 +117,37 @@ When(`{} sends a GET request to get company information of {} by company key`, a
         this.attach(`Response ${link} has status code ${this.getCompanyInfoResponse.status()} ${this.getCompanyInfoResponse.statusText()} and response body ${actualResponseText}`)
     }
 })
+
+Then('{} checks {} and other values in response of random company are correct', async function (actor, userId: string) {
+    const companyType = ['ASC', 'CSV', 'QBFS', 'QBO'];
+    expect(companyType, `Company Type should be one of ${companyType}`).toContain(this.randomCompany.companyType);
+    expect(this.randomCompany.companyKey).not.toBeNull();
+    expect(this.randomCompany.userId).toBe(userId);
+    expect(this.randomCompany.companyName).not.toBeNull();
+})
+
+Then('{} checks that the lastForecastDate field was updated in company detail information after running forecast', { timeout: 20 * 60 * 1000 }, async function (actor: string) {
+    const linkGetCompanyInfo = `${Links.API_GET_COMPANY}/${this.companyKey}`;
+    const options = {
+        headers: this.headers
+    }
+    const beforeForecastDate = Date.parse(this.lastForecastDate);
+    logger.log('info', `Before Last Forecast Date: >>>>>>` + beforeForecastDate);
+    this.attach(`Before Last Forecast Date: >>>>>>` + beforeForecastDate);
+
+    await expect.poll(async () => {
+        const getCompanyInfoResponse = await companyRequest.getCompanyInfo(this.request, linkGetCompanyInfo, options);
+        const getCompanyInfoResponseBody = JSON.parse(await getCompanyInfoResponse.text());
+        const lastForecastDateAfterRunningForecast = Date.parse(getCompanyInfoResponseBody.lastForecastDate);
+        console.log(`last Forecast Date After Running Forecast is: >>>>>>`, lastForecastDateAfterRunningForecast);
+        logger.log('info', `last Forecast Date After Running Forecast is is: >>>>>>` + lastForecastDateAfterRunningForecast);
+        this.attach(`llast Forecast Date After Running Forecast is: >>>>>>` + lastForecastDateAfterRunningForecast);
+        return lastForecastDateAfterRunningForecast;
+    }, {
+        // Custom error message, optional.
+        message: `make sure Last Forecast Date is after the moment user clicks Run Forecast`, // custom error message
+        // Probe, wait 1s, probe, wait 2s, probe, wait 10s, probe, wait 10s, probe, .... Defaults to [100, 250, 500, 1000].
+        intervals: [5_000, 10_000, 20_000],
+        timeout: 15 * 60 * 1000,
+    }).toBeGreaterThan(beforeForecastDate);
+})
