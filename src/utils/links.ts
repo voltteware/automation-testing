@@ -15,6 +15,7 @@ export class Links {
     static API_SUPPLIERS: string = '/api/vendor';
     static API_UPDATE_COMPANY: string = '/api/company/';
     static API_ITEMS: string = '/api/item';
+    static API_ITEM_COUNT: string = '/api/item/count';
     static API_BOM: string = '/api/bom';
     static API_DEMAND: string = '/api/demand';
     static API_CREATE_GRIDVIEW: string = '/api/grid-view';
