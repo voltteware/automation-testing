@@ -21,11 +21,7 @@ Then('{} sets request body with payload as itemName: {string} and dateOfSale: {s
             const randomItem = this.getItemsResponseBody[Math.floor(Math.random() * this.getItemsResponseBody.length)];
             this.itemKey = randomItem.key
             this.itemName = randomItem.name
-            break;
-        case '':
-            this.itemKey = null
-            this.itemName = null
-            break;
+            break;        
         default:
             break;
     }
@@ -43,7 +39,6 @@ Then('{} sets request body with payload as itemName: {string} and dateOfSale: {s
             const day = ('0' + currentDate.getDate()).slice(-2);
             this.dueDate = `${year}-${month}-${day}`;
             break;
-
         default:
             break;
     }
@@ -107,12 +102,12 @@ Then('{} sets request body with payload as itemName: {string} and dateOfSale: {s
         "orderKey": `${this.orderKey}`,
         "rowKey": `${this.rowKey}`,
         "refNum": `${this.refNum}`,
-        "itemKey": `${this.itemKey}`,
-        "itemName": `${this.itemName}`,
+        "itemKey": this.itemKey === undefined ? undefined : `${this.itemKey}`,
+        "itemName": this.itemName === undefined ? undefined : `${this.itemName}`,
         "fnsku": "",
         "imageUrl": "",
         "asin": "",
-        "dueDate": `${this.dueDate}`,
+        "dueDate": this.dueDate === undefined ? undefined : `${this.dueDate}`,
         "orderQty": this.orderQty,
         "openQty": this.openQty,
         "lotMultipleItemKey": null,

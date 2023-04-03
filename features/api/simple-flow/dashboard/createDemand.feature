@@ -111,8 +111,8 @@ Feature: API_Dashboard POST /api/demand
 
         Examples:
             | TC_ID      | missedField      | email                      | limitRow | itemName | dateOfSale | saleOrderQty | openSaleOrderQty | referenceNumber | expectedStatus | expectedStatusText         |
-            | TC_CD006_1 | itemName         | testautoforecast@gmail.com | 20       |          | random     | random       | random           | random          | 400            | Unable to create record.   |
-            | TC_CD006_2 | dateOfSale       | testautoforecast@gmail.com | 20       | random   |            | random       | random           | random          | 400            | Unable to create record.   |
+            | TC_CD006_1 | itemName         | testautoforecast@gmail.com | 20       |          | random     | random       | random           | random          | 400            | Missing required property. |
+            | TC_CD006_2 | dateOfSale       | testautoforecast@gmail.com | 20       | random   |            | random       | random           | random          | 400            | Missing required property. |
             | TC_CD006_3 | saleOrderQty     | testautoforecast@gmail.com | 20       | random   | random     |              | random           | random          | 400            | Missing required property. |
             | TC_CD006_4 | openSaleOrderQty | testautoforecast@gmail.com | 20       | random   | random     | random       |                  | random          | 400            | Missing required property. |
 
