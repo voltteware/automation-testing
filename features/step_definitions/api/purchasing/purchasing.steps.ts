@@ -317,3 +317,12 @@ Then(`{} checks random items in Purchasing Custom has status is Active`, async f
         }
     }
 })
+
+Then(`{} checks total items in Custom EQUALS total items active and have lotMultipleItemKey is NULL`, async function (actor) {
+    const options = {
+        headers: this.headers
+    }
+    const itemsInCustom = this.getCountItemsinPurchasingCustomResponseBody;
+    const itemsActiveAndHaslotMultipleItemKeyNull = this.getCountItemsActiveAndHasLotMultipleItemKeyNullResponseBody;
+    expect(itemsInCustom, `Total Items in Purchasing Custom ${itemsInCustom} is equal ${itemsActiveAndHaslotMultipleItemKeyNull}`).toEqual(itemsActiveAndHaslotMultipleItemKeyNull);
+})

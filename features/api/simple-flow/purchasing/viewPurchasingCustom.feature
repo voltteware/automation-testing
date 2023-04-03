@@ -12,10 +12,18 @@ Feature: API_Purchasing Custom
     Scenario Outline: <TC_ID> - Verify items on Purchasing Custom of company <companyType>
         Given User picks company with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
+        And user sets GET api endpoint to get company information by company key
+        And User sends a GET request to get company information by company key
+        And User sets POST api to run forecast
+        And User sends a POST request to run forecast
+        And User checks that the lastForecastDate field was updated in company detail information after running forecast
         And User sets GET api endpoint to get count items in Purchasing Custom
         When User sends a GET request to get count items in Purchasing Custom
         Then The expected status code should be <expectedStatus>
         And User checks API contract get count items in purchasing custom are correct
+        And User sets GET api endpoint to count items that is active and have lotMultipleItemKey is NULL
+        And User sends a GET request to get count items active and have lotMultipleItemKey is NULL
+        And User checks total items in Custom EQUALS total items active and have lotMultipleItemKey is NULL
         And User sets GET api endpoint to get items in Purchasing Custom
         And User sends a GET request to get items in Purchasing Custom
         And The expected status code should be <expectedStatus>

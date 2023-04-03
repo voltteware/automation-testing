@@ -158,7 +158,7 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     if (this.randomAItemObject.daysLeft !== null) {
         expect(typeof (this.randomAItemObject.daysLeft), 'daysLeft in response should be number').toBe("number");
-    logger.log('info', `daysLeft type ${typeof (this.randomAItemObject.daysLeft)}`);
+        logger.log('info', `daysLeft type ${typeof (this.randomAItemObject.daysLeft)}`);
 
     }
     else {
@@ -167,7 +167,7 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     if (this.randomAItemObject.daysRemaining !== null) {
         expect(typeof (this.randomAItemObject.daysRemaining), 'daysRemaining in response should be number').toBe("number");
-    logger.log('info', `daysRemaining type ${typeof (this.randomAItemObject.daysRemaining)}`);
+        logger.log('info', `daysRemaining type ${typeof (this.randomAItemObject.daysRemaining)}`);
 
     }
     else {
@@ -177,7 +177,7 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     if (this.randomAItemObject.daysUntilNextScheduledOrder !== null) {
         expect(typeof (this.randomAItemObject.daysUntilNextScheduledOrder), 'daysUntilNextScheduledOrder in response should be number').toBe("number");
-    logger.log('info', `daysUntilNextScheduledOrder type ${typeof (this.randomAItemObject.daysUntilNextScheduledOrder)}`);
+        logger.log('info', `daysUntilNextScheduledOrder type ${typeof (this.randomAItemObject.daysUntilNextScheduledOrder)}`);
 
     }
     else {
@@ -187,7 +187,7 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     if (this.randomAItemObject.description !== null) {
         expect(typeof (this.randomAItemObject.description), 'description in response should be string').toBe("string");
-    logger.log('info', `description type ${typeof (this.randomAItemObject.description)}`);
+        logger.log('info', `description type ${typeof (this.randomAItemObject.description)}`);
 
     }
     else {
@@ -196,7 +196,7 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     if (this.randomAItemObject.documentUuid !== null) {
         expect(typeof (this.randomAItemObject.documentUuid), 'documentUuid in response should be number').toBe("number");
-    logger.log('info', `documentUuid type ${typeof (this.randomAItemObject.documentUuid)}`);
+        logger.log('info', `documentUuid type ${typeof (this.randomAItemObject.documentUuid)}`);
 
     }
     else {
@@ -212,7 +212,7 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     if (this.randomAItemObject.fnsku !== null) {
         expect(typeof (this.randomAItemObject.fnsku), 'fnsku in response should be string').toBe("string");
-    logger.log('info', `fnsku type ${typeof (this.randomAItemObject.fnsku)}`);
+        logger.log('info', `fnsku type ${typeof (this.randomAItemObject.fnsku)}`);
 
     }
     else {
@@ -221,7 +221,7 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     if (this.randomAItemObject.imageUrl !== null) {
         expect(typeof (this.randomAItemObject.imageUrl), 'imageUrl in response should be string').toBe("string");
-    logger.log('info', `imageUrl type ${typeof (this.randomAItemObject.imageUrl)}`);
+        logger.log('info', `imageUrl type ${typeof (this.randomAItemObject.imageUrl)}`);
 
     }
     else {
@@ -239,7 +239,7 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     if (this.randomAItemObject.inboundAlert !== null) {
         expect(typeof (this.randomAItemObject.inboundAlert), 'inboundAlert in response should be string').toBe("string");
-    logger.log('info', `inboundAlert type ${typeof (this.randomAItemObject.inboundAlert)}`);
+        logger.log('info', `inboundAlert type ${typeof (this.randomAItemObject.inboundAlert)}`);
 
     }
     else {
@@ -535,86 +535,77 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
     //     expect(this.randomAItemObject.recommendedQty, 'recommendedQty value should be null').toBeNull();
     // }
 
-    // if (this.randomAItemObject.s7d !== null) {
-    expect(typeof (this.randomAItemObject.s7d), 's7d in response should be number').toBe("number");
-    logger.log('info', `s7d type ${typeof (this.randomAItemObject.s7d)}`);
+    if (this.randomAItemObject.s7d !== null) {
+        expect(typeof (this.randomAItemObject.s7d), 's7d in response should be number').toBe("number");
+        logger.log('info', `s7d type ${typeof (this.randomAItemObject.s7d)}`);
+    }
+    else {
+        expect(this.randomAItemObject.s7d, 's7d value should be null').toBeNull();
+    }
 
-    // }
-    // else {
-    //     expect(this.randomAItemObject.s7d, 's7d value should be null').toBeNull();
-    // }
+    if (this.randomAItemObject.s30d !== null) {
+        expect(typeof (this.randomAItemObject.s30d), 's30d in response should be number').toBe("number");
+        logger.log('info', `s30d type ${typeof (this.randomAItemObject.s30d)}`);
+    }
+    else {
+        expect(this.randomAItemObject.s30d, 's30d value should be null').toBeNull();
+    }
 
-    // if (this.randomAItemObject.s30d !== null) {
-    expect(typeof (this.randomAItemObject.s30d), 's30d in response should be number').toBe("number");
-    logger.log('info', `s30d type ${typeof (this.randomAItemObject.s30d)}`);
+    if (this.randomAItemObject.s90d !== null) {
+        expect(typeof (this.randomAItemObject.s90d), 's90d in response should be number').toBe("number");
+        logger.log('info', `s90d type ${typeof (this.randomAItemObject.s90d)}`);
+    }
+    else {
+        expect(this.randomAItemObject.s90d, 's90d value should be null').toBeNull();
+    }
 
-    // }
-    // else {
-    //     expect(this.randomAItemObject.s30d, 's30d value should be null').toBeNull();
-    // }
+    if (this.randomAItemObject.s365d !== null) {
+        expect(typeof (this.randomAItemObject.s365d), 's365d in response should be number').toBe("number");
+        logger.log('info', `s365d type ${typeof (this.randomAItemObject.s365d)}`);
+    }
+    else {
+        expect(this.randomAItemObject.s365d, 's365d value should be null').toBeNull();
+    }
 
-    // if (this.randomAItemObject.s90d !== null) {
-    expect(typeof (this.randomAItemObject.s90d), 's90d in response should be number').toBe("number");
-    logger.log('info', `s90d type ${typeof (this.randomAItemObject.s90d)}`);
+    if (this.randomAItemObject.sMtd !== null) {
+        expect(typeof (this.randomAItemObject.sMtd), 'sMtd in response should be number').toBe("number");
+        logger.log('info', `sMtd type ${typeof (this.randomAItemObject.sMtd)}`);
+    }
+    else {
+        expect(this.randomAItemObject.sMtd, 'sMtd value should be null').toBeNull();
+    }
 
-    // }
-    // else {
-    //     expect(this.randomAItemObject.s90d, 's90d value should be null').toBeNull();
-    // }
+    if (this.randomAItemObject.sYtd !== null) {
+        expect(typeof (this.randomAItemObject.sYtd), 'sYtd in response should be number').toBe("number");
+        logger.log('info', `sYtd type ${typeof (this.randomAItemObject.sYtd)}`);
+    }
+    else {
+        expect(this.randomAItemObject.sYtd, 'sYtd value should be null').toBeNull();
+    }
 
-    // if (this.randomAItemObject.s365d !== null) {
-    expect(typeof (this.randomAItemObject.s365d), 's365d in response should be number').toBe("number");
-    logger.log('info', `s365d type ${typeof (this.randomAItemObject.s365d)}`);
+    if (this.randomAItemObject.s_2d !== null) {
+        expect(typeof (this.randomAItemObject.s_2d), 's_2d in response should be number').toBe("number");
+        logger.log('info', `s_2d type ${typeof (this.randomAItemObject.s_2d)}`);
+    }
+    else {
+        expect(this.randomAItemObject.s_2d, 's_2d value should be null').toBeNull();
+    }
 
-    // }
-    // else {
-    //     expect(this.randomAItemObject.s365d, 's365d value should be null').toBeNull();
-    // }
+    if (this.randomAItemObject.s_60d !== null) {
+        expect(typeof (this.randomAItemObject.s_60d), 's_60d in response should be number').toBe("number");
+        logger.log('info', `s_60d type ${typeof (this.randomAItemObject.s_60d)}`);
+    }
+    else {
+        expect(this.randomAItemObject.s_60d, 's_60d value should be null').toBeNull();
+    }
 
-    // if (this.randomAItemObject.sMtd !== null) {
-    expect(typeof (this.randomAItemObject.sMtd), 'sMtd in response should be number').toBe("number");
-    logger.log('info', `sMtd type ${typeof (this.randomAItemObject.sMtd)}`);
-
-    // }
-    // else {
-    //     expect(this.randomAItemObject.sMtd, 'sMtd value should be null').toBeNull();
-    // }
-
-    // if (this.randomAItemObject.sYtd !== null) {
-    expect(typeof (this.randomAItemObject.sYtd), 'sYtd in response should be number').toBe("number");
-    logger.log('info', `sYtd type ${typeof (this.randomAItemObject.sYtd)}`);
-
-    // }
-    // else {
-    //     expect(this.randomAItemObject.sYtd, 'sYtd value should be null').toBeNull();
-    // }
-
-    // if (this.randomAItemObject.s_2d !== null) {
-    expect(typeof (this.randomAItemObject.s_2d), 's_2d in response should be number').toBe("number");
-    logger.log('info', `s_2d type ${typeof (this.randomAItemObject.s_2d)}`);
-
-    // }
-    // else {
-    //     expect(this.randomAItemObject.s_2d, 's_2d value should be null').toBeNull();
-    // }
-
-    // if (this.randomAItemObject.s_60d !== null) {
-    expect(typeof (this.randomAItemObject.s_60d), 's_60d in response should be number').toBe("number");
-    logger.log('info', `s_60d type ${typeof (this.randomAItemObject.s_60d)}`);
-
-    // }
-    // else {
-    //     expect(this.randomAItemObject.s_60d, 's_60d value should be null').toBeNull();
-    // }
-
-    // if (this.randomAItemObject.s_180d !== null) {
-    expect(typeof (this.randomAItemObject.s_180d), 's_180d in response should be number').toBe("number");
-    logger.log('info', `s_180d type ${typeof (this.randomAItemObject.s_180d)}`);
-
-    // }
-    // else {
-    //     expect(this.randomAItemObject.s_180d, 's_180d value should be null').toBeNull();
-    // }
+    if (this.randomAItemObject.s_180d !== null) {
+        expect(typeof (this.randomAItemObject.s_180d), 's_180d in response should be number').toBe("number");
+        logger.log('info', `s_180d type ${typeof (this.randomAItemObject.s_180d)}`);
+    }
+    else {
+        expect(this.randomAItemObject.s_180d, 's_180d value should be null').toBeNull();
+    }
 
     // if (this.randomAItemObject.safetyStockLtd !== null) {
     expect(typeof (this.randomAItemObject.safetyStockLtd), 'safetyStockLtd in response should be number').toBe("number");
@@ -636,7 +627,7 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     if (this.randomAItemObject.tag !== null) {
         expect(typeof (this.randomAItemObject.tag), 'tag in response should be string').toBe("string");
-    logger.log('info', `tag type ${typeof (this.randomAItemObject.tag)}`);
+        logger.log('info', `tag type ${typeof (this.randomAItemObject.tag)}`);
 
     }
     else {
@@ -645,7 +636,7 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     if (this.randomAItemObject.tags !== null) {
         expect(typeof (this.randomAItemObject.tags), 'tags in response should be object').toBe("object");
-    logger.log('info', `tags type ${typeof (this.randomAItemObject.tags)}`);
+        logger.log('info', `tags type ${typeof (this.randomAItemObject.tags)}`);
 
     }
     else {
@@ -664,7 +655,7 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     if (this.randomAItemObject.trueRecommendedQty !== null) {
         expect(typeof (this.randomAItemObject.trueRecommendedQty), 'trueRecommendedQty in response should be number').toBe("number");
-    logger.log('info', `trueRecommendedQty type ${typeof (this.randomAItemObject.trueRecommendedQty)}`);
+        logger.log('info', `trueRecommendedQty type ${typeof (this.randomAItemObject.trueRecommendedQty)}`);
 
     }
     else {
@@ -687,7 +678,7 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     if (this.randomAItemObject.vendorKey !== null) {
         expect(typeof (this.randomAItemObject.vendorKey), 'vendorKey in response should be string').toBe("string");
-    logger.log('info', `vendorKey type ${typeof (this.randomAItemObject.vendorKey)}`);
+        logger.log('info', `vendorKey type ${typeof (this.randomAItemObject.vendorKey)}`);
 
     }
     else {
@@ -696,7 +687,7 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     if (this.randomAItemObject.vendorName !== null) {
         expect(typeof (this.randomAItemObject.vendorName), 'vendorName in response should be string').toBe("string");
-    logger.log('info', `vendorName type ${typeof (this.randomAItemObject.vendorName)}`);
+        logger.log('info', `vendorName type ${typeof (this.randomAItemObject.vendorName)}`);
 
     }
     else {
