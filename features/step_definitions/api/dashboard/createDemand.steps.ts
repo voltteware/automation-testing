@@ -14,7 +14,7 @@ Then(`{} sets POST api endpoint to create demand`, async function (actor: string
     link = `${Links.API_DEMAND}/manual/${this.orderKey}/${this.rowKey}`;
 });
 
-Then('{} sets request body with payload as itemName: {string} and dateOfSale: {string} and saleOrderQTy: {string} and openSaleOrderQTy: {string} and referenceNumber: {string}', async function (actor, itemName: string, dateOfSale: string, saleOrderQty: string, openSaleOrderQty: string, referenceNumber: string) {
+Then('{} sets request body with payload as itemName: {string} and dateOfSale: {string} and saleOrderQty: {string} and openSaleOrderQty: {string} and referenceNumber: {string}', async function (actor, itemName: string, dateOfSale: string, saleOrderQty: string, openSaleOrderQty: string, referenceNumber: string) {
 
     switch (itemName) {
         case 'random':
@@ -32,7 +32,7 @@ Then('{} sets request body with payload as itemName: {string} and dateOfSale: {s
 
     switch (dateOfSale) {
         case 'random':
-            const currentDate = new Date();            
+            const currentDate = new Date();
             // Outputs a date string in the format "mm/dd/yyyy"
             // The expected due date have format "mm/dd/yyyy" because after edit the reponsebody return due date with format mm/dd/yyyy
             this.expectedDueDate = currentDate.toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' });
@@ -57,6 +57,15 @@ Then('{} sets request body with payload as itemName: {string} and dateOfSale: {s
             this.orderQty = "abc"
             break;
         default:
+            const isNumber = !isNaN(parseFloat(saleOrderQty)) && isFinite(+saleOrderQty);
+            if (isNumber) {
+                this.orderQty = +saleOrderQty
+            } else {
+                console.log('The saleOrderQty is not a valid number.');
+            }
+
+            logger.log('info', `Sale Order Qty: ${this.orderQty}`);
+            this.attach(`Sale Order Qty: ${this.orderQty}`);
             break;
     }
 
@@ -73,6 +82,15 @@ Then('{} sets request body with payload as itemName: {string} and dateOfSale: {s
             this.openQty = "abc"
             break;
         default:
+            const isNumber = !isNaN(parseFloat(openSaleOrderQty)) && isFinite(+openSaleOrderQty);
+            if (isNumber) {
+                this.openQty = +openSaleOrderQty
+            } else {
+                console.log('The openSaleOrderQty is not a valid number.');
+            }
+
+            logger.log('info', `Opens Sale Order Qty: ${this.openQty}`);
+            this.attach(`Opens Sale Order Qty: ${this.openQty}`);
             break;
     }
 
@@ -111,6 +129,7 @@ Then('{} sets request body with payload as itemName: {string} and dateOfSale: {s
 
 Then('{} sends a POST method to create demand', async function (actor: string) {
     const createDemandResponse = await demandRequest.createDemand(this.request, link, this.payLoad, this.headers);
+    this.response = createDemandResponse
     const responseBodyText = await createDemandResponse.text();
     if (createDemandResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
         this.responseBodyOfADemandObject = JSON.parse(responseBodyText)
@@ -124,7 +143,7 @@ Then('{} sends a POST method to create demand', async function (actor: string) {
     }
 })
 
-Then('{} checks values in response of create demand are correct', async function (actor: string) {    
+Then('{} checks values in response of create demand are correct', async function (actor: string) {
     const companyType = ['ASC', 'CSV', 'QBFS', 'QBO'];
     expect(companyType, `Company Type should be one of ${companyType}`).toContain(this.responseBodyOfADemandObject.companyType);
     expect(this.responseBodyOfADemandObject.companyKey).not.toBeNull();
