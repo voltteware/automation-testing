@@ -35,6 +35,9 @@ export class Links {
     static API_GET_COUNT_SUMMARY_BY_VENDOR = '/api/summarybyvendor';
     static API_SUMMARY_VENDOR_ITEMS_IN_PO = '/api/summary/vendor';
     static API_SUMMARY_ITEMS_IN_PURCHASING_CUSTOM = '/api/summary';
+    //API RestockAMZ
+    static API_GET_RESTOCK_SUGGESTION_BY_VENDOR = '/api/restock-suggestion-by-vendor';
+    static API_GET_RESTOCK_SUGGESTION = '/api/restock-suggestion';
     //API Admin
     static API_ADMIN_DELETE_USER: string = '/api/admin/users/';
     static API_ADMIN_GET_COMPANIES: string = '/api/admin/companies';

@@ -43,7 +43,7 @@ Feature: API_Dashboard POST /api/demand
             | TC_CD002_1 | CSV         | testautoforecast@gmail.com | 30       | invalid | invalid          | invalid           | random   | random     | random       | random           | random          | 401            | Unauthorized          |
             | TC_CD002_2 | CSV         | testautoforecast@gmail.com | 30       | invalid | valid            | invalid           | random   | random     | random       | random           | random          | 400            | Unauthorized          |
             | TC_CD002_3 | CSV         | testautoforecast@gmail.com | 30       | valid   | invalid          | invalid           | random   | random     | random       | random           | random          | 400            | Company not found.    |
-            | TC_CD002_3 | CSV         | testautoforecast@gmail.com | 30       | valid   |                  |                   | random   | random     | random       | random           | random          | 500            | Internal Server Error |
+            | TC_CD002_4 | CSV         | testautoforecast@gmail.com | 30       | valid   |                  |                   | random   | random     | random       | random           | random          | 500            | Internal Server Error |
 
     # TC_CD003 fail due to bug api - Bug 1821
     @TC_CD003 @TC_CD003-bug-1821
