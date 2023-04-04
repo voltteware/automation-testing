@@ -8,7 +8,7 @@ Feature: API_Dashboard POST /api/supply
         And In Header of the request, she sets param Cookie as valid connect.sid
         When User sends a GET request to get company keys
 
-    @TC_CSL001 @TC_CSL002 @regression-api @csv @asc
+    @TC_CSL001 @TC_CSL002 @regression-api @csv @asc @smoke-test-api
     Scenario Outline: <scenario> - Verify user <email> could call this API to create supply for company has type <companyType> with input all data valid
         Given User picks company with type <companyType> in above response
         But User sets valid cookie of <email> and valid companyKey and valid companyType in the header

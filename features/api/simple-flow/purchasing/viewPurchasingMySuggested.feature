@@ -8,7 +8,7 @@ Feature: API_Purchasing My Suggested
         And In Header of the request, she sets param Cookie as valid connect.sid
         When User sends a GET request to get company keys
 
-    @TC_PMS001-4 @regression-api @api-purchasing-mysuggested
+    @TC_PMS001-4 @smoke-test-api @api-purchasing-mysuggested
     Scenario Outline: <TC_ID> - Verify Purchasing My Suggested POs and Items in PO on <companyType>
         Given User picks company with type <companyType> in above response
         But User sets valid cookie of <email> and valid companyKey and valid companyType in the header

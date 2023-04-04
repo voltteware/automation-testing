@@ -5,7 +5,7 @@ Feature: API_Regression User can create company and complete onboarding flow
             | role  | username                     | password  |
             | admin | testuserforecastrx@gmail.com | Test1111# |
 
-    @TC_OB001_CSV
+    @TC_OB001_CSV @smoke-test-api
     Scenario Outline: <TC_ID> - Verify user <email> could call APIs to create company CSV and complete onboarding flow
         Given In Header of the request, User sets param Cookie as valid connect.sid
         And User sets request body with payload as companyName: "<companyName>" and companyKey: "" and companyType: "<companyType>" and serviceLevel: "<serviceLevel>" and leadTime: "<leadTime>" and orderInterval: "<orderInterval>" and initialSyncDate: "" and marketplaceId: ""
@@ -109,7 +109,7 @@ Feature: API_Regression User can create company and complete onboarding flow
             | TC_ID    | properties| email                        | companyName | companyType | editColumnSupply | editColumnDemand | editColumnBom | editColumn1 | value  | serviceLevel | leadTime | orderInterval | expectedStatus | expectedStatusText | supplierName      | description     | emailSupplier      | moq    | itemName      | description     | vendorName | vendorPrice | onHand | onHandMin | onHandThirdParty | onHandThirdPartyMin | lotMultipleQty | lotMultipleItemName | vendorKey | limitRow | parentName | parentKey | childName | childKey | qty    | supplyUuid | refNum | docDate | dueDate | itemKey | orderQty | openQty | orderKey | rowKey |
             | TC_OB001 | leadTime  | testuserforecastrx@gmail.com | random      | CSV         | orderQty         | itemName         | leadTime      | kitQty      | random | random       | random   | random        | 200            | OK                 | New Supplier Auto | New description | newemail@gmail.com | random | New Item Auto | New description | random     | random      | random | random    | random           | random              | random         | random              | random    | 10       | random     | random    | random    | random   | random | random     | random | random  | randon  | random  | random   | random  | random   | random |
 
-    @TC_OB002_ASC
+    @TC_OB002_ASC @smoke-test-api
     Scenario Outline: <TC_ID> - Verify user <email> could call APIs to create company ASC and complete onboarding flow
         Given In Header of the request, user sets param Cookie as valid connect.sid
         And User sends a GET request to get all company

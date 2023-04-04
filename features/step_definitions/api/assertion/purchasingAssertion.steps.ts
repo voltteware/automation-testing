@@ -130,23 +130,23 @@ Then(`{} checks API contract get items in po by vendor key are correct`, async f
 
 Then(`{} checks API contract of item object is purchasing is correct`, async function (actor) {
     expect(typeof (this.randomAItemObject.addedToSupplies), 'addedToSupplies should be number').toBe("number");
-    logger.log('info', `addedToSupplies type ${typeof (this.randomAItemObject.addedToSupplies)}`);
+    logger.log('info', `addedToSupplies type of ${this.randomAItemObject.itemKey}: ${typeof (this.randomAItemObject.addedToSupplies)}`);
 
     if (this.randomAItemObject.asin !== null) {
         expect(typeof (this.randomAItemObject.asin), 'asin in response should be string').toBe("string");
-        logger.log('info', `asin type ${typeof (this.randomAItemObject.asin)}`);
+        logger.log('info', `asin type of ${this.randomAItemObject.itemKey}: ${typeof (this.randomAItemObject.asin)}`);
     }
     else {
         expect(this.randomAItemObject.asin, 'asin value should be null').toBeNull();
     }
 
     expect(typeof (this.randomAItemObject.companyKey), 'companyKey should be string').toBe("string");
-    logger.log('info', `companyKey type ${typeof (this.randomAItemObject.companyKey)}`);
+    logger.log('info', `companyKey type of ${this.randomAItemObject.itemKey}: ${typeof (this.randomAItemObject.companyKey)}`);
     expect(typeof (this.randomAItemObject.companyType), 'companyType should be string').toBe("string");
-    logger.log('info', `companyType type ${typeof (this.randomAItemObject.companyType)}`);
+    logger.log('info', `companyType type of ${this.randomAItemObject.itemKey}: ${typeof (this.randomAItemObject.companyType)}`);
 
     expect(typeof (this.randomAItemObject.consolidatedQty), 'consolidatedQty should be number').toBe("number");
-    logger.log('info', `consolidatedQty type ${typeof (this.randomAItemObject.consolidatedQty)}`);
+    logger.log('info', `consolidatedQty type of ${this.randomAItemObject.itemKey}: ${typeof (this.randomAItemObject.consolidatedQty)}`);
 
 
     if (this.randomAItemObject.created_at !== null) {
@@ -158,7 +158,7 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     if (this.randomAItemObject.daysLeft !== null) {
         expect(typeof (this.randomAItemObject.daysLeft), 'daysLeft in response should be number').toBe("number");
-        logger.log('info', `daysLeft type ${typeof (this.randomAItemObject.daysLeft)}`);
+        logger.log('info', `daysLeft type of ${this.randomAItemObject.itemKey}: ${typeof (this.randomAItemObject.daysLeft)}`);
 
     }
     else {
@@ -167,7 +167,7 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     if (this.randomAItemObject.daysRemaining !== null) {
         expect(typeof (this.randomAItemObject.daysRemaining), 'daysRemaining in response should be number').toBe("number");
-        logger.log('info', `daysRemaining type ${typeof (this.randomAItemObject.daysRemaining)}`);
+        logger.log('info', `daysRemaining type of ${this.randomAItemObject.itemKey}: ${typeof (this.randomAItemObject.daysRemaining)}`);
 
     }
     else {
@@ -177,7 +177,7 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     if (this.randomAItemObject.daysUntilNextScheduledOrder !== null) {
         expect(typeof (this.randomAItemObject.daysUntilNextScheduledOrder), 'daysUntilNextScheduledOrder in response should be number').toBe("number");
-        logger.log('info', `daysUntilNextScheduledOrder type ${typeof (this.randomAItemObject.daysUntilNextScheduledOrder)}`);
+        logger.log('info', `daysUntilNextScheduledOrder type of ${this.randomAItemObject.itemKey}: ${typeof (this.randomAItemObject.daysUntilNextScheduledOrder)}`);
 
     }
     else {
@@ -187,7 +187,7 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     if (this.randomAItemObject.description !== null) {
         expect(typeof (this.randomAItemObject.description), 'description in response should be string').toBe("string");
-        logger.log('info', `description type ${typeof (this.randomAItemObject.description)}`);
+        logger.log('info', `description type of ${this.randomAItemObject.itemKey}: ${typeof (this.randomAItemObject.description)}`);
 
     }
     else {
@@ -196,7 +196,7 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     if (this.randomAItemObject.documentUuid !== null) {
         expect(typeof (this.randomAItemObject.documentUuid), 'documentUuid in response should be number').toBe("number");
-        logger.log('info', `documentUuid type ${typeof (this.randomAItemObject.documentUuid)}`);
+        logger.log('info', `documentUuid type of ${this.randomAItemObject.itemKey}: ${typeof (this.randomAItemObject.documentUuid)}`);
 
     }
     else {
@@ -212,7 +212,7 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     if (this.randomAItemObject.fnsku !== null) {
         expect(typeof (this.randomAItemObject.fnsku), 'fnsku in response should be string').toBe("string");
-        logger.log('info', `fnsku type ${typeof (this.randomAItemObject.fnsku)}`);
+        logger.log('info', `fnsku type of ${this.randomAItemObject.itemKey}: ${typeof (this.randomAItemObject.fnsku)}`);
 
     }
     else {
@@ -221,7 +221,7 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     if (this.randomAItemObject.imageUrl !== null) {
         expect(typeof (this.randomAItemObject.imageUrl), 'imageUrl in response should be string').toBe("string");
-        logger.log('info', `imageUrl type ${typeof (this.randomAItemObject.imageUrl)}`);
+        logger.log('info', `imageUrl type of ${this.randomAItemObject.itemKey}: ${typeof (this.randomAItemObject.imageUrl)}`);
 
     }
     else {
@@ -230,7 +230,7 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     // if (this.randomAItemObject.inbound !== null) {
     expect(typeof (this.randomAItemObject.inbound), 'inbound in response should be number').toBe("number");
-    logger.log('info', `inbound type ${typeof (this.randomAItemObject.inbound)}`);
+    logger.log('info', `inbound type of ${this.randomAItemObject.itemKey}: ${typeof (this.randomAItemObject.inbound)}`);
 
     // }
     // else {
@@ -239,8 +239,7 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     if (this.randomAItemObject.inboundAlert !== null) {
         expect(typeof (this.randomAItemObject.inboundAlert), 'inboundAlert in response should be string').toBe("string");
-        logger.log('info', `inboundAlert type ${typeof (this.randomAItemObject.inboundAlert)}`);
-
+        logger.log('info', `inboundAlert type of ${this.randomAItemObject.itemKey}: ${typeof (this.randomAItemObject.inboundAlert)}`);
     }
     else {
         expect(this.randomAItemObject.inboundAlert, 'inboundAlert value should be null').toBeNull();
@@ -248,7 +247,7 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     // if (this.randomAItemObject.inboundAvailable !== null) {
     expect(typeof (this.randomAItemObject.inboundAvailable), 'inboundAvailable in response should be number').toBe("number");
-    logger.log('info', `inboundAvailable type ${typeof (this.randomAItemObject.inboundAvailable)}`);
+    logger.log('info', `inboundAvailable type of ${this.randomAItemObject.itemKey}: ${typeof (this.randomAItemObject.inboundAvailable)}`);
 
     // }
     // else {
@@ -257,7 +256,7 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     // if (this.randomAItemObject.inboundCustomerOrder !== null) {
     expect(typeof (this.randomAItemObject.inboundCustomerOrder), 'inboundCustomerOrder in response should be number').toBe("number");
-    logger.log('info', `inboundCustomerOrder type ${typeof (this.randomAItemObject.inboundCustomerOrder)}`);
+    logger.log('info', `inboundCustomerOrder type of ${this.randomAItemObject.itemKey}: ${typeof (this.randomAItemObject.inboundCustomerOrder)}`);
 
     // }
     // else {
@@ -266,7 +265,7 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     // if (this.randomAItemObject.inboundFcProcessing !== null) {
     expect(typeof (this.randomAItemObject.inboundFcProcessing), 'inboundFcProcessing in response should be number').toBe("number");
-    logger.log('info', `inboundFcProcessing type ${typeof (this.randomAItemObject.inboundFcProcessing)}`);
+    logger.log('info', `inboundFcProcessing type of ${this.randomAItemObject.itemKey}: ${typeof (this.randomAItemObject.inboundFcProcessing)}`);
 
     // }
     // else {
@@ -275,7 +274,7 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     // if (this.randomAItemObject.inboundFcTransfer !== null) {
     expect(typeof (this.randomAItemObject.inboundFcTransfer), 'inboundFcTransfer in response should be number').toBe("number");
-    logger.log('info', `inboundFcTransfer type ${typeof (this.randomAItemObject.inboundFcTransfer)}`);
+    logger.log('info', `inboundFcTransfer type of ${this.randomAItemObject.itemKey}: ${typeof (this.randomAItemObject.inboundFcTransfer)}`);
 
     // }
     // else {
@@ -284,7 +283,7 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     // if (this.randomAItemObject.inboundPrice !== null) {
     expect(typeof (this.randomAItemObject.inboundPrice), 'inboundPrice in response should be number').toBe("number");
-    logger.log('info', `inboundPrice type ${typeof (this.randomAItemObject.inboundPrice)}`);
+    logger.log('info', `inboundPrice type of ${this.randomAItemObject.itemKey}: ${typeof (this.randomAItemObject.inboundPrice)}`);
 
     // }
     // else {
@@ -293,7 +292,7 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     // if (this.randomAItemObject.inboundSalesLast30Days !== null) {
     expect(typeof (this.randomAItemObject.inboundSalesLast30Days), 'inboundSalesLast30Days in response should be number').toBe("number");
-    logger.log('info', `inboundSalesLast30Days type ${typeof (this.randomAItemObject.inboundSalesLast30Days)}`);
+    logger.log('info', `inboundSalesLast30Days type of ${this.randomAItemObject.itemKey}: ${typeof (this.randomAItemObject.inboundSalesLast30Days)}`);
 
     // }
     // else {
@@ -302,7 +301,7 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     // if (this.randomAItemObject.inboundUnfulfillable !== null) {
     expect(typeof (this.randomAItemObject.inboundUnfulfillable), 'inboundUnfulfillable in response should be number').toBe("number");
-    logger.log('info', `inboundUnfulfillable type ${typeof (this.randomAItemObject.inboundUnfulfillable)}`);
+    logger.log('info', `inboundUnfulfillable type of ${this.randomAItemObject.itemKey}: ${typeof (this.randomAItemObject.inboundUnfulfillable)}`);
 
     // }
     // else {
@@ -311,7 +310,7 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     // if (this.randomAItemObject.inboundWorking !== null) {
     expect(typeof (this.randomAItemObject.inboundWorking), 'inboundWorking in response should be number').toBe("number");
-    logger.log('info', `inboundWorking type ${typeof (this.randomAItemObject.inboundWorking)}`);
+    logger.log('info', `inboundWorking type of ${this.randomAItemObject.itemKey}: ${typeof (this.randomAItemObject.inboundWorking)}`);
 
     // }
     // else {
@@ -320,7 +319,7 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     // if (this.randomAItemObject.inventorySourcePreference !== null) {
     expect(typeof (this.randomAItemObject.inventorySourcePreference), 'inventorySourcePreference in response should be string').toBe("string");
-    logger.log('info', `inventorySourcePreference type ${typeof (this.randomAItemObject.inventorySourcePreference)}`);
+    logger.log('info', `inventorySourcePreference type of ${this.randomAItemObject.itemKey}: ${typeof (this.randomAItemObject.inventorySourcePreference)}`);
 
     // }
     // else {
@@ -329,7 +328,7 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     // if (this.randomAItemObject.isFbm !== null) {
     expect(typeof (this.randomAItemObject.isFbm), 'isFbm in response should be boolean').toBe("boolean");
-    logger.log('info', `isFbm type ${typeof (this.randomAItemObject.isFbm)}`);
+    logger.log('info', `isFbm type of ${this.randomAItemObject.itemKey}: ${typeof (this.randomAItemObject.isFbm)}`);
 
     // }
     // else {
@@ -338,7 +337,7 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     // if (this.randomAItemObject.itemKey !== null) {
     expect(typeof (this.randomAItemObject.itemKey), 'itemKey in response should be string').toBe("string");
-    logger.log('info', `itemKey type ${typeof (this.randomAItemObject.itemKey)}`);
+    logger.log('info', `itemKey type of ${this.randomAItemObject.itemKey}: ${typeof (this.randomAItemObject.itemKey)}`);
 
     // }
     // else {
@@ -347,7 +346,7 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     // if (this.randomAItemObject.itemName !== null) {
     expect(typeof (this.randomAItemObject.itemName), 'itemName in response should be string').toBe("string");
-    logger.log('info', `itemName type ${typeof (this.randomAItemObject.itemName)}`);
+    logger.log('info', `itemName type of ${this.randomAItemObject.itemKey}: ${typeof (this.randomAItemObject.itemName)}`);
 
     // }
     // else {
@@ -363,7 +362,7 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     // if (this.randomAItemObject.leadTime !== null) {
     expect(typeof (this.randomAItemObject.leadTime), 'leadTime in response should be number').toBe("number");
-    logger.log('info', `leadTime type ${typeof (this.randomAItemObject.leadTime)}`);
+    logger.log('info', `leadTime type of ${this.randomAItemObject.itemKey}: ${typeof (this.randomAItemObject.leadTime)}`);
 
     // }
     // else {
@@ -372,7 +371,7 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     // if (this.randomAItemObject.lotMultipleQty !== null) {
     expect(typeof (this.randomAItemObject.lotMultipleQty), 'lotMultipleQty in response should be number').toBe("number");
-    logger.log('info', `lotMultipleQty type ${typeof (this.randomAItemObject.lotMultipleQty)}`);
+    logger.log('info', `lotMultipleQty type of ${this.randomAItemObject.itemKey}: ${typeof (this.randomAItemObject.lotMultipleQty)}`);
 
     // }
     // else {
@@ -381,7 +380,7 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     // if (this.randomAItemObject.meanLtd !== null) {
     expect(typeof (this.randomAItemObject.meanLtd), 'meanLtd in response should be number').toBe("number");
-    logger.log('info', `meanLtd type ${typeof (this.randomAItemObject.meanLtd)}`);
+    logger.log('info', `meanLtd type of ${this.randomAItemObject.itemKey}: ${typeof (this.randomAItemObject.meanLtd)}`);
 
     // }
     // else {
@@ -390,7 +389,7 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     // if (this.randomAItemObject.moq !== null) {
     expect(typeof (this.randomAItemObject.moq), 'moq in response should be number').toBe("number");
-    logger.log('info', `moq type ${typeof (this.randomAItemObject.moq)}`);
+    logger.log('info', `moq type of ${this.randomAItemObject.itemKey}: ${typeof (this.randomAItemObject.moq)}`);
 
     // }
     // else {
@@ -399,7 +398,7 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     // if (this.randomAItemObject.mwsFulfillmentFee !== null) {
     expect(typeof (this.randomAItemObject.mwsFulfillmentFee), 'mwsFulfillmentFee in response should be number').toBe("number");
-    logger.log('info', `mwsFulfillmentFee type ${typeof (this.randomAItemObject.mwsFulfillmentFee)}`);
+    logger.log('info', `mwsFulfillmentFee type of ${this.randomAItemObject.itemKey}: ${typeof (this.randomAItemObject.mwsFulfillmentFee)}`);
 
     // }
     // else {
@@ -415,7 +414,7 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     // if (this.randomAItemObject.onHand !== null) {
     expect(typeof (this.randomAItemObject.onHand), 'onHand in response should be number').toBe("number");
-    logger.log('info', `onHand type ${typeof (this.randomAItemObject.onHand)}`);
+    logger.log('info', `onHand type of ${this.randomAItemObject.itemKey}: ${typeof (this.randomAItemObject.onHand)}`);
 
     // }
     // else {
@@ -424,7 +423,7 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     // if (this.randomAItemObject.onHandFbm !== null) {
     expect(typeof (this.randomAItemObject.onHandFbm), 'onHandFbm in response should be number').toBe("number");
-    logger.log('info', `onHandFbm type ${typeof (this.randomAItemObject.onHandFbm)}`);
+    logger.log('info', `onHandFbm type of ${this.randomAItemObject.itemKey}: ${typeof (this.randomAItemObject.onHandFbm)}`);
 
     // }
     // else {
@@ -433,7 +432,7 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     // if (this.randomAItemObject.onHandMin !== null) {
     expect(typeof (this.randomAItemObject.onHandMin), 'onHandMin in response should be number').toBe("number");
-    logger.log('info', `onHandMin type ${typeof (this.randomAItemObject.onHandMin)}`);
+    logger.log('info', `onHandMin type of ${this.randomAItemObject.itemKey}: ${typeof (this.randomAItemObject.onHandMin)}`);
 
     // }
     // else {
@@ -442,7 +441,7 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     // if (this.randomAItemObject.onHandThirdParty !== null) {
     expect(typeof (this.randomAItemObject.onHandThirdParty), 'onHandThirdParty in response should be number').toBe("number");
-    logger.log('info', `onHandThirdParty type ${typeof (this.randomAItemObject.onHandThirdParty)}`);
+    logger.log('info', `onHandThirdParty type of ${this.randomAItemObject.itemKey}: ${typeof (this.randomAItemObject.onHandThirdParty)}`);
 
     // }
     // else {
@@ -451,7 +450,7 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     // if (this.randomAItemObject.onHandThirdPartyMin !== null) {
     expect(typeof (this.randomAItemObject.onHandThirdPartyMin), 'onHandThirdPartyMin in response should be number').toBe("number");
-    logger.log('info', `onHandThirdPartyMin type ${typeof (this.randomAItemObject.onHandThirdPartyMin)}`);
+    logger.log('info', `onHandThirdPartyMin type of ${this.randomAItemObject.itemKey}: ${typeof (this.randomAItemObject.onHandThirdPartyMin)}`);
 
     // }
     // else {
@@ -460,7 +459,7 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     // if (this.randomAItemObject.onNewPo !== null) {
     expect(typeof (this.randomAItemObject.onNewPo), 'onNewPo in response should be number').toBe("number");
-    logger.log('info', `onNewPo type ${typeof (this.randomAItemObject.onNewPo)}`);
+    logger.log('info', `onNewPo type of ${this.randomAItemObject.itemKey}: ${typeof (this.randomAItemObject.onNewPo)}`);
 
     // }
     // else {
@@ -469,7 +468,7 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     // if (this.randomAItemObject.openPurchaseOrders !== null) {
     expect(typeof (this.randomAItemObject.openPurchaseOrders), 'openPurchaseOrders in response should be number').toBe("number");
-    logger.log('info', `openPurchaseOrders type ${typeof (this.randomAItemObject.openPurchaseOrders)}`);
+    logger.log('info', `openPurchaseOrders type of ${this.randomAItemObject.itemKey}: ${typeof (this.randomAItemObject.openPurchaseOrders)}`);
 
     // }
     // else {
@@ -478,7 +477,7 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     // if (this.randomAItemObject.openSalesOrders !== null) {
     expect(typeof (this.randomAItemObject.openSalesOrders), 'openSalesOrders in response should be number').toBe("number");
-    logger.log('info', `openSalesOrders type ${typeof (this.randomAItemObject.openSalesOrders)}`);
+    logger.log('info', `openSalesOrders type of ${this.randomAItemObject.itemKey}: ${typeof (this.randomAItemObject.openSalesOrders)}`);
 
     // }
     // else {
@@ -487,7 +486,7 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     // if (this.randomAItemObject.orderInterval !== null) {
     expect(typeof (this.randomAItemObject.orderInterval), 'orderInterval in response should be number').toBe("number");
-    logger.log('info', `orderInterval type ${typeof (this.randomAItemObject.orderInterval)}`);
+    logger.log('info', `orderInterval type of ${this.randomAItemObject.itemKey}: ${typeof (this.randomAItemObject.orderInterval)}`);
 
     // }
     // else {
@@ -503,7 +502,7 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     // if (this.randomAItemObject.purchaseQty !== null) {
     expect(typeof (this.randomAItemObject.purchaseQty), 'purchaseQty in response should be number').toBe("number");
-    logger.log('info', `purchaseQty type ${typeof (this.randomAItemObject.purchaseQty)}`);
+    logger.log('info', `purchaseQty type of ${this.randomAItemObject.itemKey}: ${typeof (this.randomAItemObject.purchaseQty)}`);
 
     // }
     // else {
@@ -512,7 +511,7 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     // if (this.randomAItemObject.purchasingSummariesUuid !== null) {
     expect(typeof (this.randomAItemObject.purchasingSummariesUuid), 'purchasingSummariesUuid in response should be string').toBe("string");
-    logger.log('info', `purchasingSummariesUuid type ${typeof (this.randomAItemObject.purchasingSummariesUuid)}`);
+    logger.log('info', `purchasingSummariesUuid type of ${this.randomAItemObject.itemKey}: ${typeof (this.randomAItemObject.purchasingSummariesUuid)}`);
 
     // }
     // else {
@@ -528,7 +527,7 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     // if (this.randomAItemObject.recommendedQty !== null) {
     expect(typeof (this.randomAItemObject.recommendedQty), 'recommendedQty in response should be number').toBe("number");
-    logger.log('info', `recommendedQty type ${typeof (this.randomAItemObject.recommendedQty)}`);
+    logger.log('info', `recommendedQty type of ${this.randomAItemObject.itemKey}: ${typeof (this.randomAItemObject.recommendedQty)}`);
 
     // }
     // else {
@@ -537,7 +536,7 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     if (this.randomAItemObject.s7d !== null) {
         expect(typeof (this.randomAItemObject.s7d), 's7d in response should be number').toBe("number");
-        logger.log('info', `s7d type ${typeof (this.randomAItemObject.s7d)}`);
+        logger.log('info', `s7d type of ${this.randomAItemObject.itemKey}: ${typeof (this.randomAItemObject.s7d)}`);
     }
     else {
         expect(this.randomAItemObject.s7d, 's7d value should be null').toBeNull();
@@ -545,7 +544,7 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     if (this.randomAItemObject.s30d !== null) {
         expect(typeof (this.randomAItemObject.s30d), 's30d in response should be number').toBe("number");
-        logger.log('info', `s30d type ${typeof (this.randomAItemObject.s30d)}`);
+        logger.log('info', `s30d type of ${this.randomAItemObject.itemKey}: ${typeof (this.randomAItemObject.s30d)}`);
     }
     else {
         expect(this.randomAItemObject.s30d, 's30d value should be null').toBeNull();
@@ -553,7 +552,7 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     if (this.randomAItemObject.s90d !== null) {
         expect(typeof (this.randomAItemObject.s90d), 's90d in response should be number').toBe("number");
-        logger.log('info', `s90d type ${typeof (this.randomAItemObject.s90d)}`);
+        logger.log('info', `s90d type of ${this.randomAItemObject.itemKey}: ${typeof (this.randomAItemObject.s90d)}`);
     }
     else {
         expect(this.randomAItemObject.s90d, 's90d value should be null').toBeNull();
@@ -561,7 +560,7 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     if (this.randomAItemObject.s365d !== null) {
         expect(typeof (this.randomAItemObject.s365d), 's365d in response should be number').toBe("number");
-        logger.log('info', `s365d type ${typeof (this.randomAItemObject.s365d)}`);
+        logger.log('info', `s365d type of ${this.randomAItemObject.itemKey}: ${typeof (this.randomAItemObject.s365d)}`);
     }
     else {
         expect(this.randomAItemObject.s365d, 's365d value should be null').toBeNull();
@@ -569,7 +568,7 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     if (this.randomAItemObject.sMtd !== null) {
         expect(typeof (this.randomAItemObject.sMtd), 'sMtd in response should be number').toBe("number");
-        logger.log('info', `sMtd type ${typeof (this.randomAItemObject.sMtd)}`);
+        logger.log('info', `sMtd type of ${this.randomAItemObject.itemKey}: ${typeof (this.randomAItemObject.sMtd)}`);
     }
     else {
         expect(this.randomAItemObject.sMtd, 'sMtd value should be null').toBeNull();
@@ -577,7 +576,7 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     if (this.randomAItemObject.sYtd !== null) {
         expect(typeof (this.randomAItemObject.sYtd), 'sYtd in response should be number').toBe("number");
-        logger.log('info', `sYtd type ${typeof (this.randomAItemObject.sYtd)}`);
+        logger.log('info', `sYtd type of ${this.randomAItemObject.itemKey}: ${typeof (this.randomAItemObject.sYtd)}`);
     }
     else {
         expect(this.randomAItemObject.sYtd, 'sYtd value should be null').toBeNull();
@@ -585,7 +584,7 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     if (this.randomAItemObject.s_2d !== null) {
         expect(typeof (this.randomAItemObject.s_2d), 's_2d in response should be number').toBe("number");
-        logger.log('info', `s_2d type ${typeof (this.randomAItemObject.s_2d)}`);
+        logger.log('info', `s_2d type of ${this.randomAItemObject.itemKey}: ${typeof (this.randomAItemObject.s_2d)}`);
     }
     else {
         expect(this.randomAItemObject.s_2d, 's_2d value should be null').toBeNull();
@@ -593,7 +592,7 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     if (this.randomAItemObject.s_60d !== null) {
         expect(typeof (this.randomAItemObject.s_60d), 's_60d in response should be number').toBe("number");
-        logger.log('info', `s_60d type ${typeof (this.randomAItemObject.s_60d)}`);
+        logger.log('info', `s_60d type of ${this.randomAItemObject.itemKey}: ${typeof (this.randomAItemObject.s_60d)}`);
     }
     else {
         expect(this.randomAItemObject.s_60d, 's_60d value should be null').toBeNull();
@@ -601,7 +600,7 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     if (this.randomAItemObject.s_180d !== null) {
         expect(typeof (this.randomAItemObject.s_180d), 's_180d in response should be number').toBe("number");
-        logger.log('info', `s_180d type ${typeof (this.randomAItemObject.s_180d)}`);
+        logger.log('info', `s_180d type of ${this.randomAItemObject.itemKey}: ${typeof (this.randomAItemObject.s_180d)}`);
     }
     else {
         expect(this.randomAItemObject.s_180d, 's_180d value should be null').toBeNull();
@@ -609,7 +608,7 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     // if (this.randomAItemObject.safetyStockLtd !== null) {
     expect(typeof (this.randomAItemObject.safetyStockLtd), 'safetyStockLtd in response should be number').toBe("number");
-    logger.log('info', `safetyStockLtd type ${typeof (this.randomAItemObject.safetyStockLtd)}`);
+    logger.log('info', `safetyStockLtd type of ${this.randomAItemObject.itemKey}: ${typeof (this.randomAItemObject.safetyStockLtd)}`);
 
     // }
     // else {
@@ -618,7 +617,7 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     // if (this.randomAItemObject.snapshotQty !== null) {
     expect(typeof (this.randomAItemObject.snapshotQty), 'snapshotQty in response should be number').toBe("number");
-    logger.log('info', `snapshotQty type ${typeof (this.randomAItemObject.snapshotQty)}`);
+    logger.log('info', `snapshotQty type of ${this.randomAItemObject.itemKey}: ${typeof (this.randomAItemObject.snapshotQty)}`);
 
     // }
     // else {
@@ -627,7 +626,7 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     if (this.randomAItemObject.tag !== null) {
         expect(typeof (this.randomAItemObject.tag), 'tag in response should be string').toBe("string");
-        logger.log('info', `tag type ${typeof (this.randomAItemObject.tag)}`);
+        logger.log('info', `tag type of ${this.randomAItemObject.itemKey}: ${typeof (this.randomAItemObject.tag)}`);
 
     }
     else {
@@ -636,7 +635,7 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     if (this.randomAItemObject.tags !== null) {
         expect(typeof (this.randomAItemObject.tags), 'tags in response should be object').toBe("object");
-        logger.log('info', `tags type ${typeof (this.randomAItemObject.tags)}`);
+        logger.log('info', `tags type of ${this.randomAItemObject.itemKey}: ${typeof (this.randomAItemObject.tags)}`);
 
     }
     else {
@@ -646,7 +645,7 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     // if (this.randomAItemObject.total !== null) {
     expect(typeof (this.randomAItemObject.total), 'total in response should be number').toBe("number");
-    logger.log('info', `total type ${typeof (this.randomAItemObject.total)}`);
+    logger.log('info', `total type of ${this.randomAItemObject.itemKey}: ${typeof (this.randomAItemObject.total)}`);
 
     // }
     // else {
@@ -655,7 +654,7 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     if (this.randomAItemObject.trueRecommendedQty !== null) {
         expect(typeof (this.randomAItemObject.trueRecommendedQty), 'trueRecommendedQty in response should be number').toBe("number");
-        logger.log('info', `trueRecommendedQty type ${typeof (this.randomAItemObject.trueRecommendedQty)}`);
+        logger.log('info', `trueRecommendedQty type of ${this.randomAItemObject.itemKey}: ${typeof (this.randomAItemObject.trueRecommendedQty)}`);
 
     }
     else {
@@ -663,7 +662,7 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
     }
 
     expect(typeof (this.randomAItemObject.type), 'type in response should be string').toBe("string");
-    logger.log('info', `type type ${typeof (this.randomAItemObject.type)}`);
+    logger.log('info', `Fiedl type of ${this.randomAItemObject.itemKey} has type :${typeof (this.randomAItemObject.type)}`);
 
 
     const types = ["Make", "Buy"];
@@ -678,7 +677,7 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     if (this.randomAItemObject.vendorKey !== null) {
         expect(typeof (this.randomAItemObject.vendorKey), 'vendorKey in response should be string').toBe("string");
-        logger.log('info', `vendorKey type ${typeof (this.randomAItemObject.vendorKey)}`);
+        logger.log('info', `vendorKey type of ${this.randomAItemObject.itemKey}: ${typeof (this.randomAItemObject.vendorKey)}`);
 
     }
     else {
@@ -687,7 +686,7 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     if (this.randomAItemObject.vendorName !== null) {
         expect(typeof (this.randomAItemObject.vendorName), 'vendorName in response should be string').toBe("string");
-        logger.log('info', `vendorName type ${typeof (this.randomAItemObject.vendorName)}`);
+        logger.log('info', `vendorName type of ${this.randomAItemObject.itemKey}: ${typeof (this.randomAItemObject.vendorName)}`);
 
     }
     else {
@@ -695,7 +694,7 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
     }
 
     expect(typeof (this.randomAItemObject.vendorPrice), 'vendorPrice in response should be number').toBe("number");
-    logger.log('info', `vendorPrice type ${typeof (this.randomAItemObject.vendorPrice)}`);
+    logger.log('info', `vendorPrice type of ${this.randomAItemObject.itemKey}: ${typeof (this.randomAItemObject.vendorPrice)}`);
 })
 
 // Custom 

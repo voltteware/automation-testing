@@ -1,7 +1,7 @@
 @test-api @api-admin @api-getCompanies
 Feature: API_Admin GET/Companies
 
-    @COMPANIES001 @regression-api 
+    @COMPANIES001 @regression-api @smoke-test-api
     Scenario Outline: COMPANIES001 - Verify <email> could call this API to get all companies
         Given User has valid connect.sid of "<user>" after send a POST request with payload as email: "<email>" and password: "<password>"
         And User sets GET api endpoint to get companies keys

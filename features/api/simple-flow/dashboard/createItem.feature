@@ -8,7 +8,7 @@ Feature: API_Dashboard POST /api/item
         And In Header of the request, she sets param Cookie as valid connect.sid
         When User sends a GET request to get company keys
 
-    @TC_CI001 @regression-api @csv
+    @TC_CI001 @smoke-test-api @csv
     Scenario Outline: TC_CI001 - Verify user <email> could call this API to create item for company has type <companyType> with input all data valid
         Given User picks company with type CSV in above response
         But User sets valid cookie of <email> and valid companyKey and valid companyType in the header
@@ -41,7 +41,7 @@ Feature: API_Dashboard POST /api/item
             | companyType | email                      | itemName      | asin   | fnsku  | expectedStatus |
             | CSV         | testautoforecast@gmail.com | New Item Auto | random | random | 200            |
 
-    @TC_CI003 @regression-api @asc
+    @TC_CI003 @smoke-test-api @asc
     Scenario Outline: TC_CI003 - Verify user <email> could call this API to create item for company has type <companyType> with input all data valid
         Given User picks company with type ASC in above response
         But User sets valid cookie of <email> and valid companyKey and valid companyType in the header

@@ -8,7 +8,7 @@ Feature: API_Dashboard GET /api/demand
         When In Header of the request, she sets param Cookie as valid connect.sid
         Then User sends a GET request to get company keys
     
-    @TC_GD001_1_ASC
+    @TC_GD001_1_ASC @smoke-test-api
     Scenario Outline: TC_GD001_1 - Verify user <email> could call this API to get information of specific demand by using company key and company type (cannot create new demand)
         Given User picks company with type ASC in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
@@ -22,7 +22,7 @@ Feature: API_Dashboard GET /api/demand
             | user  | email                      | password  | expectedStatus | limitRow |
             | admin | testautoforecast@gmail.com | Test1111# | 200            | 10       |
 
-    @TC_GD001_2_CSV
+    @TC_GD001_2_CSV @smoke-test-api
     Scenario Outline: TC_GD001_2 - Verify user <email> could call this API to get information of specific demand by using company key and company type (can create new demand)
         Given User picks company with type CSV in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
