@@ -239,14 +239,15 @@ Given('User sets PUT api endpoint to edit {} of the above bom for company type {
 
     switch (editColumn) {
         case 'parentName':
-            if (value == 'random') {
-                const excludedItemKey = this.childKey
-                const listParentKey = this.getBomResponseBody.map((bom: any) => bom.parentKey)
-                console.log('beeeee'+listParentKey)
+            if (value == 'random') {                
+                const listParentKey = this.getBomResponseBody.map((bom: any) => bom.parentKey)        
+                const listChildKey = this.getBomResponseBody.map((bom: any) => bom.childKey)                
 
-                // Filter out the excluded item have excludedItemKey and item that is a parent from the list items 
-                const filteredArray = this.getItemsResponseBody.filter((item: any) => ((item.key !== excludedItemKey) && (!listParentKey.includes(item.key))));
+                // Filter out the excluded item that is a child or parent from the list items 
+                const filteredArray = this.getItemsResponseBody.filter((item: any) => ((!listChildKey.includes(item.key)) && (!listParentKey.includes(item.key))));
                 const randomItem = filteredArray[Math.floor(Math.random() * filteredArray.length)];
+                logger.log('info', `Random Parent Item: ${JSON.stringify(randomItem, undefined, 4)}`);
+                this.attach(`Random Parent Item: ${JSON.stringify(randomItem, undefined, 4)}`);
 
                 this.parentName = randomItem.name
                 this.parentKey = randomItem.key
@@ -256,13 +257,15 @@ Given('User sets PUT api endpoint to edit {} of the above bom for company type {
             this.attach(`New ${editColumn}: ${this.parentName}`);
             break;
         case 'componentName':
-            if (value == 'random') {
-                const excludedItemKey = this.childKey
+            if (value == 'random') {                
                 const listParentKey = this.getBomResponseBody.map((bom: any) => bom.parentKey)
+                const listChildKey = this.getBomResponseBody.map((bom: any) => bom.childKey)                
 
-                // Filter out the excluded item have excludedItemKey and item that is a parent from the list items
-                const filteredArray = this.getItemsResponseBody.filter((item: any) => ((item.key !== excludedItemKey) && (!listParentKey.includes(item.key))));
+                // Filter out the excluded item that is a child or parent from the list items 
+                const filteredArray = this.getItemsResponseBody.filter((item: any) => ((!listChildKey.includes(item.key)) && (!listParentKey.includes(item.key))));
                 const randomItem = filteredArray[Math.floor(Math.random() * filteredArray.length)];
+                logger.log('info', `Random Child Item: ${JSON.stringify(randomItem)}`);
+                this.attach(`Random Child Item: ${JSON.stringify(randomItem)}`);
 
                 this.childName = randomItem.name
                 this.childKey = randomItem.key

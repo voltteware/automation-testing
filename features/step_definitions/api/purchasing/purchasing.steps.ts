@@ -196,8 +196,8 @@ Then('{} checks total items in PO is matched with total in suggested PO of {} an
         if (this.getItemsinPOResponse.status() == 200 && !getItemsinPOResponseText.includes('<!doctype html>')) {
             this.responseBody = this.getItemsinPOResponseBody = JSON.parse(await this.getItemsinPOResponse.text());
             this.randomAItemObject = this.getItemsinPOResponseBody.model[Math.floor(Math.random() * this.getItemsinPOResponseBody.model.length)];
-            logger.log('info', `Response POST ${linkItemsInPO} >>>>>>` + JSON.stringify(this.getItemsinPOResponseBody, undefined, 4));
-            this.attach(`Response POST ${linkItemsInPO} >>>>>>` + JSON.stringify(this.getItemsinPOResponseBody, undefined, 4))
+            logger.log('info', `randomAItemObject in Response POST ${linkItemsInPO} >>>>>>` + JSON.stringify(this.randomAItemObject, undefined, 4));
+            this.attach(`randomAItemObject in Response POST ${linkItemsInPO} >>>>>>` + JSON.stringify(this.randomAItemObject, undefined, 4))
         }
         else {
             const actualResponseText = getItemsinPOResponseText.includes('<!doctype html>') ? 'html' : getItemsinPOResponseText;
@@ -282,8 +282,8 @@ Then(`{} sends a GET request to get items in Purchasing Custom`, async function 
     if (this.getItemsinPurchasingCustomResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
         this.responseBody = this.getItemsinPurchasingCustomResponseBody = JSON.parse(await this.getItemsinPurchasingCustomResponse.body());
         this.randomAItemObject = this.getItemsinPurchasingCustomResponseBody[Math.floor(Math.random() * this.getItemsinPurchasingCustomResponseBody.length)];
-        logger.log('info', `Response GET ${linkGetItemsInPurchasingCustom} >>>>>>` + JSON.stringify(this.getItemsinPurchasingCustomResponseBody, undefined, 4));
-        this.attach(`Response GET ${linkGetItemsInPurchasingCustom} >>>>>>` + JSON.stringify(this.getItemsinPurchasingCustomResponseBody, undefined, 4))
+        logger.log('info', `Random object in response GET ${linkGetItemsInPurchasingCustom} >>>>>>` + JSON.stringify(this.randomAItemObject, undefined, 4));
+        this.attach(`Response object in response GET ${linkGetItemsInPurchasingCustom} >>>>>>` + JSON.stringify(this.randomAItemObject, undefined, 4))
     }
     else {
         const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
@@ -316,4 +316,13 @@ Then(`{} checks random items in Purchasing Custom has status is Active`, async f
             this.attach(`Response GET ${detailItemLink} has status code ${itemDetailResponse.status()} ${itemDetailResponse.statusText()} and response body >>>>>> ${actualResponseText}`)
         }
     }
+})
+
+Then(`{} checks total items in Custom EQUALS total items active and have lotMultipleItemKey is NULL`, async function (actor) {
+    const options = {
+        headers: this.headers
+    }
+    const itemsInCustom = this.getCountItemsinPurchasingCustomResponseBody;
+    const itemsActiveAndHaslotMultipleItemKeyNull = this.getCountItemsActiveAndHasLotMultipleItemKeyNullResponseBody;
+    expect(itemsInCustom, `Total Items in Purchasing Custom ${itemsInCustom} is equal ${itemsActiveAndHaslotMultipleItemKeyNull}`).toEqual(itemsActiveAndHaslotMultipleItemKeyNull);
 })

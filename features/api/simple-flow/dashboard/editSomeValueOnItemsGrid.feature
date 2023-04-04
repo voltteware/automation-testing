@@ -8,7 +8,7 @@ Feature: API_Dashboard PUT /api/item
         And In Header of the request, she sets param Cookie as valid connect.sid
         When User sends a GET request to get company keys
 
-    @TC_UI001
+    @TC_UI001 @regression-api
     Scenario Outline: <TC_ID> - Verify user <email> could call this API to update "<editColumn>" of a items for company type (<companyType>)
         Given User picks company with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
@@ -24,10 +24,12 @@ Feature: API_Dashboard PUT /api/item
         And The new <editColumn> of item must be updated successfully
 
         Examples:
-            | TC_ID      | companyType | email                      | limitRow | editColumn | value  | expectedStatus |
-            | TC_UI001_1 | ASC         | testautoforecast@gmail.com | 20       | itemName   | random | 200            |
+            | TC_ID       | companyType | email                      | limitRow | editColumn    | value  | expectedStatus |
+            | TC_UI001_1  | ASC         | testautoforecast@gmail.com | 20       | itemName      | random | 200            |
+            | TC_UI001_29 | CSV         | testautoforecast@gmail.com | 10       | description   | random | 200            |
+            | TC_UI001_46 | QBFS        | testautoforecast@gmail.com | 10       | supplierPrice | random | 200            |
 
-    @TC_UI001 @regression-api
+    @TC_UI001
     Scenario Outline: <TC_ID> - Verify user <email> could call this API to update "<editColumn>" of a items for company type (<companyType>)
         Given User picks company with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
@@ -69,9 +71,8 @@ Feature: API_Dashboard PUT /api/item
             | TC_UI001_24 | ASC         | testautoforecast@gmail.com | 10       | useHistoryOverride        | random | 200            |
             | TC_UI001_25 | ASC         | testautoforecast@gmail.com | 10       | casePackQty               | random | 200            |
             | TC_UI001_26 | ASC         | testautoforecast@gmail.com | 10       | inventorySourcePreference | random | 200            |
-            | TC_UI001_27 | ASC         | testautoforecast@gmail.com | 10       | purchaseAs                | random | 200            |
+            | TC_UI001_27 | ASC         | testautoforecast@gmail.com | 100      | purchaseAs                | random | 200            |
             | TC_UI001_28 | CSV         | testautoforecast@gmail.com | 10       | itemName                  | random | 200            |
-            | TC_UI001_29 | CSV         | testautoforecast@gmail.com | 10       | description               | random | 200            |
             | TC_UI001_30 | CSV         | testautoforecast@gmail.com | 10       | supplierName              | random | 200            |
             | TC_UI001_31 | CSV         | testautoforecast@gmail.com | 10       | supplierPrice             | random | 200            |
             | TC_UI001_32 | CSV         | testautoforecast@gmail.com | 10       | moq                       | random | 200            |
@@ -85,10 +86,9 @@ Feature: API_Dashboard PUT /api/item
             | TC_UI001_40 | CSV         | testautoforecast@gmail.com | 10       | isHidden                  | random | 200            |
             | TC_UI001_41 | CSV         | testautoforecast@gmail.com | 10       | useHistoryOverride        | random | 200            |
             | TC_UI001_42 | CSV         | testautoforecast@gmail.com | 10       | casePackQty               | random | 200            |
-            | TC_UI001_43 | CSV         | testautoforecast@gmail.com | 10       | purchaseAs                | random | 200            |
+            | TC_UI001_43 | CSV         | testautoforecast@gmail.com | 100      | purchaseAs                | random | 200            |
             | TC_UI001_44 | QBFS        | testautoforecast@gmail.com | 10       | description               | random | 200            |
             | TC_UI001_45 | QBFS        | testautoforecast@gmail.com | 10       | supplierName              | random | 200            |
-            | TC_UI001_46 | QBFS        | testautoforecast@gmail.com | 10       | supplierPrice             | random | 200            |
             | TC_UI001_47 | QBFS        | testautoforecast@gmail.com | 10       | moq                       | random | 200            |
             | TC_UI001_48 | QBFS        | testautoforecast@gmail.com | 10       | leadTime                  | random | 200            |
             | TC_UI001_49 | QBFS        | testautoforecast@gmail.com | 10       | orderInterval             | random | 200            |
@@ -100,6 +100,6 @@ Feature: API_Dashboard PUT /api/item
             | TC_UI001_55 | QBFS        | testautoforecast@gmail.com | 10       | isHidden                  | random | 200            |
             | TC_UI001_56 | QBFS        | testautoforecast@gmail.com | 10       | useHistoryOverride        | random | 200            |
             | TC_UI001_57 | QBFS        | testautoforecast@gmail.com | 10       | casePackQty               | random | 200            |
-            | TC_UI001_58 | QBFS        | testautoforecast@gmail.com | 10       | purchaseAs                | random | 200            |
+            | TC_UI001_58 | QBFS        | testautoforecast@gmail.com | 100      | purchaseAs                | random | 200            |
 
 

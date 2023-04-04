@@ -22,82 +22,75 @@ Then(`{} sets POST api endpoint to create bom`, async function (actor: string) {
     link = Links.API_BOM;
 });
 
-Then('{} sets request body with payload as parentName: {string} and parentKey: {string} and childName: {string} and childKey: {string} and qty: {string}',
-    async function (actor, parentName, parentKey, childName, childKey, qty: string) {
-        randomParentItem = this.getItemsResponseBody[Math.floor(Math.random() * this.getItemsResponseBody.length)];
-        randomChildItem = this.getItemsResponseBody[Math.floor(Math.random() * this.getItemsResponseBody.length)];
-        randomBom = this.getBomResponseBody[Math.floor(Math.random() * this.getBomResponseBody.length)];
-        // check parent can't be child
-        for(var i = 0; i < this.getBomResponseBody.length; i++) {
-            if (randomParentItem.key == this.getBomResponseBody[i].childKey) {
-                randomParentItem = this.getItemsResponseBody[Math.floor(Math.random() * this.getItemsResponseBody.length)];
-            }
-        }
-        // check child can't be parent
-        for(var i = 0; i < this.getBomResponseBody.length; i++) {
-            if (randomChildItem.key == this.getBomResponseBody[i].parentKey) {
-                randomChildItem = this.getItemsResponseBody[Math.floor(Math.random() * this.getItemsResponseBody.length)];
-            }
-        }
-        // compare parent item and child item
-        if(randomParentItem.key == randomChildItem.key){
-            randomParentItem = this.getItemsResponseBody[Math.floor(Math.random() * this.getItemsResponseBody.length)];
-        }
+Then('{} sets request body with payload as parentName: {string} and parentKey: {string} and childName: {string} and childKey: {string} and qty: {string}', async function (actor, parentName, parentKey, childName, childKey, qty: string) {
+    // Get list parent and list child already exist
+    const listParentKeys = this.getBomResponseBody.map((bom: any) => bom.parentKey)
+    const listChildKeys = this.getBomResponseBody.map((bom: any) => bom.childKey)
 
-        if(parentName == 'random'){
-            payload.parentName = randomParentItem.name;
-        }
-        else if(parentName == 'childName'){
-            payload.parentName = randomBom.childName;
-        }
-        else{
-            payload.parentName = parentName;
-        }
+    // Array excluded list parent and list child already exist
+    const firstFilteredArray = this.getItemsResponseBody.filter((item: any) => ((!listChildKeys.includes(item.key)) && (!listParentKeys.includes(item.key))));
+    randomParentItem = firstFilteredArray[Math.floor(Math.random() * firstFilteredArray.length)];
 
-        if(parentKey == 'random'){
-            payload.parentKey = randomParentItem.key;   
-        }
-        else if(parentKey == 'childKey'){
-            payload.parentKey = randomBom.childKey;
-        }
-        else{
-            payload.parentKey = parentKey;
-        }
+    // Array excluded list parent and list child already exist and current parent item of this bom
+    const secondFilteredArray = firstFilteredArray.filter((item: any) => ((!listChildKeys.includes(item.key)) && (!listParentKeys.includes(item.key)) && (item.key !== randomParentItem.key)));
+    randomChildItem = secondFilteredArray[Math.floor(Math.random() * secondFilteredArray.length)];
 
-        if(childName == 'random'){
-            payload.childName = randomChildItem.name;
-        }
-        else if(childName == 'parentName'){
-            payload.childName = randomBom.parentName;
-        }
-        else{
-            payload.childName = childName;
-        }
+    randomBom = this.getBomResponseBody[Math.floor(Math.random() * this.getBomResponseBody.length)];
 
-        if(childKey == 'random'){
-            payload.childKey = randomChildItem.key;   
-        }
-        else if(childKey == 'parentKey'){
-            payload.childKey = randomBom.parentKey;
-        }
-        else{
-            payload.childKey = childKey;
-        }
+    if (parentName == 'random') {
+        payload.parentName = randomParentItem.name;
+    }
+    else if (parentName == 'childName') {
+        payload.parentName = randomBom.childName;
+    }
+    else {
+        payload.parentName = parentName;
+    }
 
-        if (qty == 'random') {
-            payload.qty = Number(faker.random.numeric(2));
-        }
-        else {
-            payload.qty = Number(qty);
-        }
+    if (parentKey == 'random') {
+        payload.parentKey = randomParentItem.key;
+    }
+    else if (parentKey == 'childKey') {
+        payload.parentKey = randomBom.childKey;
+    }
+    else {
+        payload.parentKey = parentKey;
+    }
 
-        this.attach(`Payload: ${JSON.stringify(payload, undefined, 4)}`)
-    });
+    if (childName == 'random') {
+        payload.childName = randomChildItem.name;
+    }
+    else if (childName == 'parentName') {
+        payload.childName = randomBom.parentName;
+    }
+    else {
+        payload.childName = childName;
+    }
+
+    if (childKey == 'random') {
+        payload.childKey = randomChildItem.key;
+    }
+    else if (childKey == 'parentKey') {
+        payload.childKey = randomBom.parentKey;
+    }
+    else {
+        payload.childKey = childKey;
+    }
+
+    if (qty == 'random') {
+        payload.qty = Number(faker.random.numeric(2));
+    }
+    else {
+        payload.qty = Number(qty);
+    }
+
+    this.attach(`Payload: ${JSON.stringify(payload, undefined, 4)}`)
+});
 
 Then('{} sends a POST method to create bom', async function (actor: string) {
     let parentKey = payload.parentKey;
     let childKey = payload.childKey;
-    if(parentKey == ''){
+    if (parentKey == '') {
         parentKey = faker.datatype.uuid();
     }
     this.response = this.createBomResponse = await bomRequest.createBom(this.request, link, payload, parentKey, childKey, this.headers);
@@ -119,17 +112,17 @@ Then('{} checks values in response of create bom are correct', async function (a
     const companyType = ['ASC', 'CSV', 'QBFS', 'QBO'];
     expect(companyType, `Company Type should be one of ${companyType}`).toContain(this.responseBodyOfABomObject.companyType);
     expect(this.responseBodyOfABomObject.companyKey).not.toBeNull();
-    
-    if(payload.parentKey){
+
+    if (payload.parentKey) {
         expect(this.responseBodyOfABomObject.parentKey, `In response body, parentKey should be matched with the data request: ${payload.parentKey}`).toBe(payload.parentKey);
     }
-    if(payload.parentName){
+    if (payload.parentName) {
         expect(this.responseBodyOfABomObject.parentName, `In response body, parentName should be matched with the data request: ${payload.parentName}`).toBe(payload.parentName);
     }
-    if(payload.childKey){
+    if (payload.childKey) {
         expect(this.responseBodyOfABomObject.childKey, `In response body, childKey should be matched with the data request: ${payload.childKey}`).toBe(payload.childKey);
     }
-    if(payload.childName){
+    if (payload.childName) {
         expect(this.responseBodyOfABomObject.childName, `In response body, childName should be matched with the data request: ${payload.childName}`).toBe(payload.childName);
     }
     if (payload.qty) {

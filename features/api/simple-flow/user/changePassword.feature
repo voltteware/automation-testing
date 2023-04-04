@@ -13,9 +13,9 @@ Feature: API_User PUT/user/password
         And The status text is "<expectedStatusText>"
         And User checks API contract essential types in user object are correct
         And UserId <email> in the response of API is correct
-        # And User sets request body with payload as password: <newPassword> and newPassword <password>
-        # When User sends a PUT method to change password of <email>
-        # Then The expected status code should be <expectedStatus>
+        And User sets request body with payload as password: <newPassword> and newPassword <password>
+        When User sends a PUT method to change password of <email>
+        Then The expected status code should be <expectedStatus>
 
         Examples:
             | email                    | password  | newPassword | expectedStatus | expectedStatusText |

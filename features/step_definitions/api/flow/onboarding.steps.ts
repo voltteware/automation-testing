@@ -1,7 +1,6 @@
 import { Then } from "@cucumber/cucumber";
 import logger from "../../../../src/Logger/logger";
 import * as companyRequest from '../../../../src/api/request/company.service';
-import * as forecastRequest from '../../../../src/api/request/forecast.service';
 import { Links } from "../../../../src/utils/links";
 import * as _ from "lodash";
 
@@ -67,7 +66,7 @@ Then(`{} sets GET api endpoint to get company information by company key`, async
     link = `${Links.API_GET_COMPANY}/${this.companyKey}`;
 });
 
-Then('{} sends a GET request to get all company', async function (actor: string){
+Then('{} sends a GET request to get all company', async function (actor: string) {
     const options = {
         headers: this.headers
     }
@@ -93,7 +92,8 @@ Then('{} sends a GET request to get company information by company key', async f
     const responseBodyText = await this.getCompanyInfoResponse.text();
     if (this.getCompanyInfoResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
         this.getCompanyInfoResponseBody = JSON.parse(await this.getCompanyInfoResponse.text());
-        this.marketplaceId = this.getCompanyInfoResponseBody.marketplaceId;
+        this.lastForecastDate = this.getCompanyInfoResponseBody.lastForecastDate;
+        console.log(this.lastForecastDate);
         logger.log('info', `Response GET ${link}` + JSON.stringify(this.getCompanyInfoResponseBody, undefined, 4));
         this.attach(`Response GET ${link}` + JSON.stringify(this.getCompanyInfoResponseBody, undefined, 4))
     }
@@ -104,27 +104,8 @@ Then('{} sends a GET request to get company information by company key', async f
     }
 });
 
-Then(`{} sets POST api to run forecast`, async function (actor: string) {
-    linkPostForecast = Links.API_RUN_FORECAST;
-});
-
-Then('{} sends a POST request to run forecast', async function (actor: string) {
-    this.postForecastResponse = this.response = await forecastRequest.postForecast(this.request, linkPostForecast, this.getCompanyInfoResponseBody, this.headers);
-    const responseBodyText = await this.postForecastResponse.text();
-    if (this.postForecastResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
-        this.postForecastResponseBody = JSON.parse(await this.postForecastResponse.text());
-        logger.log('info', `Response POST ${linkPostForecast}` + JSON.stringify(this.postForecastResponseBody, undefined, 4));
-        this.attach(`Response POST ${linkPostForecast} ` + JSON.stringify(this.postForecastResponseBody, undefined, 4))
-    }
-    else {
-        const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
-        logger.log('info', `Response ${linkPostForecast} has status code ${this.postForecastResponse.status()} ${this.postForecastResponse.statusText()} and response body ${responseBodyText}`);
-        this.attach(`Response ${linkPostForecast} has status code ${this.postForecastResponse.status()} ${this.postForecastResponse.statusText()} and response body ${actualResponseText}`)
-    }
-});
-
 //lastForecastDate is NULL => Onboarding company
-Then('{} selects onboarding company with type {}', async function (actor, companyType: string){
+Then('{} selects onboarding company with type {}', async function (actor, companyType: string) {
     this.selectedCompany = await this.getListCompanyResponseBody.find((co: any) => co.companyType == companyType && co.lastForecastDate === null);
     this.companyKey = this.selectedCompany.companyKey;
     this.companyType = this.selectedCompany.companyType;

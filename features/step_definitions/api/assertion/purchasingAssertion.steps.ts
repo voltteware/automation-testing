@@ -1,5 +1,6 @@
 import { Then } from '@cucumber/cucumber';
 import { expect } from '@playwright/test';
+import logger from '../../../../src/Logger/logger';
 
 import _ from "lodash";
 
@@ -128,21 +129,25 @@ Then(`{} checks API contract get items in po by vendor key are correct`, async f
 })
 
 Then(`{} checks API contract of item object is purchasing is correct`, async function (actor) {
-    expect(1, 'addedToSupplies should be number').toBe(2);
-    expect(typeof (this.randomAItemObject.addedToSupplies), 'addedToSupplies should be number').toBe("string");
+    expect(typeof (this.randomAItemObject.addedToSupplies), 'addedToSupplies should be number').toBe("number");
+    logger.log('info', `addedToSupplies type ${typeof (this.randomAItemObject.addedToSupplies)}`);
 
     if (this.randomAItemObject.asin !== null) {
-        console.log()
         expect(typeof (this.randomAItemObject.asin), 'asin in response should be string').toBe("string");
+        logger.log('info', `asin type ${typeof (this.randomAItemObject.asin)}`);
     }
     else {
         expect(this.randomAItemObject.asin, 'asin value should be null').toBeNull();
     }
 
-    expect(typeof (this.randomAItemObject.asin), 'asin should be string').toBe("string");
     expect(typeof (this.randomAItemObject.companyKey), 'companyKey should be string').toBe("string");
+    logger.log('info', `companyKey type ${typeof (this.randomAItemObject.companyKey)}`);
     expect(typeof (this.randomAItemObject.companyType), 'companyType should be string').toBe("string");
+    logger.log('info', `companyType type ${typeof (this.randomAItemObject.companyType)}`);
+
     expect(typeof (this.randomAItemObject.consolidatedQty), 'consolidatedQty should be number').toBe("number");
+    logger.log('info', `consolidatedQty type ${typeof (this.randomAItemObject.consolidatedQty)}`);
+
 
     if (this.randomAItemObject.created_at !== null) {
         expect(Date.parse(this.randomAItemObject.created_at), 'created_at in response should be date').not.toBeNull();
@@ -153,6 +158,8 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     if (this.randomAItemObject.daysLeft !== null) {
         expect(typeof (this.randomAItemObject.daysLeft), 'daysLeft in response should be number').toBe("number");
+        logger.log('info', `daysLeft type ${typeof (this.randomAItemObject.daysLeft)}`);
+
     }
     else {
         expect(this.randomAItemObject.daysLeft, 'daysLeft value should be null').toBeNull();
@@ -160,6 +167,8 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     if (this.randomAItemObject.daysRemaining !== null) {
         expect(typeof (this.randomAItemObject.daysRemaining), 'daysRemaining in response should be number').toBe("number");
+        logger.log('info', `daysRemaining type ${typeof (this.randomAItemObject.daysRemaining)}`);
+
     }
     else {
         expect(this.randomAItemObject.daysRemaining, 'daysRemaining value should be null').toBeNull();
@@ -168,6 +177,8 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     if (this.randomAItemObject.daysUntilNextScheduledOrder !== null) {
         expect(typeof (this.randomAItemObject.daysUntilNextScheduledOrder), 'daysUntilNextScheduledOrder in response should be number').toBe("number");
+        logger.log('info', `daysUntilNextScheduledOrder type ${typeof (this.randomAItemObject.daysUntilNextScheduledOrder)}`);
+
     }
     else {
         expect(this.randomAItemObject.daysUntilNextScheduledOrder, 'daysUntilNextScheduledOrder value should be null').toBeNull();
@@ -176,6 +187,8 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     if (this.randomAItemObject.description !== null) {
         expect(typeof (this.randomAItemObject.description), 'description in response should be string').toBe("string");
+        logger.log('info', `description type ${typeof (this.randomAItemObject.description)}`);
+
     }
     else {
         expect(this.randomAItemObject.description, 'description value should be null').toBeNull();
@@ -183,6 +196,8 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     if (this.randomAItemObject.documentUuid !== null) {
         expect(typeof (this.randomAItemObject.documentUuid), 'documentUuid in response should be number').toBe("number");
+        logger.log('info', `documentUuid type ${typeof (this.randomAItemObject.documentUuid)}`);
+
     }
     else {
         expect(this.randomAItemObject.documentUuid, 'documentUuid value should be null').toBeNull();
@@ -195,15 +210,10 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
         expect(this.randomAItemObject.dueDate, 'dueDate value should be null').toBeNull();
     }
 
-    if (this.randomAItemObject.documentUuid !== null) {
-        expect(typeof (this.randomAItemObject.documentUuid), 'documentUuid in response should be string').toBe("string");
-    }
-    else {
-        expect(this.randomAItemObject.documentUuid, 'documentUuid value should be null').toBeNull();
-    }
-
     if (this.randomAItemObject.fnsku !== null) {
         expect(typeof (this.randomAItemObject.fnsku), 'fnsku in response should be string').toBe("string");
+        logger.log('info', `fnsku type ${typeof (this.randomAItemObject.fnsku)}`);
+
     }
     else {
         expect(this.randomAItemObject.fnsku, 'fnsku value should be null').toBeNull();
@@ -211,6 +221,8 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     if (this.randomAItemObject.imageUrl !== null) {
         expect(typeof (this.randomAItemObject.imageUrl), 'imageUrl in response should be string').toBe("string");
+        logger.log('info', `imageUrl type ${typeof (this.randomAItemObject.imageUrl)}`);
+
     }
     else {
         expect(this.randomAItemObject.imageUrl, 'imageUrl value should be null').toBeNull();
@@ -218,6 +230,8 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     // if (this.randomAItemObject.inbound !== null) {
     expect(typeof (this.randomAItemObject.inbound), 'inbound in response should be number').toBe("number");
+    logger.log('info', `inbound type ${typeof (this.randomAItemObject.inbound)}`);
+
     // }
     // else {
     //     expect(this.randomAItemObject.inbound, 'inbound value should be null').toBeNull();
@@ -225,6 +239,8 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     if (this.randomAItemObject.inboundAlert !== null) {
         expect(typeof (this.randomAItemObject.inboundAlert), 'inboundAlert in response should be string').toBe("string");
+        logger.log('info', `inboundAlert type ${typeof (this.randomAItemObject.inboundAlert)}`);
+
     }
     else {
         expect(this.randomAItemObject.inboundAlert, 'inboundAlert value should be null').toBeNull();
@@ -232,6 +248,8 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     // if (this.randomAItemObject.inboundAvailable !== null) {
     expect(typeof (this.randomAItemObject.inboundAvailable), 'inboundAvailable in response should be number').toBe("number");
+    logger.log('info', `inboundAvailable type ${typeof (this.randomAItemObject.inboundAvailable)}`);
+
     // }
     // else {
     //     expect(this.randomAItemObject.inboundAvailable, 'inboundAvailable value should be null').toBeNull();
@@ -239,6 +257,8 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     // if (this.randomAItemObject.inboundCustomerOrder !== null) {
     expect(typeof (this.randomAItemObject.inboundCustomerOrder), 'inboundCustomerOrder in response should be number').toBe("number");
+    logger.log('info', `inboundCustomerOrder type ${typeof (this.randomAItemObject.inboundCustomerOrder)}`);
+
     // }
     // else {
     //     expect(this.randomAItemObject.inboundCustomerOrder, 'inboundCustomerOrder value should be null').toBeNull();
@@ -246,6 +266,8 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     // if (this.randomAItemObject.inboundFcProcessing !== null) {
     expect(typeof (this.randomAItemObject.inboundFcProcessing), 'inboundFcProcessing in response should be number').toBe("number");
+    logger.log('info', `inboundFcProcessing type ${typeof (this.randomAItemObject.inboundFcProcessing)}`);
+
     // }
     // else {
     //     expect(this.randomAItemObject.inboundFcProcessing, 'inboundFcProcessing value should be null').toBeNull();
@@ -253,6 +275,8 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     // if (this.randomAItemObject.inboundFcTransfer !== null) {
     expect(typeof (this.randomAItemObject.inboundFcTransfer), 'inboundFcTransfer in response should be number').toBe("number");
+    logger.log('info', `inboundFcTransfer type ${typeof (this.randomAItemObject.inboundFcTransfer)}`);
+
     // }
     // else {
     //     expect(this.randomAItemObject.inboundFcTransfer, 'inboundFcTransfer value should be null').toBeNull();
@@ -260,6 +284,8 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     // if (this.randomAItemObject.inboundPrice !== null) {
     expect(typeof (this.randomAItemObject.inboundPrice), 'inboundPrice in response should be number').toBe("number");
+    logger.log('info', `inboundPrice type ${typeof (this.randomAItemObject.inboundPrice)}`);
+
     // }
     // else {
     //     expect(this.randomAItemObject.inboundPrice, 'inboundPrice value should be null').toBeNull();
@@ -267,6 +293,8 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     // if (this.randomAItemObject.inboundSalesLast30Days !== null) {
     expect(typeof (this.randomAItemObject.inboundSalesLast30Days), 'inboundSalesLast30Days in response should be number').toBe("number");
+    logger.log('info', `inboundSalesLast30Days type ${typeof (this.randomAItemObject.inboundSalesLast30Days)}`);
+
     // }
     // else {
     //     expect(this.randomAItemObject.inboundSalesLast30Days, 'inboundSalesLast30Days value should be null').toBeNull();
@@ -274,6 +302,8 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     // if (this.randomAItemObject.inboundUnfulfillable !== null) {
     expect(typeof (this.randomAItemObject.inboundUnfulfillable), 'inboundUnfulfillable in response should be number').toBe("number");
+    logger.log('info', `inboundUnfulfillable type ${typeof (this.randomAItemObject.inboundUnfulfillable)}`);
+
     // }
     // else {
     //     expect(this.randomAItemObject.inboundUnfulfillable, 'inboundUnfulfillable value should be null').toBeNull();
@@ -281,6 +311,8 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     // if (this.randomAItemObject.inboundWorking !== null) {
     expect(typeof (this.randomAItemObject.inboundWorking), 'inboundWorking in response should be number').toBe("number");
+    logger.log('info', `inboundWorking type ${typeof (this.randomAItemObject.inboundWorking)}`);
+
     // }
     // else {
     //     expect(this.randomAItemObject.inboundWorking, 'inboundWorking value should be null').toBeNull();
@@ -288,6 +320,8 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     // if (this.randomAItemObject.inventorySourcePreference !== null) {
     expect(typeof (this.randomAItemObject.inventorySourcePreference), 'inventorySourcePreference in response should be string').toBe("string");
+    logger.log('info', `inventorySourcePreference type ${typeof (this.randomAItemObject.inventorySourcePreference)}`);
+
     // }
     // else {
     //     expect(this.randomAItemObject.inventorySourcePreference, 'inventorySourcePreference value should be null').toBeNull();
@@ -295,6 +329,8 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     // if (this.randomAItemObject.isFbm !== null) {
     expect(typeof (this.randomAItemObject.isFbm), 'isFbm in response should be boolean').toBe("boolean");
+    logger.log('info', `isFbm type ${typeof (this.randomAItemObject.isFbm)}`);
+
     // }
     // else {
     //     expect(this.randomAItemObject.isFbm, 'isFbm value should be null').toBeNull();
@@ -302,6 +338,8 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     // if (this.randomAItemObject.itemKey !== null) {
     expect(typeof (this.randomAItemObject.itemKey), 'itemKey in response should be string').toBe("string");
+    logger.log('info', `itemKey type ${typeof (this.randomAItemObject.itemKey)}`);
+
     // }
     // else {
     //     expect(this.randomAItemObject.itemKey, 'itemKey value should be null').toBeNull();
@@ -309,6 +347,8 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     // if (this.randomAItemObject.itemName !== null) {
     expect(typeof (this.randomAItemObject.itemName), 'itemName in response should be string').toBe("string");
+    logger.log('info', `itemName type ${typeof (this.randomAItemObject.itemName)}`);
+
     // }
     // else {
     //     expect(this.randomAItemObject.itemName, 'itemName value should be null').toBeNull();
@@ -323,6 +363,8 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     // if (this.randomAItemObject.leadTime !== null) {
     expect(typeof (this.randomAItemObject.leadTime), 'leadTime in response should be number').toBe("number");
+    logger.log('info', `leadTime type ${typeof (this.randomAItemObject.leadTime)}`);
+
     // }
     // else {
     //     expect(this.randomAItemObject.leadTime, 'leadTime value should be null').toBeNull();
@@ -330,6 +372,8 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     // if (this.randomAItemObject.lotMultipleQty !== null) {
     expect(typeof (this.randomAItemObject.lotMultipleQty), 'lotMultipleQty in response should be number').toBe("number");
+    logger.log('info', `lotMultipleQty type ${typeof (this.randomAItemObject.lotMultipleQty)}`);
+
     // }
     // else {
     //     expect(this.randomAItemObject.lotMultipleQty, 'lotMultipleQty value should be null').toBeNull();
@@ -337,6 +381,8 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     // if (this.randomAItemObject.meanLtd !== null) {
     expect(typeof (this.randomAItemObject.meanLtd), 'meanLtd in response should be number').toBe("number");
+    logger.log('info', `meanLtd type ${typeof (this.randomAItemObject.meanLtd)}`);
+
     // }
     // else {
     //     expect(this.randomAItemObject.meanLtd, 'meanLtd value should be null').toBeNull();
@@ -344,6 +390,8 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     // if (this.randomAItemObject.moq !== null) {
     expect(typeof (this.randomAItemObject.moq), 'moq in response should be number').toBe("number");
+    logger.log('info', `moq type ${typeof (this.randomAItemObject.moq)}`);
+
     // }
     // else {
     //     expect(this.randomAItemObject.moq, 'moq value should be null').toBeNull();
@@ -351,6 +399,8 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     // if (this.randomAItemObject.mwsFulfillmentFee !== null) {
     expect(typeof (this.randomAItemObject.mwsFulfillmentFee), 'mwsFulfillmentFee in response should be number').toBe("number");
+    logger.log('info', `mwsFulfillmentFee type ${typeof (this.randomAItemObject.mwsFulfillmentFee)}`);
+
     // }
     // else {
     //     expect(this.randomAItemObject.mwsFulfillmentFee, 'mwsFulfillmentFee value should be null').toBeNull();
@@ -365,6 +415,8 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     // if (this.randomAItemObject.onHand !== null) {
     expect(typeof (this.randomAItemObject.onHand), 'onHand in response should be number').toBe("number");
+    logger.log('info', `onHand type ${typeof (this.randomAItemObject.onHand)}`);
+
     // }
     // else {
     //     expect(this.randomAItemObject.onHand, 'onHand value should be null').toBeNull();
@@ -372,6 +424,8 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     // if (this.randomAItemObject.onHandFbm !== null) {
     expect(typeof (this.randomAItemObject.onHandFbm), 'onHandFbm in response should be number').toBe("number");
+    logger.log('info', `onHandFbm type ${typeof (this.randomAItemObject.onHandFbm)}`);
+
     // }
     // else {
     //     expect(this.randomAItemObject.onHandFbm, 'onHandFbm value should be null').toBeNull();
@@ -379,6 +433,8 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     // if (this.randomAItemObject.onHandMin !== null) {
     expect(typeof (this.randomAItemObject.onHandMin), 'onHandMin in response should be number').toBe("number");
+    logger.log('info', `onHandMin type ${typeof (this.randomAItemObject.onHandMin)}`);
+
     // }
     // else {
     //     expect(this.randomAItemObject.onHandMin, 'onHandMin value should be null').toBeNull();
@@ -386,6 +442,8 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     // if (this.randomAItemObject.onHandThirdParty !== null) {
     expect(typeof (this.randomAItemObject.onHandThirdParty), 'onHandThirdParty in response should be number').toBe("number");
+    logger.log('info', `onHandThirdParty type ${typeof (this.randomAItemObject.onHandThirdParty)}`);
+
     // }
     // else {
     //     expect(this.randomAItemObject.onHandThirdParty, 'onHandThirdParty value should be null').toBeNull();
@@ -393,6 +451,8 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     // if (this.randomAItemObject.onHandThirdPartyMin !== null) {
     expect(typeof (this.randomAItemObject.onHandThirdPartyMin), 'onHandThirdPartyMin in response should be number').toBe("number");
+    logger.log('info', `onHandThirdPartyMin type ${typeof (this.randomAItemObject.onHandThirdPartyMin)}`);
+
     // }
     // else {
     //     expect(this.randomAItemObject.onHandThirdPartyMin, 'onHandThirdPartyMin value should be null').toBeNull();
@@ -400,6 +460,8 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     // if (this.randomAItemObject.onNewPo !== null) {
     expect(typeof (this.randomAItemObject.onNewPo), 'onNewPo in response should be number').toBe("number");
+    logger.log('info', `onNewPo type ${typeof (this.randomAItemObject.onNewPo)}`);
+
     // }
     // else {
     //     expect(this.randomAItemObject.onNewPo, 'onNewPo value should be null').toBeNull();
@@ -407,6 +469,8 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     // if (this.randomAItemObject.openPurchaseOrders !== null) {
     expect(typeof (this.randomAItemObject.openPurchaseOrders), 'openPurchaseOrders in response should be number').toBe("number");
+    logger.log('info', `openPurchaseOrders type ${typeof (this.randomAItemObject.openPurchaseOrders)}`);
+
     // }
     // else {
     //     expect(this.randomAItemObject.openPurchaseOrders, 'openPurchaseOrders value should be null').toBeNull();
@@ -414,6 +478,8 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     // if (this.randomAItemObject.openSalesOrders !== null) {
     expect(typeof (this.randomAItemObject.openSalesOrders), 'openSalesOrders in response should be number').toBe("number");
+    logger.log('info', `openSalesOrders type ${typeof (this.randomAItemObject.openSalesOrders)}`);
+
     // }
     // else {
     //     expect(this.randomAItemObject.openSalesOrders, 'openSalesOrders value should be null').toBeNull();
@@ -421,6 +487,8 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     // if (this.randomAItemObject.orderInterval !== null) {
     expect(typeof (this.randomAItemObject.orderInterval), 'orderInterval in response should be number').toBe("number");
+    logger.log('info', `orderInterval type ${typeof (this.randomAItemObject.orderInterval)}`);
+
     // }
     // else {
     //     expect(this.randomAItemObject.orderInterval, 'orderInterval value should be null').toBeNull();
@@ -435,6 +503,8 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     // if (this.randomAItemObject.purchaseQty !== null) {
     expect(typeof (this.randomAItemObject.purchaseQty), 'purchaseQty in response should be number').toBe("number");
+    logger.log('info', `purchaseQty type ${typeof (this.randomAItemObject.purchaseQty)}`);
+
     // }
     // else {
     //     expect(this.randomAItemObject.purchaseQty, 'purchaseQty value should be null').toBeNull();
@@ -442,6 +512,8 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     // if (this.randomAItemObject.purchasingSummariesUuid !== null) {
     expect(typeof (this.randomAItemObject.purchasingSummariesUuid), 'purchasingSummariesUuid in response should be string').toBe("string");
+    logger.log('info', `purchasingSummariesUuid type ${typeof (this.randomAItemObject.purchasingSummariesUuid)}`);
+
     // }
     // else {
     //     expect(this.randomAItemObject.purchasingSummariesUuid, 'purchasingSummariesUuid value should be null').toBeNull();
@@ -456,76 +528,89 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     // if (this.randomAItemObject.recommendedQty !== null) {
     expect(typeof (this.randomAItemObject.recommendedQty), 'recommendedQty in response should be number').toBe("number");
+    logger.log('info', `recommendedQty type ${typeof (this.randomAItemObject.recommendedQty)}`);
+
     // }
     // else {
     //     expect(this.randomAItemObject.recommendedQty, 'recommendedQty value should be null').toBeNull();
     // }
 
-    // if (this.randomAItemObject.s7d !== null) {
-    expect(typeof (this.randomAItemObject.s7d), 's7d in response should be number').toBe("number");
-    // }
-    // else {
-    //     expect(this.randomAItemObject.s7d, 's7d value should be null').toBeNull();
-    // }
+    if (this.randomAItemObject.s7d !== null) {
+        expect(typeof (this.randomAItemObject.s7d), 's7d in response should be number').toBe("number");
+        logger.log('info', `s7d type ${typeof (this.randomAItemObject.s7d)}`);
+    }
+    else {
+        expect(this.randomAItemObject.s7d, 's7d value should be null').toBeNull();
+    }
 
-    // if (this.randomAItemObject.s30d !== null) {
-    expect(typeof (this.randomAItemObject.s30d), 's30d in response should be number').toBe("number");
-    // }
-    // else {
-    //     expect(this.randomAItemObject.s30d, 's30d value should be null').toBeNull();
-    // }
+    if (this.randomAItemObject.s30d !== null) {
+        expect(typeof (this.randomAItemObject.s30d), 's30d in response should be number').toBe("number");
+        logger.log('info', `s30d type ${typeof (this.randomAItemObject.s30d)}`);
+    }
+    else {
+        expect(this.randomAItemObject.s30d, 's30d value should be null').toBeNull();
+    }
 
-    // if (this.randomAItemObject.s90d !== null) {
-    expect(typeof (this.randomAItemObject.s90d), 's90d in response should be number').toBe("number");
-    // }
-    // else {
-    //     expect(this.randomAItemObject.s90d, 's90d value should be null').toBeNull();
-    // }
+    if (this.randomAItemObject.s90d !== null) {
+        expect(typeof (this.randomAItemObject.s90d), 's90d in response should be number').toBe("number");
+        logger.log('info', `s90d type ${typeof (this.randomAItemObject.s90d)}`);
+    }
+    else {
+        expect(this.randomAItemObject.s90d, 's90d value should be null').toBeNull();
+    }
 
-    // if (this.randomAItemObject.s365d !== null) {
-    expect(typeof (this.randomAItemObject.s365d), 's365d in response should be number').toBe("number");
-    // }
-    // else {
-    //     expect(this.randomAItemObject.s365d, 's365d value should be null').toBeNull();
-    // }
+    if (this.randomAItemObject.s365d !== null) {
+        expect(typeof (this.randomAItemObject.s365d), 's365d in response should be number').toBe("number");
+        logger.log('info', `s365d type ${typeof (this.randomAItemObject.s365d)}`);
+    }
+    else {
+        expect(this.randomAItemObject.s365d, 's365d value should be null').toBeNull();
+    }
 
-    // if (this.randomAItemObject.sMtd !== null) {
-    expect(typeof (this.randomAItemObject.sMtd), 'sMtd in response should be number').toBe("number");
-    // }
-    // else {
-    //     expect(this.randomAItemObject.sMtd, 'sMtd value should be null').toBeNull();
-    // }
+    if (this.randomAItemObject.sMtd !== null) {
+        expect(typeof (this.randomAItemObject.sMtd), 'sMtd in response should be number').toBe("number");
+        logger.log('info', `sMtd type ${typeof (this.randomAItemObject.sMtd)}`);
+    }
+    else {
+        expect(this.randomAItemObject.sMtd, 'sMtd value should be null').toBeNull();
+    }
 
-    // if (this.randomAItemObject.sYtd !== null) {
-    expect(typeof (this.randomAItemObject.sYtd), 'sYtd in response should be number').toBe("number");
-    // }
-    // else {
-    //     expect(this.randomAItemObject.sYtd, 'sYtd value should be null').toBeNull();
-    // }
+    if (this.randomAItemObject.sYtd !== null) {
+        expect(typeof (this.randomAItemObject.sYtd), 'sYtd in response should be number').toBe("number");
+        logger.log('info', `sYtd type ${typeof (this.randomAItemObject.sYtd)}`);
+    }
+    else {
+        expect(this.randomAItemObject.sYtd, 'sYtd value should be null').toBeNull();
+    }
 
-    // if (this.randomAItemObject.s_2d !== null) {
-    expect(typeof (this.randomAItemObject.s_2d), 's_2d in response should be number').toBe("number");
-    // }
-    // else {
-    //     expect(this.randomAItemObject.s_2d, 's_2d value should be null').toBeNull();
-    // }
+    if (this.randomAItemObject.s_2d !== null) {
+        expect(typeof (this.randomAItemObject.s_2d), 's_2d in response should be number').toBe("number");
+        logger.log('info', `s_2d type ${typeof (this.randomAItemObject.s_2d)}`);
+    }
+    else {
+        expect(this.randomAItemObject.s_2d, 's_2d value should be null').toBeNull();
+    }
 
-    // if (this.randomAItemObject.s_60d !== null) {
-    expect(typeof (this.randomAItemObject.s_60d), 's_60d in response should be number').toBe("number");
-    // }
-    // else {
-    //     expect(this.randomAItemObject.s_60d, 's_60d value should be null').toBeNull();
-    // }
+    if (this.randomAItemObject.s_60d !== null) {
+        expect(typeof (this.randomAItemObject.s_60d), 's_60d in response should be number').toBe("number");
+        logger.log('info', `s_60d type ${typeof (this.randomAItemObject.s_60d)}`);
+    }
+    else {
+        expect(this.randomAItemObject.s_60d, 's_60d value should be null').toBeNull();
+    }
 
-    // if (this.randomAItemObject.s_180d !== null) {
-    expect(typeof (this.randomAItemObject.s_180d), 's_180d in response should be number').toBe("number");
-    // }
-    // else {
-    //     expect(this.randomAItemObject.s_180d, 's_180d value should be null').toBeNull();
-    // }
+    if (this.randomAItemObject.s_180d !== null) {
+        expect(typeof (this.randomAItemObject.s_180d), 's_180d in response should be number').toBe("number");
+        logger.log('info', `s_180d type ${typeof (this.randomAItemObject.s_180d)}`);
+    }
+    else {
+        expect(this.randomAItemObject.s_180d, 's_180d value should be null').toBeNull();
+    }
 
     // if (this.randomAItemObject.safetyStockLtd !== null) {
     expect(typeof (this.randomAItemObject.safetyStockLtd), 'safetyStockLtd in response should be number').toBe("number");
+    logger.log('info', `safetyStockLtd type ${typeof (this.randomAItemObject.safetyStockLtd)}`);
+
     // }
     // else {
     //     expect(this.randomAItemObject.safetyStockLtd, 'safetyStockLtd value should be null').toBeNull();
@@ -533,6 +618,8 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     // if (this.randomAItemObject.snapshotQty !== null) {
     expect(typeof (this.randomAItemObject.snapshotQty), 'snapshotQty in response should be number').toBe("number");
+    logger.log('info', `snapshotQty type ${typeof (this.randomAItemObject.snapshotQty)}`);
+
     // }
     // else {
     //     expect(this.randomAItemObject.snapshotQty, 'snapshotQty value should be null').toBeNull();
@@ -540,6 +627,8 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     if (this.randomAItemObject.tag !== null) {
         expect(typeof (this.randomAItemObject.tag), 'tag in response should be string').toBe("string");
+        logger.log('info', `tag type ${typeof (this.randomAItemObject.tag)}`);
+
     }
     else {
         expect(this.randomAItemObject.tag, 'tag value should be null').toBeNull();
@@ -547,6 +636,8 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     if (this.randomAItemObject.tags !== null) {
         expect(typeof (this.randomAItemObject.tags), 'tags in response should be object').toBe("object");
+        logger.log('info', `tags type ${typeof (this.randomAItemObject.tags)}`);
+
     }
     else {
         expect(this.randomAItemObject.tags, 'tags value should be null').toBeNull();
@@ -555,6 +646,8 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     // if (this.randomAItemObject.total !== null) {
     expect(typeof (this.randomAItemObject.total), 'total in response should be number').toBe("number");
+    logger.log('info', `total type ${typeof (this.randomAItemObject.total)}`);
+
     // }
     // else {
     //     expect(this.randomAItemObject.total, 'total value should be null').toBeNull();
@@ -562,12 +655,16 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     if (this.randomAItemObject.trueRecommendedQty !== null) {
         expect(typeof (this.randomAItemObject.trueRecommendedQty), 'trueRecommendedQty in response should be number').toBe("number");
+        logger.log('info', `trueRecommendedQty type ${typeof (this.randomAItemObject.trueRecommendedQty)}`);
+
     }
     else {
         expect(this.randomAItemObject.trueRecommendedQty, 'trueRecommendedQty value should be null').toBeNull();
     }
 
     expect(typeof (this.randomAItemObject.type), 'type in response should be string').toBe("string");
+    logger.log('info', `type type ${typeof (this.randomAItemObject.type)}`);
+
 
     const types = ["Make", "Buy"];
     expect(types, 'type in response should be Make or Buy').toContain(this.randomAItemObject.type)
@@ -581,6 +678,8 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     if (this.randomAItemObject.vendorKey !== null) {
         expect(typeof (this.randomAItemObject.vendorKey), 'vendorKey in response should be string').toBe("string");
+        logger.log('info', `vendorKey type ${typeof (this.randomAItemObject.vendorKey)}`);
+
     }
     else {
         expect(this.randomAItemObject.vendorKey, 'vendorKey value should be null').toBeNull();
@@ -588,19 +687,15 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 
     if (this.randomAItemObject.vendorName !== null) {
         expect(typeof (this.randomAItemObject.vendorName), 'vendorName in response should be string').toBe("string");
+        logger.log('info', `vendorName type ${typeof (this.randomAItemObject.vendorName)}`);
+
     }
     else {
         expect(this.randomAItemObject.vendorName, 'vendorName value should be null').toBeNull();
     }
 
     expect(typeof (this.randomAItemObject.vendorPrice), 'vendorPrice in response should be number').toBe("number");
-
-    if (this.randomAItemObject.imageUrl !== null) {
-        expect(typeof (this.randomAItemObject.imageUrl), 'imageUrl in response should be string').toBe("string");
-    }
-    else {
-        expect(this.randomAItemObject.imageUrl, 'imageUrl value should be null').toBeNull();
-    }
+    logger.log('info', `vendorPrice type ${typeof (this.randomAItemObject.vendorPrice)}`);
 })
 
 // Custom 
