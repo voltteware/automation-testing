@@ -1,7 +1,7 @@
 @test-api @api-admin @api-getUser
 Feature: API_Admin GET/Users
 
-    @TC_AU001 @regression-api
+    @TC_AU001 @regression-api @smoke-test-api
     Scenario Outline: TC_AU001 - Verify <email> could call this API to get all user
         Given User has valid connect.sid of "<user>" after send a POST request with payload as email: "<email>" and password: "<password>"
         And User sets GET api endpoint to get 20 users has just created

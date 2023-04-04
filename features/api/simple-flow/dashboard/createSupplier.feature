@@ -8,7 +8,7 @@ Feature: API_Dashboard POST /api/vendor
         And In Header of the request, she sets param Cookie as valid connect.sid
         When User sends a GET request to get company keys
 
-    @TC_CV001 @regression-api @csv
+    @TC_CV001 @regression-api @csv @smoke-test-api
     Scenario Outline: TC_CV001 - Verify user <email> could call this API to create supplier with <scenario>
         Given User picks company with type CSV in above response
         # And User sets GET api endpoint to get information of a company belongs to <email> using company key <companyKey>
@@ -101,7 +101,7 @@ Feature: API_Dashboard POST /api/vendor
             | TC_CV006_2 | ASC company restockModel = Warehouse Ships to FBA                 | testautoforecast@gmail.com | New Supplier Auto | New description | newemail@gmail.com | random | random   | random        | random       | random           | random             | LOCAL        | random     | 200            |
             | TC_CV006_3 | ASC company restockModel = Supplier Ships to FBA                  | testautoforecast@gmail.com | New Supplier Auto | New description | newemail@gmail.com | random | random   | random        | random       | random           | random             | DIRECT_SHIP  | random     | 200            |
 
-    @TC_CV007 @regression-api @asc
+    @TC_CV007 @regression-api @asc @smoke-test-api
     Scenario Outline: <TC_ID> - Verify user <email> could call this API to add address information of supplier for ASC company
         Given User picks company with type ASC in above response
         And User sets POST api endpoint to create suppliers

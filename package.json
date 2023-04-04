@@ -9,6 +9,7 @@
     "test-api": "npx cucumber-js --tags @test-api; node cucumber-report.js",
     "test-api-extra": "npx cucumber-js --tags @test-api; node cucumber-report.js",
     "regression-api": "npx cucumber-js --tags @regression-api; node cucumber-report.js",
+    "smoke-test-api": "npx cucumber-js --tags @smoke-test-api; node cucumber-report.js",
     "test-ui": "npx cucumber-js --tags @test-ui; node cucumber-report.js",
     "cucumber-html-reporter": "node cucumber-report.js",
     "cucumber-multiple-html-reporter": "node cucumber-multiple-html-report.js",
