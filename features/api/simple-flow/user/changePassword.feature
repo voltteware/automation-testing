@@ -3,7 +3,7 @@ Feature: API_User PUT/user/password
     Background:
         Given Check testchangepass@gmail.com exist in the system, if it does not exist will create user with same email
 
-    @TC_UCP001 @regression-api
+    @TC_UCP001 @regression-api @smoke-test-api
     Scenario Outline: TC_UCP001 - Verify user could call this API to change password successfully
         Given User has valid connect.sid of "<email>" after send a POST request with payload as email: "<email>" and password: "<password>"
         And In Header of the request, user sets param Cookie as valid connect.sid
