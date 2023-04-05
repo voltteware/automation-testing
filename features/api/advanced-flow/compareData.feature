@@ -1,4 +1,4 @@
-@test-api-extra @regression-api @api-amazon 
+@test-api-extra @regression-api @compare-data @api-amazon 
 Feature: API_Testing Compare data on ForecastRx and Amazon in Demand section
     Background: Send POST /login request to login before each test
         Given user sends a POST login request to get valid cookie with role
@@ -22,4 +22,4 @@ Feature: API_Testing Compare data on ForecastRx and Amazon in Demand section
         Examples:
             | TC_ID       | companyType | email                      | itemName            |
             | TC_CDD001_1 | ASC         | testautoforecast@gmail.com | WS-01-NG1-081-PNK-L |
-            # | TC_CDD001_2 | ASC         | testautoforecast@gmail.com | WC-01-TP1-008-DGY-M |
+            | TC_CDD001_2 | ASC         | testautoforecast@gmail.com | WC-01-TP1-008-DGY-M |

@@ -5,6 +5,7 @@ import _ from "lodash";
 import { getRegionByMarketplaceId } from '../../../../src/helpers/amazon-helper';
 import SellingPartnerAPI from 'amazon-sp-api';
 
+// Will research and change APIs to make it easily
 Then(`{} sends a POST method to create report on Amazon`, async function (actor: string) {
     const clientConfig = {
         region: getRegionByMarketplaceId(this.marketplaceId),
@@ -40,6 +41,7 @@ Then(`{} sends a POST method to create report on Amazon`, async function (actor:
     }
     catch (e) {
         logger.log('info', "Error message: " + e);
+        this.attach("Error message: " + e);
     };
 });
 
@@ -75,10 +77,12 @@ Then(`{} sends a GET method to get report document by reportDocumentID`, async f
     }
     catch (e) {
         logger.log('info', "Error message: " + e);
+        this.attach("Error message: " + e);
     };
 });
 
-Then(`{} sends a GET method to get report by reportID`, { timeout: 100000 }, async function (actor: string) {
+// I set new timeout here, because when Amazon generates report, will take times to complete
+Then(`{} sends a GET method to get report by reportID`, { timeout: 5500000 }, async function (actor: string) {
     const clientConfig = {
         region: getRegionByMarketplaceId(this.marketplaceId),
         //All of info below are Fisher Finery company
@@ -96,6 +100,7 @@ Then(`{} sends a GET method to get report by reportID`, { timeout: 100000 }, asy
     };
     try {
         let sellingPartner = new SellingPartnerAPI(clientConfig);
+        // Set loop here, because I am not sure when do Amazon complete report!
         while (true) {
             logger.log('info', 'Get report Demand by Report Id from Amazon')
             await new Promise((resolve) => setTimeout(() => resolve(null), 10000));
@@ -118,5 +123,6 @@ Then(`{} sends a GET method to get report by reportID`, { timeout: 100000 }, asy
     }
     catch (e) {
         logger.log('info', "Error message: " + e);
+        this.attach("Error message: " + e);
     };
 });
