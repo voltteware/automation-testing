@@ -95,6 +95,24 @@ async function getItemsinPurchasingCustom(request: APIRequestContext, linkApi: s
     return await request.get(url, options);
 }
 
+//Get Vendor Sales Velocity Settings
+async function getVendorSalesVelocitySettings(request: APIRequestContext, linkApi: string, options?: object) {
+    const url = `${linkApi}`;
+    logger.log('info', `Send GET request ${url}`);
+    return await request.get(url, options);
+}
+
+//Update Vendor Sales Velocity Settings
+async function updateVendorSalesVelocitySettings(request: APIRequestContext, linkApi: string, payLoad: any, header?: any) {
+    const url = `${linkApi}`;
+    logger.log('info', `Send PUT request ${url} with ${JSON.stringify(payLoad, undefined, 4)}`);
+    const editResponse = await request.put(url, {
+        data: payLoad,
+        headers: header
+    });
+    return editResponse;
+}
+
 export {
     getSuppliers,
     createSupplier,
@@ -106,5 +124,7 @@ export {
     getCountItemsinPO,
     getItemsinPO,
     getCountItemsinPurchasingCustom,
-    getItemsinPurchasingCustom
+    getItemsinPurchasingCustom,
+    getVendorSalesVelocitySettings,
+    updateVendorSalesVelocitySettings
 }

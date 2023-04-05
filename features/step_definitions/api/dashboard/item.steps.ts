@@ -204,10 +204,16 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
 
                 this.vendorKey = randomSupplier.key;
                 this.vendorName = randomSupplier.name;
+            } else if (value == 'supplierUpdatedSalesVelocity') {
+                this.vendorKey = this.supplierKey;
+                this.vendorName = this.supplierName;
+            }else if (value == 'null') {
+                this.vendorKey = null
+                this.vendorName = null
             }
 
-            logger.log('info', `New ${editColumn}: ${this.vendorName}`);
-            this.attach(`New ${editColumn}: ${this.vendorName}`);
+            logger.log('info', `New ${editColumn}: ${this.vendorName} - ${this.supplierKey}`);
+            this.attach(`New ${editColumn}: ${this.vendorName} - ${this.supplierKey}`);
             break;
         case 'supplierPrice':
             if (value == 'random') {
@@ -417,14 +423,14 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
         this.payLoad = {
             companyType: `${this.responseBodyOfAItemObject.companyType}`,
             companyKey: `${this.responseBodyOfAItemObject.companyKey}`,
-            key: `${this.responseBodyOfAItemObject.key}`,
+            key: `${this.responseBodyOfAItemObject.key === undefined ? this.responseBodyOfAItemObject.itemKey : this.responseBodyOfAItemObject.key}`,
             name: this.name === undefined ? this.responseBodyOfAItemObject.name : `${this.name}`,
             asin: this.asin === undefined ? this.responseBodyOfAItemObject.asin : `${this.asin}`,
             fnsku: this.fnsku === undefined ? this.responseBodyOfAItemObject.fnsku : `${this.fnsku}`,
             description: this.description === undefined ? this.responseBodyOfAItemObject.description : `${this.description}`,
             packageWeight: this.responseBodyOfAItemObject.packageWeight,
-            vendorKey: this.vendorKey === undefined ? this.responseBodyOfAItemObject.vendorKey : `${this.vendorKey}`,
-            vendorName: this.vendorName === undefined ? this.responseBodyOfAItemObject.vendorName : `${this.vendorName}`,
+            vendorKey: this.vendorKey === undefined ? this.responseBodyOfAItemObject.vendorKey : this.vendorKey === null ? null : `${this.vendorKey}`,
+            vendorName: this.vendorName === undefined ? this.responseBodyOfAItemObject.vendorName : this.vendorName === null ? null : `${this.vendorName}`,
             vendorPrice: this.vendorPrice === undefined ? this.responseBodyOfAItemObject.vendorPrice : this.vendorPrice,
             moq: this.moq === undefined ? this.responseBodyOfAItemObject.moq : this.moq,
             leadTime: this.leadTime === undefined ? this.responseBodyOfAItemObject.leadTime : this.leadTime,

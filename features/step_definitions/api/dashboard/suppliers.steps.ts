@@ -54,6 +54,9 @@ Then('{} picks random supplier in above response', async function (actor: string
     this.responseBodyOfASupplierObject = await this.getSupplierResponseBody[Math.floor(Math.random() * this.getSupplierResponseBody.length)];
     logger.log('info', `Random supplier: ${JSON.stringify(this.responseBodyOfASupplierObject, undefined, 4)}`);
     this.attach(`Random supplier: ${JSON.stringify(this.responseBodyOfASupplierObject, undefined, 4)}`);
+
+    this.supplierName = this.responseBodyOfASupplierObject.name
+    this.supplierKey = this.responseBodyOfASupplierObject.key
 })
 
 Then('{} checks values in response of random supplier are correct', async function (actor: string) {
@@ -143,6 +146,7 @@ Then('{} checks the total suppliers is correct', async function (actor: string) 
 Then(`{} saves the supplier key`, async function (actor: string) {
     supplierKey = this.responseBodyOfASupplierObject.key
     logger.log('info', `Supplier key to edit: ${supplierKey}`);
+    this.supplierKey = supplierKey
 });
 
 Given('User sets PUT api endpoint to edit {} of the above supplier for company type {} with new value: {}', async function (editColumn: string, companyType: string, value: string) {
