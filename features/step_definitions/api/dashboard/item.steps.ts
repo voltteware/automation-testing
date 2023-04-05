@@ -5,7 +5,13 @@ import logger from '../../../../src/Logger/logger';
 import { Links } from '../../../../src/utils/links';
 import { faker } from '@faker-js/faker';
 import _ from "lodash";
+import * as keyword from '../../../../src/utils/actionwords'
 
+let linkUpdateVendorSalesVelocitySettings: any;
+let linkUpdateItemSalesVelocitySettings: any;
+let linkGetItemsWithFilter: any;
+let linkGetItemSalesVelocitySettings: any;
+let linkGetAItemFilterByName: any;
 let link: string;
 var linkGetAllItems: string;
 let linkLimitRow: string;
@@ -204,10 +210,16 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
 
                 this.vendorKey = randomSupplier.key;
                 this.vendorName = randomSupplier.name;
+            } else if (value == 'supplierUpdatedSalesVelocity') {
+                this.vendorKey = this.supplierKey;
+                this.vendorName = this.supplierName;
+            } else if (value == 'null') {
+                this.vendorKey = null
+                this.vendorName = null
             }
 
-            logger.log('info', `New ${editColumn}: ${this.vendorName}`);
-            this.attach(`New ${editColumn}: ${this.vendorName}`);
+            logger.log('info', `New ${editColumn}: ${this.vendorName} - ${this.supplierKey}`);
+            this.attach(`New ${editColumn}: ${this.vendorName} - ${this.supplierKey}`);
             break;
         case 'supplierPrice':
             if (value == 'random') {
@@ -417,14 +429,14 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
         this.payLoad = {
             companyType: `${this.responseBodyOfAItemObject.companyType}`,
             companyKey: `${this.responseBodyOfAItemObject.companyKey}`,
-            key: `${this.responseBodyOfAItemObject.key}`,
+            key: `${this.responseBodyOfAItemObject.key === undefined ? this.responseBodyOfAItemObject.itemKey : this.responseBodyOfAItemObject.key}`,
             name: this.name === undefined ? this.responseBodyOfAItemObject.name : `${this.name}`,
             asin: this.asin === undefined ? this.responseBodyOfAItemObject.asin : `${this.asin}`,
             fnsku: this.fnsku === undefined ? this.responseBodyOfAItemObject.fnsku : `${this.fnsku}`,
             description: this.description === undefined ? this.responseBodyOfAItemObject.description : `${this.description}`,
             packageWeight: this.responseBodyOfAItemObject.packageWeight,
-            vendorKey: this.vendorKey === undefined ? this.responseBodyOfAItemObject.vendorKey : `${this.vendorKey}`,
-            vendorName: this.vendorName === undefined ? this.responseBodyOfAItemObject.vendorName : `${this.vendorName}`,
+            vendorKey: this.vendorKey === undefined ? this.responseBodyOfAItemObject.vendorKey : this.vendorKey === null ? null : `${this.vendorKey}`,
+            vendorName: this.vendorName === undefined ? this.responseBodyOfAItemObject.vendorName : this.vendorName === null ? null : `${this.vendorName}`,
             vendorPrice: this.vendorPrice === undefined ? this.responseBodyOfAItemObject.vendorPrice : this.vendorPrice,
             moq: this.moq === undefined ? this.responseBodyOfAItemObject.moq : this.moq,
             leadTime: this.leadTime === undefined ? this.responseBodyOfAItemObject.leadTime : this.leadTime,
@@ -727,4 +739,140 @@ Then('The new {} of item must be updated successfully', function (editColumn: st
             break;
     }
 
+});
+
+Given(`User sets GET api endpoint to get a item in "Manage Company > Item" to assign supplier`, function () {
+    // Use items with name have DefaultPurchasingSaleVelocity to check
+    const name = 'DefaultPurchasingSaleVelocity';
+    linkGetAItemFilterByName = `${Links.API_ITEMS}?offset=0&limit=1&where={"filters":[{"filters":[{"field":"name","operator":"contains","value":"${name}"}],"logic":"and"}],"logic":"and"}`
+});
+
+Given(`User sends GET request to get a item in "Manage Company > Item" to assign supplier`, async function () {
+    const options = {
+        headers: this.headers
+    }
+    this.getItemsResponse = this.response = await itemRequest.getItems(this.request, linkGetAItemFilterByName, options);
+    const responseBodyText = await this.getItemsResponse.text();
+    if (this.getItemsResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
+        this.responseBody = this.getItemsResponseBody = JSON.parse(await this.getItemsResponse.text());
+        logger.log('info', `Response GET ${linkGetAItemFilterByName}` + JSON.stringify(this.getItemsResponseBody, undefined, 4));
+        this.attach(`Response GET ${linkGetAItemFilterByName}` + JSON.stringify(this.getItemsResponseBody, undefined, 4))
+    }
+    else {
+        const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
+        logger.log('info', `Response GET ${linkGetAItemFilterByName} has status code ${this.response.status()} ${this.response.statusText()} and response body ${responseBodyText}`);
+        this.attach(`Response GET ${linkGetAItemFilterByName} has status code ${this.response.status()} ${this.response.statusText()} and response body ${actualResponseText}`)
+    }
+
+    this.itemToCheckSaleVelocitySetting = this.getItemsResponseBody[0]
+    this.itemKey = this.itemToCheckSaleVelocitySetting.key
+    this.itemName = this.itemToCheckSaleVelocitySetting.name
+    this.responseBodyOfAItemObject = this.itemToCheckSaleVelocitySetting
+});
+
+Then('User sets GET api endpoint to get item sales velocity settings', function () {
+    linkGetItemSalesVelocitySettings = `${Links.API_ITEM_SALES_VELOCITY}/${this.itemKey}/purchasing`
+});
+
+Then('User sends GET request to get item sales velocity settings', async function () {
+    const options = {
+        headers: this.headers
+    }
+
+    this.getItemSalesVelocitySettingsResponse = this.response = await itemRequest.getItemSalesVelocitySettings(this.request, linkGetItemSalesVelocitySettings, options);
+    const responseBodyText = await this.getItemSalesVelocitySettingsResponse.text();
+    console.log('aksgcuygahsf')
+    console.log(this.getItemSalesVelocitySettingsResponse.status() + '-' + this.response.statusText())
+    if (this.getItemSalesVelocitySettingsResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
+        this.responseBody = this.getItemSalesVelocitySettingsResponseBody = JSON.parse(await this.getItemSalesVelocitySettingsResponse.text());
+        logger.log('info', `Response GET ${linkGetItemSalesVelocitySettings}` + JSON.stringify(this.getItemSalesVelocitySettingsResponseBody, undefined, 4));
+        this.attach(`Response GET ${linkGetItemSalesVelocitySettings}` + JSON.stringify(this.getItemSalesVelocitySettingsResponseBody, undefined, 4))
+    }
+    else {
+        const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
+        logger.log('info', `Response GET ${linkGetItemSalesVelocitySettings} has status code ${this.response.status()} ${this.response.statusText()} and response body ${responseBodyText}`);
+        this.attach(`Response GET ${linkGetItemSalesVelocitySettings} has status code ${this.response.status()} ${this.response.statusText()} and response body ${actualResponseText}`)
+    }
+});
+
+Given(`User sets GET api endpoint to get items in "Manage Company > Item"`, function () {
+    // Get items that its purcchase as is null and its name is not contain DefaultPurchasingSaleVelocity
+    linkGetItemsWithFilter = `${Links.API_ITEMS}?offset=0&limit=50&where={"filters":[{"filters":[{"field":"name","operator":"doesnotcontain","value":"DefaultPurchasingSaleVelocity"}],"logic":"and"},{"filters":[{"field":"vendorName","operator":"isnull","value":null}],"logic":"and"},{"filters":[{"field":"lotMultipleItemName","operator":"isnull","value":null}],"logic":"and"}],"logic":"and"}`
+});
+
+Given(`User sends GET request to get items in {string}`, async function (string) {
+    const options = {
+        headers: this.headers
+    }
+    this.getItemsResponse = this.response = await itemRequest.getItems(this.request, linkGetItemsWithFilter, options);
+    const responseBodyText = await this.getItemsResponse.text();
+    if (this.getItemsResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
+        this.responseBody = this.getItemsResponseBody = JSON.parse(await this.getItemsResponse.text());
+        // logger.log('info', `Response GET ${linkGetItemsWithFilter}` + JSON.stringify(this.getItemsResponseBody, undefined, 4));
+        // this.attach(`Response GET ${linkGetItemsWithFilter}` + JSON.stringify(this.getItemsResponseBody, undefined, 4))
+    }
+    else {
+        const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
+        logger.log('info', `Response GET ${linkGetItemsWithFilter} has status code ${this.response.status()} ${this.response.statusText()} and response body ${responseBodyText}`);
+        this.attach(`Response GET ${linkGetItemsWithFilter} has status code ${this.response.status()} ${this.response.statusText()} and response body ${actualResponseText}`)
+    }
+});
+
+Given(`User picks random a item from above list items`, async function () {
+    this.responseBodyOfAItemObject = await this.getItemsResponseBody[Math.floor(Math.random() * this.getItemsResponseBody.length)];
+    logger.log('info', `Random Item: ${JSON.stringify(this.responseBodyOfAItemObject, undefined, 4)}`);
+    this.attach(`Random Item: ${JSON.stringify(this.responseBodyOfAItemObject, undefined, 4)}`);
+
+    this.itemKey = this.responseBodyOfAItemObject.key
+    this.itemName = this.responseBodyOfAItemObject.name
+});
+
+Given('User sets PUT api endpoint to update item sales velocity setting with type {}', function (velocityType: string) {
+    linkUpdateItemSalesVelocitySettings = `${Links.API_ITEM_SALES_VELOCITY}/${this.itemKey}`
+});
+
+When('User sends PUT request to update item sales velocity setting type {} with the total percentage is {}%', async function (velocityType: string, percentage: string) {
+    const isNumber = !isNaN(parseFloat(percentage)) && isFinite(+percentage);
+
+    this.randomWeightNumbers = []
+
+    if (isNumber) {
+        // The function returns the array of 8 numbers that add up to the desired sum (here is percentage of purchasing daily sales)
+        this.randomWeightNumbers = keyword.generateRandomNumbers(Number(percentage), 8);
+
+        this.payLoad = {
+            "companyType": `${this.responseBodyOfAItemObject.companyType}`,
+            "companyKey": `${this.responseBodyOfAItemObject.companyKey}`,
+            "itemKey": `${this.responseBodyOfAItemObject.key === undefined ? this.responseBodyOfAItemObject.itemKey : this.responseBodyOfAItemObject.key}`,
+            "salesVelocitySettingsType": "purchasing",
+            "restockModel": "DIRECT_SHIP",
+            "localLeadTime": 7,
+            "targetQtyOnHandMin": 30,
+            "targetQtyOnHandMax": 60,
+            "salesVelocityType": "average",
+            "salesVelocitySettingData": {
+                "percent2Day": this.randomWeightNumbers[0],
+                "percent7Day": this.randomWeightNumbers[1],
+                "percent14Day": this.randomWeightNumbers[2],
+                "percent30Day": this.randomWeightNumbers[3],
+                "percent60Day": this.randomWeightNumbers[4],
+                "percent90Day": this.randomWeightNumbers[5],
+                "percent180Day": this.randomWeightNumbers[6],
+                "percentForecasted": this.randomWeightNumbers[7]
+            }
+        }
+    }
+
+    logger.log('info', `Payload` + JSON.stringify(this.payLoad, undefined, 4));
+    this.attach(`Payload` + JSON.stringify(this.payLoad, undefined, 4))
+
+    this.response = await itemRequest.updateItemSalesVelocitySettings(this.request, linkUpdateItemSalesVelocitySettings, this.payLoad, this.headers)
+    if (this.response.status() == 200) {
+        this.UpdateItemSalesVelocitySettingsResponseBody = JSON.parse(await this.response.text())
+        logger.log('info', `Update Item Sales Velocity Settings Response edit ${linkUpdateItemSalesVelocitySettings} has status code ${this.response.status()} ${this.response.statusText()} and updateItemSalesVelocitySettings body ${JSON.stringify(this.UpdateItemSalesVelocitySettingsResponseBody, undefined, 4)}`)
+        this.attach(`Update Item Sales Velocity Settings Response edit ${linkUpdateItemSalesVelocitySettings} has status code ${this.response.status()} ${this.response.statusText()} and updateItemSalesVelocitySettings body ${JSON.stringify(this.UpdateItemSalesVelocitySettingsResponseBody, undefined, 4)}`)
+    } else {
+        logger.log('info', `Update Item Sales Velocity Settings Response edit ${linkUpdateItemSalesVelocitySettings} has status code ${this.response.status()} ${this.response.statusText()}`)
+        this.attach(`Update Item Sales Velocity Settings Response edit ${linkUpdateItemSalesVelocitySettings} has status code ${this.response.status()} ${this.response.statusText()}`)
+    }
 });

@@ -27,7 +27,9 @@ export class Links {
     static API_GET_GRIDVIEW_BOM: string = '/api/grid-view/bom';
     static API_SUPPLY: string = '/api/supply';
     static API_CREATE_SUPPLY: string = '/api/supply/manual/';
-    static API_SUBSCRIPTION: string = '/api/billing/subscription/'
+    static API_SUBSCRIPTION: string = '/api/billing/subscription/';
+    static API_VENDOR_SALES_VELOCITY: string = '/api/vendor-sales-velocity-settings';
+    static API_ITEM_SALES_VELOCITY: string = '/api/item-sales-velocity-settings'
     //API Purchasing
     static API_GET_GRIDVIEW_CUSTOM_ITEMS: string = '/api/grid-view/custom-items-in-po';
     static API_GET_GRIDVIEW_SUGGESTED_POS: string = '/api/grid-view/suggested-pos';
@@ -35,6 +37,7 @@ export class Links {
     static API_GET_COUNT_SUMMARY_BY_VENDOR = '/api/summarybyvendor';
     static API_SUMMARY_VENDOR_ITEMS_IN_PO = '/api/summary/vendor';
     static API_SUMMARY_ITEMS_IN_PURCHASING_CUSTOM = '/api/summary';
+    static API_RESTOCK_SUGGESTION_PURCHASING = '/api/restock-suggestion';
     //API RestockAMZ
     static API_GET_RESTOCK_SUGGESTION_BY_VENDOR = '/api/restock-suggestion-by-vendor';
     static API_GET_RESTOCK_SUGGESTION = '/api/restock-suggestion';

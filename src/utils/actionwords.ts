@@ -117,5 +117,30 @@ export class ActionWords {
                 });
                 break;
         }
-    }
+    }                     
 }
+
+export function generateRandomNumbers(desiredSum: number, length: number): number[] {
+    const numbers: number[] = [];
+    let sum = 0;
+    
+    // Generate X random numbers
+    for (let i = 0; i < length; i++) {
+      const randomNum = Math.floor(Math.random() * 101);
+      numbers.push(randomNum);
+      sum += randomNum;
+    }
+    
+    // Scale numbers to desired sum
+    const scalingFactor = desiredSum / sum;
+    for (let i = 0; i < length; i++) {
+      numbers[i] = Math.round(numbers[i] * scalingFactor);
+    }
+    
+    // Adjust sum to account for rounding errors
+    const actualSum = numbers.reduce((a, b) => a + b, 0);
+    const diff = desiredSum - actualSum;
+    numbers[0] += diff;
+    
+    return numbers;
+  }

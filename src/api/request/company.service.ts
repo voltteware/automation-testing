@@ -43,10 +43,21 @@ async function getListCompanyInfo(request: APIRequestContext, linkApi: string, o
     return await request.get(url, options);
 }
 
+// Edit purchasing daily sale rate of company
+async function editPurchasingDailyRate(request: APIRequestContext, linkApi: string, payLoad: any, header?: any) {    
+    logger.log('info', `Send PUT request ${linkApi} with ${JSON.stringify(payLoad, undefined, 4)}`);
+    const updateResponse = await request.put(linkApi, {
+        data: payLoad,
+        headers: header
+    });
+    return updateResponse;
+}
+
 export {
     getRealm,
     getCompanyInfo,
     updateCompany,
     createCompany,
-    getListCompanyInfo
+    getListCompanyInfo,
+    editPurchasingDailyRate
 }
