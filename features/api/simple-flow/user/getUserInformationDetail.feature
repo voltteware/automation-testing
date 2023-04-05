@@ -3,7 +3,7 @@ Feature: API_User Get/User
     Background:
         Given Check testprofile@gmail.com exist in the system, if it does not exist will create user with same email
 
-    @TC_U001 @regression-api
+    @TC_U001 @regression-api @smoke-test-api
     Scenario Outline: TC_DU001 - Verify <user> could call this API to get user information
         Given User has valid connect.sid of "<email>" after send a POST request with payload as email: "<email>" and password: "<password>"
         # And User filters user to get user which has the email as <email>

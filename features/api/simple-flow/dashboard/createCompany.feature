@@ -6,7 +6,7 @@ Feature: API_Dashboard POST /api/company
             | admin | testuserforecastrx@gmail.com | Test1111# |
         And User sets POST api endpoint to create company
         
-    @TC_CCP001 @regression-api @asc
+    @TC_CCP001 @smoke-test-api @asc
     Scenario Outline: <TC_ID> - Verify user <email> could call this API to create company with type <companyType> when input all data valid
         Given In Header of the request, User sets param Cookie as valid connect.sid
         And User sets request body with payload as companyName: "<companyName>" and companyKey: "" and companyType: "<companyType>" and serviceLevel: "<serviceLevel>" and leadTime: "<leadTime>" and orderInterval: "<orderInterval>" and initialSyncDate: "<initialSyncDate>" and marketplaceId: "<marketplaceId>"
@@ -16,14 +16,14 @@ Feature: API_Dashboard POST /api/company
         And User checks API contract essential types in company object are correct
         And User checks values in response of create company are correct
         And Check that the company just created exists in the current companies list of his
-        And And User sets DELETE api endpoint to delete company
+        And User sets DELETE api endpoint to delete company
         And User sends a DELETE method to delete the created company
 
         Examples:
             | TC_ID     | email                        | companyName | companyType | serviceLevel | leadTime | orderInterval | initialSyncDate | marketplaceId | expectedStatus | expectedStatusText |
             | TC_CCP001 | testuserforecastrx@gmail.com | random      | ASC         | random       | random   | random        | currentDate     | random        | 201            | Created            |
 
-    @TC_CCP002 @TC_CCP003 @TC_CCP004 @regression-api @csv @qbo @qbfs
+    @TC_CCP002 @TC_CCP003 @TC_CCP004 @smoke-test-api @csv @qbo @qbfs
     Scenario Outline: <TC_ID> - Verify user <email> could call this API to create company with type <companyType> when input all data valid
         Given In Header of the request, User sets param Cookie as valid connect.sid
         And User sets request body with payload as companyName: "<companyName>" and companyKey: "" and companyType: "<companyType>" and serviceLevel: "<serviceLevel>" and leadTime: "<leadTime>" and orderInterval: "<orderInterval>" and initialSyncDate: "" and marketplaceId: ""
@@ -33,7 +33,7 @@ Feature: API_Dashboard POST /api/company
         And User checks API contract essential types in company object are correct
         And User checks values in response of create company are correct
         And Check that the company just created exists in the current companies list of his
-        And And User sets DELETE api endpoint to delete company
+        And User sets DELETE api endpoint to delete company
         And User sends a DELETE method to delete the created company
         Examples:
             | TC_ID     | email                        | companyName | companyType | serviceLevel | leadTime | orderInterval | expectedStatus | expectedStatusText |
@@ -44,7 +44,7 @@ Feature: API_Dashboard POST /api/company
     @TC_CCP005
     Scenario Outline: <TC_ID> - Verify error when user sends this API with <cookie> cookie
         Given User sets Cookie in HEADER as <cookie>
-        And And User sets request body with payload as companyName: "<companyName>" and companyKey: "" and companyType: "<companyType>" and serviceLevel: "<serviceLevel>" and leadTime: "<leadTime>" and orderInterval: "<orderInterval>" and initialSyncDate: "" and marketplaceId: ""
+        And User sets request body with payload as companyName: "<companyName>" and companyKey: "" and companyType: "<companyType>" and serviceLevel: "<serviceLevel>" and leadTime: "<leadTime>" and orderInterval: "<orderInterval>" and initialSyncDate: "" and marketplaceId: ""
         When User sends a POST method to create company
         Then The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"

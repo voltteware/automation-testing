@@ -1,7 +1,7 @@
 @test-api @api-register @api-authenticate
 Feature: API /register
 
-	@TC_R001 @api-register-with-valid-payload @regression-api
+	@TC_R001 @api-register-with-valid-payload @regression-api @smoke-test-api
 	Scenario Outline: <id> - Verify POST /api/register with <scenario>
 		Given User sets POST register service api endpoint
 		And User sets request body with payload as firstName: "<firstName>" and lastName: "<lastName>" and companyName: "<companyName>" and companyType: "<companyType>" and phone: "<phone>" and email: "<email>" and password: "<password>"

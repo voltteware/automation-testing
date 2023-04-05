@@ -283,12 +283,12 @@ Then(`{} sends a GET request to get items in Purchasing Custom`, async function 
         this.responseBody = this.getItemsinPurchasingCustomResponseBody = JSON.parse(await this.getItemsinPurchasingCustomResponse.body());
         this.randomAItemObject = this.getItemsinPurchasingCustomResponseBody[Math.floor(Math.random() * this.getItemsinPurchasingCustomResponseBody.length)];
         logger.log('info', `Random object in response GET ${linkGetItemsInPurchasingCustom} >>>>>>` + JSON.stringify(this.randomAItemObject, undefined, 4));
-        this.attach(`Response object in response GET ${linkGetItemsInPurchasingCustom} >>>>>>` + JSON.stringify(this.randomAItemObject, undefined, 4))
+        this.attach(`Random object in response GET ${linkGetItemsInPurchasingCustom} >>>>>>` + JSON.stringify(this.randomAItemObject, undefined, 4))
     }
     else {
         const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
-        logger.log('info', `Response GET ${linkGetItemsInPurchasingCustom} has status code ${this.response.status()} ${this.response.statusText()} and response body >>>>>> ${responseBodyText}`);
-        this.attach(`Response GET ${linkGetItemsInPurchasingCustom} has status code ${this.response.status()} ${this.response.statusText()} and response body >>>>>> ${actualResponseText}`)
+        logger.log('info', `Random object in Response GET ${linkGetItemsInPurchasingCustom} has status code ${this.response.status()} ${this.response.statusText()} and response body >>>>>> ${responseBodyText}`);
+        this.attach(`Random object in Response GET ${linkGetItemsInPurchasingCustom} has status code ${this.response.status()} ${this.response.statusText()} and response body >>>>>> ${actualResponseText}`)
     }
 })
 

@@ -10,7 +10,7 @@ Feature: API_Dashboard PUT /api/supply/manual
 
     # Notes: Only supply of company type CSV and ASC can edit
 
-    @TC_US001
+    @TC_US001 @smoke-test-api
     Scenario Outline: <TC_ID> - Verify user <email> could call this API to update "<editColumn>" of a demand for company type (<companyType>)
         Given User picks company with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
@@ -26,11 +26,12 @@ Feature: API_Dashboard PUT /api/supply/manual
         And The new <editColumn> of supply must be updated successfully
 
         Examples:
-            | TC_ID      | companyType | email                      | limitRow | editColumn | value  | expectedStatus |
-            | TC_US001_1 | ASC         | testautoforecast@gmail.com | 10       | poNum      | random | 200            |
+            | TC_ID       | companyType | email                      | limitRow | editColumn | value  | expectedStatus |
+            | TC_US001_1  | ASC         | testautoforecast@gmail.com | 10       | poNum      | random | 200            |
+            | TC_US001_12 | CSV         | testautoforecast@gmail.com | 10       | orderQty   | random | 200            |
 
     # Test case TC_US001_3, TC_US001_10 FAILED: The Date is pushed back 1 day when editing - Bug_ID: 1325
-    @TC_US001 @regression-api 
+    @TC_US002
     Scenario Outline: <TC_ID> - Verify user <email> could call this API to update "<editColumn>" of a demand for company type (<companyType>)
         Given User picks company with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
@@ -46,7 +47,7 @@ Feature: API_Dashboard PUT /api/supply/manual
         And The new <editColumn> of supply must be updated successfully
 
         Examples:
-            | TC_ID       | companyType | email                      | limitRow | editColumn   | value  | expectedStatus |           
+            | TC_ID       | companyType | email                      | limitRow | editColumn   | value  | expectedStatus |
             | TC_US001_2  | ASC         | testautoforecast@gmail.com | 10       | suppliername | random | 200            |
             | TC_US001_3  | ASC         | testautoforecast@gmail.com | 10       | receiveDate  | random | 200            |
             | TC_US001_4  | ASC         | testautoforecast@gmail.com | 10       | poDate       | random | 200            |
@@ -57,5 +58,4 @@ Feature: API_Dashboard PUT /api/supply/manual
             | TC_US001_9  | CSV         | testautoforecast@gmail.com | 10       | suppliername | random | 200            |
             | TC_US001_10 | CSV         | testautoforecast@gmail.com | 10       | receiveDate  | random | 200            |
             | TC_US001_11 | CSV         | testautoforecast@gmail.com | 10       | poDate       | random | 200            |
-            | TC_US001_12 | CSV         | testautoforecast@gmail.com | 10       | orderQty     | random | 200            |
             | TC_US001_13 | CSV         | testautoforecast@gmail.com | 10       | openQty      | random | 200            |
