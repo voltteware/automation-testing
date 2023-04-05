@@ -23,7 +23,7 @@ Then(`{} sets GET api endpoint to get demands with limit row: {}`, async functio
 
 Then(`{} sets GET api endpoint to get demands with itemName: {}`, async function (actor, itemName: string) {
     //API of amazon just calls 1 month in date-range. Therefore, will get list demand in latest 1 month.
-    //Define current date then change to yyyy-dd-mm format
+    //Define current date then change to yyyy-mm-dd format
     var currentDate = new Date();
     this.currentDateFormat = format(currentDate,'yyyy-MM-dd');
     this.lastMonthDateFormat = format(sub(currentDate, {months: 1}),'yyyy-MM-dd');
@@ -302,6 +302,8 @@ Then(`{} sends a GET request to get specific demand of item`, async function (ac
     const responseBodyText = await this.getDemandResponse.text();
     if (this.getDemandResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
         this.responseBody = this.getDemandResponseBody = JSON.parse(await this.getDemandResponse.text());
+        logger.log('info', `Response GET ${link}: ` + JSON.stringify(this.getDemandResponseBody, undefined, 4));
+        this.attach(`Response GET ${link}: ` + JSON.stringify(this.getDemandResponseBody, undefined, 4))
     }
     else {
         //if response include <!doctype html> => 'html', else => response

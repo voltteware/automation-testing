@@ -15,7 +15,9 @@ Feature: API_Testing Compare data on ForecastRx and Amazon in Demand section
         And User sends a GET request to get company information by company key
         And User sets GET api endpoint to get demands with itemName: <itemName>
         And User sends a GET request to get specific demand of item
-        And User sends a GET method to get report on Amazon
+        And User sends a POST method to create report on Amazon
+        And User sends a GET method to get report by reportID
+        And User sends a GET method to get report document by reportDocumentID
 
         Examples:
             | TC_ID       | companyType | email                      | itemName            |
