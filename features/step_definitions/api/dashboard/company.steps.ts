@@ -46,6 +46,20 @@ Then('{} picks random company in above response', async function (actor: string)
 
 Then('{} picks company with type {} in above response', async function (actor, companyType: string) {
     this.selectedCompany = await this.getRealmResponseBody.find((co: any) => co.companyType == companyType)
+    this.randomCompany = this.selectedCompany
+    logger.log('info', `Company which has type ${companyType}: ${JSON.stringify(this.selectedCompany, undefined, 4)}`);
+    this.attach(`Company which has type ${companyType}: ${JSON.stringify(this.selectedCompany, undefined, 4)}`);
+    this.companyKey = this.selectedCompany.companyKey;
+    this.companyType = this.selectedCompany.companyType;
+    logger.log('info', `companyKey: ${this.companyKey}`);
+    this.attach(`COMPANY KEY: ${this.companyKey}`);
+    logger.log('info', `companyType: ${this.companyType}`);
+    this.attach(`COMPANY TYPE: ${this.companyType}`);
+})
+
+Then('{} picks a company with type {} and name {} in above response', async function (actor, companyType: string, companyName: string) {
+    this.selectedCompany = await this.getRealmResponseBody.find((co: any) => ((co.companyType == companyType) && (co.companyName == companyName)))
+    this.randomCompany = this.selectedCompany
     logger.log('info', `Company which has type ${companyType}: ${JSON.stringify(this.selectedCompany, undefined, 4)}`);
     this.attach(`Company which has type ${companyType}: ${JSON.stringify(this.selectedCompany, undefined, 4)}`);
     this.companyKey = this.selectedCompany.companyKey;
