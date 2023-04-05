@@ -5,9 +5,11 @@ import logger from '../../../../src/Logger/logger';
 import { Links } from '../../../../src/utils/links';
 import { faker } from '@faker-js/faker';
 import _ from "lodash";
+import * as keyword from '../../../../src/utils/actionwords'
 
 let link: any;
 let supplierKey: string;
+let linkUpdateVendorSalesVelocitySettings: any;
 
 Then(`{} sets GET api endpoint to get suppliers keys`, async function (actor: string) {
     link = Links.API_SUPPLIERS;
@@ -386,5 +388,51 @@ Then(`The new {} of supplier must be updated successfully`, async function (edit
             break;
         default:
             break;
+    }
+});
+
+Given('User sets PUT api endpoint to update sale velocity settings with type {} of supplier', function (velocityType: string) {
+    linkUpdateVendorSalesVelocitySettings = `${Links.API_VENDOR_SALES_VELOCITY}/${this.supplierKey}`
+});
+
+Given('User sends PUT request to update sale velocity settings with type {} of above supplier with the total percentage is {}%', async function (velocityType: string, percentage: string) {
+    const isNumber = !isNaN(parseFloat(percentage)) && isFinite(+percentage);
+
+    this.randomWeightNumbers = []
+
+    if (isNumber) {
+        // The function returns the array of 8 numbers that add up to the desired sum (here is percentage of purchasing daily sales)
+        this.randomWeightNumbers = keyword.generateRandomNumbers(Number(percentage), 8);
+
+        this.payLoad = {
+            "companyKey": `${this.companyKey}`,
+            "companyType": `${this.companyType}`,
+            "salesVelocityType": "average",
+            "vendorKey": `${this.supplierKey}`,
+            "salesVelocitySettingData": {
+                "percent2Day": this.randomWeightNumbers[0],
+                "percent7Day": this.randomWeightNumbers[1],
+                "percent14Day": this.randomWeightNumbers[2],
+                "percent30Day": this.randomWeightNumbers[3],
+                "percent60Day": this.randomWeightNumbers[4],
+                "percent90Day": this.randomWeightNumbers[5],
+                "percent180Day": this.randomWeightNumbers[6],
+                "percentForecasted": this.randomWeightNumbers[7]
+            },
+            "salesVelocitySettingsType": "purchasing"
+        }
+    }
+
+    logger.log('info', `Payload` + JSON.stringify(this.payLoad, undefined, 4));
+    this.attach(`Payload` + JSON.stringify(this.payLoad, undefined, 4))
+
+    this.response = await supplierRequest.updateVendorSalesVelocitySettings(this.request, linkUpdateVendorSalesVelocitySettings, this.payLoad, this.headers)
+    if (this.response.status() == 200) {
+        this.UpdateVendorSalesVelocitySettingsResponseBody = JSON.parse(await this.response.text())
+        logger.log('info', `Edit Company Response edit ${link} has status code ${this.response.status()} ${this.response.statusText()} and editCompanyResponse body ${JSON.stringify(this.UpdateVendorSalesVelocitySettingsResponseBody, undefined, 4)}`)
+        this.attach(`Edit Company Response edit ${link} has status code ${this.response.status()} ${this.response.statusText()} and editCompanyResponse body ${JSON.stringify(this.UpdateVendorSalesVelocitySettingsResponseBody, undefined, 4)}`)
+    } else {
+        logger.log('info', `Edit Company Response edit ${link} has status code ${this.response.status()} ${this.response.statusText()}`)
+        this.attach(`Edit Company Response edit ${link} has status code ${this.response.status()} ${this.response.statusText()}`)
     }
 });

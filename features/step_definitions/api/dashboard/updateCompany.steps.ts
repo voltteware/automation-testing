@@ -5,6 +5,7 @@ import logger from '../../../../src/Logger/logger';
 import { Links } from '../../../../src/utils/links';
 import { faker } from '@faker-js/faker';
 import _ from "lodash";
+import * as keyword from '../../../../src/utils/actionwords'
 
 let link: any;
 Then(`{} sets PUT api endpoint to update company keys`, async function (actor: string) {
@@ -12,7 +13,7 @@ Then(`{} sets PUT api endpoint to update company keys`, async function (actor: s
 });
 //leadTime
 Then('{} sets request body with payload as leadTime: {} and companyKey, companyType', async function (actor: string, leadTime: any) {
-    if (leadTime == "random"){
+    if (leadTime == "random") {
         leadTime = Number(faker.datatype.number({
             'min': 1,
             'max': 365
@@ -221,3 +222,40 @@ Then('The expected Total percentage should be {int}', async function (expectedTo
         this.responseBodyOfACompanyObject.purchasingSalesVelocitySettingData.percentForecasted;
     expect(TotalPercentage).toBe(expectedTotalPercentage);
 })
+
+Then(`{} sets PUT api endpoint to update "Purchasing Daily Sales Rate Rules > Average" in the "Manage Company > Company Details" of a bove company with the total percentage is {}%`, async function (actor: string, percentage: string) {
+    link = `${Links.API_GET_COMPANY}/${this.companyKey}`;
+    this.payLoad = this.responseBodyOfACompanyObject
+
+    this.randomWeightNumbers = []
+
+    const isNumber = !isNaN(parseFloat(percentage)) && isFinite(+percentage);
+    if (isNumber) {
+        // The function returns the array of 8 numbers that add up to the desired sum (here is percentage of purchasing daily sales)
+        this.randomWeightNumbers = keyword.generateRandomNumbers(Number(percentage), 8);
+
+        this.payLoad.purchasingSalesVelocitySettingData.percent2Day = this.randomWeightNumbers[0]
+        this.payLoad.purchasingSalesVelocitySettingData.percent7Day = this.randomWeightNumbers[1]
+        this.payLoad.purchasingSalesVelocitySettingData.percent14Day = this.randomWeightNumbers[2]
+        this.payLoad.purchasingSalesVelocitySettingData.percent30Day = this.randomWeightNumbers[3]
+        this.payLoad.purchasingSalesVelocitySettingData.percent60Day = this.randomWeightNumbers[4]
+        this.payLoad.purchasingSalesVelocitySettingData.percent90Day = this.randomWeightNumbers[5]
+        this.payLoad.purchasingSalesVelocitySettingData.percent180Day = this.randomWeightNumbers[6]
+        this.payLoad.purchasingSalesVelocitySettingData.percentForecasted = this.randomWeightNumbers[7]
+    }
+
+    logger.log('info', `Payload` + JSON.stringify(this.payLoad, undefined, 4));
+    this.attach(`Payload` + JSON.stringify(this.payLoad, undefined, 4))
+});
+
+Then(`{} sends PUT request to update "Purchasing Daily Sales Rate Rules > Average"`, async function (actor: string) {
+    this.response = await companyRequest.editPurchasingDailyRate(this.request, link, this.payLoad, this.headers)
+    if (this.response.status() == 200) {
+        this.editCompanyResponseBody = JSON.parse(await this.response.text())
+        logger.log('info', `Edit Company Response edit ${link} has status code ${this.response.status()} ${this.response.statusText()} and editCompanyResponse body ${JSON.stringify(this.editCompanyResponseBody, undefined, 4)}`)
+        this.attach(`Edit Company Response edit ${link} has status code ${this.response.status()} ${this.response.statusText()} and editCompanyResponse body ${JSON.stringify(this.editCompanyResponseBody, undefined, 4)}`)
+    } else {
+        logger.log('info', `Edit Company Response edit ${link} has status code ${this.response.status()} ${this.response.statusText()}`)
+        this.attach(`Edit Company Response edit ${link} has status code ${this.response.status()} ${this.response.statusText()}`)
+    }
+});
