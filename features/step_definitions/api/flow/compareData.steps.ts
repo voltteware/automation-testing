@@ -21,29 +21,26 @@ Then(`{} sends a POST method to create report on Amazon`, async function (actor:
             'reports': '2021-06-30'
         }
     };
-    (async () => {
-        try {
-            let sellingPartner = new SellingPartnerAPI(clientConfig);
-            this.res = this.createDemandReportResponse = await sellingPartner.callAPI({
-                operation: 'createReport',
-                endpoint: 'reports',
-                body: {
-                    "reportType": `${reportType.Demand}`,
-                    "marketplaceIds": ["ATVPDKIKX0DER"],
-                    "dataStartTime": `${this.lastMonthDateFormat}`,
-                    "dataEndTime": `${this.currentDateFormat}`
-                }
-            });
-            this.createDemandReportResponseBody = JSON.parse(await this.createDemandReportResponse.text());
-            logger.log('info', "Response message: " + JSON.stringify(this.createDemandReportResponseBody, undefined, 4));
-            this.attach("Response Create report Demand from Amazon" + JSON.stringify(this.createDemandReportResponseBody, undefined, 4));
+    try {
+        let sellingPartner = new SellingPartnerAPI(clientConfig);
+        this.res = await sellingPartner.callAPI({
+            operation: 'reports.createReport',
+            body: {
+                reportType: `${reportType.Demand}`,
+                marketplaceIds: ["ATVPDKIKX0DER"],
+                dataStartTime: `${this.lastMonthDateFormat}`,
+                dataEndTime: `${this.currentDateFormat}`
+            }
+        });
+        this.createDemandReportResponseBody = this.res;
+        logger.log('info', "Response message: " + JSON.stringify(this.createDemandReportResponseBody, undefined, 4));
+        this.attach("Response Create report Demand from Amazon" + JSON.stringify(this.createDemandReportResponseBody, undefined, 4));
 
-            this.reportId = this.createDemandReportResponseBody.reportId;
-        }
-        catch (e) {
-            logger.log('info', "Error message: " + e);
-        };
-    });
+        this.reportId = this.createDemandReportResponseBody.reportId;
+    }
+    catch (e) {
+        logger.log('info', "Error message: " + e);
+    };
 });
 
 Then(`{} sends a GET method to get report document by reportDocumentID`, async function (actor: string) {
@@ -62,28 +59,26 @@ Then(`{} sends a GET method to get report document by reportDocumentID`, async f
             'reports': '2021-06-30'
         }
     };
-    (async () => {
-        try {
-            let sellingPartner = new SellingPartnerAPI(clientConfig);
-            this.res = this.getReportDocumentIdResponse = await sellingPartner.callAPI({
-                operation:'reports.getReportDocument',
-                path: {
-                    reportDocumentId:`${this.reportDocumentId}`
-                }
-            });
-            this.getReportDocumentIdResponseBody = JSON.parse(await this.getReportDocumentIdResponse.text());
-            logger.log('info', "Response Get report Demand by Report Document Id from Amazon " + JSON.stringify(this.getReportDocumentIdResponseBody));
-            this.attach("Response Get report Demand by Report Document Id from Amazon" + JSON.stringify(this.getReportDocumentIdResponseBody, undefined, 4));
+    try {
+        let sellingPartner = new SellingPartnerAPI(clientConfig);
+        this.res = await sellingPartner.callAPI({
+            operation:'reports.getReportDocument',
+            path: {
+                reportDocumentId:`${this.reportDocumentId}`
+            }
+        });
+        this.getReportDocumentIdResponseBody = this.res;
+        logger.log('info', "Response Get report Demand by Report Document Id from Amazon " + JSON.stringify(this.getReportDocumentIdResponseBody));
+        this.attach("Response Get report Demand by Report Document Id from Amazon" + JSON.stringify(this.getReportDocumentIdResponseBody, undefined, 4));
 
-            this.url = this.getReportDocumentIdResponseBody.url;
-        }
-        catch (e) {
-            logger.log('info', "Error message: " + e);
-        };
-    });
+        this.url = this.getReportDocumentIdResponseBody.url;
+    }
+    catch (e) {
+        logger.log('info', "Error message: " + e);
+    };
 });
 
-Then(`{} sends a GET method to get report by reportID`, async function (actor: string) {
+Then(`{} sends a GET method to get report by reportID`, { timeout: 100000 }, async function (actor: string) {
     const clientConfig = {
         region: getRegionByMarketplaceId(this.marketplaceId),
         //All of info below are Fisher Finery company
@@ -99,23 +94,29 @@ Then(`{} sends a GET method to get report by reportID`, async function (actor: s
             'reports': '2021-06-30'
         }
     };
-    (async () => {
-        try {
-            let sellingPartner = new SellingPartnerAPI(clientConfig);
-            this.res = this.getReportIdResponse = await sellingPartner.callAPI({
+    try {
+        let sellingPartner = new SellingPartnerAPI(clientConfig);
+        while (true) {
+            logger.log('info', 'Get report Demand by Report Id from Amazon')
+            await new Promise((resolve) => setTimeout(() => resolve(null), 10000));
+            this.res = await sellingPartner.callAPI({
                 operation:'reports.getReport',
                 path: {
                     reportId:`${this.reportId}`
                 }
             });
-            this.getReportIdResponseBody = JSON.parse(await this.getReportIdResponse.text());
+            this.getReportIdResponseBody = this.res;
             logger.log('info', "Response Get report Demand by Report Id from Amazon " + JSON.stringify(this.getReportIdResponseBody));
             this.attach("Response Get report Demand by Report Id from Amazon" + JSON.stringify(this.getReportIdResponseBody, undefined, 4));
 
-            this.reportDocumentId = this.getReportIdResponseBody.reportDocumentId;
+            if (['DONE', 'CANCELLED', 'FATAL'].includes(this.getReportIdResponseBody?.processingStatus)) {
+                break;
+            }
         }
-        catch (e) {
-            logger.log('info', "Error message: " + e);
-        };
-    });
+
+        this.reportDocumentId = this.getReportIdResponseBody.reportDocumentId;
+    }
+    catch (e) {
+        logger.log('info', "Error message: " + e);
+    };
 });
