@@ -19,5 +19,7 @@ export class CreateCompanyPage {
         await this.csvButton.click();
         await this.inputCompanyName.fill(companyName);
         await this.createCompanyButton.click();
+
+        await expect(this.page).toHaveURL(/.*onboarding/);
     }
 }

@@ -43,6 +43,7 @@ Then('user sends a POST login request to get valid cookie with role', async func
     //logger.log('info', 'Response Body:\n' + JSON.stringify(this.responseBody, undefined, 4))
     //this.attach(JSON.stringify(this.responseBody, undefined, 4))
     this.authenticateResponseBody = this.responseBody
+    this.id = this.responseBody.displayName;
 })
 
 //Set Token in HEADER

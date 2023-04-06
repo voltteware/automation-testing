@@ -1,17 +1,22 @@
 @test-ui @login
 Feature: Login to the ForecastRx
+	Background:
+		Given user sends a POST login request to get valid cookie with role
+            | role  | username                     | password  |
+            | admin | may27pre@gmail.com           | Test1111# |
+			
 	@LI001
-	Scenario Outline: LI001 - Verify login successfuly with <scenario>
+	Scenario Outline: LI001 - Verify login successfully with <scenario>
 		Given User is on Login page
 		When User enters the username "<email>" and the password "<password>"
 		And User clicks SignIn button
-		Then Verify user is on Dashboard page
+		Then Verify the username is displayed 
 		Examples:
 			| scenario                 | email              | password  |
 			| valid email and password | may27pre@gmail.com | Test1111# |
 
 	@LI002-LI003
-	Scenario Outline: <id> - Verify login unsuccessfuly with <scenario>
+	Scenario Outline: <id> - Verify login unsuccessfully with <scenario>
 		Given User is on Login page
 		When User enters the username "<email>" and the password "<password>"
 		And User clicks SignIn button
