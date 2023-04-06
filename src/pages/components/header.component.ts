@@ -28,11 +28,6 @@ export class HeaderComponent {
         await this.userName.click();
     }
 
-    async clickOnAddCompany() {
-        await this.companyName.selectOption('0: Object');
-        await expect(this.page).toHaveURL(/.*create/);
-    }
-
     async switchToAnotherCompany(companyName: string) {
         await this.companyName.selectOption(companyName);
         await expect(this.page).toHaveURL(/.*subscriptions/);
@@ -51,6 +46,7 @@ export class HeaderComponent {
     }
 
     async clickSubscriptionsLink(nameOfCompany: any) {
+        
         const [getSubscriptionsResponse] = await Promise.all([
             // Waits for the next response matching some conditions
             this.page.waitForResponse(response => (response.url().includes("/api/billing/subscriptions"))),
@@ -64,7 +60,7 @@ export class HeaderComponent {
         console.log("subscriptionsTransform: ", this.subscriptionsTransform)
         for(let i = 0; i < this.subscriptionsTransform.length; i++) {
             if(this.subscriptionsTransform[i].company.companyName == nameOfCompany) {
-                return [this.subscriptionsTransform[i].id, this.subscriptionsTransform[i].customer, this.subscriptionsTransform[i].company.companyKey, this.subscriptionsTransform[i].trial_end];
+                return [this.subscriptionsTransform[i].id, this.subscriptionsTransform[i].customer, this.subscriptionsTransform[i].company.companyKey, this.subscriptionsTransform[i].trial_end, this.subscriptionsTransform[i].company.companyName];
             }
         }
     }

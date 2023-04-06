@@ -82,6 +82,7 @@ Then('{} sends a POST method to create company', async function (actor: string) 
     this.createCompanyResponseBody = JSON.parse(await this.createCompanyResponse.text());
     this.companyKey = this.createCompanyResponseBody.companyKey;
     this.companyType = this.createCompanyResponseBody.companyType;
+    this.companyName = this.createCompanyResponseBody.companyName;
     if (this.createCompanyResponse.status() == 201 && !responseBodyText.includes('<!doctype html>')) {
         this.responseBodyOfACompanyObject = JSON.parse(responseBodyText)
         logger.log('info', `Response POST ${link}` + JSON.stringify(this.responseBodyOfACompanyObject, undefined, 4));
