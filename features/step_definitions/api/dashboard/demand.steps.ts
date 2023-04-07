@@ -3,6 +3,7 @@ import { expect } from '@playwright/test';
 import * as demandRequest from '../../../../src/api/request/demand.service';
 import logger from '../../../../src/Logger/logger';
 import { Links } from '../../../../src/utils/links';
+import { format, sub } from 'date-fns'
 import { faker } from '@faker-js/faker';
 import _ from "lodash";
 
@@ -10,6 +11,7 @@ let link: any;
 let randomItem: any;
 let linkLimitRow: any;
 let linkSorted: any;
+let linkFiltered: any;
 
 Then(`{} sets GET api endpoint to get demand keys`, async function (actor: string) {
     link = Links.API_DEMAND;
@@ -17,6 +19,17 @@ Then(`{} sets GET api endpoint to get demand keys`, async function (actor: strin
 
 Then(`{} sets GET api endpoint to get demands with limit row: {}`, async function (actor, limitRow: string) {
     linkLimitRow = `${Links.API_DEMAND}?offset=0&limit=${limitRow}`;
+});
+
+Then(`{} sets GET api endpoint to get demands with itemName: {}`, async function (actor, itemName: string) {
+    //API of amazon just calls 1 month in date-range. Therefore, will get list demand in latest 1 month.
+    //Define current date then change to yyyy-mm-dd format
+    var currentDate = new Date();
+    this.currentDateFormat = format(currentDate,'yyyy-MM-dd');
+    this.lastMonthDateFormat = format(sub(currentDate, {months: 1}),'yyyy-MM-dd');
+
+    //Get latest demand
+    linkFiltered = `${Links.API_DEMAND}?offset=0&limit=100&where={"filters":[{"filters":[{"field":"itemName","operator":"contains","value":"${itemName}"}],"logic":"and"},{"filters":[{"field":"dueDate","operator":"lt","value":"${this.currentDateFormat}"},{"field":"dueDate","operator":"gte","value":"${this.lastMonthDateFormat}"}],"logic":"and"}],"logic":"and"}`
 });
 
 Then(`{} sends a GET request to get list demands`, async function (actor: string) {
@@ -278,5 +291,24 @@ Then('The new {} of demand must be updated successfully', function (editColumn: 
             break;
         default:
             break;
+    }
+});
+
+Then(`{} sends a GET request to get specific demand of item`, async function (actor: string) {
+    const options = {
+        headers: this.headers
+    }
+    this.getDemandResponse = this.response = await demandRequest.getDemand(this.request, linkFiltered, options);
+    const responseBodyText = await this.getDemandResponse.text();
+    if (this.getDemandResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
+        this.responseBody = this.getDemandResponseBody = JSON.parse(await this.getDemandResponse.text());
+        logger.log('info', `Response GET ${link}: ` + JSON.stringify(this.getDemandResponseBody, undefined, 4));
+        this.attach(`Response GET ${link}: ` + JSON.stringify(this.getDemandResponseBody, undefined, 4))
+    }
+    else {
+        //if response include <!doctype html> => 'html', else => response
+        const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
+        logger.log('info', `Response GET ${linkFiltered} has status code ${this.response.status()} ${this.response.statusText()} and response body ${responseBodyText}`);
+        this.attach(`Response GET ${linkFiltered} has status code ${this.response.status()} ${this.response.statusText()} and response body ${actualResponseText}`)
     }
 });
