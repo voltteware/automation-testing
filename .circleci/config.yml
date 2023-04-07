@@ -16,10 +16,8 @@ jobs:
       - checkout
       - default: true
       - run:
-          name: "Test Api"
-          command: "npm run test-api"
-          name: "Test UI"
-          command: "npm run test-ui"
+          name: "Test Api & UI"
+          command: "npm run test-api & npm run test-ui"
 
 # Orchestrate jobs using workflows
 # See: https://circleci.com/docs/configuration-reference/#workflows
