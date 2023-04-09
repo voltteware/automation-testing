@@ -40,7 +40,7 @@ function sleep(s){
 
 const {uploadS3} = require('./s3-upload');
 async function uploadReportHtml() {
-    await sleep(5);
+    await sleep(10);
     try{
         console.log('Uploading report to S3');
         const filePath = __dirname + `/reports/cucumber-html-report-${env}-${dateFormat}.html`;
