@@ -32,7 +32,8 @@
     "@types/cucumber-html-reporter": "^5.0.1",
     "allure-js-commons": "^2.0.0-beta.19",
     "assert": "2.0.0",
-    "date-fns": "^2.29.3",
+    "aws-sdk": "2.1353.0",
+    "date-fns": "2.29.3",
     "dotenv": "^16.0.3"
   },
   "devDependencies": {
