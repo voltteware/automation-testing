@@ -33,6 +33,17 @@ var options = {
 reporter.generate(options);
 
 
-    //more info on `metadata` is available in `options` section below.
+const {uploadS3} = require('./s3-upload');
+async function uploadReportHtml() {
+    await sleep(10);
+    try{
+        console.log('Uploading report to S3');
+        const filePath = __dirname + `/reports/cucumber-html-report-${env}-${dateFormat}.html`;
+        console.log('Completed uploading report to S3');
+        await uploadS3(filePath);
+    } catch(err) {
+        console.log('err upload file: ', err);
+    }
+}
 
     //to generate consodilated report from multi-cucumber JSON files, please use `jsonDir` option instead of `jsonFile`. More info is available in `options` section below.
