@@ -13,6 +13,7 @@ export class Links {
     static API_CREATE_COMPANY: string = '/api/company';
     static API_GET_COMPANY: string = '/api/company';
     static API_SUPPLIERS: string = '/api/vendor';
+    static API_SUPPLIER: string = '/api/supplier'
     static API_UPDATE_COMPANY: string = '/api/company/';
     static API_ITEMS: string = '/api/item';
     static API_ITEM_COUNT: string = '/api/item/count';
@@ -41,13 +42,15 @@ export class Links {
     //API RestockAMZ
     static API_GET_RESTOCK_SUGGESTION_BY_VENDOR = '/api/restock-suggestion-by-vendor';
     static API_GET_RESTOCK_SUGGESTION = '/api/restock-suggestion';
+    static API_SHIPMENT = '/api/shipment';
     //API Admin
     static API_ADMIN_DELETE_USER: string = '/api/admin/users/';
     static API_ADMIN_GET_COMPANIES: string = '/api/admin/companies';
     static API_ADMIN_DELETE_COMPANY: string = '/api/admin/companies/';
     static API_ADMIN_GET_USER: string = '/api/admin/users?';
     //API General
-    static API_RUN_FORECAST: string = "/api/forecast";
+    static API_RUN_FORECAST: string = '/api/forecast';
+    static API_SYNC: string = '/api/sync';
     // API Count Summary
     static API_SUMMARY_COUNT: string = "/api/summary/count";
 }

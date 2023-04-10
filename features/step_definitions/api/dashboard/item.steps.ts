@@ -19,6 +19,7 @@ var linkGetFilterItem: string;
 let linkCountItems: string;
 let linkGetItems: string;
 var linkGetActiveAndHaslotMultipleItemKeyNullItem: string;
+let linkItemKey : any;
 
 Then(`{} sets GET api endpoint to get item summary`, async function (actor: string) {
     link = `${Links.API_ITEMS}?summary=true&companyKey=${this.companyKey}&companyType=${this.companyType}`;
@@ -794,7 +795,7 @@ Then('User sends GET request to get item sales velocity settings', async functio
 
     this.getItemSalesVelocitySettingsResponse = this.response = await itemRequest.getItemSalesVelocitySettings(this.request, linkGetItemSalesVelocitySettings, options);
     const responseBodyText = await this.getItemSalesVelocitySettingsResponse.text();
-    console.log('aksgcuygahsf')
+    
     console.log(this.getItemSalesVelocitySettingsResponse.status() + '-' + this.response.statusText())
     if (this.getItemSalesVelocitySettingsResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
         this.responseBody = this.getItemSalesVelocitySettingsResponseBody = JSON.parse(await this.getItemSalesVelocitySettingsResponse.text());
@@ -905,4 +906,28 @@ Then(`{} sets GET api endpoint to filter item by name or asin contains {}`, asyn
     }
 
     linkGetItems = linkGetFilterItem = encodeURI(`${Links.API_ITEMS}?offset=0&limit=30&where={"logic":"and","filters":[{"logic":"and","filters":[{"field":"isHidden","operator":"eq","value":false}]},{"logic":"or","filters":[{"field":"name","operator":"contains","value":"${searchCriteria}"},{"field":"asin","operator":"contains","value":"${searchCriteria}"}]}]}`);
+});
+
+Then(`{} sets GET api endpoint to get Item by Item key`, async function (actor: string) {
+    linkItemKey = `${Links.API_ITEMS}/${this.itemKey}`;
+});
+
+Then('User sends a GET request to get Item by Item key', async function () {
+    const options = {
+        headers: this.headers
+    }
+
+    this.getItemByItemKeyResponse = this.response = await itemRequest.getItems(this.request, linkItemKey, options);
+    const responseBodyText = await this.getItemByItemKeyResponse.text();
+    
+    if (this.getItemByItemKeyResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
+        this.responseBodyOfAItemObject = this.responseBody = this.getItemByItemKeyResponseBody = JSON.parse(await this.getItemByItemKeyResponse.text());
+        logger.log('info', `Response GET ${linkItemKey}` + JSON.stringify(this.getItemByItemKeyResponseBody, undefined, 4));
+        this.attach(`Response GET ${linkItemKey}` + JSON.stringify(this.getItemByItemKeyResponseBody, undefined, 4))
+    }
+    else {
+        const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
+        logger.log('info', `Response GET ${linkItemKey} has status code ${this.response.status()} ${this.response.statusText()} and response body ${responseBodyText}`);
+        this.attach(`Response GET ${linkItemKey} has status code ${this.response.status()} ${this.response.statusText()} and response body ${actualResponseText}`)
+    }
 });
