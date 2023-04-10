@@ -19,7 +19,7 @@ Feature: API_Dashboard PUT /api/company
         Then The expected status code should be <expectedStatus>
         And User sets GET api endpoint to get items in Purchasing Custom to check purchasing daily sales rate
         And User sends a GET request to get items in Purchasing Custom to check purchasing daily sales rate
-        And User selects ramdom items in Purchasing Custom
+        And User selects random items in Purchasing Custom
         And User sets GET api endpoint to get restock suggestion purchasing
         And User sends GET request to get restock suggestion purchasing of above items
         And User checks purchasing daily sales rate of item using default setting on company detail
@@ -41,7 +41,7 @@ Feature: API_Dashboard PUT /api/company
         And User sends a GET request to get count items in PO by vendor by vendor key
         And User sets api endpoint to get list items in PO of vendor key
         And User sends a POST request to get list items in PO by vendor by vendor key
-        And User selects ramdom items in Purchasing My Suggested
+        And User selects random items in Purchasing My Suggested
         And User sets GET api endpoint to get restock suggestion purchasing
         And User sends GET request to get restock suggestion purchasing of above items
         And User checks purchasing daily sales rate of item using default setting on company detail

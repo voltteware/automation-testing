@@ -1,6 +1,54 @@
 import { When, Then, Given } from '@cucumber/cucumber';
 import { expect } from '@playwright/test';
 import _ from "lodash";
+import logger from '../../../../src/Logger/logger';
+
+Then('{} checks API contract in item summary object are correct', async function (actor: string) {
+    if (this.
+        getItemSummaryResponseBody.err !== null) {
+        expect(typeof (this.getItemSummaryResponseBody.err), 'Type of err value should be string').toBe("string");
+        logger.log('info', `Response GET Item Summary has err${this.getItemSummaryResponseBody.err}`);
+        this.attach(`Response GET Item Summary has err${this.getItemSummaryResponseBody.err}`)
+    }
+    else {
+        expect(this.getItemSummaryResponseBody.err, 'err value should be null').toBeNull();
+    }
+
+    expect(typeof (this.getItemSummaryResponseBody.model), 'Type of model value should be object').toBe("object");
+    expect(typeof (Number(this.getItemSummaryResponseBody.model.onHandCount)), 'Type of onHandCount value should be string').toBe("number");
+    expect(typeof (Number(this.getItemSummaryResponseBody.model.onHandThirdPartyCount)), 'Type of onHandThirdPartyCount value should be number').toBe("number");
+    expect(typeof (Number(this.getItemSummaryResponseBody.model.olderThan30DaysCount)), 'Type of olderThan30DaysCount value should be number').toBe("number");
+    expect(typeof (Number(this.getItemSummaryResponseBody.model.missingVendorCount)), 'Type of missingVendorCount value should be number').toBe("number");
+})
+
+Then('{} checks number Items Out of Stock in response of item summary is correct', async function (actor: string) {
+    const onHandCount = Number(this.getItemSummaryResponseBody.model.onHandCount);
+    expect(onHandCount, `onHandCount should be greater than or equal 0`).toBeGreaterThanOrEqual(0);
+    const expectedOnHandCount = this.getAllItemsResponseBody.filter((item: any) => item.onHand == 0 || item.onHand == null).length;
+    expect(onHandCount, `onHandCount should be equal ${expectedOnHandCount}`).toEqual(expectedOnHandCount);
+})
+
+Then('{} checks number Items Out of Stock - Warehouse in response of item summary is correct', async function (actor: string) {
+    const onHandThirdPartyCount = Number(this.getItemSummaryResponseBody.model.onHandThirdPartyCount);
+    expect(onHandThirdPartyCount, `onHandThirdPartyCount should be greater than or equal 0`).toBeGreaterThanOrEqual(0);
+    const expectedOnHandThirdPartyCount = this.getAllItemsResponseBody.filter((item: any) => item.onHandThirdParty == 0 || item.onHandThirdParty == null).length;
+    expect(onHandThirdPartyCount, `onHandThirdPartyCount should be equal ${expectedOnHandThirdPartyCount}`).toEqual(expectedOnHandThirdPartyCount);
+})
+
+Then('{} checks number New Items last 30 days in response of item summary is correct', async function (actor: string) {
+    const olderThan30DaysCount = Number(this.getItemSummaryResponseBody.model.olderThan30DaysCount);
+    expect(olderThan30DaysCount, `olderThan30DaysCount should be greater than or equal 0`).toBeGreaterThanOrEqual(0);
+    const last30Days = new Date(new Date().setDate(new Date().getDate() - 30));
+    const expectedNewItemLast30Days = this.getAllItemsResponseBody.filter((item: any) => new Date(item.createdAt) >= new Date(last30Days)).length;
+    expect(olderThan30DaysCount, `olderThan30DaysCount in response should be equal ${expectedNewItemLast30Days}`).toEqual(expectedNewItemLast30Days);
+})
+
+Then('{} checks number Items without Vendors Assigned in response of item summary is correct', async function (actor: string) {
+    const missingVendorCount = Number(this.getItemSummaryResponseBody.model.missingVendorCount);
+    expect(missingVendorCount, `missingVendorCount should be greater than or equal 0`).toBeGreaterThanOrEqual(0);
+    const expectedmissingVendorCount = this.getAllItemsResponseBody.filter((item: any) => item.vendorKey == null).length;
+    expect(missingVendorCount, `missingVendorCount should be equal ${expectedmissingVendorCount}`).toEqual(expectedmissingVendorCount);
+})
 
 Then('{} checks API contract essential types in item object are correct', async function (actor: string) {
     expect(typeof (this.responseBodyOfAItemObject.companyType), 'Type of companyType value should be string').toBe("string");
@@ -230,5 +278,13 @@ Then('{} checks API contract essential types in item object are correct', async 
     expect(Date.parse(this.responseBodyOfAItemObject.created_at), 'updated_at in response should be date').not.toBeNull();
     expect(Date.parse(this.responseBodyOfAItemObject.warehouseQtyUpdatedDate), 'updated_at in response should be date').not.toBeNull();
 })
+
+Then(`{} checks API contract get count items are correct`, async function (actor) {
+    expect(typeof (this.getCountItemsActiveResponseBody), 'Get Count Items in response is a number').toBe("number");
+})
+
+Then(`{} checks the response of get item list returns {}`, async function (actor, expected: string) {
+    expect(this.getItemsResponseBody).toStrictEqual([]);
+});
 
 
