@@ -36,116 +36,126 @@ Then('{} checks API contract essential types in the response of get user informa
     //     expect(typeof (this.responseBodyOfAUserObject.err), 'Type of err value should be string').toBe("string");
     // }
     // else {
-    expect(this.getUserInformationResponseBody.err, 'err value should be null').toBeNull();
-    // }
-    //Checl model array contains at least 1 user object
-    expect(typeof (this.getUserInformationResponseBody.model), 'model should be array').toBe("object");
-    expect(this.getUserInformationResponseBody.model.length, 'model should be array has at least 1 item').toEqual(1);
-    expect(this.responseBodyOfAUserObject.hasPassword, 'hasPassword should be boolean and be true').toBe(true);
+    // expect(this.getUserInformationResponseBody.err, 'err value should be null').toBeNull();
+    // // }
+    // //Checl model array contains at least 1 user object
+    // expect(typeof (this.getUserInformationResponseBody.model), 'model should be array').toBe("object");
+    // expect(this.getUserInformationResponseBody.model.length, 'model should be array has at least 1 item').toEqual(1);
+    // expect(this.responseBodyOfAUserObject.hasPassword, 'hasPassword should be boolean and be true').toBe(true);
 
+    this.softAssert(this.getUserInformationResponseBody.err === null, 'err value should be null');
+    this.softAssert(typeof (this.getUserInformationResponseBody.model) === "object", 'model should be array');
+    this.softAssert(this.getUserInformationResponseBody.model.length === 1, 'model should be array has at least 1 item');
+    this.softAssert(this.responseBodyOfAUserObject.hasPassword === true, 'hasPassword should be boolean and be true');
+
+    // Avoid running further if there were soft assertion failures.
+    expect(this.countErrors).toBe(0)
 })
 
 Then('{} checks API contract essential types in user object are correct', async function (actor: string) {
     //Check userId 
-    expect(typeof (this.responseBodyOfAUserObject.userId), 'Type of userId value should be string').toBe("string");
+    this.softAssert(typeof (this.responseBodyOfAUserObject.userId) === "string", 'Type of userId value should be string');
     //Check isAdmin
-    expect(typeof (this.responseBodyOfAUserObject.isAdmin), 'Type of isAdmin value should be boolean').toBe("boolean");
+    this.softAssert(typeof (this.responseBodyOfAUserObject.isAdmin)=== "boolean", 'Type of isAdmin value should be boolean');
     //Check displayName
-    expect(typeof (this.responseBodyOfAUserObject.displayName), 'Type of displayName value should be string').toBe("string");
+    this.softAssert(typeof (this.responseBodyOfAUserObject.displayName) === "string", 'Type of displayName value should be string');
     //Check gridStateItem
-    expect(typeof (this.responseBodyOfAUserObject.gridStateItem), 'Type of gridStateItem value should be object').toBe("object");
+    this.softAssert(typeof (this.responseBodyOfAUserObject.gridStateItem) === "object", 'Type of gridStateItem value should be object');
     //Check gridStateBom
-    expect(typeof (this.responseBodyOfAUserObject.gridStateBom), 'Type of gridStateBom value should be object').toBe("object");
+    this.softAssert(typeof (this.responseBodyOfAUserObject.gridStateBom) === "object", 'Type of gridStateBom value should be object');
     //Check gridStateVendor
-    expect(typeof (this.responseBodyOfAUserObject.gridStateVendor), 'Type of gridStateVendor value should be object').toBe("object");
+    this.softAssert(typeof (this.responseBodyOfAUserObject.gridStateVendor) === "object", 'Type of gridStateVendor value should be object');
     //Check gridStateSupply
-    expect(typeof (this.responseBodyOfAUserObject.gridStateSupply), 'Type of gridStateSupply value should be object').toBe("object");
+    this.softAssert(typeof (this.responseBodyOfAUserObject.gridStateSupply) === "object", 'Type of gridStateSupply value should be object');
     //Check gridStateDemand
-    expect(typeof (this.responseBodyOfAUserObject.gridStateDemand), 'Type of gridStateDemand value should be object').toBe("object");
+    this.softAssert(typeof (this.responseBodyOfAUserObject.gridStateDemand) === "object", 'Type of gridStateDemand value should be object');
     //Check gridStateSummary
-    expect(typeof (this.responseBodyOfAUserObject.gridStateSummary), 'Type of gridStateSummary value should be object').toBe("object");
+    this.softAssert(typeof (this.responseBodyOfAUserObject.gridStateSummary) === "object", 'Type of gridStateSummary value should be object');
     //Check gridStateSummaryByVendor
-    expect(typeof (this.responseBodyOfAUserObject.gridStateSummaryByVendor), 'Type of gridStateSummaryByVendor value should be object').toBe("object");
+    this.softAssert(typeof (this.responseBodyOfAUserObject.gridStateSummaryByVendor) === "object", 'Type of gridStateSummaryByVendor value should be object');
     //Check gridStateCustomPo
-    expect(typeof (this.responseBodyOfAUserObject.gridStateCustomPo), 'Type of gridStateCustomPo value should be object').toBe("object");
+    this.softAssert(typeof (this.responseBodyOfAUserObject.gridStateCustomPo) === "object", 'Type of gridStateCustomPo value should be object');
     //Check gridStateSnapshot
-    expect(typeof (this.responseBodyOfAUserObject.gridStateSnapshot), 'Type of gridStateSnapshot value should be object').toBe("object");
+    this.softAssert(typeof (this.responseBodyOfAUserObject.gridStateSnapshot) === "object", 'Type of gridStateSnapshot value should be object');
     //Check gridStateUrgentCare
-    expect(typeof (this.responseBodyOfAUserObject.gridStateUrgentCare), 'Type of gridStateUrgentCare value should be object').toBe("object");
+    this.softAssert(typeof (this.responseBodyOfAUserObject.gridStateUrgentCare) === "object", 'Type of gridStateUrgentCare value should be object');
     //Check gridStateConsolidate
-    expect(typeof (this.responseBodyOfAUserObject.gridStateConsolidate), 'Type of gridStateConsolidate value should be object').toBe("object");
+    this.softAssert(typeof (this.responseBodyOfAUserObject.gridStateConsolidate) === "object", 'Type of gridStateConsolidate value should be object');
     //Check gridStateAddress
-    expect(typeof (this.responseBodyOfAUserObject.gridStateAddress), 'Type of gridStateAddress value should be object').toBe("object");
+    this.softAssert(typeof (this.responseBodyOfAUserObject.gridStateAddress) === "object", 'Type of gridStateAddress value should be object');
     //Check gridStatePoSaved
-    expect(typeof (this.responseBodyOfAUserObject.gridStatePoSaved), 'Type of gridStatePoSaved value should be object').toBe("object");
+    this.softAssert(typeof (this.responseBodyOfAUserObject.gridStatePoSaved) === "object", 'Type of gridStatePoSaved value should be object');
     //Check resetPasswordToken
     if (this.responseBodyOfAUserObject.resetPasswordToken !== null) {
-        expect(typeof (this.responseBodyOfAUserObject.resetPasswordToken), 'Type of resetPasswordToken value should be string').toBe("string");
+        this.softAssert(typeof (this.responseBodyOfAUserObject.resetPasswordToken) === "string", 'Type of resetPasswordToken value should be string');
     }
     else {
-        expect(this.responseBodyOfAUserObject.resetPasswordToken, 'resetPasswordToken value should be null').toBeNull();
+        this.softAssert(this.responseBodyOfAUserObject.resetPasswordToken === null, 'resetPasswordToken value should be null');
     }
     //Check resetPasswordExpires
     if (this.responseBodyOfAUserObject.resetPasswordExpires !== null) {
-        expect(typeof (this.responseBodyOfAUserObject.resetPasswordExpires), 'Type of resetPasswordExpires value should be string').toBe("string");
+        this.softAssert(typeof (this.responseBodyOfAUserObject.resetPasswordExpires) === "string", 'Type of resetPasswordExpires value should be string');
     }
     else {
-        expect(this.responseBodyOfAUserObject.resetPasswordExpires, 'resetPasswordExpires value should be null').toBeNull();
+        this.softAssert(this.responseBodyOfAUserObject.resetPasswordExpires === null, 'resetPasswordExpires value should be null');
     }
     //Check preferences
-    expect(typeof (this.responseBodyOfAUserObject.preferences), 'Type of preferences value should be object').toBe("object");
+    this.softAssert(typeof (this.responseBodyOfAUserObject.preferences) === "object", 'Type of preferences value should be object');
     //Check addRequest
     if (this.responseBodyOfAUserObject.addRequest !== null) {
-        expect(typeof (this.responseBodyOfAUserObject.addRequest), 'Type of addRequest value should be object').toBe("object");
+        this.softAssert(typeof (this.responseBodyOfAUserObject.addRequest) === "object", 'Type of addRequest value should be object');
     }
     else {
-        expect(this.responseBodyOfAUserObject.addRequest, 'addRequest value should be null').toBeNull();
+        this.softAssert(this.responseBodyOfAUserObject.addRequest === null, 'addRequest value should be null');
     }
     //Check acceptedPrivacyPolicy
     if (this.responseBodyOfAUserObject.acceptedPrivacyPolicy !== null) {
-        expect(typeof (this.responseBodyOfAUserObject.acceptedPrivacyPolicy), 'Type of acceptedPrivacyPolicy value should be boolean').toBe("boolean");
+        this.softAssert(typeof (this.responseBodyOfAUserObject.acceptedPrivacyPolicy) === "boolean", 'Type of acceptedPrivacyPolicy value should be boolean');
     }
     else {
-        expect(this.responseBodyOfAUserObject.acceptedPrivacyPolicy, 'acceptedPrivacyPolicy value should be null').toBeNull();
+        this.softAssert(this.responseBodyOfAUserObject.acceptedPrivacyPolicy === null, 'acceptedPrivacyPolicy value should be null');
     }
     //Check createdAt
-    expect(Date.parse(this.responseBodyOfAUserObject.createdAt), 'createdAt in response should be date').not.toBeNaN();
+    this.softAssert(!isNaN(Date.parse(this.responseBodyOfAUserObject.createdAt)), 'createdAt in response should be date');
     //Check updatedAt
-    expect(Date.parse(this.responseBodyOfAUserObject.updatedAt), 'updatedAt in response should be date').not.toBeNaN();
+    this.softAssert(!isNaN(Date.parse(this.responseBodyOfAUserObject.updatedAt)), 'updatedAt in response should be date');
     //Check gridStateAmazonReceipt
-    expect(typeof (this.responseBodyOfAUserObject.gridStateAmazonReceipt), 'Type of gridStateAmazonReceipt value should be object').toBe("object");
+    this.softAssert(typeof (this.responseBodyOfAUserObject.gridStateAmazonReceipt) === "object", 'Type of gridStateAmazonReceipt value should be object');
     //Check gridStatePoReceipt
-    expect(typeof (this.responseBodyOfAUserObject.gridStatePoReceipt), 'Type of gridStatePoReceipt value should be object').toBe("object");
+    this.softAssert(typeof (this.responseBodyOfAUserObject.gridStatePoReceipt) === "object", 'Type of gridStatePoReceipt value should be object');
     //Check gridStatePoClosed
-    expect(typeof (this.responseBodyOfAUserObject.gridStatePoClosed), 'Type of gridStatePoClosed value should be object').toBe("object");
+    this.softAssert(typeof (this.responseBodyOfAUserObject.gridStatePoClosed) === "object", 'Type of gridStatePoClosed value should be object');
     //Check gridStateShipmentClosed
-    expect(typeof (this.responseBodyOfAUserObject.gridStateShipmentClosed), 'Type of gridStateShipmentClosed value should be object').toBe("object");
+    this.softAssert(typeof (this.responseBodyOfAUserObject.gridStateShipmentClosed) === "object", 'Type of gridStateShipmentClosed value should be object');
     //Check gridStateShipment
-    expect(typeof (this.responseBodyOfAUserObject.gridStateShipment), 'Type of gridStateShipment value should be object').toBe("object");
+    this.softAssert(typeof (this.responseBodyOfAUserObject.gridStateShipment) === "object", 'Type of gridStateShipment value should be object');
     //Check gridStateAmazonReceiptDetail
-    expect(typeof (this.responseBodyOfAUserObject.gridStateAmazonReceiptDetail), 'Type of gridStateAmazonReceiptDetail value should be object').toBe("object");
+    this.softAssert(typeof (this.responseBodyOfAUserObject.gridStateAmazonReceiptDetail) === "object", 'Type of gridStateAmazonReceiptDetail value should be object');
     //Check gridStatePoReceiptDetail
-    expect(typeof (this.responseBodyOfAUserObject.gridStatePoReceiptDetail), 'Type of gridStatePoReceiptDetail value should be object').toBe("object");
+    this.softAssert(typeof (this.responseBodyOfAUserObject.gridStatePoReceiptDetail) === "object", 'Type of gridStatePoReceiptDetail value should be object');
     //Check gridStateCustomPoDetail
-    expect(typeof (this.responseBodyOfAUserObject.gridStateCustomPoDetail), 'Type of gridStateCustomPoDetail value should be object').toBe("object");
+    this.softAssert(typeof (this.responseBodyOfAUserObject.gridStateCustomPoDetail) === "object", 'Type of gridStateCustomPoDetail value should be object');
     //Check gridStateSuggestedPoDetail
-    expect(typeof (this.responseBodyOfAUserObject.gridStateSuggestedPoDetail), 'Type of gridStateSuggestedPoDetail value should be object').toBe("object");
+    this.softAssert(typeof (this.responseBodyOfAUserObject.gridStateSuggestedPoDetail) === "object", 'Type of gridStateSuggestedPoDetail value should be object');
     //Check gridStateRestockSuggestionItemList
-    expect(typeof (this.responseBodyOfAUserObject.gridStateRestockSuggestionItemList), 'Type of gridStateRestockSuggestionItemList value should be object').toBe("object");
+    this.softAssert(typeof (this.responseBodyOfAUserObject.gridStateRestockSuggestionItemList) === "object", 'Type of gridStateRestockSuggestionItemList value should be object');
     //Check gridStateInventorySelection
-    expect(typeof (this.responseBodyOfAUserObject.gridStateInventorySelection), 'Type of gridStateInventorySelection value should be object').toBe("object");
+    this.softAssert(typeof (this.responseBodyOfAUserObject.gridStateInventorySelection) === "object", 'Type of gridStateInventorySelection value should be object');
     //Check gridStateShipmentSumary
-    expect(typeof (this.responseBodyOfAUserObject.gridStateShipmentSumary), 'Type of gridStateShipmentSumary value should be object').toBe("object");
+    this.softAssert(typeof (this.responseBodyOfAUserObject.gridStateShipmentSumary) === "object", 'Type of gridStateShipmentSumary value should be object');
     //Check gridStateShipmentReview
-    expect(typeof (this.responseBodyOfAUserObject.gridStateShipmentReview), 'Type of gridStateShipmentReview value should be object').toBe("object");
+    this.softAssert(typeof (this.responseBodyOfAUserObject.gridStateShipmentReview) === "object", 'Type of gridStateShipmentReview value should be object');
     //Check gridStateShipmentComplete
-    expect(typeof (this.responseBodyOfAUserObject.gridStateShipmentComplete), 'Type of gridStateShipmentComplete value should be object').toBe("object");
+    this.softAssert(typeof (this.responseBodyOfAUserObject.gridStateShipmentComplete) === "object", 'Type of gridStateShipmentComplete value should be object');
     //Check globalFilters
-    expect(typeof (this.responseBodyOfAUserObject.globalFilters), 'Type of globalFilters value should be object').toBe("object");
+    this.softAssert(typeof (this.responseBodyOfAUserObject.globalFilters) === "object", 'Type of globalFilters value should be object');
     //Check created_at
     // expect(Date.parse(this.responseBodyOfAUserObject.created_at), 'created_at in response should be date').not.toBeNaN();
     // //Check updated_at
     // expect(Date.parse(this.responseBodyOfAUserObject.updated_at), 'updated_at in response should be date').not.toBeNaN();
+
+    // Avoid running further if there were soft assertion failures.
+    expect(this.countErrors).toBe(0)
 })
 
 //Change Password
