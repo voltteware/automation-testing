@@ -1,11 +1,12 @@
 @test-ui @profile
 Feature: Profile Information
-    Background:
-        Given User is on Login page
-
     @P001
     Scenario Outline: AG001 - Verify the user profile information is displayed correctly
-        Given User signs in with valid username "<username>" and the password "<currentPassword>" successfuly
+        Given user sends a POST login request to get valid cookie with role
+            | role  | username                   | password  |
+            | admin | thegreentree1217@gmail.com | Test1111# |
+        And User is on Login page
+        And User signs in with valid username "<username>" and the password "<currentPassword>" successfully
         And User clicks username on top right corner
         And User clicks on Profile option
         When User is on Profile page
@@ -17,7 +18,11 @@ Feature: Profile Information
 
     @CP001
     Scenario Outline: <id> - Verify that the user could change password successfully
-        Given User signs in with valid username "<username>" and the password "<currentPassword>" successfuly
+        Given user sends a POST login request to get valid cookie with role
+            | role  | username                   | password  |
+            | user | oct11@gmail.com            | Test1111# |
+        And User is on Login page
+        And User signs in with valid username "<username>" and the password "<currentPassword>" successfully
         And User clicks username on top right corner
         And User clicks on Profile option
         And User is on Profile page
@@ -26,7 +31,7 @@ Feature: Profile Information
         And User enters confirm new password "<newPassword>"
         Then User clicks Submit button then check toast "<message>" displayed
         And User logouts
-        And User signs in with valid username "<username>" and the password "<newPassword>" successfuly
+        And User signs in with valid username "<username>" and the password "<newPassword>" successfully
         And User clicks username on top right corner
         And User clicks on Profile option
         And User is on Profile page
@@ -41,7 +46,11 @@ Feature: Profile Information
 
     @CP002
     Scenario Outline: CP002 - Verify that error when user enters incorrect Current Password
-        Given User signs in with valid username "<username>" and the password "<currentPassword>" successfuly
+        Given user sends a POST login request to get valid cookie with role
+            | role  | username                   | password  |
+            | admin | thegreentree1217@gmail.com | Test1111# |
+        And User is on Login page
+        Given User signs in with valid username "<username>" and the password "<currentPassword>" successfully
         And User clicks username on top right corner
         And User clicks on Profile option
         And User is on Profile page
@@ -55,7 +64,11 @@ Feature: Profile Information
 
     @CP003
     Scenario Outline: CP003 - Verify error when user leaves New Password and Confirm New Password empty
-        Given User signs in with valid username "<username>" and the password "<currentPassword>" successfuly
+        Given user sends a POST login request to get valid cookie with role
+            | role  | username                   | password  |
+            | admin | thegreentree1217@gmail.com | Test1111# |
+        And User is on Login page
+        Given User signs in with valid username "<username>" and the password "<currentPassword>" successfully
         And User clicks username on top right corner
         And User clicks on Profile option
         And User is on Profile page

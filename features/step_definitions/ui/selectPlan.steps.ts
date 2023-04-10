@@ -13,26 +13,21 @@ let toastComponent: ToastComponent;
 let subscriptionPage: SubscriptonPage;
 let createNewCompany: CreateCompanyPage;
 
-When('User clicks username on top right', async function () {
+When('User clicks on Subscriptions', async function () {
     headerComponent = new HeaderComponent(this.page);
-    await headerComponent.clickUserNameOnTheTopRightCorner();
-});
-
-When('User clicks on Subscriptions option of {}', async function (companyName: string) {
-    headerComponent = new HeaderComponent(this.page);
-    this.id = await headerComponent.clickSubscriptionsLink(companyName);
+    this.id = await headerComponent.clickSubscriptionsLink(this.companyName);
 });
 
 When('User is on Subscriptions page', async function () {
-    await expect(this.page).toHaveURL(/.*subscriptions/);
     subscriptionPage = new SubscriptonPage(this.page);
+    await expect(this.page).toHaveURL(/.*subscriptions/);
 });
 
-Then('User clicks on subscription of {string} company', async function (companyName: string) {
-    await subscriptionPage.clickOnSubscription(companyName);
+Then('User clicks on subscription of {} company to go to subscription detail page', async function (companyName: string) {
+    await subscriptionPage.clickOnSubscription(this.id);
 });
 
-When('User checks info on the banner correctly with {} company', async function (companyName: string) {
+When('User checks the warning message that the trial of {} will be canceled', async function (companyName: string) {
     await subscriptionPage.checkInfoOnBanner(companyName, this.id);
 });
 
@@ -48,15 +43,15 @@ Then('User clicks on any plan to select', async function () {
     await subscriptionPage.pickRandomPlanToSelect();
 });
 
-When('User navigates to checkout page and input valid data in all fields {}, {}, {}', async function (card: string, promotionCode: string, expirationDate: string) {
-    await subscriptionPage.inputBillingInforOnStripeCheckoutPage(card, promotionCode,expirationDate);
+When('User navigates to checkout page and input valid data in all fields {}, {}, {}', async function (card: string, promotionCodeid: string, expirationDate: string) {
+    await subscriptionPage.inputBillingInforOnStripeCheckoutPage(card, promotionCodeid,expirationDate);
 });
 
-When('User select plan successfully', async function () {
-    await subscriptionPage.selectTrailPlanSuccessfully(this.id);
+When('Verify user has been discounted with promotion code is {} percent and the plan has been highlighted with Current Plan', async function (promotionCodeValue: any) {
+    await subscriptionPage.verifyPromotionCodeAndCurrentPlan(promotionCodeValue, this.id);
 });
 
-When('User checks subscription of {} invisible on Subscription List', async function (companyName: string) {
+When('User check that {} of canceled comapny should not show on Subscription list', async function (companyName: string) {
     await subscriptionPage.viewCanceledSubscription(companyName);
 });
 
@@ -70,8 +65,4 @@ When('User clicks on link in banner to navigate to Subscription Detail page', as
 
 When('User checks info on the banner correctly with Canceled status', async function () {
     await subscriptionPage.checkInfoOnSubscriptionDetailWithCanceled();
-});
-
-When('User select plan successfully with Canceled status', async function () {
-    await subscriptionPage.selectPlanSuccessfullyWithCanceled();
 });

@@ -22,6 +22,20 @@ Then(`{} sets DELETE api endpoint to delete company`, async function (actor: str
 });
 
 Then('Check {} company exist in the system, if it does not exist will create company', async function (companyNameKeyWord: string) {
+    //Get list 20 companies after create
+    const options = {
+        headers: this.headers
+    }
+    this.get20LatestCompaniesResponse = await adminRequest.getCompanies(this.request, endPointToGet20LatestCompany, options);
+    if (this.get20LatestCompaniesResponse.status() == 200) {
+        this.get20LatestCompaniesResponseBody = JSON.parse(await this.get20LatestCompaniesResponse.text());
+        this.attach(`Response GET ${endPointToGet20LatestCompany}` + JSON.stringify(this.get20LatestCompaniesResponseBody, undefined, 4))
+    }
+    else {
+        logger.log('info', `Response GET ${endPointToGet20LatestCompany} has status code ${this.get20LatestCompaniesResponse.status()} ${this.get20LatestCompaniesResponse.statusText()} and response body ${this.get20LatestCompaniesResponse.text()}`);
+        this.attach(`Response GET ${endPointToGet20LatestCompany} has status code ${this.get20LatestCompaniesResponse.status()} ${this.get20LatestCompaniesResponse.statusText()} and response body ${this.get20LatestCompaniesResponse.text()}`)
+    }
+
     if (companyNameKeyWord != 'any') {
         numberofCompanies = await this.get20LatestCompaniesResponseBody.filter((co: any) => co.companyName.includes(companyNameKeyWord)).length;
     }
@@ -53,25 +67,13 @@ Then('Check {} company exist in the system, if it does not exist will create com
             logger.log('info', `Response ${Links.API_CREATE_COMPANY} has status code ${this.response.status()} ${this.response.statusText()} and response body ${responseBodyText}`);
             this.attach(`Response ${Links.API_CREATE_COMPANY} has status code ${this.response.status()} ${this.response.statusText()} and response body ${actualResponseText}`)
         }
-    
-        //Get list 20 companies after create
-        const options = {
-            headers: this.headers
-        }
-        this.get20LatestCompaniesResponse = await adminRequest.getCompanies(this.request, endPointToGet20LatestCompany, options);
-        if (this.get20LatestCompaniesResponse.status() == 200) {
-            this.get20LatestCompaniesResponseBody = JSON.parse(await this.get20LatestCompaniesResponse.text());
-            this.attach(`Response GET ${endPointToGet20LatestCompany}` + JSON.stringify(this.get20LatestCompaniesResponseBody, undefined, 4))
-        }
-        else {
-            logger.log('info', `Response GET ${endPointToGet20LatestCompany} has status code ${this.get20LatestCompaniesResponse.status()} ${this.get20LatestCompaniesResponse.statusText()} and response body ${this.get20LatestCompaniesResponse.text()}`);
-            this.attach(`Response GET ${endPointToGet20LatestCompany} has status code ${this.get20LatestCompaniesResponse.status()} ${this.get20LatestCompaniesResponse.statusText()} and response body ${this.get20LatestCompaniesResponse.text()}`)
-        }
     }
 })
 
 Then('{} filters company to get company which has the company name included {}', async function (actor, companyNameKeyWord: string) {
-    selectedCompany = await this.get20LatestCompaniesResponseBody.filter((co: any) => co.companyName.includes(companyNameKeyWord))
+    console.log('companyNameKeyWord: ', companyNameKeyWord);
+    selectedCompany = await this.get20LatestCompaniesResponseBody.filter((co: any) => co.companyName == companyNameKeyWord);
+    console.log("selectedcompany: ", selectedCompany);
     randomCompany = selectedCompany[Math.floor(Math.random() * selectedCompany.length)];
     //logger.log('info', `Response Body before filter: ${JSON.stringify(selectedCompany, undefined, 4)}`);
     this.attach(`Response Body before filter: ${JSON.stringify(selectedCompany, undefined, 4)}`);
