@@ -32,7 +32,9 @@ var options = {
 
 reporter.generate(options);
 
-
+function sleep(s){
+  return new Promise(resolve => setTimeout(resolve, s * 1000));
+};
 const {uploadS3} = require('./s3-upload');
 async function uploadReportHtml() {
     await sleep(10);
