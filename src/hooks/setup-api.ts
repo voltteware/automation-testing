@@ -28,6 +28,7 @@ After({ tags: "@test-api or @test-api-extra" }, async function (scenario: ITestC
 });
 
 BeforeStep({ tags: "@test-api or @test-api-extra" }, async function (testStep: ITestStepHookParameter) {
+    this.countErrors = 0;
     logger.log('info', testStep.pickleStep.text)
 })
 
