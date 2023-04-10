@@ -11,7 +11,7 @@ console.log(env)
 const reportJson = require('path').join(__dirname, 'reports', 'cucumber-report.json');
 const generateHtml = require('path').join(__dirname, 'reports', `cucumber-html-report-${env}-${dateFormat}.html`);
 
-console.log(generateHtml);
+console.log('+++++++++++ Generate report++++++++++++++++', generateHtml);
 
 var options = {
     theme: 'bootstrap',
@@ -31,8 +31,25 @@ var options = {
 };
 
 reporter.generate(options);
+//more info on `metadata` is available in `options` section below.
+//to generate consodilated report from multi-cucumber JSON files, please use `jsonDir` option instead of `jsonFile`. More info is available in `options` section below.
 
+function sleep(s){
+  return new Promise(resolve => setTimeout(resolve, s * 1000));
+};
+const {uploadS3} = require('./s3-upload');
+async function uploadReportHtml() {
+    await sleep(10);
+    try{
+        if(process.env.DISABLE_UPLOAD == 'false') {
+            console.log('Uploading report to S3');
+            const filePath = __dirname + `/reports/cucumber-html-report-${env}-${dateFormat}.html`;
+            console.log('Completed uploading report to S3');
+            await uploadS3(filePath);
+        }
+    } catch(err) {
+        console.log('err upload file: ', err);
+    }
+}
 
-    //more info on `metadata` is available in `options` section below.
-
-    //to generate consodilated report from multi-cucumber JSON files, please use `jsonDir` option instead of `jsonFile`. More info is available in `options` section below.
+uploadReportHtml();
