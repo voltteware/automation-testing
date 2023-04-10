@@ -80,6 +80,13 @@ async function getShipmentDetail(request: APIRequestContext, linkApi: string, op
     return await request.get(url, options);
 };
 
+//Get List Shipments
+async function getListShipments(request: APIRequestContext, linkApi: string, options?: object) {
+    const url = `${linkApi}`;
+    logger.log('info', `Send GET request ${url}`);
+    return await request.get(url, options);
+};
+
 export {
     postShipment,
     getShipmentInfo,
@@ -89,5 +96,6 @@ export {
     completeShipment,
     getShipmentDetail,
     getWorkflowExport,
-    deleteShipment
+    deleteShipment,
+    getListShipments
 }

@@ -10,6 +10,7 @@ import { expect } from '@playwright/test';
 let link: any;
 let payload: any;
 let linkCount: any;
+let linkListShipments: any;
 
 Then('{} sets POST api endpoint to create Shipment', async function (actor: string) {
     // Prepare endpoint for request to edit item
@@ -428,4 +429,33 @@ Then('{} sends a DELETE request to delete shipment', async function (actor: stri
         logger.log('info', `Delete Shipment Response ${link} has status code ${this.response.status()}`);
         this.attach(`Delete Shipment Response ${link} has status code ${this.response.status()}`);
     }
+});
+
+Then('{} sets GET api endpoint to find the new created shipment', async function (actor: string) {
+    linkListShipments = encodeURI(`${Links.API_SHIPMENT}?offset=0&limit=100&sort=[{"field":"createdAt","direction":"desc"}]&where={"logic":"and","filters":[{"logic":"or","filters":[{"field":"shipmentName","operator":"contains","value":"${this.shipmentName}"},{"field":"shipmentSource","operator":"contains","value":"${this.shipmentName}"},{"field":"destinationFulfillmentCenterId","operator":"contains","value":"${this.shipmentName}"},{"field":"status","operator":"contains","value":"${this.shipmentName}"}]}]}`);
+});
+
+Then(`{} sends a GET request to find the new created shipment`, async function (actor: string) {
+    const options = {
+        headers: this.headers
+    }
+    this.getListShipmentsResponse = this.response = await shipmentRequest.getListShipments(this.request, linkListShipments, options);
+    const responseBodyText = await this.getListShipmentsResponse.text();
+    if (this.getListShipmentsResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
+        this.getListShipmentsResponseBody = JSON.parse(await this.getListShipmentsResponse.text());
+        logger.log('info', `Response GET ${linkListShipments}: ` + JSON.stringify(this.getListShipmentsResponseBody, undefined, 4));
+        this.attach(`Response GET ${linkListShipments}: ` + JSON.stringify(this.getListShipmentsResponseBody, undefined, 4));
+    }
+    else {
+        const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
+        logger.log('info', `Response ${linkListShipments} has status code ${this.getListShipmentsResponse.status()} ${this.getListShipmentsResponse.statusText()} and response body ${responseBodyText}`);
+        this.attach(`Response ${linkListShipments} has status code ${this.getListShipmentsResponse.status()} ${this.getListShipmentsResponse.statusText()} and response body ${actualResponseText}`);
+    }
+});
+
+Then('{} checks the new created shipment', async function (actor: string) {
+    this.shipmentStatus = this.getListShipmentsResponseBody[0].status;
+    this.name = this.getListShipmentsResponseBody[0].shipmentName;
+    expect(this.shipmentStatus, `In response body, the expected shipmentStatus should be: WORKING`).toBe('WORKING');
+    expect(this.name.includes(this.shipmentName), `In response body, the expected shipmentName should be: ${this.shipmentName}`).toBeTruthy();
 });
