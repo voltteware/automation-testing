@@ -55,63 +55,63 @@ Then(`{} sends a GET api method to get Items belonged to {}`, async function (ac
 });
 
 Then('{} picks random item in Item list', async function (actor: string) {
-    this.responseBodyOfAItemObject = await this.restockSuggestionResponseBody[Math.floor(Math.random() * this.restockSuggestionResponseBody.length)];
-    this.itemKey = this.responseBodyOfAItemObject.forecastconstant.itemKey;
+    this.responseOfAItem = await this.restockSuggestionResponseBody[Math.floor(Math.random() * this.restockSuggestionResponseBody.length)];
+    this.itemKey = this.responseOfAItem.forecastconstant.itemKey;
 
-    logger.log('info', `Random Item: ${JSON.stringify(this.responseBodyOfAItemObject, undefined, 4)}`);
-    this.attach(`Random Item: ${JSON.stringify(this.responseBodyOfAItemObject, undefined, 4)}`);
+    logger.log('info', `Random Item: ${JSON.stringify(this.responseOfAItem, undefined, 4)}`);
+    this.attach(`Random Item: ${JSON.stringify(this.responseOfAItem, undefined, 4)}`);
 });
 
 Then('{} saves needed values for calculations', async function (actor: string) {
-    this.onHandFBA = this.responseBodyOfAItemObject.qoh;
-    this.inbound = this.responseBodyOfAItemObject.inbound;
-    this.fcTransfer = this.responseBodyOfAItemObject.inboundFcTransfer;
-    this.sum = this.responseBodyOfAItemObject.sum;
-    this.inboundWorking = this.responseBodyOfAItemObject.inboundWorking;
-    this.inboundShipped = this.responseBodyOfAItemObject.inboundShipped;
-    this.inboundReceiving = this.responseBodyOfAItemObject.inboundReceiving;
-    this.inboundTotal = this.responseBodyOfAItemObject.inboundTotal;
-    this.targetQtyOnHand = this.responseBodyOfAItemObject.targetQtyOnHand;
-    this.onHand = this.responseBodyOfAItemObject.forecastconstant.onHand;
+    this.onHandFBA = this.responseOfAItem.qoh;
+    this.inbound = this.responseOfAItem.inbound;
+    this.fcTransfer = this.responseOfAItem.inboundFcTransfer;
+    this.sum = this.responseOfAItem.sum;
+    this.inboundWorking = this.responseOfAItem.inboundWorking;
+    this.inboundShipped = this.responseOfAItem.inboundShipped;
+    this.inboundReceiving = this.responseOfAItem.inboundReceiving;
+    this.inboundTotal = this.responseOfAItem.inboundTotal;
+    this.targetQtyOnHand = this.responseOfAItem.targetQtyOnHand;
+    this.onHand = this.responseOfAItem.forecastconstant.onHand;
 
     // Suggestions
-    this.suggShip = this.responseBodyOfAItemObject.suggShip;
-    this.suggReorder = this.responseBodyOfAItemObject.suggReorder;
-    this.restockNeeded = this.responseBodyOfAItemObject.restockNeeded;
+    this.suggShip = this.responseOfAItem.suggShip;
+    this.suggReorder = this.responseOfAItem.suggReorder;
+    this.restockNeeded = this.responseOfAItem.restockNeeded;
 
     // Recommendations
-    this.forecastRecommendedQty = this.responseBodyOfAItemObject.forecastRecommendedQty;
-    this.recommendedWarehouseQty = this.responseBodyOfAItemObject.recommendedWarehouseQty;
-    this.recommendedSupplierQty = this.responseBodyOfAItemObject.recommendedSupplierQty;
+    this.forecastRecommendedQty = this.responseOfAItem.forecastRecommendedQty;
+    this.recommendedWarehouseQty = this.responseOfAItem.recommendedWarehouseQty;
+    this.recommendedSupplierQty = this.responseOfAItem.recommendedSupplierQty;
 
     // Estimated Margin
-    this.estimatedMargin = this.responseBodyOfAItemObject.estimatedMargin;
-    this.estimatedMarginPercentage = this.responseBodyOfAItemObject.estimatedMarginPercentage;
-    this.estimatedMarkupPercentage = this.responseBodyOfAItemObject.estimatedMarkupPercentage;
+    this.estimatedMargin = this.responseOfAItem.estimatedMargin;
+    this.estimatedMarginPercentage = this.responseOfAItem.estimatedMarginPercentage;
+    this.estimatedMarkupPercentage = this.responseOfAItem.estimatedMarkupPercentage;
 
     // Cost
-    this.supplierCost = this.responseBodyOfAItemObject.supplierCost;
-    this.supplierRebate = this.responseBodyOfAItemObject.supplierRebate;
-    this.repackingLaborCost = this.responseBodyOfAItemObject.repackingLaborCost;
-    this.repackagingMaterialCost = this.responseBodyOfAItemObject.repackagingMaterialCost;
-    this.inboundShippingCost = this.responseBodyOfAItemObject.inboundShippingCost;
-    this.reshippingCost = this.responseBodyOfAItemObject.reshippingCost;
+    this.supplierCost = this.responseOfAItem.supplierCost;
+    this.supplierRebate = this.responseOfAItem.supplierRebate;
+    this.repackingLaborCost = this.responseOfAItem.repackingLaborCost;
+    this.repackagingMaterialCost = this.responseOfAItem.repackagingMaterialCost;
+    this.inboundShippingCost = this.responseOfAItem.inboundShippingCost;
+    this.reshippingCost = this.responseOfAItem.reshippingCost;
 
     this.totalCost = this.supplierCost + this.supplierRebate + this.repackingLaborCost + this.repackagingMaterialCost + this.inboundShippingCost + this.reshippingCost;  //Total cost = Sum all of above cost
     logger.log('info', `Total cost value: ` + this.totalCost);
     this.attach(`Total cost value: ` + this.totalCost);
 
     // Price
-    this.estimatedPriceType = this.responseBodyOfAItemObject.estimatedPriceType;
-    this.chosenPrice = Number(this.responseBodyOfAItemObject[this.estimatedPriceType]);
+    this.estimatedPriceType = this.responseOfAItem.estimatedPriceType;
+    this.chosenPrice = Number(this.responseOfAItem[this.estimatedPriceType]);
     logger.log('info', `Chosen price value: ` + this.chosenPrice);
     this.attach(`Chosen price value: ` + this.chosenPrice);
 
     // Amazon Fees
-    this.fbaFee = this.responseBodyOfAItemObject.fbaFee;
-    this.referralFee = this.responseBodyOfAItemObject.referralFee;
-    this.monthlyStorageFee = this.responseBodyOfAItemObject.monthlyStorageFee;
-    this.variableClosingFee = this.responseBodyOfAItemObject.variableClosingFee;
+    this.fbaFee = this.responseOfAItem.fbaFee;
+    this.referralFee = this.responseOfAItem.referralFee;
+    this.monthlyStorageFee = this.responseOfAItem.monthlyStorageFee;
+    this.variableClosingFee = this.responseOfAItem.variableClosingFee;
     this.totalAmazonFees = Number(this.fbaFee + this.referralFee + this.monthlyStorageFee + this.variableClosingFee);  //Total Amazon Fee = Sum all of above Amazon Fees
     logger.log('info', `Total Amazon Fees value: ` + this.totalAmazonFees);
     this.attach(`Total Amazon Fees value: ` + this.totalAmazonFees);

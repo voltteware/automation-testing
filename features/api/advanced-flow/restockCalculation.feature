@@ -9,7 +9,7 @@ Feature: API_Regression User can compare and check the formulas
         And User sends a GET request to get company keys
 
     # Pre-condition: Company should run forecast manually to save time
-    @TC_ASC_RC001
+    @TC_ASC_RC001 @smoke-test-api
     Scenario Outline: <TC_ID> - Verify user <email> could call APIs to compare and check the formulas
         Given User picks company with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
