@@ -89,6 +89,10 @@ Feature: API_Regression User can create shipments from Supplier
         And User sets POST api endpoint to sync
         And User sends a POST request to sync
         # Please ignore the message, I will find the root cause later
+        # Call API to get list shipment to check the new created shipment
+        And User sets GET api endpoint to find the new created shipment
+        And User sends a GET request to find the new created shipment
+        And User checks the new created shipment
 
         Examples:
             | TC_ID          | companyType | casePackOption | restockType | editColumn   | value  | email                      | direction | expectedStatus | expectedStatusText | limitRow |
@@ -170,4 +174,4 @@ Feature: API_Regression User can create shipments from Supplier
             | TC_ID          | companyType | casePackOption | restockType | editColumn   | value  | email                      | direction | expectedStatus | expectedStatusText | limitRow |
             | TC_ASC_CS002   | ASC         | Yes            | SUPPLIER    | supplierName | random | testautoforecast@gmail.com | asc       | 200            | OK                 | 10       |
 
-        # TO DO Create Shipments from Warehouse
+    #     # TO DO Create Shipments from Warehouse
