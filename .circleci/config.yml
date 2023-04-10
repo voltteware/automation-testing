@@ -27,6 +27,7 @@ workflows:
   automation-workflow:
     jobs:
       - start-testing:
-        filters:
-          branches:
-            only: master
+          filters:
+            branches:
+              only:
+                - master
