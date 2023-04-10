@@ -18,6 +18,7 @@ let timestamp: string
 // });
 
 Before('@test-ui', async function (scenario: ITestCaseHookParameter) {
+    this.request = await actionwords.createRequestContext();
     await actionwords.createBrowser(globalWithBrowser);
     timestamp = actionwords.formatDate(new Date())
     logger.log('info', '============================' + scenario.pickle.name + '============================')
