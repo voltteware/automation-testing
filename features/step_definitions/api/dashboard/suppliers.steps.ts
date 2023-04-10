@@ -31,8 +31,8 @@ Then(`{} sends a GET request to get list suppliers`, async function (actor) {
     const responseBodyText = await this.getSupplierResponse.text();
     if (this.getSupplierResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
         this.responseBody = this.getSupplierResponseBody = JSON.parse(await this.getSupplierResponse.text());
-        // logger.log('info', `Response GET ${link}` + JSON.stringify(this.getSupplierResponseBody, undefined, 4));
-        // this.attach(`Response GET ${link}` + JSON.stringify(this.getSupplierResponseBody, undefined, 4))
+        logger.log('info', `Response GET ${link}` + JSON.stringify(this.getSupplierResponseBody, undefined, 4));
+        this.attach(`Response GET ${link}` + JSON.stringify(this.getSupplierResponseBody, undefined, 4))
     }
     else {
         const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
@@ -435,4 +435,45 @@ Given('User sends PUT request to update sale velocity settings with type {} of a
         logger.log('info', `Edit Company Response edit ${link} has status code ${this.response.status()} ${this.response.statusText()}`)
         this.attach(`Edit Company Response edit ${link} has status code ${this.response.status()} ${this.response.statusText()}`)
     }
+});
+
+Then('{} sets GET api endpoint to get supplier address', async function (actor: string) {
+    link = `${Links.API_SUPPLIER}`;
+});
+
+Then(`{} sends a GET request to get supplier address`, async function (actor: string) {
+    const options = {
+        headers: this.headers
+    }
+    this.getSupplierAddressResponse = this.response = await supplierRequest.getSuppliers(this.request, link, options);
+    const responseBodyText = await this.getSupplierAddressResponse.text();
+    if (this.getSupplierAddressResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
+        this.getSupplierAddressResponseBody = JSON.parse(await this.getSupplierAddressResponse.text());
+        logger.log('info', `Response GET ${link}: ` + JSON.stringify(this.getSupplierAddressResponseBody, undefined, 4));
+        this.attach(`Response GET ${link}: ` + JSON.stringify(this.getSupplierAddressResponseBody, undefined, 4));
+    }
+    else {
+        const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
+        logger.log('info', `Response ${link} has status code ${this.getSupplierAddressResponse.status()} ${this.getSupplierAddressResponse.statusText()} and response body ${responseBodyText}`);
+        this.attach(`Response ${link} has status code ${this.getSupplierAddressResponse.status()} ${this.getSupplierAddressResponse.statusText()} and response body ${actualResponseText}`);
+    }
+});
+
+
+Then('{} picks random supplier address in above response', async function (actor: string) {
+    this.responseBodyOfASupplierAddressObject = await this.getSupplierAddressResponseBody[Math.floor(Math.random() * this.getSupplierAddressResponseBody.length)];
+    logger.log('info', `Random supplier address: ${JSON.stringify(this.responseBodyOfASupplierAddressObject, undefined, 4)}`);
+    this.attach(`Random supplier address: ${JSON.stringify(this.responseBodyOfASupplierAddressObject, undefined, 4)}`);
+
+    this.addressLine1 = this.responseBodyOfASupplierAddressObject.addressLine1;
+    this.addressLine2 = this.responseBodyOfASupplierAddressObject.addressLine2;
+    this.city = this.responseBodyOfASupplierAddressObject.city;
+    this.countryCode = this.responseBodyOfASupplierAddressObject.countryCode;
+    this.addressKey = this.responseBodyOfASupplierAddressObject.key;
+    this.phoneNumber = this.responseBodyOfASupplierAddressObject.phoneNumber;
+    this.fullName = this.responseBodyOfASupplierAddressObject.fullName;
+    this.postalCode = this.responseBodyOfASupplierAddressObject.postalCode;
+    this.stateOrProvinceCode = this.responseBodyOfASupplierAddressObject.stateOrProvinceCode;
+    this.vendorKey = this.responseBodyOfASupplierAddressObject.vendorKey;
+    this.addressKey = this.responseBodyOfASupplierAddressObject.key;
 });
