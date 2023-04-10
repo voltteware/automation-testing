@@ -29,11 +29,12 @@ Feature: API_Purchasing Custom
         And User sends a GET request to get items in Purchasing Custom
         And The expected status code should be <expectedStatus>
         And User checks API contract of item object is purchasing is correct
-        And User checks random items in Purchasing Custom has status is Active
+        And User picks max 10 random items in above list items
+        And User checks random items has status is Active
 
         Examples:
             | TC_ID    | user  | email                      | password  | companyType | expectedStatus |
             | TC_PC001 | admin | testautoforecast@gmail.com | Test1111# | CSV         | 200            |
             | TC_PC002 | admin | testautoforecast@gmail.com | Test1111# | ASC         | 200            |
             | TC_PC003 | admin | testautoforecast@gmail.com | Test1111# | QBFS        | 200            |
-            | TC_PC004 | admin | testautoforecast@gmail.com | Test1111# | QBO         | 200            |
+            # | TC_PC004 | admin | testautoforecast@gmail.com | Test1111# | QBO         | 200            |

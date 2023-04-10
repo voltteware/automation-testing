@@ -261,7 +261,7 @@ Then(`{} sends a GET request to get count items in Purchasing Custom`, async fun
     const options = {
         headers: this.headers
     }
-    this.getCountItemsinPurchasingCustomResponse = this.response = await vendorRequest.getCountItemsinPurchasingCustom(this.request, linkCountItemsInPurchasingCustom, options);
+    this.getCountItemsinPurchasingCustomResponse = this.response = await itemRequest.getCountItemsinPurchasingCustom(this.request, linkCountItemsInPurchasingCustom, options);
     const responseBodyText = await this.getCountItemsinPurchasingCustomResponse.text();
     if (this.getCountItemsinPurchasingCustomResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
         this.responseBody = this.getCountItemsinPurchasingCustomResponseBody = JSON.parse(await this.getCountItemsinPurchasingCustomResponse.body());
@@ -285,10 +285,10 @@ Then(`{} sends a GET request to get items in Purchasing Custom`, async function 
     const options = {
         headers: this.headers
     }
-    this.getItemsinPurchasingCustomResponse = this.response = await vendorRequest.getItemsinPurchasingCustom(this.request, linkGetItemsInPurchasingCustom, options);
+    this.getItemsinPurchasingCustomResponse = this.response = await itemRequest.getItemsinPurchasingCustom(this.request, linkGetItemsInPurchasingCustom, options);
     const responseBodyText = await this.getItemsinPurchasingCustomResponse.text();
     if (this.getItemsinPurchasingCustomResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
-        this.responseBody = this.getItemsinPurchasingCustomResponseBody = JSON.parse(await this.getItemsinPurchasingCustomResponse.body());
+        this.responseBody = this.getItemsinPurchasingCustomResponseBody = this.getItemsResponseBody = JSON.parse(await this.getItemsinPurchasingCustomResponse.body());
         this.randomAItemObject = this.getItemsinPurchasingCustomResponseBody[Math.floor(Math.random() * this.getItemsinPurchasingCustomResponseBody.length)];
         logger.log('info', `Random object in response GET ${linkGetItemsInPurchasingCustom} >>>>>>` + JSON.stringify(this.randomAItemObject, undefined, 4));
         this.attach(`Random object in response GET ${linkGetItemsInPurchasingCustom} >>>>>>` + JSON.stringify(this.randomAItemObject, undefined, 4))
@@ -297,32 +297,6 @@ Then(`{} sends a GET request to get items in Purchasing Custom`, async function 
         const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
         logger.log('info', `Random object in Response GET ${linkGetItemsInPurchasingCustom} has status code ${this.response.status()} ${this.response.statusText()} and response body >>>>>> ${responseBodyText}`);
         this.attach(`Random object in Response GET ${linkGetItemsInPurchasingCustom} has status code ${this.response.status()} ${this.response.statusText()} and response body >>>>>> ${actualResponseText}`)
-    }
-})
-
-Then(`{} checks random items in Purchasing Custom has status is Active`, async function (actor) {
-    const options = {
-        headers: this.headers
-    }
-
-    const maxRandomItemNumbers = this.getCountItemsinPurchasingCustomResponseBody > 10 ? 10 : this.getCountItemsinPurchasingCustomResponseBody;
-    const randomMax10Items: any = _.sampleSize(this.getItemsinPurchasingCustomResponseBody, maxRandomItemNumbers);
-    for await (const item of randomMax10Items) {
-        const itemKey = item.itemKey;
-        const detailItemLink = `${Links.API_ITEMS}/${itemKey}`;
-        var itemDetailResponse = await itemRequest.getItems(this.request, detailItemLink, options);
-        var itemDetailResponseText = await itemDetailResponse.text();
-        if (itemDetailResponse.status() == 200 && !itemDetailResponseText.includes('<!doctype html>')) {
-            const itemDetailResponseBody = JSON.parse(itemDetailResponseText);
-            logger.log('info', `Response GET ${detailItemLink} >>>>>>` + JSON.stringify(itemDetailResponseBody, undefined, 4));
-            this.attach(`Response GET ${detailItemLink} >>>>>>` + JSON.stringify(itemDetailResponseBody, undefined, 4))
-            expect(itemDetailResponseBody.isHidden, `Check item ${itemKey} has isHidden = false`).toBeFalsy();
-        }
-        else {
-            const actualResponseText = itemDetailResponseText.includes('<!doctype html>') ? 'html' : itemDetailResponseText;
-            logger.log('info', `Response GET ${detailItemLink} has status code ${itemDetailResponse.status()} ${itemDetailResponse.statusText()} and response body >>>>>> ${itemDetailResponseText}`);
-            this.attach(`Response GET ${detailItemLink} has status code ${itemDetailResponse.status()} ${itemDetailResponse.statusText()} and response body >>>>>> ${actualResponseText}`)
-        }
     }
 })
 
@@ -346,7 +320,7 @@ Then(`{} sends a GET request to get items in Purchasing Custom to check purchasi
     const options = {
         headers: this.headers
     }
-    this.getItemsinPurchasingCustomResponse = this.response = await vendorRequest.getItemsinPurchasingCustom(this.request, linkGetItemsInPurchasingCustom, options);
+    this.getItemsinPurchasingCustomResponse = this.response = await itemRequest.getItemsinPurchasingCustom(this.request, linkGetItemsInPurchasingCustom, options);
     const responseBodyText = await this.getItemsinPurchasingCustomResponse.text();
     if (this.getItemsinPurchasingCustomResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
         this.responseBody = this.getItemsinPurchasingCustomResponseBody = JSON.parse(await this.getItemsinPurchasingCustomResponse.body());
@@ -360,7 +334,7 @@ Then(`{} sends a GET request to get items in Purchasing Custom to check purchasi
     }
 })
 
-Then(`{} selects ramdom items in Purchasing Custom`, async function (actor: string) {
+Then(`{} selects random items in Purchasing Custom`, async function (actor: string) {
     // Pick random 5 item to check purchasing daily sales rate
     // const shuffledArr = this.getItemsinPurchasingCustomResponseBody.sort(() => Math.random() - 0.5);
     // this.radomFiveItemsInPurchasingCustom = shuffledArr.slice(0, 5)
@@ -374,7 +348,7 @@ Then(`{} selects ramdom items in Purchasing Custom`, async function (actor: stri
     }
 });
 
-Then(`{} selects ramdom items in Purchasing My Suggested`, async function (actor: string) {
+Then(`{} selects random items in Purchasing My Suggested`, async function (actor: string) {
     // Use items with name have DefaultPurchasingSaleVelocity to check
     this.getRandomItemsinPurchasingSuggesyion = this.getItemsinPOResponseBody.model.filter((item: any) => item.itemName.includes('DefaultPurchasingSaleVelocity'))
     // Pick random 5 item to check purchasing daily sales rate
@@ -463,7 +437,7 @@ Then('User sends a GET request to get item in Purchasing Custom to check purchas
     const options = {
         headers: this.headers
     }
-    this.getItemInPurchasingCustomResponse = this.response = await vendorRequest.getItemsinPurchasingCustom(this.request, linkGetItemsInPurchasingCustom, options);
+    this.getItemInPurchasingCustomResponse = this.response = await itemRequest.getItemsinPurchasingCustom(this.request, linkGetItemsInPurchasingCustom, options);
     const responseBodyText = await this.getItemInPurchasingCustomResponse.text();
     if (this.getItemInPurchasingCustomResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
         this.responseBody = this.getItemInPurchasingCustomResponseBody = JSON.parse(await this.getItemInPurchasingCustomResponse.body());
@@ -556,7 +530,7 @@ Given(`User sends a GET request to get list items in items in "Purchasing > Cust
     const options = {
         headers: this.headers
     }
-    this.getLimitFiveItemResponse = this.response = await vendorRequest.getItemsinPurchasingCustom(this.request, linkGetLimitFiveItemInCustom, options);
+    this.getLimitFiveItemResponse = this.response = await itemRequest.getItemsinPurchasingCustom(this.request, linkGetLimitFiveItemInCustom, options);
     const responseBodyText = await this.getLimitFiveItemResponse.text();
     if (this.getLimitFiveItemResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
         this.responseBody = this.getLimitFiveItemResponseBody = JSON.parse(await this.getLimitFiveItemResponse.body());

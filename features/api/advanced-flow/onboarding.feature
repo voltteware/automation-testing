@@ -46,7 +46,7 @@ Feature: API_Regression User can create company and complete onboarding flow
         And User sends a POST method to create item
         And User sets GET api endpoint to get item with limit row: <limitRow>
         And User sends a GET request to get list items
-        And User picks a random imtem in above list items
+        And User picks a random item in above list items
         And User saves the item key
         And User sets PUT api endpoint to edit <editColumn> of the above item for company type <companyType> with new value: <value>
         And User sends a PUT request to edit the item
@@ -150,7 +150,7 @@ Feature: API_Regression User can create company and complete onboarding flow
         And User sends a GET request to get list items
         And The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
-        And User picks a random imtem in above list items
+        And User picks a random item in above list items
         And User saves the item key
         And User sets PUT api endpoint to edit <editColumn> of the above item for company type <companyType> with new value: <value>
         And User sends a PUT request to edit the item

@@ -6,6 +6,7 @@ import { Links } from '../../../../src/utils/links';
 import { faker } from '@faker-js/faker';
 import _ from "lodash";
 import * as keyword from '../../../../src/utils/actionwords'
+import exp from 'constants';
 
 let linkUpdateVendorSalesVelocitySettings: any;
 let linkUpdateItemSalesVelocitySettings: any;
@@ -14,7 +15,9 @@ let linkGetItemSalesVelocitySettings: any;
 let linkGetAItemFilterByName: any;
 let link: string;
 var linkGetAllItems: string;
-let linkLimitRow: string;
+var linkGetFilterItem: string;
+let linkCountItems: string;
+let linkGetItems: string;
 var linkGetActiveAndHaslotMultipleItemKeyNullItem: string;
 
 Then(`{} sets GET api endpoint to get item summary`, async function (actor: string) {
@@ -22,11 +25,15 @@ Then(`{} sets GET api endpoint to get item summary`, async function (actor: stri
 });
 
 Then(`{} sets GET api endpoint to get item with limit row: {}`, async function (actor, limitRow: string) {
-    linkLimitRow = `${Links.API_ITEMS}?offset=0&limit=${limitRow}`;
+    linkGetItems = `${Links.API_ITEMS}?offset=0&limit=${limitRow}`;
 });
 
 Then(`{} sets GET api endpoint to count items that is active and have lotMultipleItemKey is NULL`, async function (actor: string) {
-    linkGetActiveAndHaslotMultipleItemKeyNullItem = encodeURI(`${Links.API_ITEM_COUNT}?where={"filters":[{"filters":[{"field":"isHidden","operator":"eq","value":false},{"field":"isHidden","operator":"eq","value":null},{"field":"isHidden","operator":"eq","value":null}],"logic":"or"},{"filters":[{"field":"lotMultipleItemName","operator":"isnull","value":null}],"logic":"and"}],"logic":"and"}`);
+    linkCountItems = linkGetActiveAndHaslotMultipleItemKeyNullItem = encodeURI(`${Links.API_ITEM_COUNT}?where={"filters":[{"filters":[{"field":"isHidden","operator":"eq","value":false},{"field":"isHidden","operator":"eq","value":null},{"field":"isHidden","operator":"eq","value":null}],"logic":"or"},{"filters":[{"field":"lotMultipleItemName","operator":"isnull","value":null}],"logic":"and"}],"logic":"and"}`);
+});
+
+Then(`{} sets GET api endpoint to get items with limit row: {} and filter field: {} equals {}`, async function (actor, limitRow, filterField, filterValue: string) {
+    linkGetItems = linkGetFilterItem = encodeURI(`${Links.API_ITEMS}?offset=0&limit=${limitRow}&where={"logic":"and","filters":[{"filters":[{"field":"${filterField}","operator":"eq","value":${filterValue}}],"logic":"and"}]}`);
 });
 
 Then(`{} sends a GET request to get count items active and have lotMultipleItemKey is NULL`, async function (actor: string) {
@@ -47,11 +54,29 @@ Then(`{} sends a GET request to get count items active and have lotMultipleItemK
     }
 })
 
+Then(`{} sends a GET request to get count items`, async function (actor: string) {
+    const options = {
+        headers: this.headers
+    }
+    this.getCountItemsActiveResponse = this.response = await itemRequest.getItems(this.request, this.linkCountItems, options);
+    const responseBodyText = await this.getCountItemsActiveResponse.text();
+    if (this.getCountItemsActiveResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
+        this.responseBody = this.getCountItemsActiveResponseBody = JSON.parse(await this.getCountItemsActiveResponse.body());
+        logger.log('info', `Response GET ${linkCountItems}>>>>>` + JSON.stringify(this.getCountItemsActiveResponseBody, undefined, 4));
+        this.attach(`Response GET ${linkCountItems}>>>>>>` + JSON.stringify(this.getCountItemsActiveResponseBody, undefined, 4))
+    }
+    else {
+        const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
+        logger.log('info', `Response GET ${linkCountItems} has status code ${this.response.status()} ${this.response.statusText()} and response body >>>>>>${responseBodyText}`);
+        this.attach(`Response GET ${linkCountItems} has status code ${this.response.status()} ${this.response.statusText()} and response body >>>>>>${actualResponseText}`)
+    }
+})
+
 Then(`{} sends a GET request to get list items`, async function (actor: string) {
     const options = {
         headers: this.headers
     }
-    this.getItemsResponse = this.response = await itemRequest.getItems(this.request, linkLimitRow, options);
+    this.getItemsResponse = this.response = await itemRequest.getItems(this.request, linkGetItems, options);
     const responseBodyText = await this.getItemsResponse.text();
     if (this.getItemsResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
         this.responseBody = this.getItemsResponseBody = JSON.parse(await this.getItemsResponse.text());
@@ -104,58 +129,46 @@ Then(`{} sends a GET request to get item summary`, async function (actor: string
     }
 })
 
-Then('{} checks API contract in item summary object are correct', async function (actor: string) {
-    if (this.
-        getItemSummaryResponseBody.err !== null) {
-        expect(typeof (this.getItemSummaryResponseBody.err), 'Type of err value should be string').toBe("string");
-        logger.log('info', `Response GET Item Summary has err${this.getItemSummaryResponseBody.err}`);
-        this.attach(`Response GET Item Summary has err${this.getItemSummaryResponseBody.err}`)
-    }
-    else {
-        expect(this.getItemSummaryResponseBody.err, 'err value should be null').toBeNull();
-    }
-
-    expect(typeof (this.getItemSummaryResponseBody.model), 'Type of model value should be object').toBe("object");
-    expect(typeof (Number(this.getItemSummaryResponseBody.model.onHandCount)), 'Type of onHandCount value should be string').toBe("number");
-    expect(typeof (Number(this.getItemSummaryResponseBody.model.onHandThirdPartyCount)), 'Type of onHandThirdPartyCount value should be number').toBe("number");
-    expect(typeof (Number(this.getItemSummaryResponseBody.model.olderThan30DaysCount)), 'Type of olderThan30DaysCount value should be number').toBe("number");
-    expect(typeof (Number(this.getItemSummaryResponseBody.model.missingVendorCount)), 'Type of missingVendorCount value should be number').toBe("number");
-})
-
-Then('{} checks number Items Out of Stock in response of item summary is correct', async function (actor: string) {
-    const onHandCount = Number(this.getItemSummaryResponseBody.model.onHandCount);
-    expect(onHandCount, `onHandCount should be greater than or equal 0`).toBeGreaterThanOrEqual(0);
-    const expectedOnHandCount = this.getAllItemsResponseBody.filter((item: any) => item.onHand == 0 || item.onHand == null).length;
-    expect(onHandCount, `onHandCount should be equal ${expectedOnHandCount}`).toEqual(expectedOnHandCount);
-})
-
-Then('{} checks number Items Out of Stock - Warehouse in response of item summary is correct', async function (actor: string) {
-    const onHandThirdPartyCount = Number(this.getItemSummaryResponseBody.model.onHandThirdPartyCount);
-    expect(onHandThirdPartyCount, `onHandThirdPartyCount should be greater than or equal 0`).toBeGreaterThanOrEqual(0);
-    const expectedOnHandThirdPartyCount = this.getAllItemsResponseBody.filter((item: any) => item.onHandThirdParty == 0 || item.onHandThirdParty == null).length;
-    expect(onHandThirdPartyCount, `onHandThirdPartyCount should be equal ${expectedOnHandThirdPartyCount}`).toEqual(expectedOnHandThirdPartyCount);
-})
-
-Then('{} checks number New Items last 30 days in response of item summary is correct', async function (actor: string) {
-    const olderThan30DaysCount = Number(this.getItemSummaryResponseBody.model.olderThan30DaysCount);
-    expect(olderThan30DaysCount, `olderThan30DaysCount should be greater than or equal 0`).toBeGreaterThanOrEqual(0);
-    const last30Days = new Date(new Date().setDate(new Date().getDate() - 30));
-    const expectedNewItemLast30Days = this.getAllItemsResponseBody.filter((item: any) => new Date(item.createdAt) >= new Date(last30Days)).length;
-    expect(olderThan30DaysCount, `olderThan30DaysCount in response should be equal ${expectedNewItemLast30Days}`).toEqual(expectedNewItemLast30Days);
-})
-
-Then('{} checks number Items without Vendors Assigned in response of item summary is correct', async function (actor: string) {
-    const missingVendorCount = Number(this.getItemSummaryResponseBody.model.missingVendorCount);
-    expect(missingVendorCount, `missingVendorCount should be greater than or equal 0`).toBeGreaterThanOrEqual(0);
-    const expectedmissingVendorCount = this.getAllItemsResponseBody.filter((item: any) => item.vendorKey == null).length;
-    expect(missingVendorCount, `missingVendorCount should be equal ${expectedmissingVendorCount}`).toEqual(expectedmissingVendorCount);
-})
-
-Given('User picks a random imtem in above list items', async function () {
+Given('User picks a random item in above list items', async function () {
+    expect(this.getItemsResponseBody.length, 'There is at least 1 item to pick random').toBeGreaterThan(1);
     this.responseBodyOfAItemObject = await this.getItemsResponseBody[Math.floor(Math.random() * this.getItemsResponseBody.length)];
     logger.log('info', `Random Item: ${JSON.stringify(this.responseBodyOfAItemObject, undefined, 4)}`);
     this.attach(`Random Item: ${JSON.stringify(this.responseBodyOfAItemObject, undefined, 4)}`);
 });
+
+Given('User picks max 10 random items in above list items', async function () {
+    const shuffledArr = this.getItemsResponseBody.sort(() => Math.random() - 0.5);
+    this.randomMax10Items = shuffledArr.slice(0, 10)
+    logger.log('info', `Random Item: ${JSON.stringify(this.randomMax10Items, undefined, 4)}`);
+    this.attach(`Random Item: ${JSON.stringify(this.randomMax10Items, undefined, 4)}`);
+});
+
+Then(`{} checks random items has status is Active`, async function (actor) {
+    const options = {
+        headers: this.headers
+    }
+
+    // const maxRandomItemNumbers = this.getCountItemsinPurchasingCustomResponseBody > 10 ? 10 : this.getCountItemsinPurchasingCustomResponseBody;
+    // const randomMax10Items: any = _.sampleSize(this.getItemsinPurchasingCustomResponseBody, maxRandomItemNumbers);
+    for await (const item of this.randomMax10Items) {
+        var itemKey = item.itemKey || item.key;
+        const detailItemLink = `${Links.API_ITEMS}/${itemKey}`;
+        var itemDetailResponse = await itemRequest.getItems(this.request, detailItemLink, options);
+        var itemDetailResponseText = await itemDetailResponse.text();
+        if (itemDetailResponse.status() == 200 && !itemDetailResponseText.includes('<!doctype html>')) {
+            const itemDetailResponseBody = JSON.parse(itemDetailResponseText);
+            logger.log('info', `Response GET ${detailItemLink} >>>>>>` + JSON.stringify(itemDetailResponseBody, undefined, 4));
+            this.attach(`Response GET ${detailItemLink} >>>>>>` + JSON.stringify(itemDetailResponseBody, undefined, 4))
+            expect(itemDetailResponseBody.isHidden, `Check item ${itemKey} has isHidden = false`).toBeFalsy();
+        }
+        else {
+            const actualResponseText = itemDetailResponseText.includes('<!doctype html>') ? 'html' : itemDetailResponseText;
+            logger.log('info', `Response GET ${detailItemLink} has status code ${itemDetailResponse.status()} ${itemDetailResponse.statusText()} and response body >>>>>> ${itemDetailResponseText}`);
+            this.attach(`Response GET ${detailItemLink} has status code ${itemDetailResponse.status()} ${itemDetailResponse.statusText()} and response body >>>>>> ${actualResponseText}`);
+            expect(itemDetailResponse.status()).toEqual(200);
+        }
+    }
+})
 
 Then(`{} saves the item key`, async function (actor: string) {
     this.itemKey = this.responseBodyOfAItemObject.key
@@ -800,6 +813,11 @@ Given(`User sets GET api endpoint to get items in "Manage Company > Item"`, func
     linkGetItemsWithFilter = `${Links.API_ITEMS}?offset=0&limit=50&where={"filters":[{"filters":[{"field":"name","operator":"doesnotcontain","value":"DefaultPurchasingSaleVelocity"}],"logic":"and"},{"filters":[{"field":"vendorName","operator":"isnull","value":null}],"logic":"and"},{"filters":[{"field":"lotMultipleItemName","operator":"isnull","value":null}],"logic":"and"}],"logic":"and"}`
 });
 
+Given(`User sets GET api endpoint to get default 30 items in "Edit Item History"`, function () {
+    // Get default 30 active items
+    linkGetItemsWithFilter = `${Links.API_ITEMS}?offset=0&limit=30&where={"logic":"and","filters":[{"logic":"and","filters":[{"field":"isHidden","operator":"eq","value":false}]}]}`
+});
+
 Given(`User sends GET request to get items in {string}`, async function (string) {
     const options = {
         headers: this.headers
@@ -808,8 +826,11 @@ Given(`User sends GET request to get items in {string}`, async function (string)
     const responseBodyText = await this.getItemsResponse.text();
     if (this.getItemsResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
         this.responseBody = this.getItemsResponseBody = JSON.parse(await this.getItemsResponse.text());
-        // logger.log('info', `Response GET ${linkGetItemsWithFilter}` + JSON.stringify(this.getItemsResponseBody, undefined, 4));
-        // this.attach(`Response GET ${linkGetItemsWithFilter}` + JSON.stringify(this.getItemsResponseBody, undefined, 4))
+        this.responseBodyOfAItemObject = await this.getItemsResponseBody[Math.floor(Math.random() * this.getItemsResponseBody.length)];
+        logger.log('info', `Response GET ${linkGetItemsWithFilter} returns total items >>>>>` + JSON.stringify(this.getItemsResponseBody.length, undefined, 4));
+        this.attach(`Response GET ${linkGetItemsWithFilter} total items >>>>>>` + JSON.stringify(this.getItemsResponseBody.length, undefined, 4))
+        logger.log('info', `A random in response GET ${linkGetItemsWithFilter} >>>>>` + JSON.stringify(this.responseBodyOfAItemObject, undefined, 4));
+        this.attach(`A random in response GET ${linkGetItemsWithFilter} >>>>>>` + JSON.stringify(this.responseBodyOfAItemObject, undefined, 4))
     }
     else {
         const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
@@ -875,4 +896,13 @@ When('User sends PUT request to update item sales velocity setting type {} with 
         logger.log('info', `Update Item Sales Velocity Settings Response edit ${linkUpdateItemSalesVelocitySettings} has status code ${this.response.status()} ${this.response.statusText()}`)
         this.attach(`Update Item Sales Velocity Settings Response edit ${linkUpdateItemSalesVelocitySettings} has status code ${this.response.status()} ${this.response.statusText()}`)
     }
+});
+
+// Edit Item History
+Then(`{} sets GET api endpoint to filter item by name or asin contains {}`, async function (actor, searchCriteria: string) {
+    if (searchCriteria.includes('Random')) {
+        searchCriteria = this.responseBodyOfAItemObject.name || this.responseBodyOfAItemObject.asin;
+    }
+
+    linkGetItems = linkGetFilterItem = encodeURI(`${Links.API_ITEMS}?offset=0&limit=30&where={"logic":"and","filters":[{"logic":"and","filters":[{"field":"isHidden","operator":"eq","value":false}]},{"logic":"or","filters":[{"field":"name","operator":"contains","value":"${searchCriteria}"},{"field":"asin","operator":"contains","value":"${searchCriteria}"}]}]}`);
 });

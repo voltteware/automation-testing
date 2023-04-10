@@ -16,7 +16,7 @@ Feature: API_Dashboard PUT /api/item
         And User sends a GET request to get list suppliers
         And User sets GET api endpoint to get item with limit row: <limitRow>
         And User sends a GET request to get list items
-        And User picks a random imtem in above list items
+        And User picks a random item in above list items
         And User saves the item key
         And User sets PUT api endpoint to edit <editColumn> of the above item for company type <companyType> with new value: <value>
         When User sends a PUT request to edit the item
@@ -37,7 +37,7 @@ Feature: API_Dashboard PUT /api/item
         And User sends a GET request to get list suppliers
         And User sets GET api endpoint to get item with limit row: <limitRow>
         And User sends a GET request to get list items
-        And User picks a random imtem in above list items
+        And User picks a random item in above list items
         And User saves the item key
         And User sets PUT api endpoint to edit <editColumn> of the above item for company type <companyType> with new value: <value>
         When User sends a PUT request to edit the item

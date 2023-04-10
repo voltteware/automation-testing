@@ -22,6 +22,20 @@ async function getItems(request: APIRequestContext, linkApi: string, options?: o
     return await request.get(url, options);
 }
 
+//Get Count Items in Purchasing Custom
+async function getCountItemsinPurchasingCustom(request: APIRequestContext, linkApi: string, options?: object) {
+    const url = `${linkApi}`;
+    logger.log('info', `Send GET request ${url}`);
+    return await request.get(url, options);
+}
+
+//Get Items in Purchasing Custom
+async function getItemsinPurchasingCustom(request: APIRequestContext, linkApi: string, options?: object) {
+    const url = `${linkApi}`;
+    logger.log('info', `Send GET request ${url}`);
+    return await request.get(url, options);
+}
+
 //Create item
 async function createItem(request: APIRequestContext, linkApi: string, payLoad: any, header?: any) {
     const url = `${linkApi}`;
@@ -77,5 +91,7 @@ export {
     editItem,
     getItemDetail,
     getItemSalesVelocitySettings,
-    updateItemSalesVelocitySettings
+    updateItemSalesVelocitySettings,
+    getCountItemsinPurchasingCustom,
+    getItemsinPurchasingCustom,
 }
