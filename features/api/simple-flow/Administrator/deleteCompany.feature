@@ -13,14 +13,14 @@ Feature: API_Admin DELETE/company
         Given Check <companyNameKeyWord> company exist in the system, if it does not exist will create company
         And User filters company to get company which has the company name included <companyNameKeyWord>
         And User sets DELETE api endpoint to delete company
-        When User sends a DELETE method to delete the filtered company
+        When User sends a DELETE method to <deleteType> delete the filtered company
         Then The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
         And Check that the company just deleted not exists in the current companies list
 
         Examples:
-            | user  | companyNameKeyWord | expectedStatus | expectedStatusText |
-            | admin | AutoTest           | 200            | OK                 |
+            | user  | companyNameKeyWord | deleteType | expectedStatus | expectedStatusText |
+            | admin | AutoTest           | hard       | 200            | OK                 |
 
     #Bug API in case TC_DCP002_1, TC_DCP002_1
     @TC_DCP002 @bug-permission @low-bug-skip
@@ -29,13 +29,15 @@ Feature: API_Admin DELETE/company
         And User filters company to get company which has the company name included <companyNameKeyWord>
         And User sets DELETE api endpoint to delete company
         But User sets Cookie in HEADER as <cookie>
-        When User sends a DELETE method to delete the filtered company
+        When User sends a DELETE method to <deleteType> delete the filtered company
         Then The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
         Examples:
-            | TC_ID       | companyNameKeyWord | cookie  | expectedStatus | expectedStatusText |
-            | TC_DCP002_1 | AutoTest           | empty   | 401            | Unauthorized       |
-            | TC_DCP002_2 | AutoTest           | invalid | 401            | Unauthorized       |
+            | TC_ID       | companyNameKeyWord | deleteType | cookie  | expectedStatus | expectedStatusText |
+            | TC_DCP002_1 | AutoTest           | hard       | empty   | 401            | Unauthorized       |
+            | TC_DCP002_2 | AutoTest           | hard       | invalid | 401            | Unauthorized       |
+            | TC_DCP002_1 | AutoTest           | soft       | empty   | 401            | Unauthorized       |
+            | TC_DCP002_2 | AutoTest           | soft       | invalid | 401            | Unauthorized       |
 
     #Bug API in case TC_DCP003
     @TC_DCP003 @bug-permission @low-bug-skip
@@ -45,10 +47,26 @@ Feature: API_Admin DELETE/company
         And User has valid connect.sid of "<userA>" after send a POST request with payload as email: "<userA>" and password: "<password>"
         And User sets DELETE api endpoint to delete company
         And In Header of the request, user sets param Cookie as valid connect.sid
-        When User sends a DELETE method to delete the filtered company
+        When User sends a DELETE method to <deleteType> delete the filtered company
         Then The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
 
         Examples:
-            | companyNameKeyWord | user | userA               | password  | expectedStatus | expectedStatusText |
-            | AutoTest           | user | may27user@gmail.com | Test1111# | 401            | Unauthorized       |
+            | companyNameKeyWord | user | userA               | deleteType | password  | expectedStatus | expectedStatusText |
+            | AutoTest           | user | may27user@gmail.com | hard       | Test1111# | 401            | Unauthorized       |
+            | AutoTest           | user | may27user@gmail.com | soft       | Test1111# | 401            | Unauthorized       |
+
+    @TC_DCP004 @regression-api @smoke-test-api
+    Scenario Outline: TC_DCP004 - Verify <user> could call this API to soft delete a company
+        Given Check <companyNameKeyWord> company exist in the system, if it does not exist will create company
+        And User filters company to get company which has the company name included <companyNameKeyWord>
+        And User sets DELETE api endpoint to delete company
+        When User sends a DELETE method to <deleteType> delete the filtered company
+        Then The expected status code should be <expectedStatus>
+        And The status text is "<expectedStatusText>"
+        And Check that the company just soft deleted still exists but the subscription has been canceled
+
+        Examples:
+            | user  | companyNameKeyWord | deleteType | expectedStatus | expectedStatusText |
+            | admin | AutoTest           | soft       | 200            | OK                 |
+

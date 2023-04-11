@@ -5,14 +5,15 @@ import * as companyRequest from '../../../../src/api/request/company.service';
 import logger from '../../../../src/Logger/logger';
 import { faker } from '@faker-js/faker';
 import { Links } from '../../../../src/utils/links';
-import _ from "lodash";
+import _, { endsWith } from "lodash";
 import { payLoadCompany } from '../../../../src/utils/companyPayLoad';
 
 let numberofCompanies: any;
 const arrCompanyType = ['ASC', 'CSV', 'QBFS', 'QBO'];
 const marketplaceIDS = ['NA', 'EU', 'A2EUQ1WTGCTBG2', 'A1PA6795UKMFR9', 'A1RKKUPIHCS9HS', 'A13V1IB3VIYZZH', 'APJ6JRA9NG5V4', 'A1AM78C64UM0Y8', 'A1F83G8C2ARO7P', 'ATVPDKIKX0DER'];
-const endPointToGet20LatestCompany = encodeURI(`${Links.API_ADMIN_GET_COMPANIES}?offset=0&limit=20&sort=[{"field":"createdAt","direction":"desc"}]&where={"logic":"and","filters":[]}`); 
+const endPointToGet20LatestCompany = encodeURI(`${Links.API_ADMIN_GET_COMPANIES}?offset=0&limit=20&sort=[{"field":"createdAt","direction":"desc"}]&where={"logic":"and","filters":[]}`);
 let link: any;
+let actionCompany: string;
 let selectedCompany: any;
 let randomCompany: any;
 let payload: payLoadCompany = {};
@@ -44,6 +45,7 @@ Then('Check {} company exist in the system, if it does not exist will create com
     }
 
     if (numberofCompanies < 1) {
+        this.actionCompany = 'created';
         payload.companyName = `${faker.company.name()}-AutoTest`;
         payload.companyKey = '';
         payload.companyType = arrCompanyType[Math.floor(Math.random() * arrCompanyType.length)];
@@ -58,9 +60,10 @@ Then('Check {} company exist in the system, if it does not exist will create com
         this.response = this.createCompanyResponse = await companyRequest.createCompany(this.request, Links.API_CREATE_COMPANY, payload, this.headers);
         const responseBodyText = await this.createCompanyResponse.text();
         if (this.createCompanyResponse.status() == 201 && !responseBodyText.includes('<!doctype html>')) {
-            this.createCompanyResponseBody = JSON.parse(responseBodyText)
+            this.createCompanyResponseBody = JSON.parse(responseBodyText);
             logger.log('info', `Response POST ${Links.API_CREATE_COMPANY}` + JSON.stringify(this.createCompanyResponseBody, undefined, 4));
-            this.attach(`Response POST ${Links.API_CREATE_COMPANY}` + JSON.stringify(this.createCompanyResponseBody, undefined, 4))
+            this.attach(`Response POST ${Links.API_CREATE_COMPANY}` + JSON.stringify(this.createCompanyResponseBody, undefined, 4));
+            return this.createCompanyResponseBody;
         }
         else {
             const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
@@ -71,26 +74,26 @@ Then('Check {} company exist in the system, if it does not exist will create com
 })
 
 Then('{} filters company to get company which has the company name included {}', async function (actor, companyNameKeyWord: string) {
-    console.log('companyNameKeyWord: ', companyNameKeyWord);
-    selectedCompany = await this.get20LatestCompaniesResponseBody.filter((co: any) => co.companyName == companyNameKeyWord);
-    console.log("selectedcompany: ", selectedCompany);
+    selectedCompany = await this.get20LatestCompaniesResponseBody.filter((co: any) => (co.companyName).endsWith(companyNameKeyWord));
     randomCompany = selectedCompany[Math.floor(Math.random() * selectedCompany.length)];
     //logger.log('info', `Response Body before filter: ${JSON.stringify(selectedCompany, undefined, 4)}`);
-    this.attach(`Response Body before filter: ${JSON.stringify(selectedCompany, undefined, 4)}`);
+    this.attach(`Response Body before filter: ${JSON.stringify(randomCompany, undefined, 4)}`);
 })
 
-Then('{} sends a DELETE method to delete the {} company', async function (actor, actionCompany: string) {
+Then('{} sends a DELETE method to {} delete the filtered company', async function (action: string, deleteType: string) {
+    this.type = deleteType;
     const options = {
         headers: this.headers
     }
-    if (actionCompany == 'created'){
-        this.companyKeyUrl = this.responseBodyOfACompanyObject.companyKey;
-        this.companyTypeUrl = this.responseBodyOfACompanyObject.companyType;
+    action = this.actionCompany;
+    if (action == 'created'){
+        this.companyKeyUrl = this.createCompanyResponseBody.companyKey;
+        this.companyTypeUrl = this.createCompanyResponseBody.companyType;
     }else {
         this.companyKeyUrl = randomCompany.companyKey;
         this.companyTypeUrl = randomCompany.companyType;
     }
-    this.response = await adminRequest.deleteCompany(this.request, link, this.companyKeyUrl, this.companyTypeUrl, options);
+    this.response = await adminRequest.deleteCompany(this.request, link, this.companyKeyUrl, this.companyTypeUrl, options, this.type);
     const responseBodyText = await this.response.text();
     logger.log('info', `Response Delete ${link} has status code ${this.response.status()} ${this.response.statusText()} and response body ${responseBodyText}`);
     this.attach(`Response Delete ${link} has status code ${this.response.status()} ${this.response.statusText()} and response body ${responseBodyText}`)
@@ -102,7 +105,22 @@ Then('Check that the company just deleted not exists in the current companies li
     }
     this.get20LatestCompaniesResponse = await adminRequest.getCompanies(this.request, endPointToGet20LatestCompany, options);
     this.get20LatestCompaniesResponseBody = JSON.parse(await this.get20LatestCompaniesResponse.text());
-    const foundCompany = this.get20LatestCompaniesResponseBody.some((element: { companyKey: any; }) => element.companyKey == randomCompany.companyKey);
-    expect(foundCompany, 'Company should not exist in the list companies').toBeFalsy();
+    if(this.actionCompany) {
+        this.foundCompany = this.get20LatestCompaniesResponseBody.some((element: { companyKey: any; }) => element.companyKey == this.createCompanyResponseBody.companyKey);
+    }
+    else {
+        this.foundCompany = this.get20LatestCompaniesResponseBody.some((element: { companyKey: any; }) => element.companyKey == randomCompany.companyKey);
+    }
+    expect(this.foundCompany, 'Company should not exist in the list companies').toBeFalsy();
 })
 
+Then('Check that the company just soft deleted still exists but the subscription has been canceled', async function () {
+    const options = {
+        headers: this.headers
+    }
+    const endPointToGetCompanyInfoResponse = encodeURI(`${Links.API_ADMIN_GET_COMPANIES}/${this.companyKeyUrl}/${this.companyTypeUrl}`);
+    this.getCompanyInfoResponse = await adminRequest.getCompanies(this.request, endPointToGetCompanyInfoResponse, options);
+    this.responseBody = JSON.parse(await this.getCompanyInfoResponse.text());
+    this.subscriptionStatus = await this.responseBody.subscriptionStatus;
+    expect(this.subscriptionStatus).toEqual('canceled');
+})
