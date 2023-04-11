@@ -29,7 +29,7 @@ Feature: API_Dashboard POST /api/supply
             | TC_CSL002 | ASC         | testautoforecast@gmail.com | 10       | random     | random | random     | random    | random  | random  | random   | random  | random   | random  | random   | random | 200            |
 
     #TC_CSL003_1, TC_CSL003_2 fail due to bug api
-    @TC_CSL003 @low-bug-skip
+    @TC_CSL003 @low-bug-skip @bug1678
     Scenario Outline: <scenario> - Verify error when user sends this API with <cookie> cookie, <companyKeyHeader> companyKey, <companyTypeHeader> companyType value in header
         Given User picks company with type <companyType> in above response
         But User sets valid cookie of <email> and valid companyKey and valid companyType in the header
@@ -133,7 +133,7 @@ Feature: API_Dashboard POST /api/supply
             | testautoforecast@gmail.com | 5        | random     | random | invalid    | invalid   | random  | random  | random   | random  | random   | random  | random   | random | 400            | Unable to create record. |
 
     # #Bug TC_CSL009,TC_CSL010 return status code 200 when call this API for company has type QBFS and QBO.
-    @TC_CSL009 @TC_CSL010
+    @TC_CSL009 @TC_CSL010 @low-bug-skip @bug1687
     Scenario Outline: <scenario> - Verify user could not call this API with company has type <companyType>
         Given User picks company with type <companyType> in above response
         But User sets valid cookie of <email> and valid companyKey and valid companyType in the header

@@ -8,7 +8,7 @@ Feature: API_Dashboard POST /api/grid-view
         And In Header of the request, she sets param Cookie as valid connect.sid
         When User sends a GET request to get company keys
 
-    @TC_CGV001
+    @TC_CGV001 @bug1872
     Scenario Outline: TC_CGV001 - Verify user <email> could call this API to create grid view for <itemType> with sort a column <field>
         Given User picks random company in above response
         And User sets GET api endpoint to get information of a company belongs to <email> using company key <companyKey>
@@ -27,7 +27,7 @@ Feature: API_Dashboard POST /api/grid-view
             | email                      | nameOfGridView | itemType | dir | field | companyKey | key    | expectedStatus |
             | testautoforecast@gmail.com | random         | supplier | asc | name  | random     | random | 200            |
 
-    @TC_CGV002
+    @TC_CGV002 @bug1872
     Scenario Outline: TC_CGV002 - Verify user <email> could call this API to create grid view for <itemType> with filter <field>
         Given User picks random company in above response
         And User sets GET api endpoint to get information of a company belongs to <email> using company key <companyKey>
