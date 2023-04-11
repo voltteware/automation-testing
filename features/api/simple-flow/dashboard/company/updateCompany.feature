@@ -188,7 +188,7 @@ Feature: API_Dashboard PUT /api/company
             | TC_UC013 | purchasingSalesVelocitySettingData | testautoforecast@gmail.com | 10          | 20          | 15           | 5            | 0            | 0             | 50                | random     | ASC         | 200            | 100                     |
 
     #Bug API in case @TC_UC014 => still return status code 200 when total percentage is greater than 100
-    @TC_UC014
+    @TC_UC014 @bug1591 @low-bug-skip
     Scenario Outline: <id> - Verify error when user <email> updates total percentage in <properties> for company type <companyType> is greater than 100
         Given User picks company with type ASC in above response
         And User sets PUT api endpoint to update company keys

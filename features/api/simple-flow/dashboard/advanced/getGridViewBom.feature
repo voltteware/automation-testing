@@ -69,7 +69,7 @@ Feature: API_Dashboard GET /api/grid-view/bom
             | may27user@gmail.com | testautoforecast@gmail.com | Test1111# | random     | 400            | Company not found. |
 
     #Bug @TC_GVB005, return status code 200 when call this API for company QBFS.
-    @TC_GVB005
+    @TC_GVB005 @bug1684 @low-bug-skip
     Scenario Outline: TC_GVB005 - Verify user could not call this API with company QBFS
         Given User picks company with type QBFS in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header

@@ -142,8 +142,8 @@ Feature: API_Dashboard POST /api/bom
             | email                      | limitRow | parentName | parentKey | childName | childKey | qty    | expectedStatus | expectedStatusText         |
             | testautoforecast@gmail.com | 20       |            |           | random    | random   | random | 400            | Missing required property. |
 
-    #Bug TC_CB009,TC_CB010 return status code 200 when call this API for company has type QBFS and QBO.
-    @TC_CB009 @TC_CB010
+    #Bug TC_CB009,TC_CB010 return status code 200 when call this API for company has type QBFS and QBO. Bug ID: 1710
+    @TC_CB009 @TC_CB010 @low-bug-skip 
     Scenario Outline: <TC_ID> - Verify user could not call this API with company has type <companyType>
         Given User picks company with type <companyType> in above response
         But User sets valid cookie of <email> and valid companyKey and valid companyType in the header

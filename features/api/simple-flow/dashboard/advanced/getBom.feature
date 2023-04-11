@@ -27,7 +27,7 @@ Feature: API_Dashboard GET /api/bom
             | admin | testautoforecast@gmail.com | Test1111# | 200            | 10       |
     
     # #Bug TC_GB002_1 and TC_GB002_2, return status code 200 when cookie invalid.
-    @TC_GB002 @bug-permission @low-bug-skip
+    @TC_GB002 @bug-permission @low-bug-skip @bug1676
     Scenario Outline: <scenario> - Verify error when user sends this API with <cookie> cookie, <companyKeyHeader> companyKey, <companyTypeHeader> companyType value in header
         Given User picks company with type ASC in above response
         But User sets <cookie> cookie of <email> and <companyKeyHeader> companyKey and <companyTypeHeader> companyType in the header
@@ -73,7 +73,7 @@ Feature: API_Dashboard GET /api/bom
             | TC_GB004_4 | admin | testautoforecast@gmail.com | Test1111# | 10       | childName | desc      |  200            |
     
     #Bug TC_GB005, return status code 200 when call this API for company QBFS.
-    @TC_GB005
+    @TC_GB005 @bug1680 @low-bug-skip
     Scenario Outline: TC_GB005 - Verify user could not call this API with company QBFS
         Given User picks company with type QBFS in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header

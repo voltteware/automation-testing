@@ -44,8 +44,7 @@ Feature: API_SUPPLIER DELETE /api/vendor
             | TC_DV002_3 | testautoforecast@gmail.com | 1                 | Auto                | valid   | invalid          | invalid           | 400            | Company not found.    |
             | TC_DV002_4 | testautoforecast@gmail.com | 1                 | Auto                | valid   |                  |                   | 500            | Internal Server Error |
 
-    #Bug API in case DS003
-    @TC_DV003 @bug-permission @low-bug-skip
+    @TC_DV003 
     Scenario Outline: TC_DV003 - Verify <userA> can't call this API to delete supplier not belongs to her company
         Given User filters <numberOfSuppliers> suppliers which has the name includes <supplierNameKeyword>
         And User has valid connect.sid of "<userA>" after send a POST request with payload as email: "<userA>" and password: "<password>"
