@@ -1,5 +1,7 @@
 
 var reporter = require('cucumber-html-reporter');
+const GoogleDriveService = require('./util/google.service');
+const fs = require('fs');
 require('dotenv').config();
 
 let ms = new Date();
@@ -10,6 +12,7 @@ console.log(env)
 
 const reportJson = require('path').join(__dirname, 'reports', 'cucumber-report.json');
 const generateHtml = require('path').join(__dirname, 'reports', `cucumber-html-report-${env}-${dateFormat}.html`);
+
 
 console.log('+++++++++++ Generate report++++++++++++++++', generateHtml);
 
@@ -37,19 +40,45 @@ reporter.generate(options);
 function sleep(s){
   return new Promise(resolve => setTimeout(resolve, s * 1000));
 };
-const {uploadS3} = require('./s3-upload');
 async function uploadReportHtml() {
     await sleep(10);
     try{
-        if(process.env.DISABLE_UPLOAD == 'false') {
-            console.log('Uploading report to S3');
-            const filePath = __dirname + `/reports/cucumber-html-report-${env}-${dateFormat}.html`;
-            console.log('Completed uploading report to S3');
-            await uploadS3(filePath);
+        const driveClientId = process.env.GOOGLE_DRIVE_CLIENT_ID;
+        const driveClientSecret = process.env.GOOGLE_DRIVE_CLIENT_SECRET;
+        const driveRedirectUri = process.env.GOOGLE_DRIVE_REDIRECT_URI;
+        const driveRefreshToken = process.env.GOOGLE_DRIVE_REFRESH_TOKEN;
+        const accessToken = process.env.GOOGLE_DRIVE_ACCESS_TOKEN;
+        const folderName = process.env.GOOGLE_DRIVE_FOLDER_NAME || 'ForecastRx-Automation-Testing-Reports';
+
+        if(!driveClientId) {
+            return;
         }
+
+        console.log('Uploading report file');
+        const googleDriveService = new GoogleDriveService(driveClientId, driveClientSecret, driveRedirectUri, driveRefreshToken, accessToken);
+        const fileName = `cucumber-html-report-${env}-${dateFormat}.html`;
+        const filePath = __dirname + `/reports/${fileName}`;
+        if (!fs.existsSync(filePath)) {
+            throw new Error('File not found!');
+        }
+
+        let folder = await googleDriveService.searchFolder(folderName).catch((error) => {
+            console.error(error);
+            return null;
+        });
+
+        if (!folder) {
+            folder = await googleDriveService.createFolder(folderName);
+        }
+
+        await googleDriveService.saveFile(fileName, filePath, '[*/*]', folder.id).catch((error) => {
+            console.error(error);
+        });
+
+        console.info('File uploaded successfully!');
     } catch(err) {
-        console.log('err upload file: ', err);
+        console.log('Error upload file: ', err);
     }
 }
 
-// uploadReportHtml();
+uploadReportHtml();
