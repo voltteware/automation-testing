@@ -11,12 +11,12 @@ function parseNumber(number: number) {
     return !isNaN(number) ? Number(number) : 0;
 };
 
-// Rounding 2 demicals
+// Rounding 2 decimals
 function roundFloatNumber(number: number) {
     return Math.round((parseNumber(number) + Number.EPSILON) * 100) / 100;
 };
 
-// Refer the mindmap here: https://whimsical.com/restockamz-beta-restock-from-supplier-2y8q1eQFoikbzF7VcaqvYo
+// Refer the mind map here: https://whimsical.com/restockamz-beta-restock-from-supplier-2y8q1eQFoikbzF7VcaqvYo
 function sumFormulaRestockAMZ(onhand: number, inbound: number, fcTransfer: number, sum: number, attach: ICreateAttachment) {
     let expectedSum = onhand + inbound + fcTransfer;
     expect(sum, `In response body, the expected Sum should be: ${expectedSum}`).toBe(expectedSum);
@@ -68,20 +68,20 @@ function estimatedMarginFormulaRestockAMZ(price: number, totalCost: number, tota
 };
 
 interface Input {
-    s2d?: number, s7d?: number, s14d?: number, s30d?: number, s60d?: number, s90d?: number, s180d?: number, sv2d?: number, sv7d?: number, sv14d?: number, sv30d?: number, sv60d?: number, sv90d?: number, sv180d?: number, svDemand?: number, percent2Day?: number, percent7Day?: number, percent14Day?: number, percent30Day?: number, percent60Day?: number, percent90Day?: number, percent180Day?: number, percentForecasted?: number, outOfStock2d?: number, outOfStock7d?: number, outOfStock14d?: number, outOfStock30d?: number, outOfStock60d?: number, outOfStock90d?: number, outOfStock180d?: number, adjSv2d?: number, adjSv7d?: number, adjSv14d?: number, adjSv30d?: number, adjSv60d?: number, adjSv90d?: number, adjSv180d?: number, demand?: number, unitsRequired?: number, qtySupplierLeadTime?: number, qtyToLocalLeadTime?: number, targetQtyOnHand?: number, warehouseLeadTime?: number, targetMaxDays?: number, supplierLeadTime?: number, currentAmazonInventory?: number, amazonInventoryDays?: number, warehouseQty?: number, onOrder?: number, localInventoryDays?: number, onOrderDays?: number, remaining?: number, recommendedWarehouseQty?: number, recommendedSupplierQty?: number, unitsAvailable?: number, unitsOnPO?: number, suggShip?: number, suggReorder?: number, restockNeeded?: number, onHand?: number
+    s2d?: number, s7d?: number, s14d?: number, s30d?: number, s60d?: number, s90d?: number, s180d?: number, sv2d?: number, sv7d?: number, sv14d?: number, sv30d?: number, sv60d?: number, sv90d?: number, sv180d?: number, svDemand?: number, percent2Day?: number, percent7Day?: number, percent14Day?: number, percent30Day?: number, percent60Day?: number, percent90Day?: number, percent180Day?: number, percentForecasted?: number, outOfStock2d?: number, outOfStock7d?: number, outOfStock14d?: number, outOfStock30d?: number, outOfStock60d?: number, outOfStock90d?: number, outOfStock180d?: number, adjSv2d?: number, adjSv7d?: number, adjSv14d?: number, adjSv30d?: number, adjSv60d?: number, adjSv90d?: number, adjSv180d?: number, demand?: number, unitsRequired?: number, qtySupplierLeadTime?: number, qtyToLocalLeadTime?: number, targetQtyOnHand?: number, warehouseLeadTime?: number, targetMaxDays?: number, supplierLeadTime?: number, currentAmazonInventory?: number, amazonInventoryDays?: number, warehouseQty?: number, onOrder?: number, localInventoryDays?: number, onOrderDays?: number, remaining?: number, recommendedWarehouseQty?: number, recommendedSupplierQty?: number, unitsAvailable?: number, unitsOnPO?: number, suggShip?: number, suggReorder?: number, restockNeeded?: number, onHand?: number, sum?: number
 };
 
 function averageDailySalesRateFormulaRestockAMZ(input: Input, attach: ICreateAttachment) {
-    const { sv2d, sv7d, sv14d, sv30d, sv60d, sv90d, sv180d, svDemand, percent2Day, percent7Day, percent14Day, percent30Day, percent60Day, percent90Day, percent180Day, percentForecasted, demand } = input;
+    const { adjSv2d, adjSv7d, adjSv14d, adjSv30d, adjSv60d, adjSv90d, adjSv180d, svDemand, percent2Day, percent7Day, percent14Day, percent30Day, percent60Day, percent90Day, percent180Day, percentForecasted, demand } = input;
 
     // Weighted (units/day) = Daily Sales Rate * Weight (Settings)
-    let weighted2d = roundFloatNumber((sv2d || 0) * (percent2Day || 0) / 100);
-    let weighted7d = roundFloatNumber((sv7d || 0) * (percent7Day || 0) / 100);
-    let weighted14d = roundFloatNumber((sv14d || 0) * (percent14Day || 0) / 100);
-    let weighted30d = roundFloatNumber((sv30d || 0) * (percent30Day || 0) / 100);
-    let weighted60d = roundFloatNumber((sv60d || 0) * (percent60Day || 0) / 100);
-    let weighted90d = roundFloatNumber((sv90d || 0) * (percent90Day || 0) / 100);
-    let weighted180d = roundFloatNumber((sv180d || 0) * (percent180Day || 0) / 100);
+    let weighted2d = roundFloatNumber((adjSv2d || 0) * (percent2Day || 0) / 100);
+    let weighted7d = roundFloatNumber((adjSv7d || 0) * (percent7Day || 0) / 100);
+    let weighted14d = roundFloatNumber((adjSv14d || 0) * (percent14Day || 0) / 100);
+    let weighted30d = roundFloatNumber((adjSv30d || 0) * (percent30Day || 0) / 100);
+    let weighted60d = roundFloatNumber((adjSv60d || 0) * (percent60Day || 0) / 100);
+    let weighted90d = roundFloatNumber((adjSv90d || 0) * (percent90Day || 0) / 100);
+    let weighted180d = roundFloatNumber((adjSv180d || 0) * (percent180Day || 0) / 100);
     let weightedForecast = roundFloatNumber((svDemand || 0) * (percentForecasted || 0) / 100);
     let expectedWeighted = roundFloatNumber(weighted2d + weighted7d + weighted14d + weighted30d + weighted60d + weighted90d + weighted180d + weightedForecast);
     expect(demand, `In response body, the expected Units/day should be: ${expectedWeighted}`).toBe(expectedWeighted);
@@ -244,7 +244,7 @@ function inventoryAvailableFormulaRestockAMZ(input: Input, attach: ICreateAttach
         attach(`Remaining Days at Amazon: Actual: ${remaining} and Expected: ${expectedRemaining}`);
     }
     else {
-        let expectedRemaining = roundFloatNumber((currentAmazonInventory || 0) / (demand || 0));
+        let expectedRemaining = Math.round((currentAmazonInventory || 0) / (demand || 0));
         expect(remaining, `In response body, the expected Remaining Days at Amazon should be: ${expectedRemaining}`).toBe(expectedRemaining);
         logger.log('info', `Remaining Days at Amazon: Actual: ${remaining} and Expected: ${expectedRemaining}`);
         attach(`Remaining Days at Amazon: Actual: ${remaining} and Expected: ${expectedRemaining}`);
@@ -271,7 +271,7 @@ function recommendationsFormulaRestockAMZ(input: Input, attach: ICreateAttachmen
 };
 
 function suggestionsFormulaRestockAMZ(input: Input, attach: ICreateAttachment) {
-    const { suggReorder, suggShip, recommendedWarehouseQty, recommendedSupplierQty, restockNeeded, targetQtyOnHand, onHand } = input;
+    const { suggReorder, suggShip, recommendedWarehouseQty, recommendedSupplierQty, restockNeeded, targetQtyOnHand, sum } = input;
 
     // suggShip = Warehouse Restock Recommendation
     expect(suggShip, `In response body, the expected Sugg Ship should be: ${recommendedWarehouseQty}`).toBe(recommendedWarehouseQty);
@@ -283,8 +283,8 @@ function suggestionsFormulaRestockAMZ(input: Input, attach: ICreateAttachment) {
     logger.log('info', `Sugg Reorder: Actual: ${suggReorder} and Expected: ${recommendedSupplierQty}`);
     attach(`Sugg Reorder: Actual: ${suggReorder} and Expected: ${recommendedSupplierQty}`);
 
-    // Restock Needed =  Ideal max quantity on hand - On hand FBA Qty
-    let expectedRestockNeeded = Math.round((targetQtyOnHand || 0) - (onHand || 0));
+    // Restock Needed =  Ideal max quantity on hand - Sum
+    let expectedRestockNeeded = Math.round((targetQtyOnHand || 0) - (sum || 0));
     expect(restockNeeded, `In response body, the expected Restock Needed should be: ${expectedRestockNeeded}`).toBe(expectedRestockNeeded);
     logger.log('info', `Restock Needed: Actual: ${restockNeeded} and Expected: ${expectedRestockNeeded}`);
     attach(`Restock Needed: Actual: ${restockNeeded} and Expected: ${expectedRestockNeeded}`);
