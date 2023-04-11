@@ -88,7 +88,7 @@ Then('{} checks {} supply exist in the system, if it does not exist will create 
         numberofSupplys = await this.getSupplyResponseBody.length;
     }
 
-    if (numberofSupplys < 1) {
+    if (numberofSupplys < 1) {        
         randomItem = this.getItemsResponseBody[Math.floor(Math.random() * this.getItemsResponseBody.length)];
         // Can create supply with items unassigned supplier
         // randomSupplier = this.getSupplierResponseBody[Math.floor(Math.random() * this.getSupplierResponseBody.length)]

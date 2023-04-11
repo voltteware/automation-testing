@@ -53,7 +53,7 @@ Feature: API_Dashboard POST /api/company
             | TC_CCP005_1 | testuserforecastrx@gmail.com | random      | CSV         | random       | random   | random        | empty   | 401            | Unauthorized       |
             | TC_CCP005_2 | testuserforecastrx@gmail.com | random      | CSV         | random       | random   | random        | invalid | 401            | Unauthorized       |
 
-    @TC_CCP006
+    @TC_CCP006 
     Scenario Outline: <TC_ID> - Verify error company already exists
         Given In Header of the request, User sets param Cookie as valid connect.sid
         And User sets request body with payload as companyName: "<companyName>" and companyKey: "" and companyType: "<companyType>" and serviceLevel: "<serviceLevel>" and leadTime: "<leadTime>" and orderInterval: "<orderInterval>" and initialSyncDate: "" and marketplaceId: ""
