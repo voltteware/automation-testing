@@ -1,4 +1,4 @@
-@test-api-extra @api-dashboard @api-demand @api-edit-some-value-on-grid
+@test-api @api-dashboard @api-demand @api-edit-some-value-on-grid
 Feature: API_Dashboard PUT /api/demand/manual
     Background: Send GET /realm request to get all company keys of current logged in user before each test
         Given user sends a POST login request to get valid cookie with role
@@ -30,8 +30,7 @@ Feature: API_Dashboard PUT /api/demand/manual
             | TC_ID      | companyType | email                      | limitRow | editColumn | value  | expectedStatus |
             | TC_UD001_1 | CSV         | testautoforecast@gmail.com | 10       | itemName   | random | 200            |
 
-    # Test case TC_UD001_2 FAILED: actual date will be less than expected date 1 day
-    @TC_UD001 @regression-api @TC_UD001_2-bug-1325
+    @TC_UD001 @regression-api
     Scenario Outline: <TC_ID> - Verify user <email> could call this API to update "<editColumn>" of a demand for company type (<companyType>)
         Given User picks company with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
@@ -48,7 +47,6 @@ Feature: API_Dashboard PUT /api/demand/manual
 
         Examples:
             | TC_ID      | companyType | email                      | limitRow | editColumn        | value  | expectedStatus |
-            | TC_UD001_1 | CSV         | testautoforecast@gmail.com | 10       | itemName          | random | 200            |
             | TC_UD001_2 | CSV         | testautoforecast@gmail.com | 10       | dateOfSale        | random | 200            |
             | TC_UD001_3 | CSV         | testautoforecast@gmail.com | 10       | salesOrderQty     | random | 200            |
             | TC_UD001_4 | CSV         | testautoforecast@gmail.com | 10       | openSalesOrderQty | random | 200            |

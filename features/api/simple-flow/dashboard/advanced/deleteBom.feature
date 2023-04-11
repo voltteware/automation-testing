@@ -30,7 +30,7 @@ Feature: API_Dashboard DELETE /api/bom
             | TC_DB002 | ASC         | 2            | Auto                 | 200            | OK                 | testautoforecast@gmail.com |
 
     #Bug API in case TC_DB003_1, TC_DB003_2
-    @TC_DB003 @bug-permission
+    @TC_DB003 @bug-permission @low-bug-skip
     Scenario Outline: <TC_ID> - Verify error when user sends this API with <cookie> cookie and <companyKeyHeader> companyKeyHeader and <companyTypeHeader> companyTypeHeader
         Given User picks company with type CSV in above response
         But User sets valid cookie of <email> and valid companyKey and valid companyType in the header

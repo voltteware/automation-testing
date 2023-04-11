@@ -132,14 +132,6 @@ When(`{} sends a GET request to get company information of {} by company key`, a
     }
 })
 
-Then('{} checks {} and other values in response of random company are correct', async function (actor, userId: string) {
-    const companyType = ['ASC', 'CSV', 'QBFS', 'QBO'];
-    expect(companyType, `Company Type should be one of ${companyType}`).toContain(this.randomCompany.companyType);
-    expect(this.randomCompany.companyKey).not.toBeNull();
-    expect(this.randomCompany.userId).toBe(userId);
-    expect(this.randomCompany.companyName).not.toBeNull();
-})
-
 Then('{} checks that the lastForecastDate field was updated in company detail information after running forecast', { timeout: 20 * 60 * 1000 }, async function (actor: string) {
     const linkGetCompanyInfo = `${Links.API_GET_COMPANY}/${this.companyKey}`;
     const options = {

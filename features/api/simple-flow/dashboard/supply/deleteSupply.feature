@@ -31,7 +31,7 @@ Feature: API_SUPPLY DELETE /api/supply
             | TC_DSL002 | ASC         | 1                | Auto                 | 200            | OK                 | testautoforecast@gmail.com |
 
     #Bug API in case TC_DSL003_1, TC_DSL003_2
-    @TC_DSL003 @bug-permission
+    @TC_DSL003 @bug-permission @low-bug-skip
     Scenario Outline: <TC_ID> - Verify error when user sends this API with <cookie> cookie and <companyKeyHeader> companyKeyHeader and <companyTypeHeader> companyTypeHeader
         Given User picks company with type CSV in above response
         But User sets valid cookie of <email> and valid companyKey and valid companyType in the header

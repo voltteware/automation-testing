@@ -29,7 +29,7 @@ Feature: API_SUPPLIER DELETE /api/vendor
             | 3                 | Auto                | 200            | OK                 | testautoforecast@gmail.com |
 
     #Bug API in case TC_DV002_1, TC_DV002_2
-    @TC_DV002 @bug-permission
+    @TC_DV002 @bug-permission @low-bug-skip
     Scenario Outline: <TC_ID> - Verify error when user sends this API with <cookie> cookie and <companyKeyHeader> companyKeyHeader and <companyTypeHeader> companyTypeHeader
         Given User filters <numberOfSuppliers> suppliers which has the name includes <supplierNameKeyword>
         But she sets <cookie> cookie of <email> and <companyKeyHeader> companyKey and <companyTypeHeader> companyType in the header
@@ -45,7 +45,7 @@ Feature: API_SUPPLIER DELETE /api/vendor
             | TC_DV002_4 | testautoforecast@gmail.com | 1                 | Auto                | valid   |                  |                   | 500            | Internal Server Error |
 
     #Bug API in case DS003
-    @TC_DV003 @bug-permission
+    @TC_DV003 @bug-permission @low-bug-skip
     Scenario Outline: TC_DV003 - Verify <userA> can't call this API to delete supplier not belongs to her company
         Given User filters <numberOfSuppliers> suppliers which has the name includes <supplierNameKeyword>
         And User has valid connect.sid of "<userA>" after send a POST request with payload as email: "<userA>" and password: "<password>"

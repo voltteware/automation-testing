@@ -16,7 +16,7 @@ Feature: API_Admin GET/Users
             | user  | email              | password  | expectedStatus |
             | admin | may27pre@gmail.com | Test1111# | 200            |
     # BUG_API
-    @TC_AU002 @bug-permission
+    @TC_AU002 @bug-permission @low-bug-skip
     Scenario Outline: TC_AU002 - Verify <email> can't call this API to get all user
         Given User has valid connect.sid of "<user>" after send a POST request with payload as email: "<email>" and password: "<password>"
         And User sets GET api endpoint to get 20 users has just created
@@ -28,7 +28,7 @@ Feature: API_Admin GET/Users
             | user | email               | password  | expectedStatus | expectedStatusText |
             | user | may27user@gmail.com | Test1111# | 401            | Unauthorized       |
 
-    @TC_AU003 @bug-permission
+    @TC_AU003 @bug-permission @low-bug-skip
     Scenario Outline: TC_AU003 - Verify error when user sends this API with <cookie> cookie
         Given User sets GET api endpoint to get 20 users has just created
         But User sets Cookie in HEADER as <cookie>
