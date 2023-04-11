@@ -171,6 +171,12 @@ Then(`{} checks random items has status is Active`, async function (actor) {
     }
 })
 
+Given('User picks a random imtem in above list items', async function () {
+    this.responseBodyOfAItemObject = await this.getItemsResponseBody[Math.floor(Math.random() * this.getItemsResponseBody.length)];
+    logger.log('info', `Random Item: ${JSON.stringify(this.responseBodyOfAItemObject, undefined, 4)}`);
+    this.attach(`Random Item: ${JSON.stringify(this.responseBodyOfAItemObject, undefined, 4)}`);    
+});
+
 Then(`{} saves the item key`, async function (actor: string) {
     this.itemKey = this.responseBodyOfAItemObject.key
     logger.log('info', `Item key to edit: ${this.itemKey}`);
