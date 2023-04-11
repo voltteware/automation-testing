@@ -53,9 +53,3 @@ Feature: API_Dashboard GET /api/item?summary=true&companyKey=<companyKey>&compan
         Examples:
             | userA               | userB                      | password  | companyKey | expectedStatus | expectedStatusText |
             | may27user@gmail.com | testautoforecast@gmail.com | Test1111# | random     | 400            | Company not found. |
-
-
-
-
-
-

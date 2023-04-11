@@ -2,6 +2,7 @@ import { When, Then, Given } from '@cucumber/cucumber';
 import { expect } from '@playwright/test';
 import _ from "lodash";
 import logger from '../../../../src/Logger/logger';
+import { ItemSummaryRequestSchema } from './generalAssertionSchema';
 
 Then('{} checks API contract in item summary object are correct', async function (actor: string) {
     if (this.
@@ -14,11 +15,12 @@ Then('{} checks API contract in item summary object are correct', async function
         expect(this.getItemSummaryResponseBody.err, 'err value should be null').toBeNull();
     }
 
-    expect(typeof (this.getItemSummaryResponseBody.model), 'Type of model value should be object').toBe("object");
-    expect(typeof (Number(this.getItemSummaryResponseBody.model.onHandCount)), 'Type of onHandCount value should be string').toBe("number");
-    expect(typeof (Number(this.getItemSummaryResponseBody.model.onHandThirdPartyCount)), 'Type of onHandThirdPartyCount value should be number').toBe("number");
-    expect(typeof (Number(this.getItemSummaryResponseBody.model.olderThan30DaysCount)), 'Type of olderThan30DaysCount value should be number').toBe("number");
-    expect(typeof (Number(this.getItemSummaryResponseBody.model.missingVendorCount)), 'Type of missingVendorCount value should be number').toBe("number");
+    ItemSummaryRequestSchema.parse(this.getItemSummaryResponseBody);
+    // expect(typeof (this.getItemSummaryResponseBody.model), 'Type of model value should be object').toBe("object");
+    // expect(typeof (Number(this.getItemSummaryResponseBody.model.onHandCount)), 'Type of onHandCount value should be string').toBe("number");
+    // expect(typeof (Number(this.getItemSummaryResponseBody.model.onHandThirdPartyCount)), 'Type of onHandThirdPartyCount value should be number').toBe("number");
+    // expect(typeof (Number(this.getItemSummaryResponseBody.model.olderThan30DaysCount)), 'Type of olderThan30DaysCount value should be number').toBe("number");
+    // expect(typeof (Number(this.getItemSummaryResponseBody.model.missingVendorCount)), 'Type of missingVendorCount value should be number').toBe("number");
 })
 
 Then('{} checks number Items Out of Stock in response of item summary is correct', async function (actor: string) {
