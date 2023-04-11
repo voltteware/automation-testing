@@ -4,13 +4,13 @@ Feature: API_Regression User can create shipments from Supplier
         Given user sends a POST login request to get valid cookie with role
             | role  | username                   | password  |
             | admin | testautoforecast@gmail.com | Test1111# |
-        And User sets GET api endpoint to get company keys
+        And User sets GET api endpoint to get companies information of current user
         And In Header of the request, she sets param Cookie as valid connect.sid
-        And User sends a GET request to get company keys
+        When User sends a GET request to get companies
 
     @TC_ASC_CS001 @smoke-test-api
     Scenario Outline: <TC_ID> - Verify user <email> could call APIs to create shipments from Supplier without Case packs
-     Given User picks company with type <companyType> in above response
+        Given User picks company which has onboarded before with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets GET api method to get restock suggestion by vendor
         And User sends a GET api method to get restock suggestion by vendor
@@ -23,7 +23,7 @@ Feature: API_Regression User can create shipments from Supplier
         And The status text is "<expectedStatusText>"
         And User sets GET api method to get Items belonged to All Suppliers with direction: <direction>
         And User sends a GET api method to get Items belonged to All Suppliers
-        # Item with Auto name cannot create shipment 
+        # Item with Auto name cannot create shipment
         And User picks a random item which does not has Auto in the name in Item list
         And The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
@@ -95,12 +95,12 @@ Feature: API_Regression User can create shipments from Supplier
         And User checks the new created shipment
 
         Examples:
-            | TC_ID          | companyType | casePackOption | restockType | editColumn   | value  | email                      | direction | expectedStatus | expectedStatusText | limitRow |
-            | TC_ASC_CS001   | ASC         | No             | SUPPLIER    | supplierName | random | testautoforecast@gmail.com | desc      | 200            | OK                 | 10       |
+            | TC_ID        | companyType | casePackOption | restockType | editColumn   | value  | email                      | direction | expectedStatus | expectedStatusText | limitRow |
+            | TC_ASC_CS001 | ASC         | No             | SUPPLIER    | supplierName | random | testautoforecast@gmail.com | desc      | 200            | OK                 | 10       |
 
     @TC_ASC_CS002 @smoke-test-api
     Scenario Outline: <TC_ID> - Verify user <email> could call APIs to create shipments from Supplier having Case packs
-    Given User picks company with type <companyType> in above response
+        Given User picks company which has onboarded before with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets GET api method to get restock suggestion by vendor
         And User sends a GET api method to get restock suggestion by vendor
@@ -113,7 +113,7 @@ Feature: API_Regression User can create shipments from Supplier
         And The status text is "<expectedStatusText>"
         And User sets GET api method to get Items belonged to All Suppliers with direction: <direction>
         And User sends a GET api method to get Items belonged to All Suppliers
-        # Item with Auto name cannot create shipment 
+        # Item with Auto name cannot create shipment
         And User picks a random item which does not has Auto in the name in Item list
         And The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
@@ -169,9 +169,9 @@ Feature: API_Regression User can create shipments from Supplier
         And User sends a DELETE request to delete shipment
         And The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
-        
-        Examples:
-            | TC_ID          | companyType | casePackOption | restockType | editColumn   | value  | email                      | direction | expectedStatus | expectedStatusText | limitRow |
-            | TC_ASC_CS002   | ASC         | Yes            | SUPPLIER    | supplierName | random | testautoforecast@gmail.com | asc       | 200            | OK                 | 10       |
 
-    #     # TO DO Create Shipments from Warehouse
+        Examples:
+            | TC_ID        | companyType | casePackOption | restockType | editColumn   | value  | email                      | direction | expectedStatus | expectedStatusText | limitRow |
+            | TC_ASC_CS002 | ASC         | Yes            | SUPPLIER    | supplierName | random | testautoforecast@gmail.com | asc       | 200            | OK                 | 10       |
+
+#     # TO DO Create Shipments from Warehouse

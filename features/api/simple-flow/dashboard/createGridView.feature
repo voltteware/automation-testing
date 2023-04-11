@@ -4,13 +4,13 @@ Feature: API_Dashboard POST /api/grid-view
         Given user sends a POST login request to get valid cookie with role
             | role  | username                   | password  |
             | admin | testautoforecast@gmail.com | Test1111# |
-        And User sets GET api endpoint to get company keys
+        And User sets GET api endpoint to get companies information of current user
         And In Header of the request, she sets param Cookie as valid connect.sid
-        When User sends a GET request to get company keys
+        When User sends a GET request to get companies
 
     @TC_CGV001 @bug1872
     Scenario Outline: TC_CGV001 - Verify user <email> could call this API to create grid view for <itemType> with sort a column <field>
-        Given User picks random company in above response
+        Given User picks random company which has onboarded in above response
         And User sets GET api endpoint to get information of a company belongs to <email> using company key <companyKey>
         And User sets POST api endpoint to create grid view keys
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
@@ -29,7 +29,7 @@ Feature: API_Dashboard POST /api/grid-view
 
     @TC_CGV002 @bug1872
     Scenario Outline: TC_CGV002 - Verify user <email> could call this API to create grid view for <itemType> with filter <field>
-        Given User picks random company in above response
+        Given User picks random company which has onboarded in above response
         And User sets GET api endpoint to get information of a company belongs to <email> using company key <companyKey>
         And User sets POST api endpoint to create grid view keys
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
@@ -48,7 +48,7 @@ Feature: API_Dashboard POST /api/grid-view
 
     @TC_CGV003
     Scenario Outline: TC_CGV003 - Verify error when user sends this API with <cookie> cookie, <companyKeyHeader> companyKey, <companyTypeHeader> companyType value in header
-        Given User picks random company in above response
+        Given User picks random company which has onboarded in above response
         And User sets POST api endpoint to create grid view keys
         And User sets <cookie> cookie of <email> and <companyKeyHeader> companyKey and <companyTypeHeader> companyType in the header
         And User sets request body with payload as name: "<nameOfGridView>" and itemType: "<itemType>" and dir: "<dir>" and field: "<field>"
@@ -61,7 +61,7 @@ Feature: API_Dashboard POST /api/grid-view
 
     @TC_CGV004
     Scenario Outline: TC_CGV004 - Verify error when user <email> sends this API with view <name> already exists
-        Given User picks random company in above response
+        Given User picks random company which has onboarded in above response
         And User sets GET api endpoint to get information of a company belongs to <email> using company key <companyKey>
         And User sets POST api endpoint to create grid view keys
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header

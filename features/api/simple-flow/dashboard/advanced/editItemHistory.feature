@@ -4,13 +4,13 @@ Feature: API_Dashboard Advanced Edit Item History
         Given user sends a POST login request to get valid cookie with role
             | role  | username                   | password  |
             | admin | testautoforecast@gmail.com | Test1111# |
-        And User sets GET api endpoint to get company keys
+        And User sets GET api endpoint to get companies information of current user
         And In Header of the request, she sets param Cookie as valid connect.sid
-        When User sends a GET request to get company keys
+        When User sends a GET request to get companies
 
     @TC_EIH001-4 @smoke-test-api
     Scenario Outline: <TC_ID> - Verify items showed on Edit Item History of company <companyType> should be active items
-        Given User picks company with type <companyType> in above response
+        Given User picks company which has onboarded before with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And user sets GET api endpoint to get company information by company key
         And User sends a GET request to get company information by company key
@@ -42,4 +42,4 @@ Feature: API_Dashboard Advanced Edit Item History
             | TC_EIH001 | admin | testautoforecast@gmail.com | Test1111# | CSV         | 200            |
             | TC_EIH002 | admin | testautoforecast@gmail.com | Test1111# | ASC         | 200            |
             | TC_EIH003 | admin | testautoforecast@gmail.com | Test1111# | QBFS        | 200            |
-            # | TC_EIH004 | admin | testautoforecast@gmail.com | Test1111# | QBO         | 200            |
+# | TC_EIH004 | admin | testautoforecast@gmail.com | Test1111# | QBO         | 200            |

@@ -9,9 +9,14 @@ import exp from 'constants';
 let companyType: any;
 let companyKey: any;
 let link: any;
+let linkGetCompanies: any;
 
 Then(`{} sets GET api endpoint to get company keys`, async function (actor: string) {
     link = Links.API_REALM;
+});
+
+Then(`{} sets GET api endpoint to get companies information of current user`, async function (actor: string) {
+    linkGetCompanies = Links.API_GET_COMPANY;
 });
 
 Then('{} sends a GET request to get company keys', async function (actor: string) {
@@ -32,8 +37,26 @@ Then('{} sends a GET request to get company keys', async function (actor: string
     }
 })
 
-Then('{} picks random company in above response', async function (actor: string) {
-    this.randomCompany = await this.getRealmResponseBody[Math.floor(Math.random() * this.getRealmResponseBody.length)];
+Then('{} sends a GET request to get companies', async function (actor: string) {
+    const options = {
+        headers: this.headers
+    }
+    this.getCompaniesResponse = this.response = await companyRequest.getCompanies(this.request, linkGetCompanies, options);
+    const responseBodyText = await this.getCompaniesResponse.text();
+    if (this.getCompaniesResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
+        this.getCompaniesResponseBody = JSON.parse(await this.getCompaniesResponse.text());
+        // logger.log('info', `Response GET ${Links.API_REALM}` + JSON.stringify(this.getCompaniesResponseBody, undefined, 4));
+        // this.attach(`Response GET ${Links.API_REALM}` + JSON.stringify(this.getCompaniesResponseBody, undefined, 4))
+    }
+    else {
+        const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
+        logger.log('info', `Response ${link} has status code ${this.getCompaniesResponse.status()} ${this.getCompaniesResponse.statusText()} and response body ${responseBodyText}`);
+        this.attach(`Response ${link} has status code ${this.getCompaniesResponse.status()} ${this.getCompaniesResponse.statusText()} and response body ${actualResponseText}`)
+    }
+})
+
+Then('{} picks random company from response of get company keys API', async function (actor: string) {
+    this.randomCompany = await this.getCompaniesResponseBody[Math.floor(Math.random() * this.getCompaniesResponseBody.length)];
     logger.log('info', `Random company: ${JSON.stringify(this.randomCompany, undefined, 4)}`);
     this.attach(`Random company: ${JSON.stringify(this.randomCompany, undefined, 4)}`);
     this.companyKey = this.randomCompany.companyKey;
@@ -44,10 +67,25 @@ Then('{} picks random company in above response', async function (actor: string)
     this.attach(`COMPANY TYPE: ${this.companyType}`);
 })
 
-Then('{} picks company with type {} in above response', async function (actor, companyType: string) {
-    this.selectedCompany = await this.getRealmResponseBody.find((co: any) => co.companyType == companyType)
+Then('{} picks random company which has onboarded in above response', async function (actor: string) {
+    this.randomCompany = await this.getCompaniesResponseBody[Math.floor(Math.random() * this.getCompaniesResponseBody.length)];
+    logger.log('info', `Random company: ${JSON.stringify(this.randomCompany, undefined, 4)}`);
+    this.attach(`Random company: ${JSON.stringify(this.randomCompany, undefined, 4)}`);
+    this.companyKey = this.randomCompany.companyKey;
+    this.companyType = this.randomCompany.companyType;
+    logger.log('info', `companyKey: ${this.companyKey}`);
+    this.attach(`COMPANY KEY: ${this.companyKey}`);
+    logger.log('info', `companyType: ${this.companyType}`);
+    this.attach(`COMPANY TYPE: ${this.companyType}`);
+})
+
+Then('{} picks company which has onboarded before with type {} in above response', async function (actor, companyType: string) {
+    // Onboarded company should have forecast date information
+    this.selectedCompany = await this.getCompaniesResponseBody.find((co: any) => co.companyType == companyType && co.lastForecastDate != null)
     this.randomCompany = this.selectedCompany
+    logger.log('info', `Company which has type ${companyType}: ${JSON.stringify(await this.getCompaniesResponseBody, undefined, 4)}`);
     logger.log('info', `Company which has type ${companyType}: ${JSON.stringify(this.selectedCompany, undefined, 4)}`);
+    this.attach(`Company which has type ${companyType}: ${JSON.stringify(await this.getCompaniesResponseBody, undefined, 4)}`);
     this.attach(`Company which has type ${companyType}: ${JSON.stringify(this.selectedCompany, undefined, 4)}`);
     this.companyKey = this.selectedCompany.companyKey;
     this.companyType = this.selectedCompany.companyType;
@@ -152,8 +190,8 @@ Then('{} checks that the lastForecastDate field was updated in company detail in
     }, {
         // Custom error message, optional.
         message: `make sure Last Forecast Date is after the moment user clicks Run Forecast`, // custom error message
-        // Probe, wait 1s, probe, wait 2s, probe, wait 10s, probe, wait 10s, probe, .... Defaults to [100, 250, 500, 1000].
-        intervals: [5_000, 10_000, 20_000],
+        // Probe, wait 1s, probe, wait 5s, probe, wait 10s, probe, wait 10s, probe, .... Defaults to [100, 250, 500, 1000].
+        intervals: [1_000, 5_000, 10_000],
         timeout: 15 * 60 * 1000,
     }).toBeGreaterThan(beforeForecastDate);
 })
