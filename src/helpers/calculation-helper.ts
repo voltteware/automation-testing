@@ -11,12 +11,12 @@ function parseNumber(number: number) {
     return !isNaN(number) ? Number(number) : 0;
 };
 
-// Rounding 2 demicals
+// Rounding 2 decimals 
 function roundFloatNumber(number: number) {
     return Math.round((parseNumber(number) + Number.EPSILON) * 100) / 100;
 };
 
-// Refer the mindmap here: https://whimsical.com/restockamz-beta-restock-from-supplier-2y8q1eQFoikbzF7VcaqvYo
+// Refer the mind map here: https://whimsical.com/restockamz-beta-restock-from-supplier-2y8q1eQFoikbzF7VcaqvYo
 function sumFormulaRestockAMZ(onhand: number, inbound: number, fcTransfer: number, sum: number, attach: ICreateAttachment) {
     let expectedSum = onhand + inbound + fcTransfer;
     expect(sum, `In response body, the expected Sum should be: ${expectedSum}`).toBe(expectedSum);
@@ -174,7 +174,7 @@ function requiredInventoryFormulaRestockAMZ(input: Input, attach: ICreateAttachm
 
     // Ideal FBA Inventory (units) = Ideal FBA Inventory (days) * Average Daily Sales Rate
     let expectedTargetQtyOnHand = roundFloatNumber((targetMaxDays || 0) * (demand || 0));
-    expect(targetQtyOnHand, `In response body, the expected Tagret Qty on Hand should be: ${expectedTargetQtyOnHand}`).toBe(expectedTargetQtyOnHand);
+    expect(targetQtyOnHand, `In response body, the expected Target Qty on Hand should be: ${expectedTargetQtyOnHand}`).toBe(expectedTargetQtyOnHand);
     logger.log('info', `Target Qty on Hand: Actual: ${targetQtyOnHand} and Expected: ${expectedTargetQtyOnHand}`);
     attach(`Target Qty on Hand: Actual: ${targetQtyOnHand} and Expected: ${expectedTargetQtyOnHand}`);
 
