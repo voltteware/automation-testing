@@ -13,7 +13,7 @@ Feature: API_DashBoard DELETE/deleteGridView
         And User sets GET api endpoint to get grid view suppliers keys
         When User sends a GET request to get grid view suppliers of testautoforecast@gmail.com by company key and company type
         
-    @TC_DGV001
+    @TC_DGV001 @bug1872
     Scenario Outline: TC_DGV001 - Verify user <email> could call this API to delete grid view of a company belongs to her
         Given Check grid view supplier exist in the company, if it does not exist will create grid view supplier
         And User picks random grid view of suppliers in above response

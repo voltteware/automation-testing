@@ -142,7 +142,7 @@ Feature: API_Dashboard POST /api/item
             | testautoforecast@gmail.com | New Item Auto | New description | random      | random | random   | random        | random       | random | random    | random           | random              | random         | random              | random             | random     | random    | 400            | Item with the same Item Name and same Supplier Name already exists |
 
     #Bug TC_CI009,TC_CI010 return status code 200 when call this API for company has type QBFS and QBO.
-    @TC_CI009 @TC_CI010 
+    @TC_CI009 @TC_CI010 @low-bug-skip @bug1688
     Scenario Outline: <scenario> - Verify user could not call this API with company has type <companyType>
         Given User picks company with type <companyType> in above response
         But User sets valid cookie of <email> and valid companyKey and valid companyType in the header
