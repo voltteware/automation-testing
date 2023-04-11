@@ -134,7 +134,7 @@ Given('User picks a random item in above list items', async function () {
     expect(this.getItemsResponseBody.length, 'There is at least 1 item to pick random').toBeGreaterThan(1);
     this.responseBodyOfAItemObject = await this.getItemsResponseBody[Math.floor(Math.random() * this.getItemsResponseBody.length)];
     logger.log('info', `Random Item: ${JSON.stringify(this.responseBodyOfAItemObject, undefined, 4)}`);
-    this.attach(`Random Item: ${JSON.stringify(this.responseBodyOfAItemObject, undefined, 4)}`);
+    this.attach(`Random Item: ${JSON.stringify(this.responseBodyOfAItemObject, undefined, 4)}`);    
 });
 
 Given('User picks max 10 random items in above list items', async function () {
@@ -421,14 +421,83 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
             break;
         case 'purchaseAs':
             if (value == 'random') {
-                const excludedItemKey = this.itemKey
+                this.payloadCreateItem = {
+                    "key": "",
+                    "name": `${faker.random.alphaNumeric(6).toUpperCase()}-${faker.datatype.number(500)}-Auto`,
+                    "asin": `${faker.random.alphaNumeric(10).toUpperCase()}`,
+                    "fnsku": `${faker.random.alphaNumeric(10).toUpperCase()}`,
+                    "description": "",
+                    "vendorKey": null,
+                    "vendorName": null,
+                    "vendorPrice": 0,
+                    "moq": 1,
+                    "leadTime": 1,
+                    "orderInterval": 0,
+                    "serviceLevel": 85,
+                    "onHand": 0,
+                    "onHandMin": "",
+                    "onHandThirdParty": 0,
+                    "onHandThirdPartyMin": "",
+                    "growthTrend": 0,
+                    "isHidden": false,
+                    "useHistoryOverride": false,
+                    "lotMultipleQty": 1,
+                    "lotMultipleItemKey": null,
+                    "lotMultipleItemName": null,
+                    "forecastDirty": false,
+                    "forecastTags": [],
+                    "tags": [],
+                    "useBackfill": false,
+                    "useLostSalesOverride": false,
+                    "createdAt": "2023-04-11T08:09:03.909Z",
+                    "isFbm": false,
+                    "inventorySourcePreference": "",
+                    "skuNotes": "",
+                    "prepNotes": "",
+                    "supplierRebate": "",
+                    "inboundShippingCost": 0,
+                    "reshippingCost": 0,
+                    "repackagingMaterialCost": 0,
+                    "repackingLaborCost": 0,
+                    "inboundShipped": 0,
+                    "inboundReceiving": 0,
+                    "inbound": 0,
+                    "inboundFcTransfer": 0,
+                    "referralFee": 0,
+                    "fbaFee": 0,
+                    "rank": 0,
+                    "variableClosingFee": 0,
+                    "lowestFba": 0,
+                    "newBuyBox": 0,
+                    "listPrice": 0,
+                    "average7DayPrice": 0,
+                    "itemHistoryLength": 0,
+                    "history": null,
+                    "links": null,
+                    "packageWeight": "",
+                    "onHandFbm": "",
+                    "prepGuide": "",
+                    "dimensionalWeight": "",
+                    "hazmat": "",
+                    "oversized": "",
+                    "category": "",
+                    "upc": "",
+                    "ean": ""
+                }
+                
+                // Create new item Item has already set as Purchase As of other items            
+                this.attach(`Payload: ${JSON.stringify(this.payloadCreateItem, undefined, 4)}`)
 
-                // Filter out the excluded item have excludedItemKey and purchase as is null from the list items
-                const filteredArray = this.getItemsResponseBody.filter((item: any) => ((item.key !== excludedItemKey) && (item.lotMultipleItemKey === null)));
-                const randomItem = filteredArray[Math.floor(Math.random() * filteredArray.length)];
+                const createItemResponse = await itemRequest.createItem(this.request, Links.API_ITEMS, this.payloadCreateItem, this.headers);
+                const responseBodyOfAItemObject = JSON.parse(await createItemResponse.text());
 
-                this.lotMultipleItemName = randomItem.name
-                this.lotMultipleItemKey = randomItem.key
+                // const excludedItemKey = this.itemKey
+                // // Filter out the excluded item have excludedItemKey and purchase as is null from the list items
+                // const filteredArray = this.getItemsResponseBody.filter((item: any) => ((item.key !== excludedItemKey) && (item.lotMultipleItemKey === null)));
+                // const randomItem = filteredArray[Math.floor(Math.random() * filteredArray.length)];
+
+                this.lotMultipleItemName = responseBodyOfAItemObject.name
+                this.lotMultipleItemKey = responseBodyOfAItemObject.key
             }
 
             logger.log('info', `New ${editColumn}: ${this.lotMultipleItemName}`);

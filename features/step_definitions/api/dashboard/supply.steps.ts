@@ -89,6 +89,7 @@ Then('{} checks {} supply exist in the system, if it does not exist will create 
     }
 
     if (numberofSupplys < 1) {
+        console.log('ughjfga' + "create new suply")
         randomItem = this.getItemsResponseBody[Math.floor(Math.random() * this.getItemsResponseBody.length)];
         // Can create supply with items unassigned supplier
         // randomSupplier = this.getSupplierResponseBody[Math.floor(Math.random() * this.getSupplierResponseBody.length)]
