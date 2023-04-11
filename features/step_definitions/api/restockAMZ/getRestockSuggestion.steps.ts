@@ -118,7 +118,7 @@ Then('{} saves needed values for calculations', async function (actor: string) {
 });
 
 Then(`{} checks value Suggestions on grid`, async function (actor: string) {
-    suggestionsFormulaRestockAMZ({ suggReorder: this.suggReorder, suggShip: this.suggShip, recommendedWarehouseQty: this.recommendedWarehouseQty, recommendedSupplierQty: this.recommendedSupplierQty, restockNeeded: this.restockNeeded, targetQtyOnHand: this.targetQtyOnHand, onHand: this.onHand }, this.attach);
+    suggestionsFormulaRestockAMZ({ suggReorder: this.suggReorder, suggShip: this.suggShip, recommendedWarehouseQty: this.recommendedWarehouseQty, recommendedSupplierQty: this.recommendedSupplierQty, restockNeeded: this.restockNeeded, targetQtyOnHand: this.targetQtyOnHand, sum: this.sum }, this.attach);
 });
 
 Then(`{} checks value Estimated Margin on grid`, async function (actor: string) {
@@ -223,6 +223,7 @@ Then('{} saves values in Restock model for calculations', async function (actor:
     this.remaining = this.restockCalculationResponseBody.remaining;
     this.unitsAvailable = this.restockCalculationResponseBody.coverageAvailable;
     this.unitsOnPO = this.restockCalculationResponseBody.coverageOrderQty;
+    this.sum = this.restockCalculationResponseBody.sum;
 
     // Recommendations
     this.forecastRecommendedQty = this.restockCalculationResponseBody.forecastRecommendedQty;
@@ -243,7 +244,7 @@ Then(`{} checks value Required Inventory in Restock Model`, async function (acto
 });
 
 Then(`{} checks value Average Daily Sales Rate in Restock Model`, async function (actor: string) {
-    averageDailySalesRateFormulaRestockAMZ({ sv2d: this.sv2d, sv7d: this.sv7d, sv14d: this.sv14d, sv30d: this.sv30d, sv60d: this.sv60d, sv90d: this.sv90d, sv180d: this.sv180d, svDemand: this.svDemand, percent2Day: this.percent2Day, percent7Day: this.percent7Day, percent14Day: this.percent14Day, percent30Day: this.percent30Day, percent60Day: this.percent60Day, percent90Day: this.percent90Day, percent180Day: this.percent180Day, percentForecasted: this.percentForecasted, demand: this.demand }, this.attach);
+    averageDailySalesRateFormulaRestockAMZ({ adjSv2d: this.adjSv2d, adjSv7d: this.adjSv7d, adjSv14d: this.adjSv14d, adjSv30d: this.adjSv30d, adjSv60d: this.adjSv60d, adjSv90d: this.adjSv90d, adjSv180d: this.adjSv180d, svDemand: this.svDemand, percent2Day: this.percent2Day, percent7Day: this.percent7Day, percent14Day: this.percent14Day, percent30Day: this.percent30Day, percent60Day: this.percent60Day, percent90Day: this.percent90Day, percent180Day: this.percent180Day, percentForecasted: this.percentForecasted, demand: this.demand }, this.attach);
 });
 
 Then(`{} checks value Daily Sales Rate in Restock Model`, async function (actor: string) {

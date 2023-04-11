@@ -1,4 +1,4 @@
-@test-api-extra @regression-api @restock-calculation
+@test-api @regression-api @restock-calculation
 Feature: API_Regression User can compare and check the formulas
     Background: Send POST /login request to login before each test
         Given user sends a POST login request to get valid cookie with role

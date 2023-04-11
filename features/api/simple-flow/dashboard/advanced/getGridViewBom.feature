@@ -39,7 +39,7 @@ Feature: API_Dashboard GET /api/grid-view/bom
             | admin | testautoforecast@gmail.com | Test1111# | 200            |
 
     # Bug TC_GVB003_1 and TC_GVB003_2, return status code 200 when cookie invalid.
-    @TC_GVB003 @bug-permission
+    @TC_GVB003 @bug-permission @low-bug-skip
     Scenario Outline: <scenario> - Verify error when user sends this API with <cookie> cookie, <companyKeyHeader> companyKey, <companyTypeHeader> companyType value in header
         Given User picks company with type ASC in above response
         And User sets GET api endpoint to get grid view boms

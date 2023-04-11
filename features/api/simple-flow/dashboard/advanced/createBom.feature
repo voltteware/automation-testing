@@ -29,7 +29,7 @@ Feature: API_Dashboard POST /api/bom
             | TC_CB002 | ASC         | testautoforecast@gmail.com | 50       | random     | random    | random    | random   | random | 200            |
 
     #TC_CB003_1, TC_CB003_2 fail due to bug api
-    @TC_CB003
+    @TC_CB003 @low-bug-skip
     Scenario Outline: <TC_ID> - Verify error when user sends this API with <cookie> cookie, <companyKeyHeader> companyKey, <companyTypeHeader> companyType value in header
         Given User picks company with type <companyType> in above response
         But User sets valid cookie of <email> and valid companyKey and valid companyType in the header

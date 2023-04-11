@@ -1,4 +1,4 @@
-@test-api-extra @api-user @api-getUserInformation
+@test-api @api-user @api-getUserInformation
 Feature: API_User Get/User
     Background:
         Given Check testprofile@gmail.com exist in the system, if it does not exist will create user with same email
@@ -20,7 +20,7 @@ Feature: API_User Get/User
             | testprofile@gmail.com | Test1111# | 200            | OK                 |
 
     #Bug API in case U002
-    @TC_U002 @bug-permission @bug-1779
+    @TC_U002 @bug-permission @bug-1779 @low-bug-skip
     Scenario Outline: TC_U002 - Verify error when user sends this API with <cookie> cookie
         But User sets Cookie in HEADER as <cookie>
         When User sends a GET method to get user information of <email>

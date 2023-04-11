@@ -1,4 +1,4 @@
-@test-api-extra @api-user @api-change-password
+@test-api @api-user @api-change-password
 Feature: API_User PUT/user/password
     Background:
         Given Check testchangepass@gmail.com exist in the system, if it does not exist will create user with same email
@@ -50,7 +50,7 @@ Feature: API_User PUT/user/password
             | testchangepass@gmail.com | Test1111# |             | 200            | OK                 | Password does not meet strength requirements. |
 
     #Bug API in case TC_UCP004 and TC_UCP005
-    @TC_UCP004 @TC_UCP005 @bug-permission @bug-1779
+    @TC_UCP004 @TC_UCP005 @bug-permission @bug-1779 @low-bug-skip
     Scenario Outline: <testId> - Verify error when user sends this API with <cookie> cookie
         But User sets Cookie in HEADER as <cookie>
         And User sets request body with payload as password: <password> and newPassword <newPassword>

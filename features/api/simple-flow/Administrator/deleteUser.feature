@@ -23,7 +23,7 @@ Feature: API_Admin DELETE/User
             | admin | testauto@gmail.com | 200            | OK                 |
 
     #Bug API in case DU002
-    @TC_DU002 @bug-permission
+    @TC_DU002 @bug-permission @low-bug-skip
     Scenario Outline: TC_DU002 - Verify error when user sends this API with <cookie> cookie
         Given User filters user to get user which has the email as <emailWantToDelete>
         And User sets DELETE api endpoint to delete user keys
@@ -38,7 +38,7 @@ Feature: API_Admin DELETE/User
             | may27user@gmail.com | invalid | 401            | Unauthorized       |
 
     #Bug API in case DU003
-    @TC_DU003 @bug-permission
+    @TC_DU003 @bug-permission @low-bug-skip
     Scenario Outline: TC_DU003 - Verify <user> can't call this API to delete user
         Given User filters user to get user which has the email as <emailWantToDelete>
         And User has valid connect.sid of "<userA>" after send a POST request with payload as email: "<userA>" and password: "<password>"

@@ -25,7 +25,7 @@ Feature: API_Dashboard GET /api/vendor
             | admin | testautoforecast@gmail.com | Test1111# | random     | 200            | 10       |
 
     #Bug TC_GV002_1 and TC_GV002_2, return status code 200 when cookie invalid.
-    @TC_GV002 @bug-permission
+    @TC_GV002 @bug-permission @low-bug-skip
     Scenario Outline: <scenario> - Verify error when user sends this API with <cookie> cookie, <companyKeyHeader> companyKey, <companyTypeHeader> companyType value in header
         Given User sets GET api endpoint to get information of a company belongs to <email> using company key <companyKey>
         But User sets <cookie> cookie of <email> and <companyKeyHeader> companyKey and <companyTypeHeader> companyType in the header

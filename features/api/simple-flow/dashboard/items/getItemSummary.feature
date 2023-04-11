@@ -28,7 +28,7 @@ Feature: API_Dashboard GET /api/item?summary=true&companyKey=<companyKey>&compan
             | admin | testautoforecast@gmail.com | Test1111# | random     | 200            |
 
     #Bug TC_GIS002 and TC_GIS002, return status code 200 when cookie invalid.
-    @TC_GIS002 @bug-permission
+    @TC_GIS002 @bug-permission @low-bug-skip
     Scenario Outline: <scenario> - Verify error when user sends this API with <cookie> cookie, <companyKeyHeader> companyKey, <companyTypeHeader> companyType value in header
         But User sets <cookie> cookie of <email> and <companyKeyHeader> companyKey and <companyTypeHeader> companyType in the header
         And User sets GET api endpoint to get item summary

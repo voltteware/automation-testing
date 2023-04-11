@@ -1,5 +1,5 @@
-@test-api-extra @api-edit-item-history @api-dashboard
-Feature: API_Purchasing Custom
+@test-api @api-edit-item-history @api-dashboard @api-dashboard-advanced
+Feature: API_Dashboard Advanced Edit Item History
     Background: Send GET /realm request to get all company keys of current logged in user before each test
         Given user sends a POST login request to get valid cookie with role
             | role  | username                   | password  |
@@ -9,7 +9,7 @@ Feature: API_Purchasing Custom
         When User sends a GET request to get company keys
 
     @TC_EIH001-4 @smoke-test-api
-    Scenario Outline: <TC_ID> - Verify items showed on Edit Item History of company <companyType>
+    Scenario Outline: <TC_ID> - Verify items showed on Edit Item History of company <companyType> should be active items
         Given User picks company with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And user sets GET api endpoint to get company information by company key

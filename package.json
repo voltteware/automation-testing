@@ -6,7 +6,7 @@
   "scripts": {
     "pretest-api": "npm i",
     "pretest-ui": "npm i",
-    "test-api": "npx cucumber-js --tags @test-api; node cucumber-report.js",
+    "test-api": "npx cucumber-js --tags \"@test-api and not @low-bug-skip\"; node cucumber-report.js",
     "test-api-extra": "npx cucumber-js --tags @test-api; node cucumber-report.js",
     "regression-api": "npx cucumber-js --tags @regression-api; node cucumber-report.js",
     "smoke-test-api": "npx cucumber-js --tags @smoke-test-api; node cucumber-report.js",
