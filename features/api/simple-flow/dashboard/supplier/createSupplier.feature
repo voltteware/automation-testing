@@ -39,7 +39,7 @@ Feature: API_Dashboard POST /api/vendor
             | only input required field | testautoforecast@gmail.com | New Supplier Auto | random     | 200            |
 
     #TC_CV003_1, TC_CV003_2 fail due to bug api
-    @TC_CV003 @bug-permission @low-bug-skip
+    @TC_CV003 @bug-permission @low-bug-skip @bug1587
     Scenario Outline: <scenario> - Verify error when user sends this API with <cookie> cookie, <companyKeyHeader> companyKey, <companyTypeHeader> companyType value in header
         Given User picks random company in above response
         And User sets POST api endpoint to create suppliers
