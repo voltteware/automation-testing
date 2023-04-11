@@ -1,4 +1,4 @@
-@test-api-extra @api-purchasing @api-purchasing-my-suggested
+@test-api @api-purchasing @api-purchasing-my-suggested
 Feature: API_Purchasing My Suggested
     Background: Send GET /realm request to get all company keys of current logged in user before each test
         Given user sends a POST login request to get valid cookie with role

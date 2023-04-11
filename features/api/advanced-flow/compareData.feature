@@ -1,4 +1,4 @@
-@test-api-extra @regression-api @compare-data @api-amazon 
+@test-api @regression-api @compare-data @api-amazon 
 Feature: API_Testing Compare data on ForecastRx and Amazon in Demand section
     Background: Send POST /login request to login before each test
         Given user sends a POST login request to get valid cookie with role

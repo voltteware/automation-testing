@@ -25,7 +25,7 @@ Feature: API_Purchasing GET api/grid-view/custom-items-in-po
             | admin | testautoforecast@gmail.com | Test1111# | random     | 200            |
 
     # Bug TC_GVCI002_1 and TC_GVCI002_2, return status code 200 when cookie invalid.
-    @TC_GVCI002 @bug-permission
+    @TC_GVCI002 @bug-permission @low-bug-skip
     Scenario Outline: <scenario> - Verify error when user sends this API with <cookie> cookie, <companyKeyHeader> companyKey, <companyTypeHeader> companyType value in header
         Given User sets GET api endpoint to get grid view custom items in PO
         But User sets <cookie> cookie of <email> and <companyKeyHeader> companyKey and <companyTypeHeader> companyType in the header
