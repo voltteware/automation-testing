@@ -51,13 +51,6 @@ Then('{} checks number Items without Vendors Assigned in response of item summar
 })
 
 Then('{} checks API contract essential types in item object are correct', async function (actor: string) {
-    // this.softAssert(this.getUserInformationResponseBody.err === null, 'err value should be null');
-    // this.softAssert(this.getUserInformationResponseBody.model.length === 1, 'model should be array has at least 1 item');
-    // this.softAssert(this.responseBodyOfAUserObject.hasPassword === true, 'hasPassword should be boolean and be true');
-
-    // // Avoid running further if there were soft assertion failures.
-    // expect(this.countErrors).toBe(0)
-
     this.softAssert(typeof (this.responseBodyOfAItemObject.companyType) === "string", 'Type of companyType value should be string');
     this.softAssert(typeof (this.responseBodyOfAItemObject.companyKey) === "string", 'Type of companyKey value should be string');
     this.softAssert(typeof (this.responseBodyOfAItemObject.key) === "string", 'Type of key value should be string');
@@ -311,6 +304,8 @@ Then('{} checks API contract essential types in item object are correct', async 
     this.softAssert(Date.parse(this.responseBodyOfAItemObject.updated_at) != null, 'updated_at in response should be date');
     this.softAssert(Date.parse(this.responseBodyOfAItemObject.created_at) != null, 'created_at in response should be date');
     this.softAssert(Date.parse(this.responseBodyOfAItemObject.warehouseQtyUpdatedDate) != null, 'warehouseQtyUpdatedDate in response should be date');
+    // // Avoid running further if there were soft assertion failures.
+    expect(this.countErrors).toBe(0)
 })
 
 Then(`{} checks API contract get count items are correct`, async function (actor) {

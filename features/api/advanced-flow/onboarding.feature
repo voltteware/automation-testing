@@ -1,4 +1,4 @@
-@test-api-extra @regression-api @onboarding-flow
+@test-api @regression-api @onboarding-flow
 Feature: API_Regression User can create company and complete onboarding flow
     Background: Send POST /login request to login before each test
         Given user sends a POST login request to get valid cookie with role

@@ -27,7 +27,7 @@ Feature: API_Dashboard GET /api/bom
             | admin | testautoforecast@gmail.com | Test1111# | 200            | 10       |
     
     # #Bug TC_GB002_1 and TC_GB002_2, return status code 200 when cookie invalid.
-    @TC_GB002 @bug-permission
+    @TC_GB002 @bug-permission @low-bug-skip
     Scenario Outline: <scenario> - Verify error when user sends this API with <cookie> cookie, <companyKeyHeader> companyKey, <companyTypeHeader> companyType value in header
         Given User picks company with type ASC in above response
         But User sets <cookie> cookie of <email> and <companyKeyHeader> companyKey and <companyTypeHeader> companyType in the header

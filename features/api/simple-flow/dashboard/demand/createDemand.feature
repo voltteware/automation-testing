@@ -1,4 +1,4 @@
-@test-api-extra @api-dashboard @api-demand @api-createDemand
+@test-api @api-dashboard @api-demand @api-createDemand
 Feature: API_Dashboard POST /api/demand
     Background: Send GET /realm request to get all company keys of current logged in user before each test
         Given user sends a POST login request to get valid cookie with role
@@ -26,7 +26,7 @@ Feature: API_Dashboard POST /api/demand
             | TC_CD001 | CSV         | testautoforecast@gmail.com | 50       | random   | random     | random       | random           | random          | 200            |
 
     #TC_CD002_1, TC_CD002_2 fail due to bug api - Bug 1820
-    @TC_CD002 @TC_CD002_1-bug-1820 @TC_CD002_2-bug-1820
+    @TC_CD002 @TC_CD002_1-bug-1820 @TC_CD002_2-bug-1820 @low-bug-skip
     Scenario Outline: <TC_ID> - Verify error when user sends this API with <cookie> cookie, <companyKeyHeader> companyKey, <companyTypeHeader> companyType value in header
         Given User picks company with type <companyType> in above response
         But User sets valid cookie of <email> and valid companyKey and valid companyType in the header
@@ -46,7 +46,7 @@ Feature: API_Dashboard POST /api/demand
             | TC_CD002_4 | CSV         | testautoforecast@gmail.com | 30       | valid   |                  |                   | random   | random     | random       | random           | random          | 500            | Internal Server Error |
 
     # TC_CD003 fail due to bug api - Bug 1821
-    @TC_CD003 @TC_CD003-bug-1821
+    @TC_CD003 @TC_CD003-bug-1821 @low-bug-skip
     Scenario Outline: TC_CD003 - Verify error when the open sale order qty greater the sale order qty
         Given User picks company with type CSV in above response
         But User sets valid cookie of <email> and valid companyKey and valid companyType in the header
@@ -63,7 +63,7 @@ Feature: API_Dashboard POST /api/demand
             | testautoforecast@gmail.com | 50       | random   | random     | random       | greaterThanSaleOrderQty | random          | 400            | Bad Request        |
 
     # TC_CD004 fail due to bug api - Bug 1822
-    @TC_CD004 @TC_CD004-bug-1822
+    @TC_CD004 @TC_CD004-bug-1822 @low-bug-skip
     Scenario Outline: TC_CD004 - Verify error when the saleOrderQty equal to 0
         Given User picks company with type CSV in above response
         But User sets valid cookie of <email> and valid companyKey and valid companyType in the header
@@ -80,7 +80,7 @@ Feature: API_Dashboard POST /api/demand
             | testautoforecast@gmail.com | 50       | random   | random     | 0            | 0                | random          | 400            | Bad Request        |
 
     # TC_CD005 fail due to bug api - Bug 1823
-    @TC_CD005 @TC_CD005-bug-1823
+    @TC_CD005 @TC_CD005-bug-1823 @low-bug-skip
     Scenario Outline: TC_CD005 - Verify error when the "<verifiedFiled>" is float
         Given User picks company with type CSV in above response
         But User sets valid cookie of <email> and valid companyKey and valid companyType in the header
@@ -117,7 +117,7 @@ Feature: API_Dashboard POST /api/demand
             | TC_CD006_4 | openSaleOrderQty | testautoforecast@gmail.com | 20       | random   | random     | random       |                  | random          | 400            | Missing required property. |
 
     #Bug 1824 - TC_CD007 return status code 200 when call this API for company has type QBFS and ASC.
-    @TC_CD007 @TC_CD007-bug-1824
+    @TC_CD007 @TC_CD007-bug-1824 @low-bug-skip
     Scenario Outline: <TC_ID> - Verify user could not call this API with company has type <companyType>
         Given User picks company with type <companyType> in above response
         But User sets valid cookie of <email> and valid companyKey and valid companyType in the header

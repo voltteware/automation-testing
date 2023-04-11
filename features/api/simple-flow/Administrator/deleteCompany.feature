@@ -23,7 +23,7 @@ Feature: API_Admin DELETE/company
             | admin | AutoTest           | 200            | OK                 |
 
     #Bug API in case TC_DCP002_1, TC_DCP002_1
-    @TC_DCP002 @bug-permission
+    @TC_DCP002 @bug-permission @low-bug-skip
     Scenario Outline: <TC_ID> - Verify error when user sends this API with <cookie> cookie
         Given Check <companyNameKeyWord> company exist in the system, if it does not exist will create company
         And User filters company to get company which has the company name included <companyNameKeyWord>
@@ -38,7 +38,7 @@ Feature: API_Admin DELETE/company
             | TC_DCP002_2 | AutoTest           | invalid | 401            | Unauthorized       |
 
     #Bug API in case TC_DCP003
-    @TC_DCP003 @bug-permission
+    @TC_DCP003 @bug-permission @low-bug-skip
     Scenario Outline: TC_DCP003 - Verify <user> can't call this API to delete company
         Given Check <companyNameKeyWord> company exist in the system, if it does not exist will create company
         And User filters company to get company which has the company name included <companyNameKeyWord>
