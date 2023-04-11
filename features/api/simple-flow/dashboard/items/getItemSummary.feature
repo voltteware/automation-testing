@@ -12,7 +12,7 @@ Feature: API_Dashboard GET /api/item?summary=true&companyKey=<companyKey>&compan
     @TC_GIS001
     Scenario Outline: TC_GIS001 - Verify user <email> could call this API to get item summary by using company key and company type
         Given User sets GET api endpoint to get information of a company belongs to <email> using company key <companyKey>
-        And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
+        And User sets valid cookie of <email> and valid companyKey and valid companyType in the header        
         And User sets GET api endpoint to get item summary
         When User sends a GET request to get item summary
         Then The expected status code should be <expectedStatus>

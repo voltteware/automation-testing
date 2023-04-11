@@ -74,7 +74,8 @@ Feature: API_Dashboard DELETE /api/bom
             | numberOfBoms | bomParentNameKeyword | userA               | userB                      | password  | expectedStatus | expectedStatusText |
             | 1            | Auto                 | may27user@gmail.com | testautoforecast@gmail.com | Test1111# | 400            | Company not found. |
 
-    @TC_DB005 @TC_DB006
+    # TC_DB005, TC_DB006: Fail due to Bug_ID 1870 - Get status 400 Unable to delete some or all the requested items. 
+    @TC_DB005 @TC_DB006 @bug1870 
         Scenario Outline: <TC_ID> - Verify <user> could call this API to delete bom and his child of a company has type <companyType> belongs to her
         Given User picks company with type <companyType> in above response
         But User sets valid cookie of <email> and valid companyKey and valid companyType in the header

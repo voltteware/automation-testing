@@ -79,11 +79,12 @@ Then('{} sets request body with payload as companyName: {string} and companyKey:
 Then('{} sends a POST method to create company', async function (actor: string) {
     this.response = this.createCompanyResponse = await companyRequest.createCompany(this.request, link, payload, this.headers);
     const responseBodyText = await this.createCompanyResponse.text();
-    this.createCompanyResponseBody = JSON.parse(await this.createCompanyResponse.text());
-    this.companyKey = this.createCompanyResponseBody.companyKey;
-    this.companyType = this.createCompanyResponseBody.companyType;
+    
     if (this.createCompanyResponse.status() == 201 && !responseBodyText.includes('<!doctype html>')) {
         this.responseBodyOfACompanyObject = JSON.parse(responseBodyText)
+        this.createCompanyResponseBody = JSON.parse(await this.createCompanyResponse.text());
+        this.companyKey = this.createCompanyResponseBody.companyKey;
+        this.companyType = this.createCompanyResponseBody.companyType;
         logger.log('info', `Response POST ${link}` + JSON.stringify(this.responseBodyOfACompanyObject, undefined, 4));
         this.attach(`Response POST ${link}` + JSON.stringify(this.responseBodyOfACompanyObject, undefined, 4))
     }
