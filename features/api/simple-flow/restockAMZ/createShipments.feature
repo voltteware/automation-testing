@@ -1,4 +1,4 @@
-@test-api-extra @regression-api @create-shipments
+@test-api @regression-api @create-shipments
 Feature: API_Regression User can create shipments from Supplier
     Background: Send POST /login request to login before each test
         Given user sends a POST login request to get valid cookie with role

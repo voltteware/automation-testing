@@ -56,7 +56,7 @@ Then('{} sends a GET request to get companies', async function (actor: string) {
 })
 
 Then('{} picks random company from response of get company keys API', async function (actor: string) {
-    this.randomCompany = await this.getCompaniesResponseBody[Math.floor(Math.random() * this.getCompaniesResponseBody.length)];
+    this.randomCompany = await this.getRealmResponseBody[Math.floor(Math.random() * this.getRealmResponseBody.length)];
     logger.log('info', `Random company: ${JSON.stringify(this.randomCompany, undefined, 4)}`);
     this.attach(`Random company: ${JSON.stringify(this.randomCompany, undefined, 4)}`);
     this.companyKey = this.randomCompany.companyKey;
@@ -83,10 +83,10 @@ Then('{} picks company which has onboarded before with type {} in above response
     // Onboarded company should have forecast date information
     this.selectedCompany = await this.getCompaniesResponseBody.find((co: any) => co.companyType == companyType && co.lastForecastDate != null)
     this.randomCompany = this.selectedCompany
-    logger.log('info', `Company which has type ${companyType}: ${JSON.stringify(await this.getCompaniesResponseBody, undefined, 4)}`);
+    this.attach(`Company which has type ${companyType}: ${JSON.stringify(this.selectedCompany, undefined, 4)}`);;
     logger.log('info', `Company which has type ${companyType}: ${JSON.stringify(this.selectedCompany, undefined, 4)}`);
-    this.attach(`Company which has type ${companyType}: ${JSON.stringify(await this.getCompaniesResponseBody, undefined, 4)}`);
-    this.attach(`Company which has type ${companyType}: ${JSON.stringify(this.selectedCompany, undefined, 4)}`);
+    // this.attach(`Companies >>>> : ${JSON.stringify(await this.getCompaniesResponseBody, undefined, 4)}`);
+    // logger.log('info', `Companies >>>> : ${JSON.stringify(await this.getCompaniesResponseBody, undefined, 4)}`);
     this.companyKey = this.selectedCompany.companyKey;
     this.companyType = this.selectedCompany.companyType;
     logger.log('info', `companyKey: ${this.companyKey}`);
@@ -96,7 +96,7 @@ Then('{} picks company which has onboarded before with type {} in above response
 })
 
 Then('{} picks a company with type {} and name {} in above response', async function (actor, companyType: string, companyName: string) {
-    this.selectedCompany = await this.getRealmResponseBody.find((co: any) => ((co.companyType == companyType) && (co.companyName == companyName)))
+    this.selectedCompany = await this.getCompaniesResponseBody.find((co: any) => ((co.companyType == companyType) && (co.companyName == companyName)))
     this.randomCompany = this.selectedCompany
     logger.log('info', `Company which has type ${companyType}: ${JSON.stringify(this.selectedCompany, undefined, 4)}`);
     this.attach(`Company which has type ${companyType}: ${JSON.stringify(this.selectedCompany, undefined, 4)}`);
@@ -170,7 +170,7 @@ When(`{} sends a GET request to get company information of {} by company key`, a
     }
 })
 
-Then('{} checks that the lastForecastDate field was updated in company detail information after running forecast', { timeout: 20 * 60 * 1000 }, async function (actor: string) {
+Then('{} checks that the lastForecastDate field was updated and jobProcessing is false in company detail information after running forecast', { timeout: 30 * 60 * 1000 }, async function (actor: string) {
     const linkGetCompanyInfo = `${Links.API_GET_COMPANY}/${this.companyKey}`;
     const options = {
         headers: this.headers
@@ -185,7 +185,7 @@ Then('{} checks that the lastForecastDate field was updated in company detail in
         const lastForecastDateAfterRunningForecast = Date.parse(getCompanyInfoResponseBody.lastForecastDate);
         console.log(`last Forecast Date After Running Forecast is: >>>>>>`, lastForecastDateAfterRunningForecast);
         logger.log('info', `last Forecast Date After Running Forecast is is: >>>>>>` + lastForecastDateAfterRunningForecast);
-        this.attach(`llast Forecast Date After Running Forecast is: >>>>>>` + lastForecastDateAfterRunningForecast);
+        this.attach(`last Forecast Date After Running Forecast is: >>>>>>` + lastForecastDateAfterRunningForecast);
         return lastForecastDateAfterRunningForecast;
     }, {
         // Custom error message, optional.
@@ -194,4 +194,20 @@ Then('{} checks that the lastForecastDate field was updated in company detail in
         intervals: [1_000, 5_000, 10_000],
         timeout: 15 * 60 * 1000,
     }).toBeGreaterThan(beforeForecastDate);
+
+    await expect.poll(async () => {
+        const getCompanyInfoResponse = await companyRequest.getCompanyInfo(this.request, linkGetCompanyInfo, options);
+        const getCompanyInfoResponseBody = JSON.parse(await getCompanyInfoResponse.text());
+        const jobProcessing = getCompanyInfoResponseBody.jobProcessing;
+        console.log(`jobProcessing is: >>>>>>`, jobProcessing);
+        logger.log('info', `jobProcessing is: >>>>>>` + jobProcessing);
+        this.attach(`jobProcessing is: >>>>>>` + jobProcessing);
+        return jobProcessing;
+    }, {
+        // Custom error message, optional.
+        message: `make sure Last Forecast Date is after the moment user clicks Run Forecast`, // custom error message
+        // Probe, wait 1s, probe, wait 5s, probe, wait 10s, probe, wait 10s, probe, .... Defaults to [100, 250, 500, 1000].
+        intervals: [1_000, 2_000, 5_000],
+        timeout: 15 * 60 * 1000,
+    }).toBeFalsy();
 })

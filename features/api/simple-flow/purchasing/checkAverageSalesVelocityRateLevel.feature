@@ -8,7 +8,7 @@ Feature: API Purchasing Setting for Daily Sale Rate
         And In Header of the request, she sets param Cookie as valid connect.sid
         When User sends a GET request to get companies
 
-    @TC_CSVRL001
+    @TC_CSVRL001_1
     Scenario Outline: <TC_ID> - Verify that when setting "Purchasing Daily Sales Rate Rules > Average" in the "Manage Company > Company Details" then applying this setting for all items in the Purchasing > Custom
         Given User picks company which has onboarded before with type <companyType> in above response
         And User sets GET api endpoint to get information of a company belongs to <email> using company key <companyKey>
@@ -28,7 +28,7 @@ Feature: API Purchasing Setting for Daily Sale Rate
             | TC_ID         | companyType | companyKey | email                      | expectedStatus |
             | TC_CSVRL001_1 | ASC         | random     | testautoforecast@gmail.com | 200            |
 
-    @TC_CSVRL001
+    @TC_CSVRL001_2
     Scenario Outline: <TC_ID> - Verify that when setting "Purchasing Daily Sales Rate Rules > Average" in the "Manage Company > Company Details" then applying this setting for all items in the Purchasing > My Suggested
         Given User picks company which has onboarded before with type <companyType> in above response
         And User sets GET api endpoint to get information of a company belongs to <email> using company key <companyKey>
@@ -121,7 +121,7 @@ Feature: API Purchasing Setting for Daily Sale Rate
             | TC_ID         | companyType | email                      | limitRow | expectedStatus |
             | TC_CSVRL003_1 | ASC         | testautoforecast@gmail.com | 10       | 200            |
 
-    @TC_CSVRL003
+    @TC_CSVRL003_2
     Scenario Outline: <TC_ID> - Verify If an item has been edited settings directly in that item (Manage Company > Items) then this item will be applied to this setting in the Purchasing > My Suggested
         Given User picks company which has onboarded before with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header

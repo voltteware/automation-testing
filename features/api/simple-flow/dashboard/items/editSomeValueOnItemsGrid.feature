@@ -1,4 +1,4 @@
-@test-api @api-dashboard @api-imtems @api-edit-some-value-on-grid
+@test-api @api-dashboard @api-imtems @api-edit-some-value-on-grid @api-edit-item-value-on-grid
 Feature: API_Dashboard PUT /api/item
 
     Background: Send GET /realm request to get all company keys of current logged in user before each test

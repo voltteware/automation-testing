@@ -145,8 +145,8 @@ Then(`{} sends a POST request to get list items in PO by vendor by vendor key`, 
     const responseBodyText = await this.getItemsinPOResponse.text();
     if (this.getItemsinPOResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
         this.responseBody = this.getItemsinPOResponseBody = JSON.parse(await this.getItemsinPOResponse.body());
-        logger.log('info', `Response POST ${linkItemsInPO} >>>>>>` + JSON.stringify(this.getItemsinPOResponseBody, undefined, 4));
-        this.attach(`Response POST ${linkItemsInPO} >>>>>>` + JSON.stringify(this.getItemsinPOResponseBody, undefined, 4))
+        // logger.log('info', `Response POST ${linkItemsInPO} >>>>>>` + JSON.stringify(this.getItemsinPOResponseBody, undefined, 4));
+        // this.attach(`Response POST ${linkItemsInPO} >>>>>>` + JSON.stringify(this.getItemsinPOResponseBody, undefined, 4))
     }
     else {
         const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
@@ -350,7 +350,7 @@ Then(`{} selects random items in Purchasing Custom`, async function (actor: stri
 
 Then(`{} selects random items in Purchasing My Suggested`, async function (actor: string) {
     // Use items with name have DefaultPurchasingSaleVelocity to check
-    this.getRandomItemsinPurchasingSuggesyion = this.getItemsinPOResponseBody.model.filter((item: any) => item.itemName.includes('DefaultPurchasingSaleVelocity'))
+    this.getRandomItemsinPurchasingSuggesyion = this.getItemsinPOResponseBody.model.filter((item: any) => item.itemName != null && item.itemName.includes('DefaultPurchasingSaleVelocity'))
     // Pick random 5 item to check purchasing daily sales rate
     const shuffledArr = this.getRandomItemsinPurchasingSuggesyion.sort(() => Math.random() - 0.5);
     this.radomFiveItemsInPurchasingSuggestion = shuffledArr.slice(0, 5)
@@ -499,7 +499,7 @@ Then('User sends GET request to get list items in "Purchasing > My Suggested"', 
 
 Then('User save a random item in above list suggested items', function () {
     // Use items with name have DefaultPurchasingSaleVelocity to check
-    this.getRandomItemsinPurchasingSuggested = this.getItemsinPOResponseBody.model.filter((item: any) => !item.itemName.includes('DefaultPurchasingSaleVelocity'))
+    this.getRandomItemsinPurchasingSuggested = this.getItemsinPOResponseBody.model.filter((item: any) => item.itemName != null && item.itemName.includes('DefaultPurchasingSaleVelocity'))
     // Pick random 1 item to check purchasing daily sales rate    
     this.radomAItemsInPurchasingSuggested = this.getRandomItemsinPurchasingSuggested[Math.floor(Math.random() * this.getRandomItemsinPurchasingSuggested.length)]
     this.responseBodyOfAItemObject = this.radomAItemsInPurchasingSuggested
@@ -511,7 +511,7 @@ Then('User save a random item in above list suggested items', function () {
 });
 
 Then('User save a random item in above list suggested items to assign supplier', function () {
-    this.getRandomItemsinPurchasingSuggested = this.getItemsinPOResponseBody.model.filter((item: any) => item.itemName.includes('DefaultPurchasingSaleVelocity'))
+    this.getRandomItemsinPurchasingSuggested = this.getItemsinPOResponseBody.model.filter((item: any) => item.itemName != null && item.itemName.includes('DefaultPurchasingSaleVelocity'))
     // Pick random 1 item to check purchasing daily sales rate    
     this.radomAItemsInPurchasingSuggested = this.getRandomItemsinPurchasingSuggested[Math.floor(Math.random() * this.getRandomItemsinPurchasingSuggested.length)]
     this.responseBodyOfAItemObject = this.radomAItemsInPurchasingSuggested

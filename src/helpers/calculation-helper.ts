@@ -174,7 +174,7 @@ function requiredInventoryFormulaRestockAMZ(input: Input, attach: ICreateAttachm
 
     // Ideal FBA Inventory (units) = Ideal FBA Inventory (days) * Average Daily Sales Rate
     let expectedTargetQtyOnHand = roundFloatNumber((targetMaxDays || 0) * (demand || 0));
-    expect(targetQtyOnHand, `In response body, the expected Tagret Qty on Hand should be: ${expectedTargetQtyOnHand}`).toBe(expectedTargetQtyOnHand);
+    expect(targetQtyOnHand, `In response body, the expected Target Qty on Hand should be: ${expectedTargetQtyOnHand}`).toBe(expectedTargetQtyOnHand);
     logger.log('info', `Target Qty on Hand: Actual: ${targetQtyOnHand} and Expected: ${expectedTargetQtyOnHand}`);
     attach(`Target Qty on Hand: Actual: ${targetQtyOnHand} and Expected: ${expectedTargetQtyOnHand}`);
 
