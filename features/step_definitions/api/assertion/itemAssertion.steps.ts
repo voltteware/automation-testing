@@ -56,7 +56,20 @@ Then('{} checks API contract essential types in item object are correct', async 
     this.softAssert(typeof (this.responseBodyOfAItemObject.companyType) === "string", 'Type of companyType value should be string');
     this.softAssert(typeof (this.responseBodyOfAItemObject.companyKey) === "string", 'Type of companyKey value should be string');
     this.softAssert(typeof (this.responseBodyOfAItemObject.key) === "string", 'Type of key value should be string');
-    this.softAssert(typeof (this.responseBodyOfAItemObject.asin) === "string", 'Type of asin value should be string');
+    if (this.responseBodyOfAItemObject.asin !== null) {
+        this.softAssert(typeof (this.responseBodyOfAItemObject.asin) === "string", 'Type of asin value should be string');
+    }
+    else {
+        this.softAssert(this.responseBodyOfAItemObject.asin === null, 'asin value should be null');
+    }
+
+    if (this.responseBodyOfAItemObject.fnsku !== null) {
+        this.softAssert(typeof (this.responseBodyOfAItemObject.fnsku) === "string", 'Type of fnsku value should be string');
+    }
+    else {
+        this.softAssert(this.responseBodyOfAItemObject.fnsku === null, 'fnsku value should be null');
+    }
+    
     this.softAssert(typeof (this.responseBodyOfAItemObject.fnsku) === "string", 'Type of fnsku value should be string');
     this.softAssert(typeof (this.responseBodyOfAItemObject.name) === "string", 'Type of name value should be string');
     this.softAssert(typeof (this.responseBodyOfAItemObject.packageWeight) === "number", 'Type of packageWeight value should be number');

@@ -4,13 +4,13 @@ Feature: API_Dashboard POST /api/supply
         Given user sends a POST login request to get valid cookie with role
             | role  | username                   | password  |
             | admin | testautoforecast@gmail.com | Test1111# |
-        And User sets GET api endpoint to get company keys
+        And User sets GET api endpoint to get companies information of current user
         And In Header of the request, she sets param Cookie as valid connect.sid
-        When User sends a GET request to get company keys
+        When User sends a GET request to get companies
 
     @TC_CSL001 @TC_CSL002 @regression-api @csv @asc @smoke-test-api
     Scenario Outline: <scenario> - Verify user <email> could call this API to create supply for company has type <companyType> with input all data valid
-        Given User picks company with type <companyType> in above response
+        Given User picks company which has onboarded before with type <companyType> in above response
         But User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get suppliers with limit row: <limitRow>
         And User sends a GET request to get list suppliers
@@ -31,7 +31,7 @@ Feature: API_Dashboard POST /api/supply
     #TC_CSL003_1, TC_CSL003_2 fail due to bug api
     @TC_CSL003 @low-bug-skip @bug1678
     Scenario Outline: <scenario> - Verify error when user sends this API with <cookie> cookie, <companyKeyHeader> companyKey, <companyTypeHeader> companyType value in header
-        Given User picks company with type <companyType> in above response
+        Given User picks company which has onboarded before with type <companyType> in above response
         But User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get item with limit row: <limitRow>
         And User sends a GET request to get list items
@@ -46,11 +46,11 @@ Feature: API_Dashboard POST /api/supply
             | TC_CSL003_1 | CSV         | testautoforecast@gmail.com | 5        | invalid | invalid          | invalid           | random     | random | random  | random  | random   | random  | random   | random  | random   | random | 401            | Unauthorized          |
             | TC_CSL003_2 | ASC         | testautoforecast@gmail.com | 5        | invalid | valid            | valid             | random     | random | random  | random  | random   | random  | random   | random  | random   | random | 401            | Unauthorized          |
             | TC_CSL003_3 | CSV         | testautoforecast@gmail.com | 5        | valid   | invalid          | invalid           | random     | random | random  | random  | random   | random  | random   | random  | random   | random | 400            | Company not found.    |
-            | TC_CSL003_4 | ASC         | testautoforecast@gmail.com | 5        | valid   |                  |                   | random     | random | random  | random  | random   | random  | random   | random  | random   | random | 500            | Internal Server Error |  
+            | TC_CSL003_4 | ASC         | testautoforecast@gmail.com | 5        | valid   |                  |                   | random     | random | random  | random  | random   | random  | random   | random  | random   | random | 500            | Internal Server Error |
 
     @TC_CSL004
     Scenario Outline: TC_CSL004 - Verify user <userA> could not call this API to create supply of company which does not belongs to her
-        Given User picks company with type ASC in above response
+        Given User picks company which has onboarded before with type ASC in above response
         But User sets valid cookie of <userB> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get item with limit row: <limitRow>
         And User sends a GET request to get list items
@@ -62,12 +62,12 @@ Feature: API_Dashboard POST /api/supply
         Then The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
         Examples:
-            | userA               | userB                      | password  | limitRow | supplyUuid | refNum | docDate | dueDate | itemName | itemKey | orderQty | openQty | orderKey | rowKey | expectedStatus | expectedStatusText    |
-            | may27user@gmail.com | testautoforecast@gmail.com | Test1111# | 5        | random     | random | random  | random  | random   | random  | random   | random  | random   | random | 400            | Company not found.    |
-            
+            | userA               | userB                      | password  | limitRow | supplyUuid | refNum | docDate | dueDate | itemName | itemKey | orderQty | openQty | orderKey | rowKey | expectedStatus | expectedStatusText |
+            | may27user@gmail.com | testautoforecast@gmail.com | Test1111# | 5        | random     | random | random  | random  | random   | random  | random   | random  | random   | random | 400            | Company not found. |
+
     @TC_CSL005
     Scenario Outline: TC_CSL005 - Verify error orderKey and rowKey already exists
-        Given User picks company with type CSV in above response
+        Given User picks company which has onboarded before with type CSV in above response
         But User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get suppliers with limit row: <limitRow>
         And User sends a GET request to get list suppliers
@@ -86,7 +86,7 @@ Feature: API_Dashboard POST /api/supply
 
     @TC_CSL006
     Scenario Outline: TC_CSL006 - Verify error when user input invalid date in the docDate and dueDate
-        Given User picks company with type CSV in above response
+        Given User picks company which has onboarded before with type CSV in above response
         But User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get item with limit row: <limitRow>
         And User sends a GET request to get list items
@@ -101,7 +101,7 @@ Feature: API_Dashboard POST /api/supply
 
     @TC_CSL007
     Scenario Outline: TC_CSL007 - Verify error when user input is missing one required field
-        Given User picks company with type CSV in above response
+        Given User picks company which has onboarded before with type CSV in above response
         But User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get item with limit row: <limitRow>
         And User sends a GET request to get list items
@@ -116,7 +116,7 @@ Feature: API_Dashboard POST /api/supply
 
     @TC_CSL008
     Scenario Outline: TC_CSL008 - Verify error when user input invalid in the vendorname and vendorkey
-        Given User picks company with type CSV in above response
+        Given User picks company which has onboarded before with type CSV in above response
         But User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get suppliers with limit row: <limitRow>
         And User sends a GET request to get list suppliers
@@ -135,7 +135,7 @@ Feature: API_Dashboard POST /api/supply
     # #Bug TC_CSL009,TC_CSL010 return status code 200 when call this API for company has type QBFS and QBO.
     @TC_CSL009 @TC_CSL010 @low-bug-skip @bug1687
     Scenario Outline: <scenario> - Verify user could not call this API with company has type <companyType>
-        Given User picks company with type <companyType> in above response
+        Given User picks company which has onboarded before with type CSV in above response
         But User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get suppliers with limit row: <limitRow>
         And User sends a GET request to get list suppliers
@@ -151,4 +151,3 @@ Feature: API_Dashboard POST /api/supply
             | scenario  | companyType | email                      | limitRow | supplyUuid | refNum | vendorName | vendorKey | docDate | dueDate | itemName | itemKey | orderQty | openQty | orderKey | rowKey | expectedStatus | expectedStatusText |
             | TC_CSL009 | QBFS        | testautoforecast@gmail.com | 10       | random     | random | random     | random    | random  | random  | random   | random  | random   | random  | random   | random | 400            | Bad Request        |
             | TC_CSL010 | QBO         | testautoforecast@gmail.com | 10       | random     | random | random     | random    | random  | random  | random   | random  | random   | random  | random   | random | 400            | Bad Request        |
-   

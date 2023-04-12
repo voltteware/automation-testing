@@ -96,6 +96,23 @@ Then('{} sends a DELETE method to {} delete the {} company', async function (act
     this.attach(`Response Delete ${link} has status code ${this.response.status()} ${this.response.statusText()} and response body ${responseBodyText}`)
 })
 
+Then('{} sends a DELETE method to delete the {} company', async function (actor, actionCompany: string) {
+    const options = {
+        headers: this.headers
+    }
+    if (actionCompany == 'created'){
+        this.companyKeyUrl = this.responseBodyOfACompanyObject.companyKey;
+        this.companyTypeUrl = this.responseBodyOfACompanyObject.companyType;
+    }else {
+        this.companyKeyUrl = randomCompany.companyKey;
+        this.companyTypeUrl = randomCompany.companyType;
+    }
+    this.response = await adminRequest.deleteCompany(this.request, link, this.companyKeyUrl, this.companyTypeUrl, options);
+    const responseBodyText = await this.response.text();
+    logger.log('info', `Response Delete ${link} has status code ${this.response.status()} ${this.response.statusText()} and response body ${responseBodyText}`);
+    this.attach(`Response Delete ${link} has status code ${this.response.status()} ${this.response.statusText()} and response body ${responseBodyText}`)
+})
+
 Then('Check that the company just deleted not exists in the current companies list', async function () {
     const options = {
         headers: this.headers

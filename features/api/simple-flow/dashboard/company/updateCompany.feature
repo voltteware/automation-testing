@@ -4,13 +4,13 @@ Feature: API_Dashboard PUT /api/company
         Given user sends a POST login request to get valid cookie with role
             | role  | username                   | password  |
             | admin | testautoforecast@gmail.com | Test1111# |
-        And User sets GET api endpoint to get company keys
+        And User sets GET api endpoint to get companies information of current user
         And In Header of the request, she sets param Cookie as valid connect.sid
-        When User sends a GET request to get company keys
+        When User sends a GET request to get companies
 
     @TC_UC001 @regression-api @csv @smoke-test-api
     Scenario Outline: TC_UC001 - Verify user <email> could call this API to update <properties> for any company type
-        Given User picks company with type <companyType> in above response
+        Given User picks company which has onboarded before with type <companyType> in above response
         # And User sets GET api endpoint to get information of a company belongs to <email> using company key <companyKey>
         And User sets PUT api endpoint to update company keys
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
@@ -25,7 +25,7 @@ Feature: API_Dashboard PUT /api/company
 
     @TC_UC002 @regression-api @qbfs @smoke-test-api
     Scenario Outline: TC_UC002 - Verify user <email> could call this API to update <properties> for any company type
-        Given User picks company with type <companyType> in above response
+        Given User picks company which has onboarded before with type <companyType> in above response
         # And User sets GET api endpoint to get information of a company belongs to <email> using company key <companyKey>
         And User sets PUT api endpoint to update company keys
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
@@ -40,7 +40,7 @@ Feature: API_Dashboard PUT /api/company
 
     @TC_UC003 @regression-api
     Scenario Outline: TC_UC003 - Verify user <email> could call this API to update <properties> for any company type
-        Given User picks random company in above response
+        Given User picks random company which has onboarded in above response
         And User sets GET api endpoint to get information of a company belongs to <email> using company key <companyKey>
         And User sets PUT api endpoint to update company keys
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
@@ -55,7 +55,7 @@ Feature: API_Dashboard PUT /api/company
 
     @TC_UC004 @regression-api
     Scenario Outline: <id> - Verify user <email> could call this API to update <properties> for any company type
-        Given User picks random company in above response
+        Given User picks random company which has onboarded in above response
         And User sets GET api endpoint to get information of a company belongs to <email> using company key <companyKey>
         And User sets PUT api endpoint to update company keys
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
@@ -71,7 +71,7 @@ Feature: API_Dashboard PUT /api/company
 
     @TC_UC005
     Scenario Outline: <id> - Verify user <email> could call this API to update <properties> for any company type
-        Given User picks random company in above response
+        Given User picks random company which has onboarded in above response
         And User sets GET api endpoint to get information of a company belongs to <email> using company key <companyKey>
         And User sets PUT api endpoint to update company keys
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
@@ -85,9 +85,9 @@ Feature: API_Dashboard PUT /api/company
             | TC_UC005_1 | isNotifyingAfterForecast | testautoforecast@gmail.com | false                    | random     | 200            |
             | TC_UC005_2 | isNotifyingAfterForecast | testautoforecast@gmail.com | true                     | random     | 200            |
 
-    @TC_UC006 
+    @TC_UC006
     Scenario Outline: TC_UC006 - Verify user <email> could call this API to update <properties> for any company type
-        Given User picks random company in above response
+        Given User picks random company which has onboarded in above response
         And User sets GET api endpoint to get information of a company belongs to <email> using company key <companyKey>
         And User sets PUT api endpoint to update company keys
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
@@ -100,9 +100,9 @@ Feature: API_Dashboard PUT /api/company
             | id         | properties         | email                      | isLostSaleTracking | companyKey | expectedStatus |
             | TC_UC006_1 | isLostSaleTracking | testautoforecast@gmail.com | false              | random     | 200            |
             | TC_UC006_2 | isLostSaleTracking | testautoforecast@gmail.com | true               | random     | 200            |
-    @TC_UC007 
+    @TC_UC007
     Scenario Outline: TC_UC007 - Verify error when user <email> sends this API <scenario> in the request body
-        Given User picks random company in above response
+        Given User picks random company which has onboarded in above response
         And User sets GET api endpoint to get information of a company belongs to <email> using company key <companyKey>
         And User sets PUT api endpoint to update company keys
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
@@ -115,7 +115,7 @@ Feature: API_Dashboard PUT /api/company
 
     @TC_UC008
     Scenario Outline: TC_UC008 - Verify error when user <email> sends this API <scenario> in the request body
-        Given User picks random company in above response
+        Given User picks random company which has onboarded in above response
         And User sets GET api endpoint to get information of a company belongs to <email> using company key <companyKey>
         And User sets PUT api endpoint to update company keys
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
@@ -128,7 +128,7 @@ Feature: API_Dashboard PUT /api/company
 
     @TC_UC009 @TC_UC010
     Scenario Outline: <scenario> - Verify error when user sends this API with <cookie> cookie
-        Given User picks random company in above response
+        Given User picks random company which has onboarded in above response
         And User sets GET api endpoint to get information of a company belongs to <email> using company key <companyKey>
         And User sets PUT api endpoint to update company keys
         And User sets Cookie in HEADER as <cookie>
@@ -143,7 +143,7 @@ Feature: API_Dashboard PUT /api/company
 
     @TC_UC011 @regression-api @asc @smoke-test-api
     Scenario Outline: <id> - Verify user <email> could call this API to update <properties> value for company type <companyType>
-        Given User picks company with type ASC in above response
+        Given User picks company which has onboarded before with type ASC in above response
         And User sets PUT api endpoint to update company keys
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets request body with payload as pendingOrderToggle: "<pendingOrderToggle>" and companyKey, companyType
@@ -158,7 +158,7 @@ Feature: API_Dashboard PUT /api/company
 
     @TC_UC012 @regression-api @asc
     Scenario Outline: <id> - Verify user <email> could call this API to update <properties> value for company type <companyType>
-        Given User picks company with type ASC in above response
+        Given User picks company which has onboarded before with type ASC in above response
         And User sets PUT api endpoint to update company keys
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets request body with payload as inventorySourcePreference: "<inventorySourcePreference>" and companyKey, companyType
@@ -174,7 +174,7 @@ Feature: API_Dashboard PUT /api/company
 
     @TC_UC013 @regression-api @asc
     Scenario Outline: <id> - Verify user <email> could call this API to update <properties> value for company type <companyType>
-        Given User picks company with type ASC in above response
+        Given User picks company which has onboarded before with type ASC in above response
         And User sets PUT api endpoint to update company keys
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets request body with payload purchasingSalesVelocitySettingData as percent2Day: <percent2Day> and percent7Day: <percent7Day> and percent30Day: <percent30Day> and percent60Day: <percent60Day> and percent90Day: <percent90Day> and percent180Day: <percent180Day> and percentForecasted: <percentForecasted> and companyKey, companyType
@@ -190,7 +190,7 @@ Feature: API_Dashboard PUT /api/company
     #Bug API in case @TC_UC014 => still return status code 200 when total percentage is greater than 100
     @TC_UC014 @bug1591 @low-bug-skip
     Scenario Outline: <id> - Verify error when user <email> updates total percentage in <properties> for company type <companyType> is greater than 100
-        Given User picks company with type ASC in above response
+        Given User picks company which has onboarded before with type ASC in above response
         And User sets PUT api endpoint to update company keys
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets request body with payload purchasingSalesVelocitySettingData as percent2Day: <percent2Day> and percent7Day: <percent7Day> and percent30Day: <percent30Day> and percent60Day: <percent60Day> and percent90Day: <percent90Day> and percent180Day: <percent180Day> and percentForecasted: <percentForecasted> and companyKey, companyType

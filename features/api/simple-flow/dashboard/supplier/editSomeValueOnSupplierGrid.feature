@@ -4,13 +4,13 @@ Feature: API_Dashboard PUT /api/vendor
         Given user sends a POST login request to get valid cookie with role
             | role  | username                   | password  |
             | admin | testautoforecast@gmail.com | Test1111# |
-        And User sets GET api endpoint to get company keys
+        And User sets GET api endpoint to get companies information of current user
         And In Header of the request, she sets param Cookie as valid connect.sid
-        When User sends a GET request to get company keys
+        When User sends a GET request to get companies
 
     @TC_UV001 @smoke-test-api @regression-api
     Scenario Outline: <TC_ID> - Verify user <email> could call this API to update "<editColumn>" of a supplier for company type (<companyType>)
-        Given User picks company with type <companyType> in above response
+        Given User picks company which has onboarded before with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get suppliers with limit row: <limitRow>
         And User sends a GET request to get list suppliers
@@ -29,7 +29,7 @@ Feature: API_Dashboard PUT /api/vendor
 
     @TC_UV002 @regression-api
     Scenario Outline: <TC_ID> - Verify user <email> could call this API to update "<editColumn>" of a supplier for company type (<companyType>)
-        Given User picks company with type <companyType> in above response
+        Given User picks company which has onboarded before with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get suppliers with limit row: <limitRow>
         And User sends a GET request to get list suppliers
@@ -73,7 +73,7 @@ Feature: API_Dashboard PUT /api/vendor
 
     @TC_UV003 @regression-api
     Scenario Outline: <TC_ID> - Verify error when user <email> call this API to update Supplier Name of a supplier that is already exist for company type (<companyType>)
-        Given User picks company with type <companyType> in above response
+        Given User picks company which has onboarded before with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get suppliers with limit row: <limitRow>
         And User sends a GET request to get list suppliers

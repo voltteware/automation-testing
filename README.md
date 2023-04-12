@@ -11,6 +11,7 @@ Or Run command line below to execute test only
 
 - npx cucumber-js --tags @api-login 
 - npx cucumber-js --tags @test-api
+- npx cucumber-js --tags "@test-api and not @low-bug-skip"
 - npx cucumber-js --tags @api-realm
 - npx cucumber-js --tags @test-ui
 
