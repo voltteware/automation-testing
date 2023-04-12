@@ -34,10 +34,10 @@
     "assert": "2.0.0",
     "aws-sdk": "2.1353.0",
     "date-fns": "2.29.3",
-    "dotenv": "^16.0.3",
+    "dotenv": "16.0.3",
     "soft-assert": "0.2.6",
     "googleapis": "115.0.0",
-    "zod": "^3.21.4"
+    "zod": "3.21.4"
   },
   "devDependencies": {
     "@babel/core": "^7.21.3",
