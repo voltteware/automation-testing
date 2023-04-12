@@ -13,7 +13,6 @@ const arrCompanyType = ['ASC', 'CSV', 'QBFS', 'QBO'];
 const marketplaceIDS = ['NA', 'EU', 'A2EUQ1WTGCTBG2', 'A1PA6795UKMFR9', 'A1RKKUPIHCS9HS', 'A13V1IB3VIYZZH', 'APJ6JRA9NG5V4', 'A1AM78C64UM0Y8', 'A1F83G8C2ARO7P', 'ATVPDKIKX0DER'];
 const endPointToGet20LatestCompany = encodeURI(`${Links.API_ADMIN_GET_COMPANIES}?offset=0&limit=20&sort=[{"field":"createdAt","direction":"desc"}]&where={"logic":"and","filters":[]}`);
 let link: any;
-let actionCompany: string;
 let selectedCompany: any;
 let randomCompany: any;
 let payload: payLoadCompany = {};
@@ -63,7 +62,6 @@ Then('Check {} company exist in the system, if it does not exist will create com
             this.createCompanyResponseBody = JSON.parse(responseBodyText);
             logger.log('info', `Response POST ${Links.API_CREATE_COMPANY}` + JSON.stringify(this.createCompanyResponseBody, undefined, 4));
             this.attach(`Response POST ${Links.API_CREATE_COMPANY}` + JSON.stringify(this.createCompanyResponseBody, undefined, 4));
-            return this.createCompanyResponseBody;
         }
         else {
             const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
@@ -80,15 +78,14 @@ Then('{} filters company to get company which has the company name included {}',
     this.attach(`Response Body before filter: ${JSON.stringify(randomCompany, undefined, 4)}`);
 })
 
-Then('{} sends a DELETE method to {} delete the filtered company', async function (action: string, deleteType: string) {
+Then('{} sends a DELETE method to {} delete the {} company', async function (actor, deleteType: string, actionCompany: string) {
     this.type = deleteType;
     const options = {
         headers: this.headers
     }
-    action = this.actionCompany;
-    if (action == 'created'){
-        this.companyKeyUrl = this.createCompanyResponseBody.companyKey;
-        this.companyTypeUrl = this.createCompanyResponseBody.companyType;
+    if (actionCompany == 'created'){
+        this.companyKeyUrl = this.responseBodyOfACompanyObject.companyKey;
+        this.companyTypeUrl = this.responseBodyOfACompanyObject.companyType;
     }else {
         this.companyKeyUrl = randomCompany.companyKey;
         this.companyTypeUrl = randomCompany.companyType;

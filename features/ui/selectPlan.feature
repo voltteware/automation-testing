@@ -28,7 +28,7 @@ Feature: Subscribe a plan for a company
         When User navigates to checkout page and input valid data in all fields "<card>", "<promotionCodeId>", "<expirationDate>"
         Then Verify user has been discounted with promotion code is <promotionCodeValue> percent and the plan has been highlighted with Current Plan
         And User sets DELETE api endpoint to delete company
-        And User sends a DELETE method to delete the created company
+        And User sends a DELETE method to <deleteType> delete the created company
         Examples:
-            | username                   | currentPassword |  companyName             | companyType  | plan                         | status   | card                | promotionCodeId | promotionCodeValue| expirationDate| expectedStatusText     | expectedStatus | serviceLevel| leadTime| orderInterval|
-            | subscriptionauto@gmail.com | Test1111#       |  Select Plan-AutoTest    | CSV          | Starter Monthly Subscription | Trialing | 4242 4242 4242 4242 | TEST20PR        | 20                | 08 / 23       | Created                | 201            | 85          | 15      | 15           |
+            | username                   | currentPassword |  companyName             | companyType  | plan                         | status   | card                | promotionCodeId | promotionCodeValue| expirationDate| expectedStatusText     | expectedStatus | serviceLevel| leadTime| orderInterval| deleteType |
+            | subscriptionauto@gmail.com | Test1111#       |  Select Plan-AutoTest    | CSV          | Starter Monthly Subscription | Trialing | 4242 4242 4242 4242 | TEST20PR        | 20                | 08 / 23       | Created                | 201            | 85          | 15      | 15           | hard       |
