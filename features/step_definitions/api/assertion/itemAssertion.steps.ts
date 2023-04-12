@@ -2,7 +2,7 @@ import { When, Then, Given } from '@cucumber/cucumber';
 import { expect } from '@playwright/test';
 import _ from "lodash";
 import logger from '../../../../src/Logger/logger';
-import { ItemSummaryRequestSchema } from './generalAssertionSchema';
+import { ItemSummaryRequestSchema } from './itemAssertionSchema';
 
 Then('{} checks API contract in item summary object are correct', async function (actor: string) {
     if (this.
