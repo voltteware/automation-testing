@@ -45,7 +45,7 @@ Then('Check {} company exist in the system, if it does not exist will create com
 
     if (numberofCompanies < 1) {
         this.actionCompany = 'created';
-        payload.companyName = `${faker.company.name()}-AutoTest3`;
+        payload.companyName = `${faker.company.name()}-AutoTest`;
         payload.companyKey = '';
         payload.companyType = arrCompanyType[Math.floor(Math.random() * arrCompanyType.length)];
         payload.leadTime = Number(faker.datatype.number({'min': 1,'max': 365}));
@@ -79,7 +79,7 @@ Then('{} filters company to get company which has the company name included {}',
 })
 
 Then('{} sends a DELETE method to {} delete the {} company', async function (actor, deleteType: string, actionCompany: string) {
-    this.type = deleteType;
+    this.deleteType = deleteType;
     const options = {
         headers: this.headers
     }
@@ -90,7 +90,7 @@ Then('{} sends a DELETE method to {} delete the {} company', async function (act
         this.companyKeyUrl = randomCompany.companyKey;
         this.companyTypeUrl = randomCompany.companyType;
     }
-    this.response = await adminRequest.deleteCompany(this.request, link, this.companyKeyUrl, this.companyTypeUrl, options, this.type);
+    this.response = await adminRequest.deleteCompany(this.request, link, this.companyKeyUrl, this.companyTypeUrl, options, this.deleteType);
     const responseBodyText = await this.response.text();
     logger.log('info', `Response Delete ${link} has status code ${this.response.status()} ${this.response.statusText()} and response body ${responseBodyText}`);
     this.attach(`Response Delete ${link} has status code ${this.response.status()} ${this.response.statusText()} and response body ${responseBodyText}`)

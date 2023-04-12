@@ -20,7 +20,7 @@ Feature: API_Admin DELETE/company
 
         Examples:
             | user  | companyNameKeyWord | deleteType | expectedStatus | expectedStatusText |
-            | admin | AutoTest3           | hard       | 200            | OK                 |
+            | admin | AutoTest           | hard       | 200            | OK                 |
 
     #Bug API in case TC_DCP002_1, TC_DCP002_1
     @TC_DCP002 @bug-permission @low-bug-skip
