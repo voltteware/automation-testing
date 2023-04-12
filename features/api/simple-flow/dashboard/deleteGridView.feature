@@ -1,4 +1,4 @@
-@test-api @api-admin @api-deleteGridView
+@test-api @api-admin @api-deleteGridView 
 Feature: API_DashBoard DELETE/deleteGridView
     Background: Send GET request to get grid view keys of current logged in user before each test
         Given user sends a POST login request to get valid cookie with role
@@ -12,7 +12,7 @@ Feature: API_DashBoard DELETE/deleteGridView
         And User sets valid cookie of testautoforecast@gmail.com and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get grid view suppliers keys
         When User sends a GET request to get grid view suppliers of testautoforecast@gmail.com by company key and company type
-
+            
     @TC_DGV001 @bug1872
     Scenario Outline: TC_DGV001 - Verify user <email> could call this API to delete grid view of a company belongs to her
         Given Check grid view supplier exist in the company, if it does not exist will create grid view supplier
