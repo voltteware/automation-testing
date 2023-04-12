@@ -45,7 +45,7 @@ Then('Check {} company exist in the system, if it does not exist will create com
 
     if (numberofCompanies < 1) {
         this.actionCompany = 'created';
-        payload.companyName = `${faker.company.name()}-AutoTest`;
+        payload.companyName = `${faker.company.name()}-AutoTest3`;
         payload.companyKey = '';
         payload.companyType = arrCompanyType[Math.floor(Math.random() * arrCompanyType.length)];
         payload.leadTime = Number(faker.datatype.number({'min': 1,'max': 365}));
@@ -61,14 +61,14 @@ Then('Check {} company exist in the system, if it does not exist will create com
         if (this.createCompanyResponse.status() == 201 && !responseBodyText.includes('<!doctype html>')) {
             this.createCompanyResponseBody = JSON.parse(responseBodyText);
             logger.log('info', `Response POST ${Links.API_CREATE_COMPANY}` + JSON.stringify(this.createCompanyResponseBody, undefined, 4));
-            this.attach(`Response POST ${Links.API_CREATE_COMPANY}` + JSON.stringify(this.createCompanyResponseBody, undefined, 4));
+            this.attach(`Response Create New Company POST >>>>>> ${Links.API_CREATE_COMPANY}` + JSON.stringify(this.createCompanyResponseBody, undefined, 4));
         }
         else {
             const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
             logger.log('info', `Response ${Links.API_CREATE_COMPANY} has status code ${this.response.status()} ${this.response.statusText()} and response body ${responseBodyText}`);
             this.attach(`Response ${Links.API_CREATE_COMPANY} has status code ${this.response.status()} ${this.response.statusText()} and response body ${actualResponseText}`)
         }
-    }
+    }    
 })
 
 Then('{} filters company to get company which has the company name included {}', async function (actor, companyNameKeyWord: string) {
@@ -83,9 +83,9 @@ Then('{} sends a DELETE method to {} delete the {} company', async function (act
     const options = {
         headers: this.headers
     }
-    if (actionCompany == 'created'){
-        this.companyKeyUrl = this.responseBodyOfACompanyObject.companyKey;
-        this.companyTypeUrl = this.responseBodyOfACompanyObject.companyType;
+    if (this.actionCompany == 'created' || actionCompany == 'created'){
+        this.companyKeyUrl = this.createCompanyResponseBody.companyKey;
+        this.companyTypeUrl = this.createCompanyResponseBody.companyType;
     }else {
         this.companyKeyUrl = randomCompany.companyKey;
         this.companyTypeUrl = randomCompany.companyType;
