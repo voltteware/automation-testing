@@ -14,3 +14,8 @@ When('User logouts', async function () {
     await headerComponent.clickLogOut();
     await expect(this.page).toHaveURL(/.*signin/);
 });
+
+When('User switchs to {} company that has Canceled subscription', async function(companyName: string) {
+    headerComponent = new HeaderComponent(this.page);
+    await headerComponent.switchToAnotherCompany(companyName);
+})
