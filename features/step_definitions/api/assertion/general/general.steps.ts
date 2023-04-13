@@ -1,10 +1,10 @@
 import { DataTable, Then } from "@cucumber/cucumber";
 import { expect } from "@playwright/test";
-import * as authenticateRequest from '../../../../src/api/request/authentication.service';
-import logger from "../../../../src/Logger/logger";
-import { Links } from "../../../../src/utils/links";
+import * as authenticateRequest from '../../../../../src/api/request/authentication.service';
+import logger from "../../../../../src/Logger/logger";
+import { Links } from "../../../../../src/utils/links";
 import * as _ from "lodash";
-import { sortLocale } from '../../../../src/helpers/array-helper';
+import { sortLocale } from '../../../../../src/helpers/array-helper';
 
 // Get Valid Token 
 Then('{} has valid connect.sid of {} after send a POST request with payload as email: {string} and password: {string}', async function (name, user: string, email: string, password: string) {

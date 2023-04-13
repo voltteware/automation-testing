@@ -19,6 +19,7 @@ Feature: API_Regression User can compare and check the formulas
         And The status text is "<expectedStatusText>"
         # Select option All Suppliers because it contains a lot of Items
         And User selects the All Suppliers in Supplier list
+        And User checks API contract of get restock suggestion by vendor api
         And User sends a GET api method to count all Items have alerts in All Suppliers
         And The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
@@ -30,15 +31,17 @@ Feature: API_Regression User can compare and check the formulas
         And The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
         And User picks random item in Item list
+        And User checks API contract of get items in Item list
         And User saves needed values for calculations
         And User checks value Sum on grid
         And User checks value Total Inbound on grid
         And User checks value Estimated Margin on grid
         And User checks value Suggestions on grid
-        And User sets GET api method to restock calculation of specific Item
-        And User sends a GET api method to restock calculation of specific Item
+        And User sets GET api method to get restock calculation of specific Item
+        And User sends a GET api method to get restock calculation of specific Item
         And The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
+        And User checks API contract of get restock calculation api
         And User saves values in Restock model for calculations
         And User checks value Daily Sales Rate in Restock Model
         And User checks value Adj Daily Sales Rate in Restock Model
