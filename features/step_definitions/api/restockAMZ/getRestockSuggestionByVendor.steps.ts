@@ -3,11 +3,16 @@ import logger from '../../../../src/Logger/logger';
 import { Links } from '../../../../src/utils/links';
 import _ from "lodash";
 import * as restockSuggestion from '../../../../src/api/request/restockSuggestion.service';
+import { getRestockSuggestionByVendorResponseSchema } from '../assertion/restockAMZ/getRestockSuggestionByVendorAssertionSchema';
 
 let link: any;
 
 Then(`{} sets GET api method to get restock suggestion by vendor`, async function (actor: string) {
     link = Links.API_GET_RESTOCK_SUGGESTION_BY_VENDOR;
+});
+
+Then('{} checks API contract of get restock suggestion by vendor api', async function (actor: string) {
+    getRestockSuggestionByVendorResponseSchema.parse(this.selectedListSupplier);
 });
 
 Then(`{} sends a GET api method to get restock suggestion by vendor`, async function (actor: string) {

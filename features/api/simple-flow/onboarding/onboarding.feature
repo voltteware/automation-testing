@@ -57,7 +57,7 @@ Feature: API_Regression User can create company and complete onboarding flow
         And User sets POST api endpoint to create bom
         And User sets request body with payload as parentName: "<parentName>" and parentKey: "<parentKey>" and childName: "<childName>" and childKey: "<childKey>" and qty: "<qty>"
         And User sends a POST method to create bom
-        And User sets GET api endpoint to get boms with limit row: 10
+        And User sets GET api endpoint to get boms with limit row: 20
         And User sends a GET request to get list limited boms
         And User picks a random bom in above list boms
         And User saves the parentKey key and childKey key
@@ -102,12 +102,13 @@ Feature: API_Regression User can create company and complete onboarding flow
         And User sends a POST request to run forecast
         When The expected status code should be <expectedStatus>
         Then The status text is "<expectedStatusText>"
-        # And Check that the company just created exists in the current companies list of his
-        # And User sets DELETE api endpoint to delete company
-        # And User sends a DELETE method to <deleteType> delete the created company
+        And User checks API contract of run forecast api
+        And Check that the company just created exists in the current companies list of his
+        And User sets DELETE api endpoint to delete company
+        And User sends a DELETE method to <deleteType> delete the created company
         Examples:   
             | TC_ID    | properties| email                        | companyName | companyType | editColumnSupply | editColumnDemand | editColumnBom | editColumn1 | value  | serviceLevel | leadTime | orderInterval | expectedStatus | expectedStatusText | supplierName      | description     | emailSupplier      | moq    | itemName      | description     | vendorName | vendorPrice | onHand | onHandMin | onHandThirdParty | onHandThirdPartyMin | lotMultipleQty | lotMultipleItemName | vendorKey | limitRow | parentName | parentKey | childName | childKey | qty    | supplyUuid | refNum | docDate | dueDate | itemKey | orderQty | openQty | orderKey | rowKey | deleteType |
-            | TC_OB001 | leadTime  | testuserforecastrx@gmail.com | random      | CSV         | orderQty         | itemName         | leadTime      | kitQty      | random | random       | random   | random        | 200            | OK                 | New Supplier Auto | New description | newemail@gmail.com | random | New Item Auto | New description | random     | random      | random | random    | random           | random              | random         | random              | random    | 10       | random     | random    | random    | random   | random | random     | random | random  | randon  | random  | random   | random  | random   | random | hard       |
+            | TC_OB001 | leadTime  | testuserforecastrx@gmail.com | random      | CSV         | orderQty         | itemName         | leadTime      | kitQty      | random | random       | random   | random        | 200            | OK                 | New Supplier Auto | New description | newemail@gmail.com | random | New Item Auto | New description | random     | random      | random | random    | random           | random              | random         | random              | random    | 20       | random     | random    | random    | random   | random | random     | random | random  | randon  | random  | random   | random  | random   | random | hard       |
 
     @TC_OB002_ASC @smoke-test-api
     Scenario Outline: <TC_ID> - Verify user <email> could call APIs to create company ASC and complete onboarding flow
@@ -165,7 +166,7 @@ Feature: API_Regression User can create company and complete onboarding flow
         And User sends a POST method to create bom
         And The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
-        And User sets GET api endpoint to get boms with limit row: 10
+        And User sets GET api endpoint to get boms with limit row: 20
         And User sends a GET request to get list limited boms
         And User picks a random bom in above list boms
         And User saves the parentKey key and childKey key
@@ -200,6 +201,7 @@ Feature: API_Regression User can create company and complete onboarding flow
         # And User sends a POST request to run forecast
         # When The expected status code should be <expectedStatus>
         # Then The status text is "<expectedStatusText>"
+        # And User checks API contract of run forecast api
         # And Check that the company just created exists in the current companies list of his
         # And User sets DELETE api endpoint to delete company
         # And User sends a DELETE method to <deleteType> delete the created company

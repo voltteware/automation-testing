@@ -1,6 +1,6 @@
 import { Then } from '@cucumber/cucumber';
 import { expect } from '@playwright/test';
-import logger from '../../../../src/Logger/logger';
+import logger from '../../../../../src/Logger/logger';
 
 import _ from "lodash";
 
