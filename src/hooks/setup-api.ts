@@ -13,8 +13,10 @@ setParallelCanAssign(function (pickleInQuestion, picklesInProgress) {
 })
 
 let actionwords: ActionWords = new ActionWords()
+export let currentTestCaseID: string;
 
 Before({ tags: "@test-api or @test-api-extra" }, async function (scenario: ITestCaseHookParameter) {
+    currentTestCaseID = scenario.pickle.name.split('-')[0].trim();
     // Only one pickle with @tag1 can run at a time
     // AND only one pickle with @tag2 can run at a time
     setParallelCanAssign(myTagRule)
@@ -28,8 +30,9 @@ After({ tags: "@test-api or @test-api-extra" }, async function (scenario: ITestC
 });
 
 BeforeStep({ tags: "@test-api or @test-api-extra" }, async function (testStep: ITestStepHookParameter) {
+    currentTestCaseID = testStep.pickle.name.split('-')[0].trim();   
     this.countErrors = 0;
-    logger.log('info', testStep.pickleStep.text)
+    logger.log('info', testStep.pickleStep.text)     
 })
 
 AfterStep({ tags: "@test-api or @test-api-extra" }, async function (testStep: ITestStepHookParameter) {
