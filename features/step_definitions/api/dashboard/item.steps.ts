@@ -227,6 +227,8 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
                 // Filter out the excluded supplier have excludedSupplierKey from the list suppliers
                 const filteredArray = this.getSupplierResponseBody.filter((supplier: any) => supplier.key !== excludedSupplierKey);
                 const randomSupplier = filteredArray[Math.floor(Math.random() * this.getSupplierResponseBody.length)];
+                logger.log('info', `Ramdom supplier` + JSON.stringify(randomSupplier, undefined, 4));
+                this.attach(`Ramdom supplier` + JSON.stringify(randomSupplier, undefined, 4))
 
                 this.vendorKey = randomSupplier.key;
                 this.vendorName = randomSupplier.name;
@@ -427,83 +429,92 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
             break;
         case 'purchaseAs':
             if (value == 'random') {
-                this.payloadCreateItem = {
-                    "key": "",
-                    "name": `${faker.random.alphaNumeric(6).toUpperCase()}-${faker.datatype.number(500)}-Auto`,
-                    "asin": `${faker.random.alphaNumeric(10).toUpperCase()}`,
-                    "fnsku": `${faker.random.alphaNumeric(10).toUpperCase()}`,
-                    "description": "",
-                    "vendorKey": null,
-                    "vendorName": null,
-                    "vendorPrice": 0,
-                    "moq": 1,
-                    "leadTime": 1,
-                    "orderInterval": 0,
-                    "serviceLevel": 85,
-                    "onHand": 0,
-                    "onHandMin": "",
-                    "onHandThirdParty": 0,
-                    "onHandThirdPartyMin": "",
-                    "growthTrend": 0,
-                    "isHidden": false,
-                    "useHistoryOverride": false,
-                    "lotMultipleQty": 1,
-                    "lotMultipleItemKey": null,
-                    "lotMultipleItemName": null,
-                    "forecastDirty": false,
-                    "forecastTags": [],
-                    "tags": [],
-                    "useBackfill": false,
-                    "useLostSalesOverride": false,
-                    "createdAt": "2023-04-11T08:09:03.909Z",
-                    "isFbm": false,
-                    "inventorySourcePreference": "",
-                    "skuNotes": "",
-                    "prepNotes": "",
-                    "supplierRebate": "",
-                    "inboundShippingCost": 0,
-                    "reshippingCost": 0,
-                    "repackagingMaterialCost": 0,
-                    "repackingLaborCost": 0,
-                    "inboundShipped": 0,
-                    "inboundReceiving": 0,
-                    "inbound": 0,
-                    "inboundFcTransfer": 0,
-                    "referralFee": 0,
-                    "fbaFee": 0,
-                    "rank": 0,
-                    "variableClosingFee": 0,
-                    "lowestFba": 0,
-                    "newBuyBox": 0,
-                    "listPrice": 0,
-                    "average7DayPrice": 0,
-                    "itemHistoryLength": 0,
-                    "history": null,
-                    "links": null,
-                    "packageWeight": "",
-                    "onHandFbm": "",
-                    "prepGuide": "",
-                    "dimensionalWeight": "",
-                    "hazmat": "",
-                    "oversized": "",
-                    "category": "",
-                    "upc": "",
-                    "ean": ""
-                }
-                
-                // Create new item Item has already set as Purchase As of other items            
-                this.attach(`Payload: ${JSON.stringify(this.payloadCreateItem, undefined, 4)}`)
+                if(companyType !== "QBFS"){
+                    this.payloadCreateItem = {
+                        "key": "",
+                        "name": `${faker.random.alphaNumeric(6).toUpperCase()}-${faker.datatype.number(500)}-Auto`,
+                        "asin": companyType === "ASC" ? `${faker.random.alphaNumeric(10).toUpperCase()}` : "",
+                        "fnsku": companyType === "ASC" ? `${faker.random.alphaNumeric(10).toUpperCase()}` : "",
+                        "description": "",
+                        "vendorKey": null,
+                        "vendorName": null,
+                        "vendorPrice": 0,
+                        "moq": 1,
+                        "leadTime": 1,
+                        "orderInterval": 0,
+                        "serviceLevel": 85,
+                        "onHand": 0,
+                        "onHandMin": "",
+                        "onHandThirdParty": 0,
+                        "onHandThirdPartyMin": "",
+                        "growthTrend": 0,
+                        "isHidden": false,
+                        "useHistoryOverride": false,
+                        "lotMultipleQty": 1,
+                        "lotMultipleItemKey": null,
+                        "lotMultipleItemName": null,
+                        "forecastDirty": false,
+                        "forecastTags": [],
+                        "tags": [],
+                        "useBackfill": false,
+                        "useLostSalesOverride": false,
+                        "createdAt": "2023-04-11T08:09:03.909Z",
+                        "isFbm": false,
+                        "inventorySourcePreference": "",
+                        "skuNotes": "",
+                        "prepNotes": "",
+                        "supplierRebate": "",
+                        "inboundShippingCost": 0,
+                        "reshippingCost": 0,
+                        "repackagingMaterialCost": 0,
+                        "repackingLaborCost": 0,
+                        "inboundShipped": 0,
+                        "inboundReceiving": 0,
+                        "inbound": 0,
+                        "inboundFcTransfer": 0,
+                        "referralFee": 0,
+                        "fbaFee": 0,
+                        "rank": 0,
+                        "variableClosingFee": 0,
+                        "lowestFba": 0,
+                        "newBuyBox": 0,
+                        "listPrice": 0,
+                        "average7DayPrice": 0,
+                        "itemHistoryLength": 0,
+                        "history": null,
+                        "links": null,
+                        "packageWeight": "",
+                        "onHandFbm": "",
+                        "prepGuide": "",
+                        "dimensionalWeight": "",
+                        "hazmat": "",
+                        "oversized": "",
+                        "category": "",
+                        "upc": "",
+                        "ean": ""
+                    }
+                    
+                    // Create new item Item has already set as Purchase As of other items            
+                    this.attach(`Payload Create new item: ${JSON.stringify(this.payloadCreateItem, undefined, 4)}`)
+    
+                    const createItemResponse = await itemRequest.createItem(this.request, Links.API_ITEMS, this.payloadCreateItem, this.headers);
+                    const responseBodyOfAItemObject = JSON.parse(await createItemResponse.text());
 
-                const createItemResponse = await itemRequest.createItem(this.request, Links.API_ITEMS, this.payloadCreateItem, this.headers);
-                const responseBodyOfAItemObject = JSON.parse(await createItemResponse.text());
+                    this.lotMultipleItemName = responseBodyOfAItemObject.name
+                    this.lotMultipleItemKey = responseBodyOfAItemObject.key
+                } else {
+                    const excludedItemKey = this.itemKey
+                    const excludedListPurchaseAs = this.getItemsResponseBody.map((item:any) => item.lotMultipleItemKey)
+                    // Filter out the excluded item have excludedItemKey and purchase as is null from the list items
+                    const filteredArray = this.getItemsResponseBody.filter((item: any) => ((item.key !== excludedItemKey) && (item.lotMultipleItemKey === null) && (!excludedListPurchaseAs.includes(item.key))));
+                    const randomItem = filteredArray[Math.floor(Math.random() * filteredArray.length)];
 
-                // const excludedItemKey = this.itemKey
-                // // Filter out the excluded item have excludedItemKey and purchase as is null from the list items
-                // const filteredArray = this.getItemsResponseBody.filter((item: any) => ((item.key !== excludedItemKey) && (item.lotMultipleItemKey === null)));
-                // const randomItem = filteredArray[Math.floor(Math.random() * filteredArray.length)];
-
-                this.lotMultipleItemName = responseBodyOfAItemObject.name
-                this.lotMultipleItemKey = responseBodyOfAItemObject.key
+                    this.lotMultipleItemName = randomItem.name
+                    this.lotMultipleItemKey = randomItem.key
+                }                                
+            } else if (value == 'null') {
+                this.lotMultipleItemName = null
+                this.lotMultipleItemKey = null
             }
 
             logger.log('info', `New ${editColumn}: ${this.lotMultipleItemName}`);
@@ -556,8 +567,8 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
             useHistoryOverride: this.useHistoryOverride === undefined ? this.responseBodyOfAItemObject.useHistoryOverride : this.useHistoryOverride,
             useLostSalesOverride: this.responseBodyOfAItemObject.useLostSalesOverride,
             lotMultipleQty: this.lotMultipleQty === undefined ? this.responseBodyOfAItemObject.lotMultipleQty : this.lotMultipleQty,
-            lotMultipleItemKey: this.lotMultipleItemKey === undefined ? this.responseBodyOfAItemObject.lotMultipleItemKey : `${this.lotMultipleItemKey}`,
-            lotMultipleItemName: this.lotMultipleItemName === undefined ? this.responseBodyOfAItemObject.lotMultipleItemName : `${this.lotMultipleItemName}`,
+            lotMultipleItemKey: this.lotMultipleItemKey === undefined ? this.responseBodyOfAItemObject.lotMultipleItemKey : this.lotMultipleItemKey === null ? null : `${this.lotMultipleItemKey}`,
+            lotMultipleItemName: this.lotMultipleItemName === undefined ? this.responseBodyOfAItemObject.lotMultipleItemName : this.lotMultipleItemName === null ? null : `${this.lotMultipleItemName}`,
             forecastDirty: this.responseBodyOfAItemObject.forecastDirty,
             forecastTags: this.responseBodyOfAItemObject.forecastTags,
             tag: this.responseBodyOfAItemObject.tag,
@@ -659,8 +670,8 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
             useHistoryOverride: this.useHistoryOverride === undefined ? this.responseBodyOfAItemObject.useHistoryOverride : this.useHistoryOverride,
             useLostSalesOverride: this.responseBodyOfAItemObject.useLostSalesOverride,
             lotMultipleQty: this.lotMultipleQty === undefined ? this.responseBodyOfAItemObject.lotMultipleQty : this.lotMultipleQty,
-            lotMultipleItemKey: this.lotMultipleItemKey === undefined ? this.responseBodyOfAItemObject.lotMultipleItemKey : `${this.lotMultipleItemKey}`,
-            lotMultipleItemName: this.lotMultipleItemName === undefined ? this.responseBodyOfAItemObject.lotMultipleItemName : `${this.lotMultipleItemName}`,
+            lotMultipleItemKey: this.lotMultipleItemKey === undefined ? this.responseBodyOfAItemObject.lotMultipleItemKey : this.lotMultipleItemKey === null ? null : `${this.lotMultipleItemKey}`,
+            lotMultipleItemName: this.lotMultipleItemName === undefined ? this.responseBodyOfAItemObject.lotMultipleItemName : this.lotMultipleItemName === null ? null : `${this.lotMultipleItemName}`,
             forecastDirty: this.responseBodyOfAItemObject.forecastDirty,
             forecastTags: this.responseBodyOfAItemObject.forecastTags,
             tag: this.responseBodyOfAItemObject.tag,
