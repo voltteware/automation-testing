@@ -17,12 +17,13 @@ Feature: API_Dashboard PUT /api/item
         And User sends a GET request to get list suppliers
         And User sets POST api endpoint to create item
         And User sets request body with payload as name: "New Item Auto" and asin: "random" and fnsku: "random"
-        When User sends a POST method to create item
+        And User sends a POST method to create item
         And User saves the item key
         And User sets PUT api endpoint to edit <editColumn> of the above item for company type <companyType> with new value: <value>
         When User sends a PUT request to edit the item
         Then The expected status code should be <expectedStatus>
         And The new <editColumn> of item must be updated successfully
+        And User checks API contract essential types in item object are correct
 
         Examples:
             | TC_ID       | companyType | email                      | limitRow | editColumn    | value  | expectedStatus |
@@ -44,6 +45,7 @@ Feature: API_Dashboard PUT /api/item
         When User sends a PUT request to edit the item
         Then The expected status code should be <expectedStatus>
         And The new <editColumn> of item must be updated successfully
+        And User checks API contract essential types in item object are correct
 
         Examples:
             | TC_ID       | companyType | email                      | limitRow | editColumn                | value  | expectedStatus |

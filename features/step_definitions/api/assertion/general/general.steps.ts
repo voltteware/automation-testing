@@ -12,7 +12,7 @@ Then('{} has valid connect.sid of {} after send a POST request with payload as e
         username: email,
         password: password,
     }
-    var response = await authenticateRequest.sendPOSTAuthenticatieRequest(Links.API_LOGIN, payload);
+    var response = await authenticateRequest.sendPOSTAuthenticateRequest(Links.API_LOGIN, payload);
     expect(response.status()).toBe(201);
 
     const responseHeaders = response.headers();
@@ -33,7 +33,7 @@ Then('user sends a POST login request to get valid cookie with role', async func
         username: username,
         password: password,
     }
-    var response = await authenticateRequest.sendPOSTAuthenticatieRequest(Links.API_LOGIN, payload);
+    var response = await authenticateRequest.sendPOSTAuthenticateRequest(Links.API_LOGIN, payload);
     expect(response.status()).toBe(201);
 
     const responseHeaders = response.headers();

@@ -5,7 +5,7 @@ import { Links } from '../../../../src/utils/links';
 import _ from "lodash";
 import * as restockSuggestion from '../../../../src/api/request/restockSuggestion.service';
 import { sumFormulaRestockAMZ, totalInboundFormulaRestockAMZ, estimatedMarginFormulaRestockAMZ, dailySalesRateFormulaRestockAMZ, adjDailySalesRateFormulaRestockAMZ, averageDailySalesRateFormulaRestockAMZ, requiredInventoryFormulaRestockAMZ, inventoryAvailableFormulaRestockAMZ, recommendationsFormulaRestockAMZ, suggestionsFormulaRestockAMZ } from '../../../../src/helpers/calculation-helper';
-import { itemInfoResponseSchema } from '../assertion/dashboard/itemAssertionSchema';
+import { itemRestockAMZInfoResponseSchema } from '../assertion/dashboard/itemAssertionSchema';
 
 let link: any;
 
@@ -56,7 +56,7 @@ Then(`{} sends a GET api method to get Items belonged to {}`, async function (ac
 });
 
 Then('{} checks API contract of get items in Item list', async function (actor: string) {
-    itemInfoResponseSchema.parse(this.responseOfAItem);
+    itemRestockAMZInfoResponseSchema.parse(this.responseOfAItem);
 });
 
 Then('{} picks random item in Item list', async function (actor: string) {
@@ -261,5 +261,5 @@ Then(`{} checks value Adj Daily Sales Rate in Restock Model`, async function (ac
 });
 
 Then('{} checks API contract of get restock calculation api', async function (actor: string) {
-    itemInfoResponseSchema.parse(this.restockCalculationResponseBody);
+    itemRestockAMZInfoResponseSchema.parse(this.restockCalculationResponseBody);
 });
