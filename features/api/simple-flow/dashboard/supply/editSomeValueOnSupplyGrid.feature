@@ -17,13 +17,14 @@ Feature: API_Dashboard PUT /api/supply/manual
         And User sets GET api endpoint to get suppliers with limit row: <limitRow>
         And User sends a GET request to get list suppliers
         And User sets GET api endpoint to get supplies with limit row: <limitRow>
-        When User sends a GET request to get list supplies
+        And User sends a GET request to get list supplies
         And User picks a random supply in above list supplies
         And User saves the supply key and order key
         And User sets PUT api endpoint to edit <editColumn> of the above supply for company type <companyType> with new value: <value>
         When User sends a PUT request to edit the supply
         Then The expected status code should be <expectedStatus>
         And The new <editColumn> of supply must be updated successfully
+        And User checks API contract essential types in supply object are correct
 
         Examples:
             | TC_ID       | companyType | email                      | limitRow | editColumn | value  | expectedStatus |
@@ -38,13 +39,14 @@ Feature: API_Dashboard PUT /api/supply/manual
         And User sets GET api endpoint to get suppliers with limit row: <limitRow>
         And User sends a GET request to get list suppliers
         And User sets GET api endpoint to get supplies with limit row: <limitRow>
-        When User sends a GET request to get list supplies
+        And User sends a GET request to get list supplies
         And User picks a random supply in above list supplies
         And User saves the supply key and order key
         And User sets PUT api endpoint to edit <editColumn> of the above supply for company type <companyType> with new value: <value>
         When User sends a PUT request to edit the supply
         Then The expected status code should be <expectedStatus>
         And The new <editColumn> of supply must be updated successfully
+        And User checks API contract essential types in supply object are correct
 
         Examples:
             | TC_ID       | companyType | email                      | limitRow | editColumn   | value  | expectedStatus |

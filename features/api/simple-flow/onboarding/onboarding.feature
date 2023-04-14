@@ -33,6 +33,7 @@ Feature: API_Regression User can create company and complete onboarding flow
         And User sets PUT api endpoint to edit <editColumn> of the above supplier for company type <companyType> with new value: <value>
         And User sends a PUT request to edit the supplier
         And The expected status code should be <expectedStatus>
+        And User checks API contract essential types in supplier object are correct
         And The new <editColumn> of supplier must be updated successfully
         And User sets POST api endpoint to create item
         And User sets request body with payload as name: "<itemName>" and description: "<description>" and vendorName: "<vendorName>" and vendorPrice: "<vendorPrice>" and moq: "<moq>" and leadTime: "<leadTime>" and orderInterval: "<orderInterval>" and serviceLevel: "<serviceLevel>" and onHand: "<onHand>" and onHandMin: "<onHandMin>" and onHandThirdParty: "<onHandThirdParty>" and onHandThirdPartyMin: "<onHandThirdPartyMin>" and lotMultipleQty: "" and lotMultipleItemName: "" and asin: "" and fnsku: "" and skuNotes: "" and prepNotes: "" and supplierRebate: "" and inboundShippingCost: "" and reshippingCost: "" and repackagingMaterialCost: "" and repackingLaborCost: "" and rank: "" and inventorySourcePreference: "" and average7DayPrice: "" and isFbm: "" and key: "" and vendorKey: "<vendorKey>" and lotMultipleItemKey: ""
@@ -52,6 +53,7 @@ Feature: API_Regression User can create company and complete onboarding flow
         And User sends a PUT request to edit the item
         And The expected status code should be <expectedStatus>
         And The new <editColumn> of item must be updated successfully
+        And User checks API contract essential types in item object are correct
         And User sets GET api endpoint to get bom keys
         And User sends a GET request to get all boms
         And User sets POST api endpoint to create bom
@@ -80,6 +82,7 @@ Feature: API_Regression User can create company and complete onboarding flow
         And User sends a PUT request to edit the demand
         And The expected status code should be <expectedStatus>
         And The new <editColumnDemand> of demand must be updated successfully
+        And User checks values in response of random demand are correct
         And User sets POST api endpoint to create supply
         And User sets request body with payload as supplyUuid: "<supplyUuid>" and refNum: "<refNum>" and vendorName: "<vendorName>" and vendorKey: "<vendorKey>" and docDate: "<docDate>" and dueDate: "<dueDate>" and itemName: "<itemName>" and itemKey: "<itemKey>" and orderQty: "<orderQty>" and openQty: "<openQty>" and orderKey: "<orderKey>" and rowKey: "<rowKey>"
         And User sends a POST method to create supply
@@ -93,6 +96,7 @@ Feature: API_Regression User can create company and complete onboarding flow
         And User sends a PUT request to edit the supply
         And The expected status code should be <expectedStatus>
         And The new <editColumnSupply> of supply must be updated successfully
+        And User checks API contract essential types in supply object are correct
         And User sends a PUT method to set a scheduled time meeting
         And The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
@@ -136,10 +140,10 @@ Feature: API_Regression User can create company and complete onboarding flow
         And User saves the supplier key
         And User sets PUT api endpoint to edit <editColumn> of the above supplier for company type <companyType> with new value: <value>
         And User sends a PUT request to edit the supplier
-        And The expected status code should be <expectedStatus>
         And The new <editColumn> of supplier must be updated successfully
         And The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
+        And User checks API contract essential types in supplier object are correct
         And User sets POST api endpoint to create item
         And User sets request body with payload as name: "<itemName>" and description: "<description>" and vendorName: "<vendorName>" and vendorPrice: "<vendorPrice>" and moq: "<moq>" and leadTime: "<leadTime>" and orderInterval: "<orderInterval>" and serviceLevel: "<serviceLevel>" and onHand: "<onHand>" and onHandMin: "<onHandMin>" and onHandThirdParty: "<onHandThirdParty>" and onHandThirdPartyMin: "<onHandThirdPartyMin>" and lotMultipleQty: "<lotMultipleQty>" and lotMultipleItemName: "" and asin: "<asin>" and fnsku: "<fnsku>" and skuNotes: "<skuNotes>" and prepNotes: "<prepNotes>" and supplierRebate: "<supplierRebate>" and inboundShippingCost: "<inboundShippingCost>" and reshippingCost: "<reshippingCost>" and repackagingMaterialCost: "<repackagingMaterialCost>" and repackingLaborCost: "<repackingLaborCost>" and rank: "<rank>" and inventorySourcePreference: "<inventorySourcePreference>" and average7DayPrice: "<average7DayPrice>" and isFbm: "<isFbm>" and key: "" and vendorKey: "<vendorKey>" and lotMultipleItemKey: ""
         And User sends a POST method to create item
@@ -157,6 +161,8 @@ Feature: API_Regression User can create company and complete onboarding flow
         And User sends a PUT request to edit the item
         And The expected status code should be <expectedStatus>
         And The new <editColumn> of item must be updated successfully
+        # Some values are null so cannot check the api contract by old expectation
+        # And User checks API contract essential types in item object are correct
         And User sets GET api endpoint to get bom keys
         And User sends a GET request to get all boms
         And The expected status code should be <expectedStatus>
@@ -189,6 +195,7 @@ Feature: API_Regression User can create company and complete onboarding flow
         And User sends a PUT request to edit the supply
         And The expected status code should be <expectedStatus>
         And The new <editColumnSupply> of supply must be updated successfully
+        And User checks API contract essential types in supply object are correct
         And User sends a PUT method to set a scheduled time meeting
         And The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
