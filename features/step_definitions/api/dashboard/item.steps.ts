@@ -7,6 +7,7 @@ import { faker } from '@faker-js/faker';
 import _ from "lodash";
 import * as keyword from '../../../../src/utils/actionwords'
 import exp from 'constants';
+import { itemInfoResponseSchema } from '../assertion/dashboard/itemAssertionSchema';
 
 let linkUpdateVendorSalesVelocitySettings: any;
 let linkUpdateItemSalesVelocitySettings: any;
@@ -18,7 +19,7 @@ var linkGetAllItems: string;
 var linkGetFilterItem: string;
 let linkCountItems: string;
 let linkGetItems: string;
-var linkGetActiveAndHaslotMultipleItemKeyNullItem: string;
+var linkGetActiveAndHasLotMultipleItemKeyNullItem: string;
 let linkItemKey : any;
 
 Then(`{} sets GET api endpoint to get item summary`, async function (actor: string) {
@@ -30,7 +31,7 @@ Then(`{} sets GET api endpoint to get item with limit row: {}`, async function (
 });
 
 Then(`{} sets GET api endpoint to count items that is active and have lotMultipleItemKey is NULL`, async function (actor: string) {
-    linkCountItems = linkGetActiveAndHaslotMultipleItemKeyNullItem = encodeURI(`${Links.API_ITEM_COUNT}?where={"filters":[{"filters":[{"field":"isHidden","operator":"eq","value":false},{"field":"isHidden","operator":"eq","value":null},{"field":"isHidden","operator":"eq","value":null}],"logic":"or"},{"filters":[{"field":"lotMultipleItemName","operator":"isnull","value":null}],"logic":"and"}],"logic":"and"}`);
+    linkCountItems = linkGetActiveAndHasLotMultipleItemKeyNullItem = encodeURI(`${Links.API_ITEM_COUNT}?where={"filters":[{"filters":[{"field":"isHidden","operator":"eq","value":false},{"field":"isHidden","operator":"eq","value":null},{"field":"isHidden","operator":"eq","value":null}],"logic":"or"},{"filters":[{"field":"lotMultipleItemName","operator":"isnull","value":null}],"logic":"and"}],"logic":"and"}`);
 });
 
 Then(`{} sets GET api endpoint to get items with limit row: {} and filter field: {} equals {}`, async function (actor, limitRow, filterField, filterValue: string) {
@@ -41,17 +42,17 @@ Then(`{} sends a GET request to get count items active and have lotMultipleItemK
     const options = {
         headers: this.headers
     }
-    this.getCountItemsActiveAndHasLotMultipleItemKeyNullResponse = this.response = await itemRequest.getItems(this.request, linkGetActiveAndHaslotMultipleItemKeyNullItem, options);
+    this.getCountItemsActiveAndHasLotMultipleItemKeyNullResponse = this.response = await itemRequest.getItems(this.request, linkGetActiveAndHasLotMultipleItemKeyNullItem, options);
     const responseBodyText = await this.getCountItemsActiveAndHasLotMultipleItemKeyNullResponse.text();
     if (this.getCountItemsActiveAndHasLotMultipleItemKeyNullResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
         this.responseBody = this.getCountItemsActiveAndHasLotMultipleItemKeyNullResponseBody = JSON.parse(await this.getCountItemsActiveAndHasLotMultipleItemKeyNullResponse.body());
-        logger.log('info', `Response GET ${linkGetActiveAndHaslotMultipleItemKeyNullItem}>>>>>` + JSON.stringify(this.getCountItemsActiveAndHasLotMultipleItemKeyNullResponseBody, undefined, 4));
-        this.attach(`Response GET ${linkGetActiveAndHaslotMultipleItemKeyNullItem}>>>>>>` + JSON.stringify(this.getCountItemsActiveAndHasLotMultipleItemKeyNullResponseBody, undefined, 4))
+        logger.log('info', `Response GET ${linkGetActiveAndHasLotMultipleItemKeyNullItem}>>>>>` + JSON.stringify(this.getCountItemsActiveAndHasLotMultipleItemKeyNullResponseBody, undefined, 4));
+        this.attach(`Response GET ${linkGetActiveAndHasLotMultipleItemKeyNullItem}>>>>>>` + JSON.stringify(this.getCountItemsActiveAndHasLotMultipleItemKeyNullResponseBody, undefined, 4))
     }
     else {
         const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
-        logger.log('info', `Response GET ${linkGetActiveAndHaslotMultipleItemKeyNullItem} has status code ${this.response.status()} ${this.response.statusText()} and response body >>>>>>${responseBodyText}`);
-        this.attach(`Response GET ${linkGetActiveAndHaslotMultipleItemKeyNullItem} has status code ${this.response.status()} ${this.response.statusText()} and response body >>>>>>${actualResponseText}`)
+        logger.log('info', `Response GET ${linkGetActiveAndHasLotMultipleItemKeyNullItem} has status code ${this.response.status()} ${this.response.statusText()} and response body >>>>>>${responseBodyText}`);
+        this.attach(`Response GET ${linkGetActiveAndHasLotMultipleItemKeyNullItem} has status code ${this.response.status()} ${this.response.statusText()} and response body >>>>>>${actualResponseText}`)
     }
 })
 
@@ -149,8 +150,8 @@ Then(`{} checks random items has status is Active`, async function (actor) {
         headers: this.headers
     }
 
-    // const maxRandomItemNumbers = this.getCountItemsinPurchasingCustomResponseBody > 10 ? 10 : this.getCountItemsinPurchasingCustomResponseBody;
-    // const randomMax10Items: any = _.sampleSize(this.getItemsinPurchasingCustomResponseBody, maxRandomItemNumbers);
+    // const maxRandomItemNumbers = this.getCountItemsInPurchasingCustomResponseBody > 10 ? 10 : this.getCountItemsInPurchasingCustomResponseBody;
+    // const randomMax10Items: any = _.sampleSize(this.getItemsInPurchasingCustomResponseBody, maxRandomItemNumbers);
     for await (const item of this.randomMax10Items) {
         var itemKey = item.itemKey || item.key;
         const detailItemLink = `${Links.API_ITEMS}/${itemKey}`;
@@ -169,12 +170,6 @@ Then(`{} checks random items has status is Active`, async function (actor) {
             expect(itemDetailResponse.status()).toEqual(200);
         }
     }
-})
-
-Given('User picks a random imtem in above list items', async function () {
-    this.responseBodyOfAItemObject = await this.getItemsResponseBody[Math.floor(Math.random() * this.getItemsResponseBody.length)];
-    logger.log('info', `Random Item: ${JSON.stringify(this.responseBodyOfAItemObject, undefined, 4)}`);
-    this.attach(`Random Item: ${JSON.stringify(this.responseBodyOfAItemObject, undefined, 4)}`);    
 });
 
 Then(`{} saves the item key`, async function (actor: string) {
@@ -415,10 +410,10 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
         case 'inventorySourcePreference':
             if (value == 'random') {
                 const inventorySources = ['FBA', 'FBM', 'FBA+FBM'];
-                const excludedInvetorySource = this.responseBodyOfAItemObject.inventorySourcePreference;
+                const excludedInventorySource = this.responseBodyOfAItemObject.inventorySourcePreference;
 
-                // Filter out the excluded inventory sourec value from the inventorySources array
-                const filteredArray = inventorySources.filter((value) => value !== excludedInvetorySource);
+                // Filter out the excluded inventory source value from the inventorySources array
+                const filteredArray = inventorySources.filter((value) => value !== excludedInventorySource);
                 this.inventorySourcePreference = filteredArray[Math.floor(Math.random() * filteredArray.length)];
             }
 
@@ -729,7 +724,7 @@ When('User sends a PUT request to edit the item', async function () {
     // Send PUT request
     this.response = await itemRequest.editItem(this.request, link, this.payLoad, this.headers)
     if (this.response.status() == 200) {
-        this.editItemResponseBody = JSON.parse(await this.response.text())
+        this.responseBodyOfAItemObject = this.editItemResponseBody = JSON.parse(await this.response.text());
         logger.log('info', `Edit Item Response edit ${link} has status code ${this.response.status()} ${this.response.statusText()} and editItemResponse body ${JSON.stringify(this.editItemResponseBody, undefined, 4)}`)
         this.attach(`Edit Item Response edit ${link} has status code ${this.response.status()} ${this.response.statusText()} and editItemResponse body ${JSON.stringify(this.editItemResponseBody, undefined, 4)}`)
     } else {
@@ -885,7 +880,7 @@ Then('User sends GET request to get item sales velocity settings', async functio
 });
 
 Given(`User sets GET api endpoint to get items in "Manage Company > Item"`, function () {
-    // Get items that its purcchase as is null and its name is not contain DefaultPurchasingSaleVelocity
+    // Get items that its purchase as is null and its name is not contain DefaultPurchasingSaleVelocity
     linkGetItemsWithFilter = `${Links.API_ITEMS}?offset=0&limit=50&where={"filters":[{"filters":[{"field":"name","operator":"doesnotcontain","value":"DefaultPurchasingSaleVelocity"}],"logic":"and"},{"filters":[{"field":"vendorName","operator":"isnull","value":null}],"logic":"and"},{"filters":[{"field":"lotMultipleItemName","operator":"isnull","value":null}],"logic":"and"}],"logic":"and"}`
 });
 
@@ -1005,4 +1000,8 @@ Then('User sends a GET request to get Item by Item key', async function () {
         logger.log('info', `Response GET ${linkItemKey} has status code ${this.response.status()} ${this.response.statusText()} and response body ${responseBodyText}`);
         this.attach(`Response GET ${linkItemKey} has status code ${this.response.status()} ${this.response.statusText()} and response body ${actualResponseText}`)
     }
+});
+
+Then('{} checks API contract of get Item by Item key api', async function (actor: string) {
+    itemInfoResponseSchema.parse(this.getItemByItemKeyResponseBody);
 });

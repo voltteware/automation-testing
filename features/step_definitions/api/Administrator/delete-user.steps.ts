@@ -47,7 +47,7 @@ Then('Check {} exist in the system, if it does not exist will create user with s
         //     username: 'may27pre@gmail.com',
         //     password: 'Test1111#',
         // }
-        // this.loginResponse = await authenticateRequest.sendPOSTAuthenticatieRequest(Links.API_LOGIN, this.payloadLogin);
+        // this.loginResponse = await authenticateRequest.sendPOSTAuthenticateRequest(Links.API_LOGIN, this.payloadLogin);
         // if (this.loginResponse.status() == 201) {
         //     const responseHeaders = this.loginResponse.headers();
         //     this.cookieLogin = responseHeaders['set-cookie'];
@@ -82,7 +82,7 @@ Then('Login with admin account to check new user {} is showed in the response of
         username: 'may27pre@gmail.com',
         password: 'Test1111#',
     }
-    this.loginResponse = await authenticateRequest.sendPOSTAuthenticatieRequest(Links.API_LOGIN, this.payloadLogin);
+    this.loginResponse = await authenticateRequest.sendPOSTAuthenticateRequest(Links.API_LOGIN, this.payloadLogin);
     if (this.loginResponse.status() == 201) {
         const responseHeaders = this.loginResponse.headers();
         this.cookieLogin = responseHeaders['set-cookie'];

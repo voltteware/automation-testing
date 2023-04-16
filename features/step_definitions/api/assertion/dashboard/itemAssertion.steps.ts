@@ -1,7 +1,8 @@
 import { When, Then, Given } from '@cucumber/cucumber';
 import { expect } from '@playwright/test';
 import _ from "lodash";
-import logger from '../../../../src/Logger/logger';
+import logger from '../../../../../src/Logger/logger';
+import { itemSummaryResponseSchema } from '../dashboard/itemAssertionSchema';
 
 Then('{} checks API contract in item summary object are correct', async function (actor: string) {
     if (this.
@@ -14,11 +15,12 @@ Then('{} checks API contract in item summary object are correct', async function
         expect(this.getItemSummaryResponseBody.err, 'err value should be null').toBeNull();
     }
 
-    expect(typeof (this.getItemSummaryResponseBody.model), 'Type of model value should be object').toBe("object");
-    expect(typeof (Number(this.getItemSummaryResponseBody.model.onHandCount)), 'Type of onHandCount value should be string').toBe("number");
-    expect(typeof (Number(this.getItemSummaryResponseBody.model.onHandThirdPartyCount)), 'Type of onHandThirdPartyCount value should be number').toBe("number");
-    expect(typeof (Number(this.getItemSummaryResponseBody.model.olderThan30DaysCount)), 'Type of olderThan30DaysCount value should be number').toBe("number");
-    expect(typeof (Number(this.getItemSummaryResponseBody.model.missingVendorCount)), 'Type of missingVendorCount value should be number').toBe("number");
+    itemSummaryResponseSchema.parse(this.getItemSummaryResponseBody);
+    // expect(typeof (this.getItemSummaryResponseBody.model), 'Type of model value should be object').toBe("object");
+    // expect(typeof (Number(this.getItemSummaryResponseBody.model.onHandCount)), 'Type of onHandCount value should be string').toBe("number");
+    // expect(typeof (Number(this.getItemSummaryResponseBody.model.onHandThirdPartyCount)), 'Type of onHandThirdPartyCount value should be number').toBe("number");
+    // expect(typeof (Number(this.getItemSummaryResponseBody.model.olderThan30DaysCount)), 'Type of olderThan30DaysCount value should be number').toBe("number");
+    // expect(typeof (Number(this.getItemSummaryResponseBody.model.missingVendorCount)), 'Type of missingVendorCount value should be number').toBe("number");
 })
 
 Then('{} checks number Items Out of Stock in response of item summary is correct', async function (actor: string) {
@@ -54,7 +56,20 @@ Then('{} checks API contract essential types in item object are correct', async 
     this.softAssert(typeof (this.responseBodyOfAItemObject.companyType) === "string", 'Type of companyType value should be string');
     this.softAssert(typeof (this.responseBodyOfAItemObject.companyKey) === "string", 'Type of companyKey value should be string');
     this.softAssert(typeof (this.responseBodyOfAItemObject.key) === "string", 'Type of key value should be string');
-    this.softAssert(typeof (this.responseBodyOfAItemObject.asin) === "string", 'Type of asin value should be string');
+    if (this.responseBodyOfAItemObject.asin !== null) {
+        this.softAssert(typeof (this.responseBodyOfAItemObject.asin) === "string", 'Type of asin value should be string');
+    }
+    else {
+        this.softAssert(this.responseBodyOfAItemObject.asin === null, 'asin value should be null');
+    }
+
+    if (this.responseBodyOfAItemObject.fnsku !== null) {
+        this.softAssert(typeof (this.responseBodyOfAItemObject.fnsku) === "string", 'Type of fnsku value should be string');
+    }
+    else {
+        this.softAssert(this.responseBodyOfAItemObject.fnsku === null, 'fnsku value should be null');
+    }
+    
     this.softAssert(typeof (this.responseBodyOfAItemObject.fnsku) === "string", 'Type of fnsku value should be string');
     this.softAssert(typeof (this.responseBodyOfAItemObject.name) === "string", 'Type of name value should be string');
     this.softAssert(typeof (this.responseBodyOfAItemObject.packageWeight) === "number", 'Type of packageWeight value should be number');

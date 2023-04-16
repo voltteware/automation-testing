@@ -7,6 +7,13 @@ async function getRealm(request: APIRequestContext, linkApi: string, options?: o
     return await request.get(url, options);
 }
 
+// Get companies information of current user
+async function getCompanies(request: APIRequestContext, linkApi: string, options?: object) {
+    const url = `${linkApi}`;
+    logger.log('info', `Send GET request ${url}`);
+    return await request.get(url, options);
+}
+
 //Get company by company key
 async function getCompanyInfo(request: APIRequestContext, linkApi: string, options?: object) {
     const url = `${linkApi}`;
@@ -55,6 +62,7 @@ async function editPurchasingDailyRate(request: APIRequestContext, linkApi: stri
 
 export {
     getRealm,
+    getCompanies,
     getCompanyInfo,
     updateCompany,
     createCompany,

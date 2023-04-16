@@ -114,7 +114,7 @@ export class ActionWords {
     testStep: ITestStepHookParameter,
     timestamp: string
   ) {
-    const imgageName = testStep.pickleStep.text
+    const imageName = testStep.pickleStep.text
       .replaceAll('"', "")
       .replaceAll("<", "")
       .replaceAll(">", "");
@@ -127,7 +127,7 @@ export class ActionWords {
         testStep.pickle.name +
         timestamp +
         "/" +
-        imgageName +
+        imageName +
         ".png",
     });
   }

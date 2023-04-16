@@ -61,14 +61,14 @@ Then('Check {} company exist in the system, if it does not exist will create com
         if (this.createCompanyResponse.status() == 201 && !responseBodyText.includes('<!doctype html>')) {
             this.createCompanyResponseBody = JSON.parse(responseBodyText);
             logger.log('info', `Response POST ${Links.API_CREATE_COMPANY}` + JSON.stringify(this.createCompanyResponseBody, undefined, 4));
-            this.attach(`Response POST ${Links.API_CREATE_COMPANY}` + JSON.stringify(this.createCompanyResponseBody, undefined, 4));
+            this.attach(`Response Create New Company POST >>>>>> ${Links.API_CREATE_COMPANY}` + JSON.stringify(this.createCompanyResponseBody, undefined, 4));
         }
         else {
             const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
             logger.log('info', `Response ${Links.API_CREATE_COMPANY} has status code ${this.response.status()} ${this.response.statusText()} and response body ${responseBodyText}`);
             this.attach(`Response ${Links.API_CREATE_COMPANY} has status code ${this.response.status()} ${this.response.statusText()} and response body ${actualResponseText}`)
         }
-    }
+    }    
 })
 
 Then('{} filters company to get company which has the company name included {}', async function (actor, companyNameKeyWord: string) {
@@ -79,7 +79,24 @@ Then('{} filters company to get company which has the company name included {}',
 })
 
 Then('{} sends a DELETE method to {} delete the {} company', async function (actor, deleteType: string, actionCompany: string) {
-    this.type = deleteType;
+    this.deleteType = deleteType;
+    const options = {
+        headers: this.headers
+    }
+    if (this.actionCompany == 'created' || actionCompany == 'created'){
+        this.companyKeyUrl = this.createCompanyResponseBody.companyKey;
+        this.companyTypeUrl = this.createCompanyResponseBody.companyType;
+    }else {
+        this.companyKeyUrl = randomCompany.companyKey;
+        this.companyTypeUrl = randomCompany.companyType;
+    }
+    this.response = await adminRequest.deleteCompany(this.request, link, this.companyKeyUrl, this.companyTypeUrl, options, this.deleteType);
+    const responseBodyText = await this.response.text();
+    logger.log('info', `Response Delete ${link} has status code ${this.response.status()} ${this.response.statusText()} and response body ${responseBodyText}`);
+    this.attach(`Response Delete ${link} has status code ${this.response.status()} ${this.response.statusText()} and response body ${responseBodyText}`)
+})
+
+Then('{} sends a DELETE method to delete the {} company', async function (actor, actionCompany: string) {
     const options = {
         headers: this.headers
     }
@@ -90,7 +107,7 @@ Then('{} sends a DELETE method to {} delete the {} company', async function (act
         this.companyKeyUrl = randomCompany.companyKey;
         this.companyTypeUrl = randomCompany.companyType;
     }
-    this.response = await adminRequest.deleteCompany(this.request, link, this.companyKeyUrl, this.companyTypeUrl, options, this.type);
+    this.response = await adminRequest.deleteCompany(this.request, link, this.companyKeyUrl, this.companyTypeUrl, options);
     const responseBodyText = await this.response.text();
     logger.log('info', `Response Delete ${link} has status code ${this.response.status()} ${this.response.statusText()} and response body ${responseBodyText}`);
     this.attach(`Response Delete ${link} has status code ${this.response.status()} ${this.response.statusText()} and response body ${responseBodyText}`)

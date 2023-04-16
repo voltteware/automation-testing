@@ -24,7 +24,7 @@ Then('She sends POST requests with payload incorrect email format and check stat
     };
 
     //Send POST login request
-    this.response = await authenticateRequest.sendPOSTAuthenticatieRequest(link, this.payload)
+    this.response = await authenticateRequest.sendPOSTAuthenticateRequest(link, this.payload)
     this.attach(JSON.stringify(this.payload, undefined, 4))
 
     this.responseBody = JSON.parse(await this.response.text());
@@ -58,7 +58,7 @@ When('She sets request body with payload as email: {string} and passowrd: {strin
 });
 
 Then('She sends a POST method to authenticate account', async function () {
-  this.response = await authenticateRequest.sendPOSTAuthenticatieRequest(link, this.payload);
+  this.response = await authenticateRequest.sendPOSTAuthenticateRequest(link, this.payload);
   if (this.response.status() == 201) {
     const responseHeaders = this.response.headers();
     this.cookie = responseHeaders['set-cookie'];

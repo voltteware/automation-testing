@@ -7,7 +7,7 @@ Feature: API_User GET/realm
         And In Header of the request, she sets param Cookie as valid connect.sid
         When She sends a GET request to get company keys
         Then The expected status code should be <expectedStatus>
-        And She picks random company in above response
+        And She picks random company from response of get company keys API
         And She checks API contract types in random company object are correct
         And She checks <email> and other values in response of random company are correct
         Examples:

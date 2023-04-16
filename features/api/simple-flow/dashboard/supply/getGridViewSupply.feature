@@ -4,10 +4,10 @@ Feature: API_Dashboard GET /api/grid-view/supply
         Given user sends a POST login request to get valid cookie with role
             | role  | username                   | password  |
             | admin | testautoforecast@gmail.com | Test1111# |
-        And User sets GET api endpoint to get company keys
+        And User sets GET api endpoint to get companies information of current user
         And In Header of the request, she sets param Cookie as valid connect.sid
-        When User sends a GET request to get company keys
-        Then User picks random company in above response
+        When User sends a GET request to get companies
+        Then User picks random company which has onboarded in above response
 
     @TC_GVSL001
     Scenario Outline: TC_GVSL001 - Verify user <email> could call this API to get grid view supply by using company key and company type
@@ -39,7 +39,7 @@ Feature: API_Dashboard GET /api/grid-view/supply
             | TC_GVSL002_3 | testautoforecast@gmail.com | random     | valid   | invalid          | invalid           | 400            | Company not found.    |
             | TC_GVSL002_4 | testautoforecast@gmail.com | random     | valid   |                  |                   | 500            | Internal Server Error |
 
-    @TC_GVSL003 
+    @TC_GVSL003
     Scenario Outline: TC_GVSL003 - Verify user <userA> could not call this API to get grid view in the supply of company which does not belongs to her
         Given User has valid connect.sid of "<userA>" after send a POST request with payload as email: "<userA>" and password: "<password>"
         But User sets GET api endpoint to get information of a company belongs to <userB> using company key <companyKey>

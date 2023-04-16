@@ -23,14 +23,14 @@ async function getItems(request: APIRequestContext, linkApi: string, options?: o
 }
 
 //Get Count Items in Purchasing Custom
-async function getCountItemsinPurchasingCustom(request: APIRequestContext, linkApi: string, options?: object) {
+async function getCountItemsInPurchasingCustom(request: APIRequestContext, linkApi: string, options?: object) {
     const url = `${linkApi}`;
     logger.log('info', `Send GET request ${url}`);
     return await request.get(url, options);
 }
 
 //Get Items in Purchasing Custom
-async function getItemsinPurchasingCustom(request: APIRequestContext, linkApi: string, options?: object) {
+async function getItemsInPurchasingCustom(request: APIRequestContext, linkApi: string, options?: object) {
     const url = `${linkApi}`;
     logger.log('info', `Send GET request ${url}`);
     return await request.get(url, options);
@@ -92,6 +92,6 @@ export {
     getItemDetail,
     getItemSalesVelocitySettings,
     updateItemSalesVelocitySettings,
-    getCountItemsinPurchasingCustom,
-    getItemsinPurchasingCustom,
+    getCountItemsInPurchasingCustom,
+    getItemsInPurchasingCustom,
 }

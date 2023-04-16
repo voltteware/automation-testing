@@ -4,10 +4,10 @@ Feature: API_Dashboard GET /api/company/company key
         Given user sends a POST login request to get valid cookie with role
             | role  | username           | password  |
             | admin | may27pre@gmail.com | Test1111# |
-        And She sets GET api endpoint to get company keys
+        And User sets GET api endpoint to get companies information of current user
         And In Header of the request, she sets param Cookie as valid connect.sid
-        When She sends a GET request to get company keys
-        Then She picks random company in above response
+        When User sends a GET request to get companies
+        Then She picks random company which has onboarded in above response
 
     @TC_C001
     Scenario Outline: TC_C001 - Verify user <email> could call this API to get information of specific company by using company key

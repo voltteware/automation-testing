@@ -335,7 +335,7 @@ When('User sends a PUT request to edit the supply', async function () {
     // Send PUT request
     this.response = await supplyRequest.editSupply(this.request, link, this.payLoad, this.headers)
     if (this.response.status() == 200) {
-        this.editSupplyResponseBody = JSON.parse(await this.response.text())
+        this.responseBodyOfASupplyObject = this.editSupplyResponseBody = JSON.parse(await this.response.text());
         logger.log('info', `Edit Supply Response edit ${link} has status code ${this.response.status()} ${this.response.statusText()} and editSupplyResponse body ${JSON.stringify(this.editSupplyResponseBody, undefined, 4)}`)
         this.attach(`Edit Supply Response edit ${link} has status code ${this.response.status()} ${this.response.statusText()} and editSupplyResponse body ${JSON.stringify(this.editSupplyResponseBody, undefined, 4)}`)
     } else {
