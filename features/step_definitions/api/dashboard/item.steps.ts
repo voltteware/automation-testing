@@ -20,7 +20,7 @@ var linkGetFilterItem: string;
 let linkCountItems: string;
 let linkGetItems: string;
 var linkGetActiveAndHasLotMultipleItemKeyNullItem: string;
-let linkItemKey : any;
+let linkItemKey: any;
 
 Then(`{} sets GET api endpoint to get item summary`, async function (actor: string) {
     link = `${Links.API_ITEMS}?summary=true&companyKey=${this.companyKey}&companyType=${this.companyType}`;
@@ -135,41 +135,93 @@ Given('User picks a random item in above list items', async function () {
     expect(this.getItemsResponseBody.length, 'There is at least 1 item to pick random').toBeGreaterThan(1);
     this.responseBodyOfAItemObject = await this.getItemsResponseBody[Math.floor(Math.random() * this.getItemsResponseBody.length)];
     logger.log('info', `Random Item: ${JSON.stringify(this.responseBodyOfAItemObject, undefined, 4)}`);
-    this.attach(`Random Item: ${JSON.stringify(this.responseBodyOfAItemObject, undefined, 4)}`);    
+    this.attach(`Random Item: ${JSON.stringify(this.responseBodyOfAItemObject, undefined, 4)}`);
 });
 
 Given('User picks max 10 random items in above list items', async function () {
-    const shuffledArr = this.getItemsResponseBody.sort(() => Math.random() - 0.5);
-    this.randomMax10Items = shuffledArr.slice(0, 10)
-    logger.log('info', `Random Item: ${JSON.stringify(this.randomMax10Items, undefined, 4)}`);
-    this.attach(`Random Item: ${JSON.stringify(this.randomMax10Items, undefined, 4)}`);
+    // Add this if else condition to skip test in Purchasing My Suggested if system only show Items without Suppliers, there is no item has Supplier Name not null. 
+    if (this.getItemsResponseBody != undefined || null) {
+        const shuffledArr = this.getItemsResponseBody.sort(() => Math.random() - 0.5);
+        this.randomMax10Items = shuffledArr.slice(0, 10)
+        logger.log('info', `Random Item: ${JSON.stringify(this.randomMax10Items, undefined, 4)}`);
+        this.attach(`Random Item: ${JSON.stringify(this.randomMax10Items, undefined, 4)}`);
+    }
+    else {
+        this.randomMax10Items = null;
+        logger.log('info', `There is no item in getItemsResponseBody`);
+        this.attach(`There is no item in getItemsResponseBody`);
+    }
 });
 
 Then(`{} checks random items has status is Active`, async function (actor) {
-    const options = {
-        headers: this.headers
-    }
+     // Add this if else condition to skip test in Purchasing My Suggested if system only show Items without Suppliers, there is no item has Supplier Name not null. 
+    if (this.randomMax10Items != undefined || null) {
+        const options = {
+            headers: this.headers
+        }
 
-    // const maxRandomItemNumbers = this.getCountItemsInPurchasingCustomResponseBody > 10 ? 10 : this.getCountItemsInPurchasingCustomResponseBody;
-    // const randomMax10Items: any = _.sampleSize(this.getItemsInPurchasingCustomResponseBody, maxRandomItemNumbers);
-    for await (const item of this.randomMax10Items) {
-        var itemKey = item.itemKey || item.key;
-        const detailItemLink = `${Links.API_ITEMS}/${itemKey}`;
-        var itemDetailResponse = await itemRequest.getItems(this.request, detailItemLink, options);
-        var itemDetailResponseText = await itemDetailResponse.text();
-        if (itemDetailResponse.status() == 200 && !itemDetailResponseText.includes('<!doctype html>')) {
-            const itemDetailResponseBody = JSON.parse(itemDetailResponseText);
-            logger.log('info', `Response GET ${detailItemLink} >>>>>>` + JSON.stringify(itemDetailResponseBody, undefined, 4));
-            this.attach(`Response GET ${detailItemLink} >>>>>>` + JSON.stringify(itemDetailResponseBody, undefined, 4))
-            expect(itemDetailResponseBody.isHidden, `Check item ${itemKey} has isHidden = false`).toBeFalsy();
-        }
-        else {
-            const actualResponseText = itemDetailResponseText.includes('<!doctype html>') ? 'html' : itemDetailResponseText;
-            logger.log('info', `Response GET ${detailItemLink} has status code ${itemDetailResponse.status()} ${itemDetailResponse.statusText()} and response body >>>>>> ${itemDetailResponseText}`);
-            this.attach(`Response GET ${detailItemLink} has status code ${itemDetailResponse.status()} ${itemDetailResponse.statusText()} and response body >>>>>> ${actualResponseText}`);
-            expect(itemDetailResponse.status()).toEqual(200);
+        // const maxRandomItemNumbers = this.getCountItemsinPurchasingCustomResponseBody > 10 ? 10 : this.getCountItemsinPurchasingCustomResponseBody;
+        // const randomMax10Items: any = _.sampleSize(this.getItemsinPurchasingCustomResponseBody, maxRandomItemNumbers);
+        for await (const item of this.randomMax10Items) {
+            var itemKey = item.itemKey || item.key;
+            const detailItemLink = `${Links.API_ITEMS}/${itemKey}`;
+            var itemDetailResponse = await itemRequest.getItems(this.request, detailItemLink, options);
+            var itemDetailResponseText = await itemDetailResponse.text();
+            if (itemDetailResponse.status() == 200 && !itemDetailResponseText.includes('<!doctype html>')) {
+                const itemDetailResponseBody = JSON.parse(itemDetailResponseText);
+                logger.log('info', `Response GET ${detailItemLink} >>>>>>` + JSON.stringify(itemDetailResponseBody, undefined, 4));
+                this.attach(`Response GET ${detailItemLink} >>>>>>` + JSON.stringify(itemDetailResponseBody, undefined, 4))
+                expect(itemDetailResponseBody.isHidden, `Check item ${itemKey} has isHidden = false`).toBeFalsy();
+            }
+            else {
+                const actualResponseText = itemDetailResponseText.includes('<!doctype html>') ? 'html' : itemDetailResponseText;
+                logger.log('info', `Response GET ${detailItemLink} has status code ${itemDetailResponse.status()} ${itemDetailResponse.statusText()} and response body >>>>>> ${itemDetailResponseText}`);
+                this.attach(`Response GET ${detailItemLink} has status code ${itemDetailResponse.status()} ${itemDetailResponse.statusText()} and response body >>>>>> ${actualResponseText}`);
+                expect(itemDetailResponse.status()).toEqual(200);
+            }
         }
     }
+    else {
+        logger.log('info', `There is no item`);
+        this.attach(`There is no item`);
+    }
+})
+
+Then(`{} checks supplier name of above random items in Manage Company Items`, async function (actor: string) {
+    if (this.randomMax10Items != undefined || null) {
+        const options = {
+            headers: this.headers
+        }
+
+        for (const item of this.randomMax10Items) {
+            const itemName = item.itemName;
+            linkGetItemsWithFilter = `${Links.API_ITEMS}?offset=0&limit=100&where={"filters":[{"filters":[{"field":"name","operator":"contains","value":"${itemName}"}],"logic":"and"}],"logic":"and"}`;
+            const itemInMangeCompanyItemsResponse = await itemRequest.getItems(this.request, linkGetItemsWithFilter, options);
+            const responseBodyText = await itemInMangeCompanyItemsResponse.text();
+            if (itemInMangeCompanyItemsResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
+                const itemInMangeCompanyItemsResponseBody = JSON.parse(responseBodyText);
+                const vendorName = itemInMangeCompanyItemsResponseBody[0].vendorName;
+                logger.log('info', `Vendor Name of ${itemName} >>>>>> ${vendorName}`);
+                this.attach(`Vendor Name of ${itemName} >>>>>> ${vendorName}`);
+                expect(vendorName, `Vendor Name of ${itemName} should be ${vendorName}`).toBe(this.selectedVendorName);
+            }
+            else {
+                const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
+                logger.log('info', `Response GET ${linkGetItemsWithFilter} has status code ${itemInMangeCompanyItemsResponse.status()} ${itemInMangeCompanyItemsResponse.statusText()} and response body >>>>>> ${responseBodyText}`);
+                this.attach(`Response GET ${linkGetItemsWithFilter} has status code ${itemInMangeCompanyItemsResponse.status()} ${itemInMangeCompanyItemsResponse.statusText()} and response body >>>>>> ${actualResponseText}`)
+            }
+        }
+    }
+    else {
+        logger.log('info', `There is no item`);
+        this.attach(`There is no item`);
+    }
+});
+
+Given('User picks a random imtem in above list items', async function () {
+    this.responseBodyOfAItemObject = await this.getItemsResponseBody[Math.floor(Math.random() * this.getItemsResponseBody.length)];
+    logger.log('info', `Random Item: ${JSON.stringify(this.responseBodyOfAItemObject, undefined, 4)}`);
+    this.attach(`Random Item: ${JSON.stringify(this.responseBodyOfAItemObject, undefined, 4)}`);
 });
 
 Then(`{} saves the item key`, async function (actor: string) {
@@ -222,6 +274,8 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
                 // Filter out the excluded supplier have excludedSupplierKey from the list suppliers
                 const filteredArray = this.getSupplierResponseBody.filter((supplier: any) => supplier.key !== excludedSupplierKey);
                 const randomSupplier = filteredArray[Math.floor(Math.random() * this.getSupplierResponseBody.length)];
+                logger.log('info', `Ramdom supplier` + JSON.stringify(randomSupplier, undefined, 4));
+                this.attach(`Ramdom supplier` + JSON.stringify(randomSupplier, undefined, 4))
 
                 this.vendorKey = randomSupplier.key;
                 this.vendorName = randomSupplier.name;
@@ -422,83 +476,92 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
             break;
         case 'purchaseAs':
             if (value == 'random') {
-                this.payloadCreateItem = {
-                    "key": "",
-                    "name": `${faker.random.alphaNumeric(6).toUpperCase()}-${faker.datatype.number(500)}-Auto`,
-                    "asin": `${faker.random.alphaNumeric(10).toUpperCase()}`,
-                    "fnsku": `${faker.random.alphaNumeric(10).toUpperCase()}`,
-                    "description": "",
-                    "vendorKey": null,
-                    "vendorName": null,
-                    "vendorPrice": 0,
-                    "moq": 1,
-                    "leadTime": 1,
-                    "orderInterval": 0,
-                    "serviceLevel": 85,
-                    "onHand": 0,
-                    "onHandMin": "",
-                    "onHandThirdParty": 0,
-                    "onHandThirdPartyMin": "",
-                    "growthTrend": 0,
-                    "isHidden": false,
-                    "useHistoryOverride": false,
-                    "lotMultipleQty": 1,
-                    "lotMultipleItemKey": null,
-                    "lotMultipleItemName": null,
-                    "forecastDirty": false,
-                    "forecastTags": [],
-                    "tags": [],
-                    "useBackfill": false,
-                    "useLostSalesOverride": false,
-                    "createdAt": "2023-04-11T08:09:03.909Z",
-                    "isFbm": false,
-                    "inventorySourcePreference": "",
-                    "skuNotes": "",
-                    "prepNotes": "",
-                    "supplierRebate": "",
-                    "inboundShippingCost": 0,
-                    "reshippingCost": 0,
-                    "repackagingMaterialCost": 0,
-                    "repackingLaborCost": 0,
-                    "inboundShipped": 0,
-                    "inboundReceiving": 0,
-                    "inbound": 0,
-                    "inboundFcTransfer": 0,
-                    "referralFee": 0,
-                    "fbaFee": 0,
-                    "rank": 0,
-                    "variableClosingFee": 0,
-                    "lowestFba": 0,
-                    "newBuyBox": 0,
-                    "listPrice": 0,
-                    "average7DayPrice": 0,
-                    "itemHistoryLength": 0,
-                    "history": null,
-                    "links": null,
-                    "packageWeight": "",
-                    "onHandFbm": "",
-                    "prepGuide": "",
-                    "dimensionalWeight": "",
-                    "hazmat": "",
-                    "oversized": "",
-                    "category": "",
-                    "upc": "",
-                    "ean": ""
-                }
-                
-                // Create new item Item has already set as Purchase As of other items            
-                this.attach(`Payload: ${JSON.stringify(this.payloadCreateItem, undefined, 4)}`)
+                if(companyType !== "QBFS"){
+                    this.payloadCreateItem = {
+                        "key": "",
+                        "name": `${faker.random.alphaNumeric(6).toUpperCase()}-${faker.datatype.number(500)}-Auto`,
+                        "asin": companyType === "ASC" ? `${faker.random.alphaNumeric(10).toUpperCase()}` : "",
+                        "fnsku": companyType === "ASC" ? `${faker.random.alphaNumeric(10).toUpperCase()}` : "",
+                        "description": "",
+                        "vendorKey": null,
+                        "vendorName": null,
+                        "vendorPrice": 0,
+                        "moq": 1,
+                        "leadTime": 1,
+                        "orderInterval": 0,
+                        "serviceLevel": 85,
+                        "onHand": 0,
+                        "onHandMin": "",
+                        "onHandThirdParty": 0,
+                        "onHandThirdPartyMin": "",
+                        "growthTrend": 0,
+                        "isHidden": false,
+                        "useHistoryOverride": false,
+                        "lotMultipleQty": 1,
+                        "lotMultipleItemKey": null,
+                        "lotMultipleItemName": null,
+                        "forecastDirty": false,
+                        "forecastTags": [],
+                        "tags": [],
+                        "useBackfill": false,
+                        "useLostSalesOverride": false,
+                        "createdAt": "2023-04-11T08:09:03.909Z",
+                        "isFbm": false,
+                        "inventorySourcePreference": "",
+                        "skuNotes": "",
+                        "prepNotes": "",
+                        "supplierRebate": "",
+                        "inboundShippingCost": 0,
+                        "reshippingCost": 0,
+                        "repackagingMaterialCost": 0,
+                        "repackingLaborCost": 0,
+                        "inboundShipped": 0,
+                        "inboundReceiving": 0,
+                        "inbound": 0,
+                        "inboundFcTransfer": 0,
+                        "referralFee": 0,
+                        "fbaFee": 0,
+                        "rank": 0,
+                        "variableClosingFee": 0,
+                        "lowestFba": 0,
+                        "newBuyBox": 0,
+                        "listPrice": 0,
+                        "average7DayPrice": 0,
+                        "itemHistoryLength": 0,
+                        "history": null,
+                        "links": null,
+                        "packageWeight": "",
+                        "onHandFbm": "",
+                        "prepGuide": "",
+                        "dimensionalWeight": "",
+                        "hazmat": "",
+                        "oversized": "",
+                        "category": "",
+                        "upc": "",
+                        "ean": ""
+                    }
+                    
+                    // Create new item Item has already set as Purchase As of other items            
+                    this.attach(`Payload Create new item: ${JSON.stringify(this.payloadCreateItem, undefined, 4)}`)
+    
+                    const createItemResponse = await itemRequest.createItem(this.request, Links.API_ITEMS, this.payloadCreateItem, this.headers);
+                    const responseBodyOfAItemObject = JSON.parse(await createItemResponse.text());
 
-                const createItemResponse = await itemRequest.createItem(this.request, Links.API_ITEMS, this.payloadCreateItem, this.headers);
-                const responseBodyOfAItemObject = JSON.parse(await createItemResponse.text());
+                    this.lotMultipleItemName = responseBodyOfAItemObject.name
+                    this.lotMultipleItemKey = responseBodyOfAItemObject.key
+                } else {
+                    const excludedItemKey = this.itemKey
+                    const excludedListPurchaseAs = this.getItemsResponseBody.map((item:any) => item.lotMultipleItemKey)
+                    // Filter out the excluded item have excludedItemKey and purchase as is null from the list items
+                    const filteredArray = this.getItemsResponseBody.filter((item: any) => ((item.key !== excludedItemKey) && (item.lotMultipleItemKey === null) && (!excludedListPurchaseAs.includes(item.key))));
+                    const randomItem = filteredArray[Math.floor(Math.random() * filteredArray.length)];
 
-                // const excludedItemKey = this.itemKey
-                // // Filter out the excluded item have excludedItemKey and purchase as is null from the list items
-                // const filteredArray = this.getItemsResponseBody.filter((item: any) => ((item.key !== excludedItemKey) && (item.lotMultipleItemKey === null)));
-                // const randomItem = filteredArray[Math.floor(Math.random() * filteredArray.length)];
-
-                this.lotMultipleItemName = responseBodyOfAItemObject.name
-                this.lotMultipleItemKey = responseBodyOfAItemObject.key
+                    this.lotMultipleItemName = randomItem.name
+                    this.lotMultipleItemKey = randomItem.key
+                }                                
+            } else if (value == 'null') {
+                this.lotMultipleItemName = null
+                this.lotMultipleItemKey = null
             }
 
             logger.log('info', `New ${editColumn}: ${this.lotMultipleItemName}`);
@@ -551,8 +614,8 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
             useHistoryOverride: this.useHistoryOverride === undefined ? this.responseBodyOfAItemObject.useHistoryOverride : this.useHistoryOverride,
             useLostSalesOverride: this.responseBodyOfAItemObject.useLostSalesOverride,
             lotMultipleQty: this.lotMultipleQty === undefined ? this.responseBodyOfAItemObject.lotMultipleQty : this.lotMultipleQty,
-            lotMultipleItemKey: this.lotMultipleItemKey === undefined ? this.responseBodyOfAItemObject.lotMultipleItemKey : `${this.lotMultipleItemKey}`,
-            lotMultipleItemName: this.lotMultipleItemName === undefined ? this.responseBodyOfAItemObject.lotMultipleItemName : `${this.lotMultipleItemName}`,
+            lotMultipleItemKey: this.lotMultipleItemKey === undefined ? this.responseBodyOfAItemObject.lotMultipleItemKey : this.lotMultipleItemKey === null ? null : `${this.lotMultipleItemKey}`,
+            lotMultipleItemName: this.lotMultipleItemName === undefined ? this.responseBodyOfAItemObject.lotMultipleItemName : this.lotMultipleItemName === null ? null : `${this.lotMultipleItemName}`,
             forecastDirty: this.responseBodyOfAItemObject.forecastDirty,
             forecastTags: this.responseBodyOfAItemObject.forecastTags,
             tag: this.responseBodyOfAItemObject.tag,
@@ -654,8 +717,8 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
             useHistoryOverride: this.useHistoryOverride === undefined ? this.responseBodyOfAItemObject.useHistoryOverride : this.useHistoryOverride,
             useLostSalesOverride: this.responseBodyOfAItemObject.useLostSalesOverride,
             lotMultipleQty: this.lotMultipleQty === undefined ? this.responseBodyOfAItemObject.lotMultipleQty : this.lotMultipleQty,
-            lotMultipleItemKey: this.lotMultipleItemKey === undefined ? this.responseBodyOfAItemObject.lotMultipleItemKey : `${this.lotMultipleItemKey}`,
-            lotMultipleItemName: this.lotMultipleItemName === undefined ? this.responseBodyOfAItemObject.lotMultipleItemName : `${this.lotMultipleItemName}`,
+            lotMultipleItemKey: this.lotMultipleItemKey === undefined ? this.responseBodyOfAItemObject.lotMultipleItemKey : this.lotMultipleItemKey === null ? null : `${this.lotMultipleItemKey}`,
+            lotMultipleItemName: this.lotMultipleItemName === undefined ? this.responseBodyOfAItemObject.lotMultipleItemName : this.lotMultipleItemName === null ? null : `${this.lotMultipleItemName}`,
             forecastDirty: this.responseBodyOfAItemObject.forecastDirty,
             forecastTags: this.responseBodyOfAItemObject.forecastTags,
             tag: this.responseBodyOfAItemObject.tag,
@@ -865,7 +928,7 @@ Then('User sends GET request to get item sales velocity settings', async functio
 
     this.getItemSalesVelocitySettingsResponse = this.response = await itemRequest.getItemSalesVelocitySettings(this.request, linkGetItemSalesVelocitySettings, options);
     const responseBodyText = await this.getItemSalesVelocitySettingsResponse.text();
-    
+
     console.log(this.getItemSalesVelocitySettingsResponse.status() + '-' + this.response.statusText())
     if (this.getItemSalesVelocitySettingsResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
         this.responseBody = this.getItemSalesVelocitySettingsResponseBody = JSON.parse(await this.getItemSalesVelocitySettingsResponse.text());
@@ -989,7 +1052,7 @@ Then('User sends a GET request to get Item by Item key', async function () {
 
     this.getItemByItemKeyResponse = this.response = await itemRequest.getItems(this.request, linkItemKey, options);
     const responseBodyText = await this.getItemByItemKeyResponse.text();
-    
+
     if (this.getItemByItemKeyResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
         this.responseBodyOfAItemObject = this.responseBody = this.getItemByItemKeyResponseBody = JSON.parse(await this.getItemByItemKeyResponse.text());
         logger.log('info', `Response GET ${linkItemKey}` + JSON.stringify(this.getItemByItemKeyResponseBody, undefined, 4));

@@ -12,8 +12,8 @@ export class LoginPage {
 
     constructor(page: Page) {
         this.page = page
-        this.emailTextbox = page.getByPlaceholder('Email address')
-        this.passwordTextbox = page.locator('[placeholder="Password"]')
+        this.emailTextbox = page.locator('#email')
+        this.passwordTextbox = page.locator('#password')
         this.signInButton = page.locator('button', { hasText: 'Sign In' })
         this.alertLocator = page.locator('.text-danger')
         this.requiredPasswordLocator = page.locator('input#password + .error')
@@ -25,12 +25,13 @@ export class LoginPage {
     }
 
     async enterEmail(email: string) {
-        await this.emailTextbox.fill('')
+        await this.emailTextbox.click()
         await this.emailTextbox.fill(email)
         await this.emailTextbox.blur();
     }
 
     async enterPassword(password: string) {
+        await this.passwordTextbox.click();
         await this.passwordTextbox.fill(password);
         await this.passwordTextbox.blur();
     }

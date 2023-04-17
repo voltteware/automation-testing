@@ -254,7 +254,7 @@ Then('{} sets request body with payload as name: {string} and description: {stri
         this.attach(`Payload: ${JSON.stringify(payload, undefined, 4)}`)
     });
 Then('{} sets request body with payload as name: {string} and asin: {string} and fnsku: {string}', async function (actor, name, asin, fnsku: string) {
-
+    payload = {}
     if (name.includes('New Item Auto')) {
         payload.name = `${faker.random.alphaNumeric(6).toUpperCase()}-${faker.datatype.number(500)}-Auto`;
     }
