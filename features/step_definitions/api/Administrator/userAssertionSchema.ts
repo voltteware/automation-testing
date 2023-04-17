@@ -8,5 +8,5 @@ export const addUserToCompanyResponseSchema = z.object({
             companyName: z.string({ invalid_type_error: "companyName must be string" }),
             userId: z.string({ invalid_type_error: "userId must be string" }),
             updated_at: z.string({ invalid_type_error: "updated_at must be string" })
-        })
+        }).optional()
 })

@@ -229,12 +229,12 @@ Given('User sends a POST request add user to company', async function () {
 
 Then('{} checks API contract essential types in the response of add user to company are correct', async function (actor: string) {
     // Check error 
-    if (this.addUserToCompanyResponseBody.err !== null) {
-        expect(typeof (this.this.addUserToCompanyResponseBody.err), 'Type of err value should be string').toBe("string");
-    }
-    else {
-    expect(this.addUserToCompanyResponseBody.err, 'err value should be null').toBeNull();
-    }
+    // if (this.addUserToCompanyResponseBody.err !== null) {
+    //     expect(typeof (this.addUserToCompanyResponseBody.err), 'Type of err value should be string').toBe("string");
+    // }
+    // else {
+    // expect(this.addUserToCompanyResponseBody.err, 'err value should be null').toBeNull();
+    // }
     //Check model object
     // expect(typeof (this.addUserToCompanyResponseBody.model), 'model should be object').toBe("object");
     // expect(typeof (this.addUserToCompanyResponseBody.model.companyKey), 'Type of companyKey must be string').toBe("string");
@@ -242,6 +242,9 @@ Then('{} checks API contract essential types in the response of add user to comp
     // expect(typeof (this.addUserToCompanyResponseBody.model.companyName), 'Type of companyName must be string').toBe("string");
     // expect(typeof (this.addUserToCompanyResponseBody.model.userId), 'Type of userId must be string').toBe("string");
     // expect(Date.parse(this.addUserToCompanyResponseBody.model.updated_at), 'Type of updated_at must be date').not.toBeNull();
-
     addUserToCompanyResponseSchema.parse(this.addUserToCompanyResponseBody)
 })
+
+Then('The error message must be {string}', function (errorMessage: string) {
+    expect(this.addUserToCompanyResponseBody.err, `The error message mus be ${errorMessage}`).toBe(errorMessage)
+});

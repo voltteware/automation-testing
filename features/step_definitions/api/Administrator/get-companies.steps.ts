@@ -64,5 +64,5 @@ Given('User saves information of above company', function () {
     this.companyName = this.responseBodyOfACompanyObject.companyName
 
     logger.log('info', `Conpany key: ${this.companyKey}, Company type: ${this.companyType}, Company name: ${this.companyName}`)
-    this.attach(`Conpany key: ${this.companyKey}, Company type: ${this.conpanyType}, Company name: ${this.companyName}`)
+    this.attach(`Conpany key: ${this.companyKey}, Company type: ${this.companyType}, Company name: ${this.companyName}`)
 });

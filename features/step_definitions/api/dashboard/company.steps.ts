@@ -235,9 +235,18 @@ Then('User sends a GET request to get associated user of company', async functio
     }
 }); 
 
+Given('User selects a user in associated users list', function () {
+    const associatedUsers = this.getAssociatedUsersResponseBody
+    const randomIndex = Math.floor(Math.random() * associatedUsers.length)
+    const anAssociatedUser = associatedUsers[randomIndex]
+
+    this.userId = anAssociatedUser.userId
+});
+
 Then('User verify that the user successfully added', function () {
     const associatedUsers = this.getAssociatedUsersResponseBody
     const hasUserWithUserId = associatedUsers.some( (user: any) => user.userId === this.userId)
 
     expect(hasUserWithUserId, "User just created must be display in associated users").toBeTruthy()
 });
+
