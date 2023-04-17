@@ -14,6 +14,7 @@ Feature: API_Admin PUT api/company/<companyKey>
     And Use picks a random companies with type "<companyType>" in above response
     And User sets GET api to get information of "<companyType>" company
     And User sends GET request to get information of company
+    # TODO: change last sync date
     And User sets PUT api to change information of "<companyType>" company
       | companyName | leadTime | orderInterval | serviceLevel | isNotifyingAfterForecast | isNotifyingAfterSync | isLostSaleTracking | displayRestockAMZ |
       | random      | random   | random        | random       | random                   | random               | random             | random            |
@@ -25,3 +26,5 @@ Feature: API_Admin PUT api/company/<companyKey>
     Examples: 
       | user  | companyType | expectedStatus |
       | admin | ASC         |            200 |
+
+    # TODO: Change information of CSV, QBFS
