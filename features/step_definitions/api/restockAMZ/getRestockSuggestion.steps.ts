@@ -5,6 +5,7 @@ import { Links } from '../../../../src/utils/links';
 import _ from "lodash";
 import * as restockSuggestion from '../../../../src/api/request/restockSuggestion.service';
 import { sumFormulaRestockAMZ, totalInboundFormulaRestockAMZ, estimatedMarginFormulaRestockAMZ, dailySalesRateFormulaRestockAMZ, adjDailySalesRateFormulaRestockAMZ, averageDailySalesRateFormulaRestockAMZ, requiredInventoryFormulaRestockAMZ, inventoryAvailableFormulaRestockAMZ, recommendationsFormulaRestockAMZ, suggestionsFormulaRestockAMZ } from '../../../../src/helpers/calculation-helper';
+import { itemRestockAMZInfoResponseSchema } from '../assertion/dashboard/itemAssertionSchema';
 
 let link: any;
 
@@ -52,6 +53,10 @@ Then(`{} sends a GET api method to get Items belonged to {}`, async function (ac
         logger.log('info', `Response ${link} has status code ${this.restockSuggestionResponse.status()} ${this.restockSuggestionResponse.statusText()} and response body ${responseBodyText}`);
         this.attach(`Response ${link} has status code ${this.restockSuggestionResponse.status()} ${this.restockSuggestionResponse.statusText()} and response body ${actualResponseText}`)
     }
+});
+
+Then('{} checks API contract of get items in Item list', async function (actor: string) {
+    itemRestockAMZInfoResponseSchema.parse(this.responseOfAItem);
 });
 
 Then('{} picks random item in Item list', async function (actor: string) {
@@ -133,11 +138,11 @@ Then(`{} checks value Sum on grid`, async function (actor: string) {
     sumFormulaRestockAMZ(this.onHandFBA, this.inbound, this.fcTransfer, this.sum, this.attach);
 });
 
-Then(`{} sets GET api method to restock calculation of specific Item`, async function (actor: string) {
+Then(`{} sets GET api method to get restock calculation of specific Item`, async function (actor: string) {
     link = `${Links.API_GET_RESTOCK_SUGGESTION}/${this.itemKey}/restockAMZ`;
 });
 
-Then(`{} sends a GET api method to restock calculation of specific Item`, async function (actor: string) {
+Then(`{} sends a GET api method to get restock calculation of specific Item`, async function (actor: string) {
     const options = {
         headers: this.headers
     }
@@ -253,4 +258,8 @@ Then(`{} checks value Daily Sales Rate in Restock Model`, async function (actor:
 
 Then(`{} checks value Adj Daily Sales Rate in Restock Model`, async function (actor: string) {
     adjDailySalesRateFormulaRestockAMZ({ s2d: this.s2d, s7d: this.s7d, s14d: this.s14d, s30d: this.s30d, s60d: this.s60d, s90d: this.s90d, s180d: this.s180d, outOfStock2d: this.outOfStock2d, outOfStock7d: this.outOfStock7d, outOfStock14d: this.outOfStock14d, outOfStock30d: this.outOfStock30d, outOfStock60d: this.outOfStock60d, outOfStock90d: this.outOfStock90d, outOfStock180d: this.outOfStock180d, adjSv2d: this.adjSv2d, adjSv7d: this.adjSv7d, adjSv14d: this.adjSv14d, adjSv30d: this.adjSv30d, adjSv60d: this.adjSv60d, adjSv90d: this.adjSv90d, adjSv180d: this.adjSv180d }, this.attach);
+});
+
+Then('{} checks API contract of get restock calculation api', async function (actor: string) {
+    itemRestockAMZInfoResponseSchema.parse(this.restockCalculationResponseBody);
 });

@@ -5,7 +5,8 @@ import logger from '../../../../src/Logger/logger';
 import { Links } from '../../../../src/utils/links';
 import { faker } from '@faker-js/faker';
 import _ from "lodash";
-import * as keyword from '../../../../src/utils/actionwords'
+import * as keyword from '../../../../src/utils/actionwords';
+import { supplierAddressResponseSchema } from '../assertion/dashboard/supplierAssertionSchema';
 
 let link: any;
 let supplierKey: string;
@@ -345,7 +346,7 @@ Given('User sends a PUT request to edit the supplier', async function () {
     // Send PUT request
     this.response = await supplierRequest.editSupplier(this.request, link, this.payLoad, this.headers)
     if (this.response.status() == 200) {
-        this.editSupplierResponseBody = JSON.parse(await this.response.text())
+        this.responseBodyOfASupplierObject = this.editSupplierResponseBody = JSON.parse(await this.response.text());
         logger.log('info', `Edit Supplier Response edit ${link} has status code ${this.response.status()} ${this.response.statusText()} and editSupplierResponse body ${JSON.stringify(this.editSupplierResponseBody, undefined, 4)}`)
         this.attach(`Edit Supplier Response edit ${link} has status code ${this.response.status()} ${this.response.statusText()} and editSupplierResponse body ${JSON.stringify(this.editSupplierResponseBody, undefined, 4)}`)
     } else {
@@ -476,4 +477,8 @@ Then('{} picks random supplier address in above response', async function (actor
     this.stateOrProvinceCode = this.responseBodyOfASupplierAddressObject.stateOrProvinceCode;
     this.vendorKey = this.responseBodyOfASupplierAddressObject.vendorKey;
     this.addressKey = this.responseBodyOfASupplierAddressObject.key;
+});
+
+Then('{} checks API contract of get supplier address api', async function (actor: string) {
+    supplierAddressResponseSchema.parse(this.responseBodyOfASupplierAddressObject);
 });

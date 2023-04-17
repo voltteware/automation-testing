@@ -5,11 +5,16 @@ import logger from '../../../../src/Logger/logger';
 import { Links } from '../../../../src/utils/links';
 import { faker } from '@faker-js/faker';
 import _ from "lodash";
+import { RunForecastResponseSchema } from '../assertion/general/runForecastAssertionSchema';
 
 let linkPostForecast: string;
 
 Then(`{} sets POST api to run forecast`, async function (actor: string) {
     linkPostForecast = Links.API_RUN_FORECAST;
+});
+
+Then('{} checks API contract of run forecast api', async function (actor: string) {
+    RunForecastResponseSchema.parse(this.postForecastResponseBody);
 });
 
 Then('{} sends a POST request to run forecast', async function (actor: string) {

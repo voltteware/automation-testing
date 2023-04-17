@@ -25,6 +25,7 @@ Feature: API_Dashboard PUT /api/demand/manual
         When User sends a PUT request to edit the demand
         Then The expected status code should be <expectedStatus>
         And The new <editColumn> of demand must be updated successfully
+        And User checks values in response of random demand are correct
 
         Examples:
             | TC_ID      | companyType | email                      | limitRow | editColumn | value  | expectedStatus |
@@ -44,6 +45,7 @@ Feature: API_Dashboard PUT /api/demand/manual
         When User sends a PUT request to edit the demand
         Then The expected status code should be <expectedStatus>
         And The new <editColumn> of demand must be updated successfully
+        And User checks values in response of random demand are correct
 
         Examples:
             | TC_ID      | companyType | email                      | limitRow | editColumn        | value  | expectedStatus |
