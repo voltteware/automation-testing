@@ -1,8 +1,9 @@
-import { When, Then, Given } from '@cucumber/cucumber';
+import { When, Then, Given, DataTable } from '@cucumber/cucumber';
 import { expect } from '@playwright/test';
 import * as companyRequest from '../../../../src/api/request/company.service';
 import logger from '../../../../src/Logger/logger';
 import { Links } from '../../../../src/utils/links';
+import { faker } from '@faker-js/faker';
 import _ from "lodash";
 import exp from 'constants';
 
@@ -211,3 +212,83 @@ Then('{} checks that the lastForecastDate field was updated and jobProcessing is
         timeout: 15 * 60 * 1000,
     }).toBeFalsy();
 })
+
+Given('User sets GET api to get information of {string} company', function (companyType) {
+    this.linkApiAdminGetInfomationCompany = `${Links.API_ADMIN_GET_COMPANIES}/${this.companyKey}/${companyType}`
+});
+
+Given('User sends GET request to get information of company', async function () {
+    const options = {
+        headers: this.headers
+    }
+
+    this.getInformationCompanyResponse = this.response = await companyRequest.getCompanyInfo(this.request, this.linkApiAdminGetInfomationCompany, options);
+    const responseBodyText = await this.getInformationCompanyResponse.text();
+    if (this.getInformationCompanyResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
+        this.getInformationCompanyResponseBody = JSON.parse(await this.getInformationCompanyResponse.text());
+        logger.log('info', `Response GET ${link}` + JSON.stringify(this.getInformationCompanyResponseBody, undefined, 4));
+        this.attach(`Response GET ${link}` + JSON.stringify(this.getInformationCompanyResponseBody, undefined, 4))
+    }
+    else {
+        const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
+        logger.log('info', `Response ${this.linkApiAdminGetInfomationCompany} has status code ${this.getInformationCompanyResponse.status()} ${this.getInformationCompanyResponse.statusText()} and response body ${responseBodyText}`);
+        this.attach(`Response ${this.linkApiAdminGetInfomationCompany} has status code ${this.getInformationCompanyResponse.status()} ${this.getInformationCompanyResponse.statusText()} and response body ${actualResponseText}`)
+    }
+});
+
+Given('User sets PUT api to change information of {string} company', function (companyType: string, dataTable: DataTable) {
+    this.linkApiChangeInformationCompany = `${Links.API_UPDATE_COMPANY}${this.companyKey}`
+
+    const rows = dataTable.hashes();
+    this.changeInformationCompanyPayload = this.getInformationCompanyResponseBody
+    switch (companyType) {
+        case "ASC":
+            const {companyName, leadTime, orderInterval, serviceLevel, isNotifyingAfterForecast, isNotifyingAfterSync, isLostSaleTracking, displayRestockAMZ} = rows[0]
+            companyName === "random" ? this.changeInformationCompanyPayload.companyName = `${faker.company.name()}` : this.changeInformationCompanyPayload.companyName = companyName
+            leadTime === "random" ? this.changeInformationCompanyPayload.leadTime = Number(faker.datatype.number({'min': 1,'max': 365})) : this.changeInformationCompanyPayload.leadTime = leadTime
+            orderInterval === "random" ? this.changeInformationCompanyPayload.orderInterval = Number(faker.datatype.number({'min': 1,'max': 365})) : this.changeInformationCompanyPayload.orderInterval = orderInterval
+            serviceLevel === "random" ? this.changeInformationCompanyPayload.serviceLevel = Number(faker.datatype.number({'min': 1,'max': 99})) : this.changeInformationCompanyPayload.serviceLevel = serviceLevel
+            isNotifyingAfterForecast === "random" ? this.changeInformationCompanyPayload.isNotifyingAfterForecast = !Boolean(this.changeInformationCompanyPayload.isNotifyingAfterForecast) : this.changeInformationCompanyPayload.isNotifyingAfterForecast = isNotifyingAfterForecast
+            isNotifyingAfterSync === "random" ? this.changeInformationCompanyPayload.isNotifyingAfterSync = !Boolean(this.changeInformationCompanyPayload.isNotifyingAfterSync) : this.changeInformationCompanyPayload.isNotifyingAfterSync = isNotifyingAfterSync
+            isLostSaleTracking === "random" ? this.changeInformationCompanyPayload.isLostSaleTracking = !Boolean(this.changeInformationCompanyPayload.isLostSaleTracking) : this.changeInformationCompanyPayload.isLostSaleTracking = isLostSaleTracking
+            displayRestockAMZ === "random" ? this.changeInformationCompanyPayload.displayRestockAMZ = !Boolean(this.changeInformationCompanyPayload.displayRestockAMZ) : this.changeInformationCompanyPayload.displayRestockAMZ = displayRestockAMZ
+            break;
+        case "CSV":
+            
+            break;
+        case "QBFS":
+            
+            break;
+        default:
+            break;
+    }    
+
+    logger.log('info', `Change information company Payload >>>>>>>` + JSON.stringify(this.changeInformationCompanyPayload, undefined, 4));
+        this.attach(`Change information company Payload >>>>>>>` + JSON.stringify(this.changeInformationCompanyPayload, undefined, 4))
+});
+
+Given('User sends PUT request to change information of company', async function (){
+    this.response = this.changeInformationCompanyResponse = await companyRequest.updateCompany(this.request, this.linkApiChangeInformationCompany, this.companyKey, this.changeInformationCompanyPayload, this.headers);
+    const responseBodyText = await this.changeInformationCompanyResponse.text();
+    if (this.changeInformationCompanyResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
+        this.changeInformationCompanyResponseBody = JSON.parse(responseBodyText)
+        logger.log('info', `Response PUT ${this.linkApiChangeInformationCompany}` + JSON.stringify(this.changeInformationCompanyResponseBody, undefined, 4));
+        this.attach(`Response PUT ${this.linkApiChangeInformationCompany}` + JSON.stringify(this.changeInformationCompanyResponseBody, undefined, 4))
+    }
+    else {
+        const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
+        logger.log('info', `Response PUT ${this.linkApiChangeInformationCompany} has status code ${this.changeInformationCompanyResponse.status()} ${this.changeInformationCompanyResponse.statusText()} and response body ${responseBodyText}`);
+        this.attach(`Response PUT ${this.linkApiChangeInformationCompany} has status code ${this.changeInformationCompanyResponse.status()} ${this.changeInformationCompanyResponse.statusText()} and response body ${actualResponseText}`)
+    }
+});
+
+Given('Information of company must be change successfully', async function(){
+    expect(this.changeInformationCompanyResponseBody.companyName).toBe(this.changeInformationCompanyPayload.companyName)
+    expect(this.changeInformationCompanyResponseBody.leadTime).toBe(this.changeInformationCompanyPayload.leadTime)
+    expect(this.changeInformationCompanyResponseBody.orderInterval).toBe(this.changeInformationCompanyPayload.orderInterval)
+    expect(this.changeInformationCompanyResponseBody.serviceLevel).toBe(this.changeInformationCompanyPayload.serviceLevel)
+    expect(this.changeInformationCompanyResponseBody.isNotifyingAfterForecast).toBe(this.changeInformationCompanyPayload.isNotifyingAfterForecast)
+    expect(this.changeInformationCompanyResponseBody.isNotifyingAfterSync).toBe(this.changeInformationCompanyPayload.isNotifyingAfterSync)
+    expect(this.changeInformationCompanyResponseBody.isLostSaleTracking).toBe(this.changeInformationCompanyPayload.isLostSaleTracking)
+    expect(this.changeInformationCompanyResponseBody.displayRestockAMZ).toBe(this.changeInformationCompanyPayload.displayRestockAMZ)
+});
