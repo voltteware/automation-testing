@@ -12,6 +12,7 @@ export class HeaderComponent {
     subscriptionsJSON: any;
     subscriptionsTransform: any;
     company: any;
+    id: string | RegExp | undefined;
 
     constructor(page: Page) {
         this.page = page;
@@ -30,7 +31,7 @@ export class HeaderComponent {
 
     async switchToAnotherCompany(companyName: string) {
         await this.companyName.selectOption(companyName);
-        await expect(this.page).toHaveURL(/.*subscriptions/);
+        await expect(this.page).toHaveURL(/.*home/);
     }
 
     async clickProfileLink() {

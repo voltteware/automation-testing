@@ -41,6 +41,9 @@ Then('User sends a POST method to register account', async function () {
     console.log('Cookie----------', this.cookie)
     this.responseBody = JSON.parse(await this.response.text())
     registerResponseBody = this.responseBody;
+
+    logger.log('info', `Response ${link} has status code ${this.response.status()} ${this.response.statusText()} and response body ${JSON.stringify(this.responseBody, undefined, 4)}`);
+    this.attach(`Response ${link} has status code ${this.response.status()} ${this.response.statusText()} and response body ${JSON.stringify(this.responseBody, undefined, 4)}`)
   }
   else {
     const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
@@ -48,6 +51,13 @@ Then('User sends a POST method to register account', async function () {
     this.attach(`Response ${link} has status code ${this.response.status()} ${this.response.statusText()} and response body ${actualResponseText}`)
   }
 })
+
+Given('User saves information of user just created', function () {
+  this.userId = registerResponseBody.userId
+
+  logger.log('info', `User id: ${this.userId}`)
+  this.attach(`User id: ${this.userId}`)
+});
 
 Then('User sends a DELETE method to delete user just created', async function () {
   const options = {

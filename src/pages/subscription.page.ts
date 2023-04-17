@@ -42,7 +42,7 @@ export class SubscriptonPage {
         await this.page.goto('/login', { timeout: 5 * 5000 })
     }
 
-    async clickOnSubscription(id: any) {
+    async clickOnSubscription(comapnyName: string, id: any) {
         const responsePromise = this.page.waitForResponse(resp => resp.url() === `https://preprod-my.forecastrx.com/api/billing/pending-subscription/${id[1]}/${id[0]}` && resp.status() === 200);
         await this.subscriptionRow.getByText(id[4]).click();
         const response = await responsePromise;
@@ -60,7 +60,7 @@ export class SubscriptonPage {
         await expect(showCompanyName).toBeVisible();
     }
 
-    async checkShowDefaultPlanOnTrial(plan: string) {
+    async checkDefaultPlanOnTrial(plan: string, status: string) {
         let showDefaultPlan = await this.showDefaultPlan.textContent();
         console.log("default plan: ", showDefaultPlan?.trim());
         expect(showDefaultPlan?.trim()).toEqual(plan);
@@ -103,9 +103,8 @@ export class SubscriptonPage {
         this.amountDisccounted = await this.page.locator('#OrderDetails-TotalAmount').textContent();
     }
 
-    async verifyPromotionCodeAndCurrentPlan(promotionCodeValue: any, id: string) {
+    async verifyPromotionCodeAndCurrentPlan(promotionCodeValue: any, buttonName: string, id: string) {
         console.log('Plans[this.index].', Plans[this.index], Plans[this.index].price, Plans[this.index].dataTestID, promotionCodeValue);
-        let currentCompanyKey = id[2];
         console.log("amountDisccounted: ", this.amountDisccounted);
 
         // Create our number formatter.
@@ -125,7 +124,7 @@ export class SubscriptonPage {
         // Click on the Start Trial to subscribe plan
         await Promise.all([
             this.page.waitForNavigation(/*{ url: 'https://preprod-my.forecastrx.com/subscriptions/` + currentCompanyKey }*/),
-            this.page.locator('button:has-text("Start Trial")').click(),,
+            this.page.locator(`button:has-text(${buttonName})`).click(),,
         ]);
 
         this.currentPlanText = await this.page.getByTestId(Plans[this.index].dataTestID + ' current-plan').textContent();
@@ -136,7 +135,7 @@ export class SubscriptonPage {
         await expect(this.subscriptionRow.filter({ hasText: companyName })).not.toBeVisible();
     }
 
-    async checkInfoOnBannerOfCancelSubscription(company: string) {
+    async checkWarningMessageOfCanceledSubscription() {
         let notify = await this.notifyOnDashboard.textContent();
         console.log("Notify: ", notify);
         expect(notify).toEqual(" Your subscription is expired, unpaid or canceled.  Click here to manage your subscription ");
@@ -146,7 +145,7 @@ export class SubscriptonPage {
         await this.notifyOnDashboard.getByRole('link').click();
     }
 
-    async checkInfoOnSubscriptionDetailWithCanceled() {
+    async checkWaringMessageThatSelectAPlan() {
         let noti = await this.infoOnBanner.textContent();
         console.log("NOTI SD: ", noti);
         expect(noti).toEqual("Select a plan to start using ForecastRx.");
