@@ -57,3 +57,12 @@ Then('{} picks random companies in above response', async function (actor: strin
     logger.log('info', `Random company: ${JSON.stringify(this.responseBodyOfACompanyObject, undefined, 4)}`);
     this.attach(`Random company: ${JSON.stringify(this.responseBodyOfACompanyObject, undefined, 4)}`);
 })
+
+Given('User saves information of above company', function () {
+    this.companyKey = this.responseBodyOfACompanyObject.companyKey
+    this.companyType = this.responseBodyOfACompanyObject.companyType
+    this.companyName = this.responseBodyOfACompanyObject.companyName
+
+    logger.log('info', `Conpany key: ${this.companyKey}, Company type: ${this.companyType}, Company name: ${this.companyName}`)
+    this.attach(`Conpany key: ${this.companyKey}, Company type: ${this.companyType}, Company name: ${this.companyName}`)
+});

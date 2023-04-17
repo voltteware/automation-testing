@@ -211,3 +211,42 @@ Then('{} checks that the lastForecastDate field was updated and jobProcessing is
         timeout: 15 * 60 * 1000,
     }).toBeFalsy();
 })
+
+Then('User sets GET api to get associated users of company', function () {
+    this.linkApiGetAssociatedUser = encodeURI(`${Links.API_GET_COMPANY}/${this.companyKey}/users?type=${this.companyType}`)
+});
+
+Then('User sends a GET request to get associated user of company', async function () {
+    const options = {
+        headers: this.headers
+    } 
+
+    this.getAssociatedUsersResponse = this.response = await companyRequest.getAssociatedUsers(this.request, this.linkApiGetAssociatedUser, options);
+    const responseBodyText = await this.getAssociatedUsersResponse.text();
+    if (this.getAssociatedUsersResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
+        this.getAssociatedUsersResponseBody = JSON.parse(await this.getAssociatedUsersResponse.text());
+        logger.log('info', `Response GET ${this.linkApiGetAssociatedUser}` + JSON.stringify(this.getAssociatedUsersResponseBody, undefined, 4));
+        this.attach(`Response GET ${this.linkApiGetAssociatedUser}` + JSON.stringify(this.getAssociatedUsersResponseBody, undefined, 4))
+    }
+    else {
+        const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
+        logger.log('info', `Response ${this.linkApiGetAssociatedUser} has status code ${this.getAssociatedUsersResponse.status()} ${this.getAssociatedUsersResponse.statusText()} and response body ${responseBodyText}`);
+        this.attach(`Response ${this.linkApiGetAssociatedUser} has status code ${this.getAssociatedUsersResponse.status()} ${this.getAssociatedUsersResponse.statusText()} and response body ${actualResponseText}`)
+    }
+}); 
+
+Given('User selects a user in associated users list', function () {
+    const associatedUsers = this.getAssociatedUsersResponseBody
+    const randomIndex = Math.floor(Math.random() * associatedUsers.length)
+    const anAssociatedUser = associatedUsers[randomIndex]
+
+    this.userId = anAssociatedUser.userId
+});
+
+Then('User verify that the user successfully added', function () {
+    const associatedUsers = this.getAssociatedUsersResponseBody
+    const hasUserWithUserId = associatedUsers.some( (user: any) => user.userId === this.userId)
+
+    expect(hasUserWithUserId, "User just created must be display in associated users").toBeTruthy()
+});
+

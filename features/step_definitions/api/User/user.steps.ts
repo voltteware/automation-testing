@@ -4,6 +4,7 @@ import * as userRequest from '../../../../src/api/request/user.service';
 import logger from '../../../../src/Logger/logger';
 import { Links } from '../../../../src/utils/links';
 import * as arrayHelper from "../../../../src/helpers/array-helper";
+import {addUserToCompanyResponseSchema} from '../Administrator/userAssertionSchema'
 import _ from "lodash";
 
 // Get User Information
@@ -193,4 +194,57 @@ Then('Error message {} in the response of API is displayed', async function (err
     expect(this.responseBody.msg.type, 'Check message type is error').toBe("error");
     expect(this.responseBody.msg.content, `Check content error is correct: ${errorMessage}`).toContain(errorMessage);
     // }
+});
+
+Given('User sets POST api to add user to company', function () {
+    this.linkApiAddUserToCompnay = `${Links.API_USER}`
+
+    this.addToCompanyPayload = {
+        "userId": `${this.userId}`,
+        "companyKey": `${this.companyKey}`,
+        "companyType": `${this.companyType}`,
+        "companyName": `${this.companyName}`,
+        "operation": "addToCompany"
+    }
+
+    logger.log('info', `Payload add to company ${this.linkApiAddUserToCompnay}` + JSON.stringify(this.addToCompanyPayload, undefined, 4));
+    this.attach(`Payload add to company ${this.linkApiAddUserToCompnay}` + JSON.stringify(this.addToCompanyPayload, undefined, 4))
+});
+
+Given('User sends a POST request add user to company', async function () {
+    this.response = this.addUserToCompanyResponse = await userRequest.addToCompany(this.request, this.linkApiAddUserToCompnay, this.addToCompanyPayload, this.headers);
+    const responseBodyText = await this.addUserToCompanyResponse.text();
+    if (this.addUserToCompanyResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
+        this.responseBody = this.addUserToCompanyResponseBody = JSON.parse(responseBodyText);        
+
+        logger.log('info', `Response POST add to company ${this.linkApiAddUserToCompnay}` + JSON.stringify(this.responseBody, undefined, 4));
+        this.attach(`Response POST add to company ${this.linkApiAddUserToCompnay}` + JSON.stringify(this.responseBody, undefined, 4))
+    }
+    else {
+        const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
+        logger.log('info', `Response POST add to company ${this.linkApiAddUserToCompnay} has status code ${this.addUserToCompanyResponse.status()} ${this.addUserToCompanyResponse.statusText()} and response body ${responseBodyText}`);
+        this.attach(`Response POST add to company ${this.linkApiAddUserToCompnay} has status code ${this.addUserToCompanyResponse.status()} ${this.addUserToCompanyResponse.statusText()} and response body ${actualResponseText}`)
+    }
+});
+
+Then('{} checks API contract essential types in the response of add user to company are correct', async function (actor: string) {
+    // Check error 
+    // if (this.addUserToCompanyResponseBody.err !== null) {
+    //     expect(typeof (this.addUserToCompanyResponseBody.err), 'Type of err value should be string').toBe("string");
+    // }
+    // else {
+    // expect(this.addUserToCompanyResponseBody.err, 'err value should be null').toBeNull();
+    // }
+    //Check model object
+    // expect(typeof (this.addUserToCompanyResponseBody.model), 'model should be object').toBe("object");
+    // expect(typeof (this.addUserToCompanyResponseBody.model.companyKey), 'Type of companyKey must be string').toBe("string");
+    // expect(typeof (this.addUserToCompanyResponseBody.model.companyType), 'Type of companyType must be string').toBe("string");
+    // expect(typeof (this.addUserToCompanyResponseBody.model.companyName), 'Type of companyName must be string').toBe("string");
+    // expect(typeof (this.addUserToCompanyResponseBody.model.userId), 'Type of userId must be string').toBe("string");
+    // expect(Date.parse(this.addUserToCompanyResponseBody.model.updated_at), 'Type of updated_at must be date').not.toBeNull();
+    addUserToCompanyResponseSchema.parse(this.addUserToCompanyResponseBody)
+})
+
+Then('The error message must be {string}', function (errorMessage: string) {
+    expect(this.addUserToCompanyResponseBody.err, `The error message mus be ${errorMessage}`).toBe(errorMessage)
 });

@@ -18,17 +18,54 @@ Feature: Subscribe a plan for a company
         And User checks values in response of create company are correct
         And User signs in with valid username "<username>" and the password "<currentPassword>" successfully
         And User clicks username on top right corner
-        And User clicks on Subscriptions
+        And User clicks on Subscriptions after clicking on the user name of <companyName> company
         And User is on Subscriptions page 
         And User clicks on subscription of "<companyName>" company to go to subscription detail page
         And User checks the warning message that the trial of <companyName> will be canceled
         And User checks show <companyName> company on header
-        And User checks show default plan is <plan> on trialing mode
+        And User checks show default plan is <plan> with <status> status
         And User clicks on any plan to select
         When User navigates to checkout page and input valid data in all fields "<card>", "<promotionCodeId>", "<expirationDate>"
-        Then Verify user has been discounted with promotion code is <promotionCodeValue> percent and the plan has been highlighted with Current Plan
+        Then Verify user has been discounted with promotion code is <promotionCodeValue> percent and the plan has been highlighted with Current Plan after clicking on "<buttonName>" button
         And User sets DELETE api endpoint to delete company
         And User sends a DELETE method to <deleteType> delete the created company
         Examples:
-            | username                   | currentPassword |  companyName             | companyType  | plan                         | status   | card                | promotionCodeId | promotionCodeValue| expirationDate| expectedStatusText     | expectedStatus | serviceLevel| leadTime| orderInterval| deleteType |
-            | subscriptionauto@gmail.com | Test1111#       |  Select Plan-AutoTest    | CSV          | Starter Monthly Subscription | Trialing | 4242 4242 4242 4242 | TEST20PR        | 20                | 08 / 23       | Created                | 201            | 85          | 15      | 15           | hard       |
+            | username                   | currentPassword |  companyName             | companyType  | status   | plan                         | status   | card                | promotionCodeId | promotionCodeValue| expirationDate| expectedStatusText     | expectedStatus | serviceLevel| leadTime| orderInterval| deleteType | buttonName  |
+            | subscriptionauto@gmail.com | Test1111#       |  Select Plan-AutoTest    | CSV          | trialing | Starter Monthly Subscription | Trialing | 4242 4242 4242 4242 | TEST20PR        | 20                | 08 / 23       | Created                | 201            | 85          | 15      | 15           | hard       | Start Trial |
+
+    @Sub002
+    Scenario Outline: Sub002 - Verify the content with the subscription has canceled status
+        Given User signs in with valid username "<username>" and the password "<currentPassword>" successfully
+        And User switchs to <companyName> company that has Canceled subscription
+        And User clicks username on top right corner
+        And User clicks on Subscriptions after clicking on the user name of <companyName> company
+        When User is on Subscriptions page
+        Then User check that "<companyName>" of canceled comapny should not show on Subscription list
+        And User checks warning message that the subscription is canceled in Subscription List
+        And User clicks on link in banner to navigate to Subscription Detail page
+        And User checks show <companyName> company on header
+        And User checks show default plan is <plan> with <status> status
+        Examples:
+            | role | username                   | currentPassword | companyName                | status   | plan              | status   | card                | promotionCode| expirationDate|
+            | user | subscriptionauto@gmail.com | Test1111#       | select-plan-after-canceled | canceled | Choose your plan  | Canceled | 4242 4242 4242 4242 | TEST20PR     | 08 / 23       | 
+
+    @Sub003
+    Scenario Outline: Sub003 - Verify a user select plan and subscribed successfully with Canceled status
+        Given User signs in with valid username "<username>" and the password "<currentPassword>" successfully
+        And User switchs to <companyName> company that has Canceled subscription
+        And User clicks username on top right corner
+        And User clicks on Subscriptions after clicking on the user name of <companyName> company
+        And User is on Subscriptions page
+        And User clicks on link in banner to navigate to Subscription Detail page
+        And User clicks on any plan to select
+        When User navigates to checkout page and input valid data in all fields "<card>", "<promotionCodeId>", "<expirationDate>"
+        Then Verify user has been discounted with promotion code is <promotionCodeValue> percent and the plan has been highlighted with Current Plan after clicking on "<buttonName>" button
+        And User sets GET api endpoint to get 20 companies has just created
+        And In Header of the request, user sets param Cookie as valid connect.sid
+        And User sends a GET request to get 20 latest companies
+        And User filters company to get company which has the company name included <companyKeyWord>
+        And User sets DELETE api endpoint to delete company
+        And User sends a DELETE method to <deleteType> delete the filtered company
+        Examples:
+            | user  | username                   | currentPassword |  companyName                | companyKeyWord | companyType  | plan                         | status   | card                | promotionCodeId | promotionCodeValue| expirationDate| expectedStatusText     | expectedStatus | serviceLevel| leadTime| orderInterval| deleteType | buttonName |
+            | admin | subscriptionauto@gmail.com | Test1111#       |  select-plan-after-canceled | canceled       | CSV          | Choose your plan             | Canceled | 4242 4242 4242 4242 | TEST20PR        | 20                | 08 / 23       | Created                | 201            | 85          | 15      | 15           | soft       | Subscribe  |
