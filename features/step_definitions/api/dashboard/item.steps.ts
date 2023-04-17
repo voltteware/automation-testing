@@ -7,6 +7,7 @@ import { faker } from '@faker-js/faker';
 import _ from "lodash";
 import * as keyword from '../../../../src/utils/actionwords'
 import exp from 'constants';
+import { itemInfoResponseSchema } from '../assertion/dashboard/itemAssertionSchema';
 
 let linkUpdateVendorSalesVelocitySettings: any;
 let linkUpdateItemSalesVelocitySettings: any;
@@ -18,7 +19,7 @@ var linkGetAllItems: string;
 var linkGetFilterItem: string;
 let linkCountItems: string;
 let linkGetItems: string;
-var linkGetActiveAndHaslotMultipleItemKeyNullItem: string;
+var linkGetActiveAndHasLotMultipleItemKeyNullItem: string;
 let linkItemKey: any;
 
 Then(`{} sets GET api endpoint to get item summary`, async function (actor: string) {
@@ -30,7 +31,7 @@ Then(`{} sets GET api endpoint to get item with limit row: {}`, async function (
 });
 
 Then(`{} sets GET api endpoint to count items that is active and have lotMultipleItemKey is NULL`, async function (actor: string) {
-    linkCountItems = linkGetActiveAndHaslotMultipleItemKeyNullItem = encodeURI(`${Links.API_ITEM_COUNT}?where={"filters":[{"filters":[{"field":"isHidden","operator":"eq","value":false},{"field":"isHidden","operator":"eq","value":null},{"field":"isHidden","operator":"eq","value":null}],"logic":"or"},{"filters":[{"field":"lotMultipleItemName","operator":"isnull","value":null}],"logic":"and"}],"logic":"and"}`);
+    linkCountItems = linkGetActiveAndHasLotMultipleItemKeyNullItem = encodeURI(`${Links.API_ITEM_COUNT}?where={"filters":[{"filters":[{"field":"isHidden","operator":"eq","value":false},{"field":"isHidden","operator":"eq","value":null},{"field":"isHidden","operator":"eq","value":null}],"logic":"or"},{"filters":[{"field":"lotMultipleItemName","operator":"isnull","value":null}],"logic":"and"}],"logic":"and"}`);
 });
 
 Then(`{} sets GET api endpoint to get items with limit row: {} and filter field: {} equals {}`, async function (actor, limitRow, filterField, filterValue: string) {
@@ -41,17 +42,17 @@ Then(`{} sends a GET request to get count items active and have lotMultipleItemK
     const options = {
         headers: this.headers
     }
-    this.getCountItemsActiveAndHasLotMultipleItemKeyNullResponse = this.response = await itemRequest.getItems(this.request, linkGetActiveAndHaslotMultipleItemKeyNullItem, options);
+    this.getCountItemsActiveAndHasLotMultipleItemKeyNullResponse = this.response = await itemRequest.getItems(this.request, linkGetActiveAndHasLotMultipleItemKeyNullItem, options);
     const responseBodyText = await this.getCountItemsActiveAndHasLotMultipleItemKeyNullResponse.text();
     if (this.getCountItemsActiveAndHasLotMultipleItemKeyNullResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
         this.responseBody = this.getCountItemsActiveAndHasLotMultipleItemKeyNullResponseBody = JSON.parse(await this.getCountItemsActiveAndHasLotMultipleItemKeyNullResponse.body());
-        logger.log('info', `Response GET ${linkGetActiveAndHaslotMultipleItemKeyNullItem}>>>>>` + JSON.stringify(this.getCountItemsActiveAndHasLotMultipleItemKeyNullResponseBody, undefined, 4));
-        this.attach(`Response GET ${linkGetActiveAndHaslotMultipleItemKeyNullItem}>>>>>>` + JSON.stringify(this.getCountItemsActiveAndHasLotMultipleItemKeyNullResponseBody, undefined, 4))
+        logger.log('info', `Response GET ${linkGetActiveAndHasLotMultipleItemKeyNullItem}>>>>>` + JSON.stringify(this.getCountItemsActiveAndHasLotMultipleItemKeyNullResponseBody, undefined, 4));
+        this.attach(`Response GET ${linkGetActiveAndHasLotMultipleItemKeyNullItem}>>>>>>` + JSON.stringify(this.getCountItemsActiveAndHasLotMultipleItemKeyNullResponseBody, undefined, 4))
     }
     else {
         const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
-        logger.log('info', `Response GET ${linkGetActiveAndHaslotMultipleItemKeyNullItem} has status code ${this.response.status()} ${this.response.statusText()} and response body >>>>>>${responseBodyText}`);
-        this.attach(`Response GET ${linkGetActiveAndHaslotMultipleItemKeyNullItem} has status code ${this.response.status()} ${this.response.statusText()} and response body >>>>>>${actualResponseText}`)
+        logger.log('info', `Response GET ${linkGetActiveAndHasLotMultipleItemKeyNullItem} has status code ${this.response.status()} ${this.response.statusText()} and response body >>>>>>${responseBodyText}`);
+        this.attach(`Response GET ${linkGetActiveAndHasLotMultipleItemKeyNullItem} has status code ${this.response.status()} ${this.response.statusText()} and response body >>>>>>${actualResponseText}`)
     }
 })
 
@@ -273,6 +274,8 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
                 // Filter out the excluded supplier have excludedSupplierKey from the list suppliers
                 const filteredArray = this.getSupplierResponseBody.filter((supplier: any) => supplier.key !== excludedSupplierKey);
                 const randomSupplier = filteredArray[Math.floor(Math.random() * this.getSupplierResponseBody.length)];
+                logger.log('info', `Ramdom supplier` + JSON.stringify(randomSupplier, undefined, 4));
+                this.attach(`Ramdom supplier` + JSON.stringify(randomSupplier, undefined, 4))
 
                 this.vendorKey = randomSupplier.key;
                 this.vendorName = randomSupplier.name;
@@ -461,10 +464,10 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
         case 'inventorySourcePreference':
             if (value == 'random') {
                 const inventorySources = ['FBA', 'FBM', 'FBA+FBM'];
-                const excludedInvetorySource = this.responseBodyOfAItemObject.inventorySourcePreference;
+                const excludedInventorySource = this.responseBodyOfAItemObject.inventorySourcePreference;
 
-                // Filter out the excluded inventory sourec value from the inventorySources array
-                const filteredArray = inventorySources.filter((value) => value !== excludedInvetorySource);
+                // Filter out the excluded inventory source value from the inventorySources array
+                const filteredArray = inventorySources.filter((value) => value !== excludedInventorySource);
                 this.inventorySourcePreference = filteredArray[Math.floor(Math.random() * filteredArray.length)];
             }
 
@@ -473,83 +476,92 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
             break;
         case 'purchaseAs':
             if (value == 'random') {
-                this.payloadCreateItem = {
-                    "key": "",
-                    "name": `${faker.random.alphaNumeric(6).toUpperCase()}-${faker.datatype.number(500)}-Auto`,
-                    "asin": `${faker.random.alphaNumeric(10).toUpperCase()}`,
-                    "fnsku": `${faker.random.alphaNumeric(10).toUpperCase()}`,
-                    "description": "",
-                    "vendorKey": null,
-                    "vendorName": null,
-                    "vendorPrice": 0,
-                    "moq": 1,
-                    "leadTime": 1,
-                    "orderInterval": 0,
-                    "serviceLevel": 85,
-                    "onHand": 0,
-                    "onHandMin": "",
-                    "onHandThirdParty": 0,
-                    "onHandThirdPartyMin": "",
-                    "growthTrend": 0,
-                    "isHidden": false,
-                    "useHistoryOverride": false,
-                    "lotMultipleQty": 1,
-                    "lotMultipleItemKey": null,
-                    "lotMultipleItemName": null,
-                    "forecastDirty": false,
-                    "forecastTags": [],
-                    "tags": [],
-                    "useBackfill": false,
-                    "useLostSalesOverride": false,
-                    "createdAt": "2023-04-11T08:09:03.909Z",
-                    "isFbm": false,
-                    "inventorySourcePreference": "",
-                    "skuNotes": "",
-                    "prepNotes": "",
-                    "supplierRebate": "",
-                    "inboundShippingCost": 0,
-                    "reshippingCost": 0,
-                    "repackagingMaterialCost": 0,
-                    "repackingLaborCost": 0,
-                    "inboundShipped": 0,
-                    "inboundReceiving": 0,
-                    "inbound": 0,
-                    "inboundFcTransfer": 0,
-                    "referralFee": 0,
-                    "fbaFee": 0,
-                    "rank": 0,
-                    "variableClosingFee": 0,
-                    "lowestFba": 0,
-                    "newBuyBox": 0,
-                    "listPrice": 0,
-                    "average7DayPrice": 0,
-                    "itemHistoryLength": 0,
-                    "history": null,
-                    "links": null,
-                    "packageWeight": "",
-                    "onHandFbm": "",
-                    "prepGuide": "",
-                    "dimensionalWeight": "",
-                    "hazmat": "",
-                    "oversized": "",
-                    "category": "",
-                    "upc": "",
-                    "ean": ""
-                }
+                if(companyType !== "QBFS"){
+                    this.payloadCreateItem = {
+                        "key": "",
+                        "name": `${faker.random.alphaNumeric(6).toUpperCase()}-${faker.datatype.number(500)}-Auto`,
+                        "asin": companyType === "ASC" ? `${faker.random.alphaNumeric(10).toUpperCase()}` : "",
+                        "fnsku": companyType === "ASC" ? `${faker.random.alphaNumeric(10).toUpperCase()}` : "",
+                        "description": "",
+                        "vendorKey": null,
+                        "vendorName": null,
+                        "vendorPrice": 0,
+                        "moq": 1,
+                        "leadTime": 1,
+                        "orderInterval": 0,
+                        "serviceLevel": 85,
+                        "onHand": 0,
+                        "onHandMin": "",
+                        "onHandThirdParty": 0,
+                        "onHandThirdPartyMin": "",
+                        "growthTrend": 0,
+                        "isHidden": false,
+                        "useHistoryOverride": false,
+                        "lotMultipleQty": 1,
+                        "lotMultipleItemKey": null,
+                        "lotMultipleItemName": null,
+                        "forecastDirty": false,
+                        "forecastTags": [],
+                        "tags": [],
+                        "useBackfill": false,
+                        "useLostSalesOverride": false,
+                        "createdAt": "2023-04-11T08:09:03.909Z",
+                        "isFbm": false,
+                        "inventorySourcePreference": "",
+                        "skuNotes": "",
+                        "prepNotes": "",
+                        "supplierRebate": "",
+                        "inboundShippingCost": 0,
+                        "reshippingCost": 0,
+                        "repackagingMaterialCost": 0,
+                        "repackingLaborCost": 0,
+                        "inboundShipped": 0,
+                        "inboundReceiving": 0,
+                        "inbound": 0,
+                        "inboundFcTransfer": 0,
+                        "referralFee": 0,
+                        "fbaFee": 0,
+                        "rank": 0,
+                        "variableClosingFee": 0,
+                        "lowestFba": 0,
+                        "newBuyBox": 0,
+                        "listPrice": 0,
+                        "average7DayPrice": 0,
+                        "itemHistoryLength": 0,
+                        "history": null,
+                        "links": null,
+                        "packageWeight": "",
+                        "onHandFbm": "",
+                        "prepGuide": "",
+                        "dimensionalWeight": "",
+                        "hazmat": "",
+                        "oversized": "",
+                        "category": "",
+                        "upc": "",
+                        "ean": ""
+                    }
+                    
+                    // Create new item Item has already set as Purchase As of other items            
+                    this.attach(`Payload Create new item: ${JSON.stringify(this.payloadCreateItem, undefined, 4)}`)
+    
+                    const createItemResponse = await itemRequest.createItem(this.request, Links.API_ITEMS, this.payloadCreateItem, this.headers);
+                    const responseBodyOfAItemObject = JSON.parse(await createItemResponse.text());
 
-                // Create new item Item has already set as Purchase As of other items            
-                this.attach(`Payload: ${JSON.stringify(this.payloadCreateItem, undefined, 4)}`)
+                    this.lotMultipleItemName = responseBodyOfAItemObject.name
+                    this.lotMultipleItemKey = responseBodyOfAItemObject.key
+                } else {
+                    const excludedItemKey = this.itemKey
+                    const excludedListPurchaseAs = this.getItemsResponseBody.map((item:any) => item.lotMultipleItemKey)
+                    // Filter out the excluded item have excludedItemKey and purchase as is null from the list items
+                    const filteredArray = this.getItemsResponseBody.filter((item: any) => ((item.key !== excludedItemKey) && (item.lotMultipleItemKey === null) && (!excludedListPurchaseAs.includes(item.key))));
+                    const randomItem = filteredArray[Math.floor(Math.random() * filteredArray.length)];
 
-                const createItemResponse = await itemRequest.createItem(this.request, Links.API_ITEMS, this.payloadCreateItem, this.headers);
-                const responseBodyOfAItemObject = JSON.parse(await createItemResponse.text());
-
-                // const excludedItemKey = this.itemKey
-                // // Filter out the excluded item have excludedItemKey and purchase as is null from the list items
-                // const filteredArray = this.getItemsResponseBody.filter((item: any) => ((item.key !== excludedItemKey) && (item.lotMultipleItemKey === null)));
-                // const randomItem = filteredArray[Math.floor(Math.random() * filteredArray.length)];
-
-                this.lotMultipleItemName = responseBodyOfAItemObject.name
-                this.lotMultipleItemKey = responseBodyOfAItemObject.key
+                    this.lotMultipleItemName = randomItem.name
+                    this.lotMultipleItemKey = randomItem.key
+                }                                
+            } else if (value == 'null') {
+                this.lotMultipleItemName = null
+                this.lotMultipleItemKey = null
             }
 
             logger.log('info', `New ${editColumn}: ${this.lotMultipleItemName}`);
@@ -602,8 +614,8 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
             useHistoryOverride: this.useHistoryOverride === undefined ? this.responseBodyOfAItemObject.useHistoryOverride : this.useHistoryOverride,
             useLostSalesOverride: this.responseBodyOfAItemObject.useLostSalesOverride,
             lotMultipleQty: this.lotMultipleQty === undefined ? this.responseBodyOfAItemObject.lotMultipleQty : this.lotMultipleQty,
-            lotMultipleItemKey: this.lotMultipleItemKey === undefined ? this.responseBodyOfAItemObject.lotMultipleItemKey : `${this.lotMultipleItemKey}`,
-            lotMultipleItemName: this.lotMultipleItemName === undefined ? this.responseBodyOfAItemObject.lotMultipleItemName : `${this.lotMultipleItemName}`,
+            lotMultipleItemKey: this.lotMultipleItemKey === undefined ? this.responseBodyOfAItemObject.lotMultipleItemKey : this.lotMultipleItemKey === null ? null : `${this.lotMultipleItemKey}`,
+            lotMultipleItemName: this.lotMultipleItemName === undefined ? this.responseBodyOfAItemObject.lotMultipleItemName : this.lotMultipleItemName === null ? null : `${this.lotMultipleItemName}`,
             forecastDirty: this.responseBodyOfAItemObject.forecastDirty,
             forecastTags: this.responseBodyOfAItemObject.forecastTags,
             tag: this.responseBodyOfAItemObject.tag,
@@ -705,8 +717,8 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
             useHistoryOverride: this.useHistoryOverride === undefined ? this.responseBodyOfAItemObject.useHistoryOverride : this.useHistoryOverride,
             useLostSalesOverride: this.responseBodyOfAItemObject.useLostSalesOverride,
             lotMultipleQty: this.lotMultipleQty === undefined ? this.responseBodyOfAItemObject.lotMultipleQty : this.lotMultipleQty,
-            lotMultipleItemKey: this.lotMultipleItemKey === undefined ? this.responseBodyOfAItemObject.lotMultipleItemKey : `${this.lotMultipleItemKey}`,
-            lotMultipleItemName: this.lotMultipleItemName === undefined ? this.responseBodyOfAItemObject.lotMultipleItemName : `${this.lotMultipleItemName}`,
+            lotMultipleItemKey: this.lotMultipleItemKey === undefined ? this.responseBodyOfAItemObject.lotMultipleItemKey : this.lotMultipleItemKey === null ? null : `${this.lotMultipleItemKey}`,
+            lotMultipleItemName: this.lotMultipleItemName === undefined ? this.responseBodyOfAItemObject.lotMultipleItemName : this.lotMultipleItemName === null ? null : `${this.lotMultipleItemName}`,
             forecastDirty: this.responseBodyOfAItemObject.forecastDirty,
             forecastTags: this.responseBodyOfAItemObject.forecastTags,
             tag: this.responseBodyOfAItemObject.tag,
@@ -775,7 +787,7 @@ When('User sends a PUT request to edit the item', async function () {
     // Send PUT request
     this.response = await itemRequest.editItem(this.request, link, this.payLoad, this.headers)
     if (this.response.status() == 200) {
-        this.editItemResponseBody = JSON.parse(await this.response.text())
+        this.responseBodyOfAItemObject = this.editItemResponseBody = JSON.parse(await this.response.text());
         logger.log('info', `Edit Item Response edit ${link} has status code ${this.response.status()} ${this.response.statusText()} and editItemResponse body ${JSON.stringify(this.editItemResponseBody, undefined, 4)}`)
         this.attach(`Edit Item Response edit ${link} has status code ${this.response.status()} ${this.response.statusText()} and editItemResponse body ${JSON.stringify(this.editItemResponseBody, undefined, 4)}`)
     } else {
@@ -931,7 +943,7 @@ Then('User sends GET request to get item sales velocity settings', async functio
 });
 
 Given(`User sets GET api endpoint to get items in "Manage Company > Item"`, function () {
-    // Get items that its purcchase as is null and its name is not contain DefaultPurchasingSaleVelocity
+    // Get items that its purchase as is null and its name is not contain DefaultPurchasingSaleVelocity
     linkGetItemsWithFilter = `${Links.API_ITEMS}?offset=0&limit=50&where={"filters":[{"filters":[{"field":"name","operator":"doesnotcontain","value":"DefaultPurchasingSaleVelocity"}],"logic":"and"},{"filters":[{"field":"vendorName","operator":"isnull","value":null}],"logic":"and"},{"filters":[{"field":"lotMultipleItemName","operator":"isnull","value":null}],"logic":"and"}],"logic":"and"}`
 });
 
@@ -1051,4 +1063,8 @@ Then('User sends a GET request to get Item by Item key', async function () {
         logger.log('info', `Response GET ${linkItemKey} has status code ${this.response.status()} ${this.response.statusText()} and response body ${responseBodyText}`);
         this.attach(`Response GET ${linkItemKey} has status code ${this.response.status()} ${this.response.statusText()} and response body ${actualResponseText}`)
     }
+});
+
+Then('{} checks API contract of get Item by Item key api', async function (actor: string) {
+    itemInfoResponseSchema.parse(this.getItemByItemKeyResponseBody);
 });

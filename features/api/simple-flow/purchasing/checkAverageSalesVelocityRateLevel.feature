@@ -1,4 +1,4 @@
-@test-api @api-regression @api-dashboard @api-company @api-edit-purchasing-daily-sale-rate-rules-average @check-average-sales-velocity-rate-level
+@test-api @api-regression @api-dashboard @api-company @api-purchasing @api-edit-purchasing-daily-sale-rate-rules-average @check-average-sales-velocity-rate-level
 Feature: API Purchasing Setting for Daily Sale Rate
     Background: Send GET /realm request to get all company keys of current logged in user before each test
         Given user sends a POST login request to get valid cookie with role
@@ -38,9 +38,9 @@ Feature: API Purchasing Setting for Daily Sale Rate
         When User sends PUT request to update "Purchasing Daily Sales Rate Rules > Average"
         Then The expected status code should be <expectedStatus>
         And User sets GET api endpoint to get count items in PO by vendor key <vendorKey>
-        And User sends a GET request to get count items in PO by vendor by vendor key
+        And User sends request to get count items on Items in PO by vendor key
         And User sets api endpoint to get list items in PO of vendor key
-        And User sends a POST request to get list items in PO by vendor by vendor key
+        And User sends a POST request to get list items in PO by vendor key
         And User selects random items in Purchasing My Suggested
         And User sets GET api endpoint to get restock suggestion purchasing
         And User sends GET request to get restock suggestion purchasing of above items

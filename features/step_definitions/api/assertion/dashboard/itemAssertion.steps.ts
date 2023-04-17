@@ -1,8 +1,8 @@
 import { When, Then, Given } from '@cucumber/cucumber';
 import { expect } from '@playwright/test';
 import _ from "lodash";
-import logger from '../../../../src/Logger/logger';
-import { ItemSummaryRequestSchema } from './itemAssertionSchema';
+import logger from '../../../../../src/Logger/logger';
+import { itemSummaryResponseSchema } from '../dashboard/itemAssertionSchema';
 
 Then('{} checks API contract in item summary object are correct', async function (actor: string) {
     if (this.
@@ -15,7 +15,7 @@ Then('{} checks API contract in item summary object are correct', async function
         expect(this.getItemSummaryResponseBody.err, 'err value should be null').toBeNull();
     }
 
-    ItemSummaryRequestSchema.parse(this.getItemSummaryResponseBody);
+    itemSummaryResponseSchema.parse(this.getItemSummaryResponseBody);
     // expect(typeof (this.getItemSummaryResponseBody.model), 'Type of model value should be object').toBe("object");
     // expect(typeof (Number(this.getItemSummaryResponseBody.model.onHandCount)), 'Type of onHandCount value should be string').toBe("number");
     // expect(typeof (Number(this.getItemSummaryResponseBody.model.onHandThirdPartyCount)), 'Type of onHandThirdPartyCount value should be number').toBe("number");

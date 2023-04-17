@@ -20,6 +20,7 @@ Feature: API_Dashboard PUT /api/vendor
         When User sends a PUT request to edit the supplier
         Then The expected status code should be <expectedStatus>
         And The new <editColumn> of supplier must be updated successfully
+        And User checks API contract essential types in supplier object are correct
 
         Examples:
             | TC_ID       | companyType | email                      | limitRow | editColumn   | value  | expectedStatus |
@@ -39,6 +40,7 @@ Feature: API_Dashboard PUT /api/vendor
         When User sends a PUT request to edit the supplier
         Then The expected status code should be <expectedStatus>
         And The new <editColumn> of supplier must be updated successfully
+        And User checks API contract essential types in supplier object are correct
 
         Examples:
             | TC_ID       | companyType | email                      | limitRow | editColumn            | value  | expectedStatus |

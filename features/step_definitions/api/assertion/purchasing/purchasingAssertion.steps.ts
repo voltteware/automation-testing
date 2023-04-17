@@ -1,9 +1,6 @@
 import { Then } from '@cucumber/cucumber';
 import { expect } from '@playwright/test';
-import logger from '../../../../src/Logger/logger';
-
-import _ from "lodash";
-import { Links } from '../../../../src/utils/links';
+import logger from '../../../../../src/Logger/logger';
 
 // My Suggested
 Then(`{} checks API contract get count summary by vendor are correct`, async function (actor) {
@@ -135,14 +132,14 @@ Then('{} checks Total Units on Suggested Purchase Orders is correct', async func
 
 Then('{} checks total items in PO is matched with total in suggested POs', async function (actor: string) {
     var expectedTotalItemsInPO = Number(await this.getSummaryByVendorResponseBody.find((v: { vendorKey: any; }) => v.vendorKey == this.selectedVendorKey).uniqueItems);
-    const actualTotalItemsInPO = this.getCountItemsinPOResponseBody;
-    const itemsInPOListFromSummaryVendorAPI = await this.getItemsinPOResponseBody.model.length;
+    const actualTotalItemsInPO = this.getCountItemsInPOResponseBody;
+    const itemsInPOListFromSummaryVendorAPI = await this.getItemsInPOResponseBody.model.length;
     expect(expectedTotalItemsInPO, `total items in PO is matched with total in suggested POs ${expectedTotalItemsInPO}`).toEqual(actualTotalItemsInPO);
     expect(itemsInPOListFromSummaryVendorAPI, `Total item listed in PO ${itemsInPOListFromSummaryVendorAPI} is matched with then number of Total Products in My Suggested ${expectedTotalItemsInPO}`).toEqual(expectedTotalItemsInPO);
 })
 
 Then('{} checks Forecast Recommended Qty is greater than 0', async function (actor: string) {
-    var forecastRecommendedQtyOfPOs = await this.getItemsinPOResponseBody.model.map((v: { consolidatedQty: any; }) => v.consolidatedQty);
+    var forecastRecommendedQtyOfPOs = await this.getItemsInPOResponseBody.model.map((v: { consolidatedQty: any; }) => v.consolidatedQty);
     forecastRecommendedQtyOfPOs.forEach((qty: any) => {
         expect(qty, `Forecast Recommended Qty ${qty} is greater than 0.`).toBeGreaterThan(0);
     })
@@ -151,14 +148,14 @@ Then('{} checks Forecast Recommended Qty is greater than 0', async function (act
 Then(`{} checks API contract get items in po by vendor key are correct`, async function (actor) {
     // If system did not show any supplier has name, skip to check. We only check if supplierName is Items Without Supplier or specific name.
     if (this.selectedVendorKey != '') {
-        if (this.getItemsinPOResponseBody.err !== null) {
-            expect(typeof (this.getItemsinPOResponseBody.err), 'err in response is a string').toBe("string");
+        if (this.getItemsInPOResponseBody.err !== null) {
+            expect(typeof (this.getItemsInPOResponseBody.err), 'err in response is a string').toBe("string");
         }
         else {
-            expect(this.getItemsinPOResponseBody.err, 'err value should be null').toBeNull();
+            expect(this.getItemsInPOResponseBody.err, 'err value should be null').toBeNull();
         }
 
-        expect(typeof (this.getItemsinPOResponseBody.model), 'model response is a object').toBe("object");
+        expect(typeof (this.getItemsInPOResponseBody.model), 'model response is a object').toBe("object");
     }
     else {
         // There is no supplier has name
@@ -751,5 +748,5 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
 // Custom 
 
 Then(`{} checks API contract get count items in purchasing custom are correct`, async function (actor) {
-    expect(typeof (this.getCountItemsinPurchasingCustomResponseBody), 'Get Count Items in Purchasing Custom response is a number').toBe("number");
+    expect(typeof (this.getCountItemsInPurchasingCustomResponseBody), 'Get Count Items in Purchasing Custom response is a number').toBe("number");
 })

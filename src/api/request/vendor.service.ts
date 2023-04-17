@@ -43,35 +43,35 @@ async function editSupplier(request: APIRequestContext, linkApi: string, payLoad
 }
 
 //Count Summary by vendor
-async function getCountSymmaryByVendor(request: APIRequestContext, linkApi: string, options?: object) {
+async function getCountSummaryByVendor(request: APIRequestContext, linkApi: string, options?: object) {
     const url = `${linkApi}`;
     logger.log('info', `Send GET request ${url}`);
     return await request.get(url, options);
 }
 
 //Get Summary by vendor
-async function getSymmaryByVendor(request: APIRequestContext, linkApi: string, options?: object) {
+async function getSummaryByVendor(request: APIRequestContext, linkApi: string, options?: object) {
     const url = `${linkApi}`;
     logger.log('info', `Send GET request ${url}`);
     return await request.get(url, options);
 }
 
 //Get Total Qty, Total Price and Unique Items in Summary by vendor
-async function getSymmaryByVendorByComppanyKeyAndType(request: APIRequestContext, linkApi: string, options?: object) {
+async function getSummaryByVendorByCompanyKeyAndType(request: APIRequestContext, linkApi: string, options?: object) {
     const url = `${linkApi}`;
     logger.log('info', `Send GET request ${url}`);
     return await request.get(url, options);
 }
 
 //Get Count Items in PO by vendor key
-async function getCountItemsinPO(request: APIRequestContext, linkApi: string, options?: object) {
+async function getCountItemsInPO(request: APIRequestContext, linkApi: string, options?: object) {
     const url = `${linkApi}`;
     logger.log('info', `Send GET request ${url}`);
     return await request.get(url, options);
 }
 
 //Get Items in PO by vendor key
-async function getItemsinPO(request: APIRequestContext, linkApi: string, payLoad: any, header: any) {
+async function getItemsInPO(request: APIRequestContext, linkApi: string, payLoad: any, header: any) {
     const url = `${linkApi}`;
     logger.log('info', `Send POST request ${url} with ${JSON.stringify(payLoad, undefined, 4)}`);
     const response = await request.post(url, {
@@ -104,11 +104,11 @@ export {
     createSupplier,
     deleteSupplier,
     editSupplier,
-    getCountSymmaryByVendor,
-    getSymmaryByVendor,
-    getSymmaryByVendorByComppanyKeyAndType,
-    getCountItemsinPO,
-    getItemsinPO,
+    getCountSummaryByVendor,
+    getSummaryByVendor,
+    getSummaryByVendorByCompanyKeyAndType,
+    getCountItemsInPO,
+    getItemsInPO,
     getVendorSalesVelocitySettings,
     updateVendorSalesVelocitySettings
 }

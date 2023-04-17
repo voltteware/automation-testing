@@ -6,14 +6,15 @@ import * as purchasingRequest from '../../../../src/api/request/purchasing.servi
 import logger from '../../../../src/Logger/logger';
 import { Links } from '../../../../src/utils/links';
 import { faker } from '@faker-js/faker';
+import { itemsInPurchasingResponseSchema } from '../assertion/purchasing/purchasingAssertionSchema';
 import _ from "lodash";
 
 let linkGetRestockSuggestionPurchasing: any;
 let linkGetItemInPurchasingCustom: any;
 let linkCountSummary: string, linkSummaryVendor: string, linkSummaryVendorWithTotalQtyAndTotalPrice: string, linkCountItemsInPO: string, linkItemsInPO: string;
 let linkCountItemsInPurchasingCustom: string, linkGetItemsInPurchasingCustom: string;
-let salesVelocitySettingDatas: any[] = [];
-let linkGetRestockSuggestionPurchasings: string[] = [];
+let salesVelocitySettingDataArray: any[] = [];
+let linkGetRestockSuggestionPurchasingArray: string[] = [];
 let linkGetPercentDefaultOfAverages: string[] = [];
 let linkGetLimitFiveItemInMySuggested: any;
 let linkGetLimitFiveItemInCustom: any;
@@ -38,7 +39,7 @@ Then(`{} sends a GET request to get count summary by vendor`, async function (ac
     const options = {
         headers: this.headers
     }
-    this.getCountSummaryByVendorResponse = this.response = await vendorRequest.getCountSymmaryByVendor(this.request, linkCountSummary, options);
+    this.getCountSummaryByVendorResponse = this.response = await vendorRequest.getCountSummaryByVendor(this.request, linkCountSummary, options);
     const responseBodyText = await this.getCountSummaryByVendorResponse.text();
     if (this.getCountSummaryByVendorResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
         this.responseBody = this.getCountSummaryByVendorResponseBody = JSON.parse(await this.getCountSummaryByVendorResponse.body());
@@ -56,7 +57,7 @@ Then(`{} sends a GET request to get summary by vendor`, async function (actor) {
     const options = {
         headers: this.headers
     }
-    this.getSummaryByVendorResponse = this.response = await vendorRequest.getSymmaryByVendor(this.request, linkSummaryVendor, options);
+    this.getSummaryByVendorResponse = this.response = await vendorRequest.getSummaryByVendor(this.request, linkSummaryVendor, options);
     const responseBodyText = await this.getSummaryByVendorResponse.text();
     if (this.getSummaryByVendorResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
         this.responseBody = this.getSummaryByVendorResponseBody = JSON.parse(await this.getSummaryByVendorResponse.body());
@@ -74,7 +75,7 @@ Then(`{} sends a GET request to get total price, total qty and unique items on P
     const options = {
         headers: this.headers
     }
-    this.getSummaryByVendorByCompanyKeyAndTypeResponse = this.response = await vendorRequest.getSymmaryByVendorByComppanyKeyAndType(this.request, linkSummaryVendorWithTotalQtyAndTotalPrice, options);
+    this.getSummaryByVendorByCompanyKeyAndTypeResponse = this.response = await vendorRequest.getSummaryByVendorByCompanyKeyAndType(this.request, linkSummaryVendorWithTotalQtyAndTotalPrice, options);
     const responseBodyText = await this.getSummaryByVendorByCompanyKeyAndTypeResponse.text();
     if (this.getSummaryByVendorByCompanyKeyAndTypeResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
         this.responseBody = this.getSummaryByVendorByCompanyKeyAndTypeResponseBody = JSON.parse(await this.getSummaryByVendorByCompanyKeyAndTypeResponse.body());
@@ -130,7 +131,7 @@ Then(`{} sends request to get count items on Items in PO by vendor key`, async f
         const options = {
             headers: this.headers
         }
-        this.getCountItemsinPOResponse = this.response = await vendorRequest.getCountItemsinPO(this.request, linkCountItemsInPO, options);
+        this.getCountItemsinPOResponse = this.response = await vendorRequest.getCountItemsInPO(this.request, linkCountItemsInPO, options);
         const responseBodyText = await this.getCountItemsinPOResponse.text();
         if (this.getCountItemsinPOResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
             this.responseBody = this.getCountItemsinPOResponseBody = JSON.parse(await this.getCountItemsinPOResponse.body());
@@ -172,15 +173,15 @@ Then(`{} sends a POST request to get list items in PO by vendor key`, async func
     // If system did not show any supplier has name, skip to check. We only check if supplierName is Items Without Supplier or specific name.
     if (this.selectedVendorKey != '') {
         const payload = { "removedItemKeys": [] };
-        this.getItemsinPOResponse = this.response = await vendorRequest.getItemsinPO(this.request, linkItemsInPO, payload, this.headers);
+        this.getItemsinPOResponse = this.response = await vendorRequest.getItemsInPO(this.request, linkItemsInPO, payload, this.headers);
         const responseBodyText = await this.getItemsinPOResponse.text();
         if (this.getItemsinPOResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
-            this.responseBody = this.getItemsinPOResponseBody = JSON.parse(await this.getItemsinPOResponse.body());
-            this.getItemsResponseBody = this.getItemsinPOResponseBody.model;
-            this.randomAItemObject = this.getItemsinPOResponseBody.model[Math.floor(Math.random() * this.getItemsinPOResponseBody.model.length)];
+            this.responseBody = this.getItemsInPOResponseBody = JSON.parse(await this.getItemsinPOResponse.body());
+            this.getItemsResponseBody = this.getItemsInPOResponseBody.model;
+            this.randomAItemObject = this.getItemsInPOResponseBody.model[Math.floor(Math.random() * this.getItemsInPOResponseBody.model.length)];
 
-            // logger.log('info', `Response POST ${linkItemsInPO} >>>>>>` + JSON.stringify(this.getItemsinPOResponseBody, undefined, 4));
-            // this.attach(`Response POST ${linkItemsInPO} >>>>>>` + JSON.stringify(this.getItemsinPOResponseBody, undefined, 4))
+            // logger.log('info', `Response POST ${linkItemsInPO} >>>>>>` + JSON.stringify(this.getItemsInPOResponseBody, undefined, 4));
+            // this.attach(`Response POST ${linkItemsInPO} >>>>>>` + JSON.stringify(this.getItemsInPOResponseBody, undefined, 4))
         }
         else {
             const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
@@ -234,7 +235,7 @@ Then(`{} checks total items in PO is matched with total products in suggested PO
         const selectedSuggestedPO = await this.getSummaryByVendorResponseBody.find((v: { vendorKey: any; }) => v.vendorKey == this.selectedVendorKey);
         var totalProductsOfSpecificRecordsOnSuggestedPOs = Number(await selectedSuggestedPO.uniqueItems);
         const actualTotalItemsInPO = this.getCountItemsinPOResponseBody;
-        const itemsInPOListFromSummaryVendorAPI = await this.getItemsinPOResponseBody.model;
+        const itemsInPOListFromSummaryVendorAPI = await this.getItemsInPOResponseBody.model;
         const totalItemsInPOListFromSummaryVendorAPI = itemsInPOListFromSummaryVendorAPI.length;
         logger.log('info', `Total Products in Suggested POs of ${supplierName} >>>>>> ${totalProductsOfSpecificRecordsOnSuggestedPOs}`);
         this.attach(`Total Products in Suggested POs of ${supplierName} >>>>>> ${totalProductsOfSpecificRecordsOnSuggestedPOs}`);
@@ -258,7 +259,7 @@ Then('{} checks Total Qty of all Items in PO is matched with Total Qty in sugges
         let totalQtyInSuggestedPO: Number = 0;
 
         totalQtyInSuggestedPO = this.getSummaryByVendorResponseBody.find((v: { vendorKey: null; }) => v.vendorKey == this.selectedVendorKey).totalQty;
-        this.getItemsinPOResponseBody.model.forEach((v: { purchaseQty: any; }) => {
+        this.getItemsInPOResponseBody.model.forEach((v: { purchaseQty: any; }) => {
             totalQtyOfItemsinPOOfSelectedSuggestedPO += v.purchaseQty;
         });
 
@@ -283,7 +284,7 @@ Then('{} checks Total Cost of all Items in PO is matched with Total Cost in sugg
         let totalCostInSuggestedPO: Number = 0;
 
         totalCostInSuggestedPO = this.getSummaryByVendorResponseBody.find((v: { vendorKey: null; }) => v.vendorKey == this.selectedVendorKey).totalPrice;
-        this.getItemsinPOResponseBody.model.forEach((v: { total: any; }) => {
+        this.getItemsInPOResponseBody.model.forEach((v: { total: any; }) => {
             totalCostOfItemsinPOOfSelectedSuggestedPO += v.total;
         });
 
@@ -305,7 +306,7 @@ Then(`{} checks Forecast Recommended Qty of all items in PO of suggested PO of {
     // If system did not show any supplier has name, skip to check. We only check if supplierName is Items Without Supplier or specific name.
     if (this.selectedVendorKey != '') {
         // Check Forecast Recommended Qty is greater than 0
-        var forecastRecommendedQtyOfPOs = await this.getItemsinPOResponseBody.model.map((v: { consolidatedQty: any; }) => v.consolidatedQty);
+        var forecastRecommendedQtyOfPOs = await this.getItemsInPOResponseBody.model.map((v: { consolidatedQty: any; }) => v.consolidatedQty);
         forecastRecommendedQtyOfPOs.forEach((qty: any) => {
             expect(qty, `Forecast Recommended Qty ${qty} is greater than 0.`).toBeGreaterThan(0);
         })
@@ -329,12 +330,12 @@ Then(`{} sends a GET request to get count items in Purchasing Custom`, async fun
     const options = {
         headers: this.headers
     }
-    this.getCountItemsinPurchasingCustomResponse = this.response = await itemRequest.getCountItemsinPurchasingCustom(this.request, linkCountItemsInPurchasingCustom, options);
-    const responseBodyText = await this.getCountItemsinPurchasingCustomResponse.text();
-    if (this.getCountItemsinPurchasingCustomResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
-        this.responseBody = this.getCountItemsinPurchasingCustomResponseBody = JSON.parse(await this.getCountItemsinPurchasingCustomResponse.body());
-        logger.log('info', `Response GET ${linkCountItemsInPurchasingCustom} >>>>>>` + JSON.stringify(this.getCountItemsinPurchasingCustomResponseBody, undefined, 4));
-        this.attach(`Response GET ${linkCountItemsInPurchasingCustom} >>>>>>` + JSON.stringify(this.getCountItemsinPurchasingCustomResponseBody, undefined, 4))
+    this.getCountItemsInPurchasingCustomResponse = this.response = await itemRequest.getCountItemsInPurchasingCustom(this.request, linkCountItemsInPurchasingCustom, options);
+    const responseBodyText = await this.getCountItemsInPurchasingCustomResponse.text();
+    if (this.getCountItemsInPurchasingCustomResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
+        this.responseBody = this.getCountItemsInPurchasingCustomResponseBody = JSON.parse(await this.getCountItemsInPurchasingCustomResponse.body());
+        logger.log('info', `Response GET ${linkCountItemsInPurchasingCustom} >>>>>>` + JSON.stringify(this.getCountItemsInPurchasingCustomResponseBody, undefined, 4));
+        this.attach(`Response GET ${linkCountItemsInPurchasingCustom} >>>>>>` + JSON.stringify(this.getCountItemsInPurchasingCustomResponseBody, undefined, 4))
     }
     else {
         const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
@@ -353,11 +354,11 @@ Then(`{} sends a GET request to get items in Purchasing Custom`, async function 
     const options = {
         headers: this.headers
     }
-    this.getItemsinPurchasingCustomResponse = this.response = await itemRequest.getItemsinPurchasingCustom(this.request, linkGetItemsInPurchasingCustom, options);
-    const responseBodyText = await this.getItemsinPurchasingCustomResponse.text();
-    if (this.getItemsinPurchasingCustomResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
-        this.responseBody = this.getItemsinPurchasingCustomResponseBody = this.getItemsResponseBody = JSON.parse(await this.getItemsinPurchasingCustomResponse.body());
-        this.randomAItemObject = this.getItemsinPurchasingCustomResponseBody[Math.floor(Math.random() * this.getItemsinPurchasingCustomResponseBody.length)];
+    this.getItemsInPurchasingCustomResponse = this.response = await itemRequest.getItemsInPurchasingCustom(this.request, linkGetItemsInPurchasingCustom, options);
+    const responseBodyText = await this.getItemsInPurchasingCustomResponse.text();
+    if (this.getItemsInPurchasingCustomResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
+        this.responseBody = this.getItemsInPurchasingCustomResponseBody = this.getItemsResponseBody = JSON.parse(await this.getItemsInPurchasingCustomResponse.body());
+        this.randomAItemObject = this.getItemsInPurchasingCustomResponseBody[Math.floor(Math.random() * this.getItemsInPurchasingCustomResponseBody.length)];
         logger.log('info', `Random object in response GET ${linkGetItemsInPurchasingCustom} >>>>>>` + JSON.stringify(this.randomAItemObject, undefined, 4));
         this.attach(`Random object in response GET ${linkGetItemsInPurchasingCustom} >>>>>>` + JSON.stringify(this.randomAItemObject, undefined, 4))
     }
@@ -372,9 +373,9 @@ Then(`{} checks total items in Custom EQUALS total items active and have lotMult
     const options = {
         headers: this.headers
     }
-    const itemsInCustom = this.getCountItemsinPurchasingCustomResponseBody;
-    const itemsActiveAndHaslotMultipleItemKeyNull = this.getCountItemsActiveAndHasLotMultipleItemKeyNullResponseBody;
-    expect(itemsInCustom, `Total Items in Purchasing Custom ${itemsInCustom} is equal ${itemsActiveAndHaslotMultipleItemKeyNull}`).toEqual(itemsActiveAndHaslotMultipleItemKeyNull);
+    const itemsInCustom = this.getCountItemsInPurchasingCustomResponseBody;
+    const itemsActiveAndHasLotMultipleItemKeyNull = this.getCountItemsActiveAndHasLotMultipleItemKeyNullResponseBody;
+    expect(itemsInCustom, `Total Items in Purchasing Custom ${itemsInCustom} is equal ${itemsActiveAndHasLotMultipleItemKeyNull}`).toEqual(itemsActiveAndHasLotMultipleItemKeyNull);
 })
 
 Then(`{} sets GET api endpoint to get items in Purchasing Custom to check purchasing daily sales rate`, async function (actor: string) {
@@ -388,12 +389,12 @@ Then(`{} sends a GET request to get items in Purchasing Custom to check purchasi
     const options = {
         headers: this.headers
     }
-    this.getItemsinPurchasingCustomResponse = this.response = await itemRequest.getItemsinPurchasingCustom(this.request, linkGetItemsInPurchasingCustom, options);
-    const responseBodyText = await this.getItemsinPurchasingCustomResponse.text();
-    if (this.getItemsinPurchasingCustomResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
-        this.responseBody = this.getItemsinPurchasingCustomResponseBody = JSON.parse(await this.getItemsinPurchasingCustomResponse.body());
-        logger.log('info', `Random object in response GET ${linkGetItemsInPurchasingCustom} >>>>>>` + JSON.stringify(this.getItemsinPurchasingCustomResponseBody, undefined, 4));
-        this.attach(`Response object in response GET ${linkGetItemsInPurchasingCustom} >>>>>>` + JSON.stringify(this.getItemsinPurchasingCustomResponseBody, undefined, 4))
+    this.getItemsInPurchasingCustomResponse = this.response = await itemRequest.getItemsInPurchasingCustom(this.request, linkGetItemsInPurchasingCustom, options);
+    const responseBodyText = await this.getItemsInPurchasingCustomResponse.text();
+    if (this.getItemsInPurchasingCustomResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
+        this.responseBody = this.getItemsInPurchasingCustomResponseBody = JSON.parse(await this.getItemsInPurchasingCustomResponse.body());
+        logger.log('info', `Random object in response GET ${linkGetItemsInPurchasingCustom} >>>>>>` + JSON.stringify(this.getItemsInPurchasingCustomResponseBody, undefined, 4));
+        this.attach(`Response object in response GET ${linkGetItemsInPurchasingCustom} >>>>>>` + JSON.stringify(this.getItemsInPurchasingCustomResponseBody, undefined, 4))
     }
     else {
         const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
@@ -404,9 +405,9 @@ Then(`{} sends a GET request to get items in Purchasing Custom to check purchasi
 
 Then(`{} selects random items in Purchasing Custom`, async function (actor: string) {
     // Pick random 5 item to check purchasing daily sales rate
-    // const shuffledArr = this.getItemsinPurchasingCustomResponseBody.sort(() => Math.random() - 0.5);
+    // const shuffledArr = this.getItemsInPurchasingCustomResponseBody.sort(() => Math.random() - 0.5);
     // this.radomFiveItemsInPurchasingCustom = shuffledArr.slice(0, 5)
-    this.radomFiveItemsInPurchasingCustom = this.getItemsinPurchasingCustomResponseBody.slice(0, 5)
+    this.radomFiveItemsInPurchasingCustom = this.getItemsInPurchasingCustomResponseBody.slice(0, 5)
 
     this.listKeysOfRandomItems = this.radomFiveItemsInPurchasingCustom.map((item: any) => item.itemKey)
 
@@ -418,9 +419,9 @@ Then(`{} selects random items in Purchasing Custom`, async function (actor: stri
 
 Then(`{} selects random items in Purchasing My Suggested`, async function (actor: string) {
     // Use items with name have DefaultPurchasingSaleVelocity to check
-    this.getRandomItemsinPurchasingSuggesyion = this.getItemsinPOResponseBody.model.filter((item: any) => item.itemName != null && item.itemName.includes('DefaultPurchasingSaleVelocity'))
+    this.getRandomItemsInPurchasingSuggestion = this.getItemsInPOResponseBody.model.filter((item: any) => item.itemName != null && item.itemName.includes('DefaultPurchasingSaleVelocity'))
     // Pick random 5 item to check purchasing daily sales rate
-    const shuffledArr = this.getRandomItemsinPurchasingSuggesyion.sort(() => Math.random() - 0.5);
+    const shuffledArr = this.getRandomItemsInPurchasingSuggestion.sort(() => Math.random() - 0.5);
     this.radomFiveItemsInPurchasingSuggestion = shuffledArr.slice(0, 5)
 
     this.listKeysOfRandomItems = this.radomFiveItemsInPurchasingSuggestion.map((item: any) => item.itemKey)
@@ -432,14 +433,14 @@ Then(`{} selects random items in Purchasing My Suggested`, async function (actor
 });
 
 Then(`{} sets GET api endpoint to get restock suggestion purchasing`, async function (actor: string) {
-    linkGetRestockSuggestionPurchasings = []
+    linkGetRestockSuggestionPurchasing = []
     for (const itemKey of this.listKeysOfRandomItems) {
-        linkGetRestockSuggestionPurchasings.push(`${Links.API_RESTOCK_SUGGESTION_PURCHASING}/${itemKey}/purchasing`)
+        linkGetRestockSuggestionPurchasing.push(`${Links.API_RESTOCK_SUGGESTION_PURCHASING}/${itemKey}/purchasing`)
         logger.log('info', `Link: ${JSON.stringify(itemKey, undefined, 4)}`)
         this.attach(`Link: ${JSON.stringify(itemKey, undefined, 4)}`)
     }
 
-    for (const link of linkGetRestockSuggestionPurchasings) {
+    for (const link of linkGetRestockSuggestionPurchasing) {
         logger.log('info', `Link: ${JSON.stringify(link, undefined, 4)}`)
         this.attach(`Link: ${JSON.stringify(link, undefined, 4)}`)
     }
@@ -450,15 +451,15 @@ Then(`{} sends GET request to get restock suggestion purchasing of above items`,
         headers: this.headers
     }
 
-    salesVelocitySettingDatas = []
+    salesVelocitySettingDataArray = []
 
-    for (const linkGetRestockSuggestionPurchasing of linkGetRestockSuggestionPurchasings) {
+    for (const linkGetRestockSuggestionPurchasing of linkGetRestockSuggestionPurchasingArray) {
         this.getRestockSuggestionPurchasingResponse = this.response = await purchasingRequest.getRestockSuggestionPurchasing(this.request, linkGetRestockSuggestionPurchasing, options);
         const responseBodyText = await this.getRestockSuggestionPurchasingResponse.text();
         if (this.getRestockSuggestionPurchasingResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
             this.responseBody = this.getRestockSuggestionPurchasingResponseBody = JSON.parse(await this.getRestockSuggestionPurchasingResponse.body());
             const salesVelocitySettingData = this.getRestockSuggestionPurchasingResponseBody.salesVelocitySettingData
-            salesVelocitySettingDatas.push(salesVelocitySettingData)
+            salesVelocitySettingDataArray.push(salesVelocitySettingData)
             logger.log('info', `Response GET ${linkGetRestockSuggestionPurchasing} >>>>>>` + JSON.stringify(this.getRestockSuggestionPurchasingResponseBody, undefined, 4));
             this.attach(`Response GET ${linkGetRestockSuggestionPurchasing} >>>>>>` + JSON.stringify(this.getRestockSuggestionPurchasingResponseBody, undefined, 4))
         }
@@ -471,7 +472,7 @@ Then(`{} sends GET request to get restock suggestion purchasing of above items`,
 });
 
 Then(`{} checks purchasing daily sales rate of item using default setting on company detail`, async function (actor: string) {
-    for (const salesVelocitySettingData of salesVelocitySettingDatas) {
+    for (const salesVelocitySettingData of salesVelocitySettingDataArray) {
         expect(salesVelocitySettingData.percent2Day, `The weight of 2-day is equal ${this.randomWeightNumbers[0]}`).toEqual(this.randomWeightNumbers[0]);
         expect(salesVelocitySettingData.percent7Day, `The weight of 7-day is equal ${this.randomWeightNumbers[1]}`).toEqual(this.randomWeightNumbers[1]);
         expect(salesVelocitySettingData.percent14Day, `The weight of 14-day is equal ${this.randomWeightNumbers[2]}`).toEqual(this.randomWeightNumbers[2]);
@@ -505,7 +506,7 @@ Then('User sends a GET request to get item in Purchasing Custom to check purchas
     const options = {
         headers: this.headers
     }
-    this.getItemInPurchasingCustomResponse = this.response = await itemRequest.getItemsinPurchasingCustom(this.request, linkGetItemsInPurchasingCustom, options);
+    this.getItemInPurchasingCustomResponse = this.response = await itemRequest.getItemsInPurchasingCustom(this.request, linkGetItemsInPurchasingCustom, options);
     const responseBodyText = await this.getItemInPurchasingCustomResponse.text();
     if (this.getItemInPurchasingCustomResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
         this.responseBody = this.getItemInPurchasingCustomResponseBody = JSON.parse(await this.getItemInPurchasingCustomResponse.body());
@@ -551,12 +552,12 @@ Then('User sets GET api endpoint to get list items in "Purchasing > My Suggested
 
 Then('User sends GET request to get list items in "Purchasing > My Suggested"', async function () {
     const payload = { "removedItemKeys": [] };
-    this.getItemsinPOResponse = this.response = await vendorRequest.getItemsinPO(this.request, linkItemsInPO, payload, this.headers);
-    const responseBodyText = await this.getItemsinPOResponse.text();
-    if (this.getItemsinPOResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
-        this.responseBody = this.getItemsinPOResponseBody = JSON.parse(await this.getItemsinPOResponse.body());
-        // logger.log('info', `Response POST ${linkItemsInPO} >>>>>>` + JSON.stringify(this.getItemsinPOResponseBody, undefined, 4));
-        // this.attach(`Response POST ${linkItemsInPO} >>>>>>` + JSON.stringify(this.getItemsinPOResponseBody, undefined, 4))
+    this.getItemsInPOResponse = this.response = await vendorRequest.getItemsInPO(this.request, linkItemsInPO, payload, this.headers);
+    const responseBodyText = await this.getItemsInPOResponse.text();
+    if (this.getItemsInPOResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
+        this.responseBody = this.getItemsInPOResponseBody = JSON.parse(await this.getItemsInPOResponse.body());
+        // logger.log('info', `Response POST ${linkItemsInPO} >>>>>>` + JSON.stringify(this.getItemsInPOResponseBody, undefined, 4));
+        // this.attach(`Response POST ${linkItemsInPO} >>>>>>` + JSON.stringify(this.getItemsInPOResponseBody, undefined, 4))
     }
     else {
         const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
@@ -567,9 +568,9 @@ Then('User sends GET request to get list items in "Purchasing > My Suggested"', 
 
 Then('User save a random item in above list suggested items', function () {
     // Use items with name have DefaultPurchasingSaleVelocity to check
-    this.getRandomItemsinPurchasingSuggested = this.getItemsinPOResponseBody.model.filter((item: any) => item.itemName != null && item.itemName.includes('DefaultPurchasingSaleVelocity'))
+    this.getRandomItemsInPurchasingSuggested = this.getItemsInPOResponseBody.model.filter((item: any) => item.itemName != null && item.itemName.includes('DefaultPurchasingSaleVelocity'))
     // Pick random 1 item to check purchasing daily sales rate    
-    this.radomAItemsInPurchasingSuggested = this.getRandomItemsinPurchasingSuggested[Math.floor(Math.random() * this.getRandomItemsinPurchasingSuggested.length)]
+    this.radomAItemsInPurchasingSuggested = this.getRandomItemsInPurchasingSuggested[Math.floor(Math.random() * this.getRandomItemsInPurchasingSuggested.length)]
     this.responseBodyOfAItemObject = this.radomAItemsInPurchasingSuggested
     this.itemName = this.radomAItemsInPurchasingSuggested.itemName
     this.itemKey = this.radomAItemsInPurchasingSuggested.itemKey
@@ -579,9 +580,9 @@ Then('User save a random item in above list suggested items', function () {
 });
 
 Then('User save a random item in above list suggested items to assign supplier', function () {
-    this.getRandomItemsinPurchasingSuggested = this.getItemsinPOResponseBody.model.filter((item: any) => item.itemName != null && item.itemName.includes('DefaultPurchasingSaleVelocity'))
+    this.getRandomItemsInPurchasingSuggested = this.getItemsInPOResponseBody.model.filter((item: any) => item.itemName != null && item.itemName.includes('DefaultPurchasingSaleVelocity'))
     // Pick random 1 item to check purchasing daily sales rate    
-    this.radomAItemsInPurchasingSuggested = this.getRandomItemsinPurchasingSuggested[Math.floor(Math.random() * this.getRandomItemsinPurchasingSuggested.length)]
+    this.radomAItemsInPurchasingSuggested = this.getRandomItemsInPurchasingSuggested[Math.floor(Math.random() * this.getRandomItemsInPurchasingSuggested.length)]
     this.responseBodyOfAItemObject = this.radomAItemsInPurchasingSuggested
     this.itemName = this.radomAItemsInPurchasingSuggested.itemName
     this.itemKey = this.radomAItemsInPurchasingSuggested.itemKey
@@ -598,7 +599,7 @@ Given(`User sends a GET request to get list items in items in "Purchasing > Cust
     const options = {
         headers: this.headers
     }
-    this.getLimitFiveItemResponse = this.response = await itemRequest.getItemsinPurchasingCustom(this.request, linkGetLimitFiveItemInCustom, options);
+    this.getLimitFiveItemResponse = this.response = await itemRequest.getItemsInPurchasingCustom(this.request, linkGetLimitFiveItemInCustom, options);
     const responseBodyText = await this.getLimitFiveItemResponse.text();
     if (this.getLimitFiveItemResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
         this.responseBody = this.getLimitFiveItemResponseBody = JSON.parse(await this.getLimitFiveItemResponse.body());
@@ -631,7 +632,7 @@ Then(`{} sends GET request to get percent default of "Average"`, async function 
         headers: this.headers
     }
 
-    salesVelocitySettingDatas = []
+    salesVelocitySettingDataArray = []
 
     for (const linkGetPercentDefaultOfAverage of linkGetPercentDefaultOfAverages) {
         this.getRestockSuggestionPurchasingResponse = this.response = await purchasingRequest.getRestockSuggestionPurchasing(this.request, linkGetPercentDefaultOfAverage, options);
@@ -639,7 +640,7 @@ Then(`{} sends GET request to get percent default of "Average"`, async function 
         if (this.getRestockSuggestionPurchasingResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
             this.responseBody = this.getRestockSuggestionPurchasingResponseBody = JSON.parse(await this.getRestockSuggestionPurchasingResponse.body());
             const salesVelocitySettingData = this.getRestockSuggestionPurchasingResponseBody.salesVelocitySettingData
-            salesVelocitySettingDatas.push(salesVelocitySettingData)
+            salesVelocitySettingDataArray.push(salesVelocitySettingData)
             logger.log('info', `Response GET ${linkGetPercentDefaultOfAverage} >>>>>>` + JSON.stringify(this.getRestockSuggestionPurchasingResponseBody, undefined, 4));
             this.attach(`Response GET ${linkGetPercentDefaultOfAverage} >>>>>>` + JSON.stringify(this.getRestockSuggestionPurchasingResponseBody, undefined, 4))
         }
@@ -653,7 +654,7 @@ Then(`{} sends GET request to get percent default of "Average"`, async function 
 
 Then(`{} checks the percent default of "Average" is the same as setting in company default`, async function (actor: string) {
     const percentDefaultOfAverage: number[] = [0, 20, 0, 20, 10, 0, 0, 50]
-    for (const salesVelocitySettingData of salesVelocitySettingDatas) {
+    for (const salesVelocitySettingData of salesVelocitySettingDataArray) {
         expect.soft(salesVelocitySettingData.percent2Day, `The weight of 2-day is equal ${percentDefaultOfAverage[0]}`).toEqual(percentDefaultOfAverage[0]);
         expect.soft(salesVelocitySettingData.percent7Day, `The weight of 7-day is equal ${percentDefaultOfAverage[1]}`).toEqual(percentDefaultOfAverage[1]);
         expect.soft(salesVelocitySettingData.percent14Day, `The weight of 14-day is equal ${percentDefaultOfAverage[2]}`).toEqual(percentDefaultOfAverage[2]);
@@ -671,7 +672,7 @@ Given(`User sets GET api endpoint to get list items in "Purchasing > My Suggeste
 
 Given(`User sends a GET request to get list items in items in "Purchasing > My Suggested" to check default purchasing daily sales rate`, async function () {
     const payload = { "removedItemKeys": [] };
-    this.getItemInPOResponse = this.response = await vendorRequest.getItemsinPO(this.request, linkGetLimitFiveItemInMySuggested, payload, this.headers);
+    this.getItemInPOResponse = this.response = await vendorRequest.getItemsInPO(this.request, linkGetLimitFiveItemInMySuggested, payload, this.headers);
     const responseBodyText = await this.getItemInPOResponse.text();
     if (this.getItemInPOResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
         this.responseBody = this.getItemInPOResponseBody = JSON.parse(await this.getItemInPOResponse.body());
@@ -685,4 +686,8 @@ Given(`User sends a GET request to get list items in items in "Purchasing > My S
         logger.log('info', `Response POST ${linkGetLimitFiveItemInMySuggested} has status code ${this.response.status()} ${this.response.statusText()} and response body >>>>>> ${responseBodyText}`);
         this.attach(`Response POST ${linkGetLimitFiveItemInMySuggested} has status code ${this.response.status()} ${this.response.statusText()} and response body >>>>>> ${actualResponseText}`)
     }
+});
+
+Then('{} checks API contract of get items in Purchasing Custom api', async function (actor: string) {
+    itemsInPurchasingResponseSchema.parse(this.radomFiveItemsInPurchasingCustom);
 });

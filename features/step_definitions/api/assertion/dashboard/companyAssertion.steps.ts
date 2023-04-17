@@ -1,8 +1,8 @@
 import { When, Then, Given } from '@cucumber/cucumber';
 import { expect } from '@playwright/test';
-import * as companiesRequest from '../../../../src/api/request/administration.service';
-import logger from '../../../../src/Logger/logger';
-import { Links } from '../../../../src/utils/links';
+import * as companiesRequest from '../../../../../src/api/request/administration.service';
+import logger from '../../../../../src/Logger/logger';
+import { Links } from '../../../../../src/utils/links';
 import _ from "lodash";
 
 Then('{} checks API contract essential types in company object are correct', async function (actor: string) {

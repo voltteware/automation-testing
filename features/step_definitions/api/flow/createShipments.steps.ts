@@ -6,6 +6,8 @@ import { Links } from '../../../../src/utils/links';
 import { faker } from '@faker-js/faker';
 import _ from "lodash";
 import { expect } from '@playwright/test';
+import { simpleShipmentResponseSchema, updateItemInfoWithLastStepResponseSchema, getListShipmentsResponseSchema } from '../assertion/restockAMZ/shipmentAssertionSchema';
+import { itemInfoInShipmentResponseSchema } from '../assertion/dashboard/itemAssertionSchema';
 
 let link: any;
 let payload: any;
@@ -236,7 +238,7 @@ Then(`{} sends a POST request to create shipment plan`, async function (actor: s
 
     this.response = await shipmentRequest.postShipmentPlan(this.request, link, payload, this.headers);
     if (this.response.status() == 200) {
-        // Respone body of this API is empty so no need to log response body
+        // Response body of this API is empty so no need to log response body
         logger.log('info', `Create Shipment Plan Response ${link} has status code ${this.response.status()}`);
         this.attach(`Create Shipment Plan Response ${link} has status code ${this.response.status()} ${this.response.statusText()}`);
     } else {
@@ -331,12 +333,12 @@ Then('{} sends a POST request to sync', async function (actor: string) {
     await sleep(5000);
 });
 
-Then(`{} sets GET api enpoint to count items in Shipment Review`, async function (actor: string) {
+Then(`{} sets GET api endpoint to count items in Shipment Review`, async function (actor: string) {
     linkCount = `${Links.API_SHIPMENT}-detail/count?where=%7B%22logic%22:%22and%22,%22filters%22:%5B%5D%7D&key=${this.shipmentKey}&type=amazon&restockType=SUPPLIER`;
 });
 
 Then(`{} checks Items in Shipment Review`, async function (actor: string) {
-    expect(this.getAmountItemsResponseBody, `The amount of items would be greate than 0`).toBeGreaterThan(0);
+    expect(this.getAmountItemsResponseBody, `The amount of items would be greater than 0`).toBeGreaterThan(0);
 });
 
 Then(`{} sends a GET request to count items in Shipment Review`, async function (actor: string) {
@@ -357,7 +359,7 @@ Then(`{} sends a GET request to count items in Shipment Review`, async function 
     }
 });
 
-Then(`{} sets PUT api enpoint to update shipment Item key`, async function (actor: string) {
+Then(`{} sets PUT api endpoint to update shipment Item key`, async function (actor: string) {
     link = `${Links.API_SHIPMENT}-detail/${this.shipmentItemKey}`;
 });
 
@@ -458,4 +460,34 @@ Then('{} checks the new created shipment', async function (actor: string) {
     this.name = this.getListShipmentsResponseBody[0].shipmentName;
     expect(this.shipmentStatus, `In response body, the expected shipmentStatus should be: WORKING`).toBe('WORKING');
     expect(this.name.includes(this.shipmentName), `In response body, the expected shipmentName should be: ${this.shipmentName}`).toBeTruthy();
+});
+
+Then('{} checks API contract of create shipment api', async function (actor: string) {
+    simpleShipmentResponseSchema.parse(this.createShipmentResponseBody);
+});
+
+Then('{} checks API contract of get Shipment info api', async function (actor: string) {
+    simpleShipmentResponseSchema.parse(this.getShipmentInfoResponseBody);
+});
+
+Then(`{} picks random item to check api contract`, async function (actor: string) {
+    this.responseBodyOfAItemInShipmentObject = await this.getShipmentItemsResponseBody[Math.floor(Math.random() * this.getShipmentItemsResponseBody.length)];
+    logger.log('info', `Random Item: ${JSON.stringify(this.responseBodyOfAItemInShipmentObject, undefined, 4)}`);
+    this.attach(`Random Item: ${JSON.stringify(this.responseBodyOfAItemInShipmentObject, undefined, 4)}`);
+});
+
+Then('{} checks API contract of get items in shipment', async function (actor: string) {
+    itemInfoInShipmentResponseSchema.parse(this.responseBodyOfAItemInShipmentObject);
+});
+
+Then('{} checks API contract of update shipment by shipment key api', async function (actor: string) {
+    updateItemInfoWithLastStepResponseSchema.parse(this.updateShipmentInfoResponseBody);
+});
+
+Then('{} checks API contract of get list shipments api', async function (actor: string) {
+    getListShipmentsResponseSchema.parse(this.getListShipmentsResponseBody[0]);
+});
+
+Then('{} checks API contract of update item shipment key', async function (actor: string) {
+    itemInfoInShipmentResponseSchema.parse(this.updateShipmentItemKeyResponseBody);
 });
