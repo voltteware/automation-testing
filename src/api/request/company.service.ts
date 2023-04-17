@@ -60,6 +60,13 @@ async function editPurchasingDailyRate(request: APIRequestContext, linkApi: stri
     return updateResponse;
 }
 
+//Get associated users
+async function getAssociatedUsers(request: APIRequestContext, linkApi: string, options?: any) {
+    const url = `${linkApi}`;
+    logger.log('info', `Send GET associated users request ${url}`);
+    return await request.get(url, options);
+}
+
 export {
     getRealm,
     getCompanies,
@@ -67,5 +74,6 @@ export {
     updateCompany,
     createCompany,
     getListCompanyInfo,
-    editPurchasingDailyRate
+    editPurchasingDailyRate,
+    getAssociatedUsers
 }
