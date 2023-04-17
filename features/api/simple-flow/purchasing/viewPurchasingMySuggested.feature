@@ -33,14 +33,47 @@ Feature: API_Purchasing My Suggested
         And The expected status code should be <expectedStatus>
         And User checks API contract get total price, total qty and unique items on Purchasing My Suggest are correct
         And User checks number Suggested Purchase Orders is correct
-        And User checks total cost of suggested purchase orders is correct
-        And User checks total unique items on suggested purchase orders is correct
-        And User checks total units on suggested purchase orders is correct
-        And User checks total items in PO is matched with total in suggested PO of Items Without Supplier and Forecast Recommended Qty > 0 and only show Active Items
+        And User checks Total Cost of Suggested Purchase Orders is correct
+        And User checks Total Items on Suggested Purchase Orders is correct
+        And User checks Total Units on Suggested Purchase Orders is correct
+
+        # Check Items in PO of "Item Without Supplier"
+        And User selects suggested PO of Items Without Supplier
+        And User sets GET api endpoint to get count items in PO by vendor key null
+        And User sends request to get count items on Items in PO by vendor key
         And User checks API contract get count items by vendor key are correct
+        And User sets api endpoint to get list items in PO of vendor key
+        And User sends a POST request to get list items in PO by vendor key
         And User checks API contract get items in po by vendor key are correct
         And User checks API contract of item object is purchasing is correct
-        And User checks total items in PO is matched with total in suggested PO of random supplier if any and Forecast Recommended Qty > 0 and only show Active Items
+
+        And User checks total items in PO is matched with total products in suggested PO of Items Without Supplier
+        And User checks Total Qty of all Items in PO is matched with Total Qty in suggested PO of Items Without Supplier
+        And User checks Total Cost of all Items in PO is matched with Total Cost in suggested PO of Items Without Supplier
+
+        And User checks Forecast Recommended Qty of all items in PO of suggested PO of Items Without Supplier > 0
+        And User picks max 10 random items in above list items
+        And User checks random items has status is Active
+        And User checks supplier name of above random items in Manage Company Items
+
+        # Check Items in PO of a random supplier
+        And User selects suggested PO of random supplier
+        And User sets GET api endpoint to get count items in PO by vendor key random
+        And User sends request to get count items on Items in PO by vendor key
+        And User checks API contract get count items by vendor key are correct
+        And User sets api endpoint to get list items in PO of vendor key
+        And User sends a POST request to get list items in PO by vendor key
+        And User checks API contract get items in po by vendor key are correct
+        And User checks API contract of item object is purchasing is correct
+
+        And User checks total items in PO is matched with total products in suggested PO of random supplier
+        And User checks Total Qty of all Items in PO is matched with Total Qty in suggested PO of random supplier
+        And User checks Total Cost of all Items in PO is matched with Total Cost in suggested PO of random supplier
+
+        And User checks Forecast Recommended Qty of all items in PO of suggested PO of random supplier > 0
+        And User picks max 10 random items in above list items
+        And User checks random items has status is Active
+        And User checks supplier name of above random items in Manage Company Items
         Examples:
             | TC_ID     | user  | email                      | password  | companyType | expectedStatus |
             | TC_PMS001 | admin | testautoforecast@gmail.com | Test1111# | CSV         | 200            |
