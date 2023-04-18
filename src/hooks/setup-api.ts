@@ -4,7 +4,7 @@ import { ActionWords } from "../utils/actionwords";
 import { setParallelCanAssign, parallelCanAssignHelpers } from '@cucumber/cucumber'
 
 const { atMostOnePicklePerTag } = parallelCanAssignHelpers;
-const myTagRule = atMostOnePicklePerTag(['@api-createBom', '@api-createItem', '@api-createSupplier', '@api-createSupply', '@api-edit-purchasing-daily-sale-rate-rules-average']);
+const myTagRule = atMostOnePicklePerTag(['@api-createBom', '@api-createItem', '@api-createSupplier', '@api-createSupply', '@api-edit-purchasing-daily-sale-rate-rules-average', '@api-overrideValue', '@api-dashboard-advanced']);
 
 setParallelCanAssign(function (pickleInQuestion, picklesInProgress) {
     return (

@@ -1,4 +1,4 @@
-@test-api @api-dashboard @api-overrideValue
+@test-api @api-dashboard
 Feature: API_Dashboard PUT /api/history-override
     Background: Send GET /realm request to get all company keys of current logged in user before each test
         Given user sends a POST login request to get valid cookie with role
@@ -8,7 +8,7 @@ Feature: API_Dashboard PUT /api/history-override
         And In Header of the request, she sets param Cookie as valid connect.sid
         When User sends a GET request to get companies
     
-    @TC_OV001 @smoke-test-api @regression-api
+    @TC_OV001 @smoke-test-api @regression-api @api-overrideValue
     Scenario Outline: <TC_ID> - Verify user <email> override history value and go to Purchasing to check data
         Given User picks company which has onboarded before with type <companyType> in above response
         But User sets valid cookie of <email> and valid companyKey and valid companyType in the header
@@ -16,7 +16,7 @@ Feature: API_Dashboard PUT /api/history-override
         And User sends a GET request to get list items
         And The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
-        And User picks a random item in above list items
+        And User picks a random item which does not have Purchase As
         And User saves the item key
         And User sets PUT api endpoint to update history override
         And User sends a PUT request to update history override
@@ -47,8 +47,7 @@ Feature: API_Dashboard PUT /api/history-override
         Then User checks API contract of get results of item
         And The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
-        # I am not sure why below step is failed => will find the root causes later
-        # And User checks override history values in Purchasing
+        And User checks override history values in Purchasing
         Examples:
             | TC_ID      | companyType | email                      | limitRow | expectedStatus | expectedStatusText | editColumn         | value | 
             | TC_OV001_1 | CSV         | testautoforecast@gmail.com | 20       | 200            | OK                 | useHistoryOverride | true  |
