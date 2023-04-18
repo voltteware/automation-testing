@@ -113,7 +113,35 @@ Then('{} filters {} suppliers which has the name includes {}', async function (a
 
     logger.log('info', `Selected ${this.selectedSuppliers.length} suppliers which has the name includes ${supplierNameKeyword}` + JSON.stringify(await this.selectedSuppliers, undefined, 4));
     this.attach(`Selected ${this.selectedSuppliers.length} suppliers which has the name includes ${supplierNameKeyword}` + JSON.stringify(await this.selectedSuppliers, undefined, 4));
+})
+
+Then('{} checks there is at least 1 supplier found', async function (actor: string) {
     expect(this.selectedSuppliers.length, 'Expect that there is at least user is selected').toBeGreaterThan(0);
+})
+
+Then('{} search the deleted suppliers and checks that there is no supplier found', async function (actor: string) {
+    const options = {
+        headers: this.headers
+    }
+
+    for await (const supplier of this.selectedSuppliers) {
+        const supplierName = supplier.name;
+        const link = encodeURI(`${Links.API_SUPPLIERS}?offset=0&limit=50&where={"filters":[{"filters":[{"field":"name","operator":"contains","value":"${supplierName}"}],"logic":"and"}],"logic":"and"}`);
+        const searchSupplierResponse = await supplierRequest.getSuppliers(this.request, link, options);
+        const responseBodyText = await searchSupplierResponse.text();
+        var searchSupplierResponseBody = JSON.parse(responseBodyText);
+        if (searchSupplierResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
+            logger.log('info', `Response GET ${link}>>>>>>>` + JSON.stringify(responseBodyText, undefined, 4));
+            this.attach(`Response GET ${link}>>>>>>>>` + JSON.stringify(responseBodyText, undefined, 4))
+        }
+        else {
+            const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
+            logger.log('info', `Response GET ${link} has status code ${searchSupplierResponse.status()} ${searchSupplierResponse.statusText()} and response body ${responseBodyText}`);
+            this.attach(`Response GET ${link} has status code ${searchSupplierResponse.status()} ${searchSupplierResponse.statusText()} and response body ${actualResponseText}`)
+        }
+
+        expect(searchSupplierResponseBody.length, `Expect that there is no supplier ${supplierName} in the system`).toBe(0);
+    }
 })
 
 Then('{} sends a DELETE method to delete supplier', async function (actor: string) {
