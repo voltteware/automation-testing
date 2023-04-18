@@ -44,8 +44,7 @@ Then('Check {} company exist in the system, if it does not exist will create com
     }
 
     if (numberofCompanies < 1) {
-        this.actionCompany = 'created';
-        payload.companyName = `${faker.company.name()}-AutoTest`;
+        payload.companyName = `${faker.company.name()}-${companyNameKeyWord}`;
         payload.companyKey = '';
         payload.companyType = arrCompanyType[Math.floor(Math.random() * arrCompanyType.length)];
         payload.leadTime = Number(faker.datatype.number({'min': 1,'max': 365}));
@@ -62,6 +61,7 @@ Then('Check {} company exist in the system, if it does not exist will create com
             this.createCompanyResponseBody = JSON.parse(responseBodyText);
             logger.log('info', `Response POST ${Links.API_CREATE_COMPANY}` + JSON.stringify(this.createCompanyResponseBody, undefined, 4));
             this.attach(`Response Create New Company POST >>>>>> ${Links.API_CREATE_COMPANY}` + JSON.stringify(this.createCompanyResponseBody, undefined, 4));
+            this.get20LatestCompaniesResponseBody = this.createCompanyResponseBody;
         }
         else {
             const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
@@ -72,10 +72,20 @@ Then('Check {} company exist in the system, if it does not exist will create com
 })
 
 Then('{} filters company to get company which has the company name included {}', async function (actor, companyNameKeyWord: string) {
+    const options = {
+        headers: this.headers
+    }
+
+    this.get20LatestCompaniesResponse = await adminRequest.getCompanies(this.request, endPointToGet20LatestCompany, options);
+    this.get20LatestCompaniesResponseBody = JSON.parse(await this.get20LatestCompaniesResponse.text());
     selectedCompany = await this.get20LatestCompaniesResponseBody.filter((co: any) => (co.companyName).endsWith(companyNameKeyWord));
     randomCompany = selectedCompany[Math.floor(Math.random() * selectedCompany.length)];
     //logger.log('info', `Response Body before filter: ${JSON.stringify(selectedCompany, undefined, 4)}`);
-    this.attach(`Response Body before filter: ${JSON.stringify(randomCompany, undefined, 4)}`);
+    this.companyKey = randomCompany.companyKey;
+    this.companyType = randomCompany.companyType;
+    this.companyName = randomCompany.companyName;
+    this.customerId = randomCompany.customerId;
+    this.attach(`Response Body before filter: ${JSON.stringify(this.randomCompany, undefined, 4)}`);
 })
 
 Then('{} sends a DELETE method to {} delete the {} company', async function (actor, deleteType: string, actionCompany: string) {
@@ -83,9 +93,10 @@ Then('{} sends a DELETE method to {} delete the {} company', async function (act
     const options = {
         headers: this.headers
     }
-    if (this.actionCompany == 'created' || actionCompany == 'created'){
-        this.companyKeyUrl = this.createCompanyResponseBody.companyKey;
-        this.companyTypeUrl = this.createCompanyResponseBody.companyType;
+
+    if (actionCompany == 'created'){
+        this.companyKeyUrl = this.responseBodyOfACompanyObject.companyKey;
+        this.companyTypeUrl = this.responseBodyOfACompanyObject.companyType;
     }else {
         this.companyKeyUrl = randomCompany.companyKey;
         this.companyTypeUrl = randomCompany.companyType;
@@ -137,4 +148,9 @@ Then('Check that the company just soft deleted still exists but the subscription
     this.responseBody = JSON.parse(await this.getCompanyInfoResponse.text());
     this.subscriptionStatus = await this.responseBody.subscriptionStatus;
     expect(this.subscriptionStatus).toEqual('canceled');
+})
+
+Then('User verify that has no item in item summary', async function () {
+    this.expect = {"err": null, "model": {}};
+    expect(this.getItemSummaryResponseBody).toEqual(this.expect);
 })
