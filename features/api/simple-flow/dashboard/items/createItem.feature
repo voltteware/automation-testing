@@ -23,6 +23,10 @@ Feature: API_Dashboard POST /api/item
         Then The expected status code should be <expectedStatus>
         And User checks API contract essential types in item object are correct
         And User checks values in response of create item are correct
+        # Hide item after created
+        And User sets PUT api endpoint to edit isHidden of the above item for company type <companyType> with new value: true
+        When User sends a PUT request to edit the item
+        
         Examples:
             | companyType | email                      | limitRow | itemName      | description     | vendorName | vendorPrice | moq    | leadTime | orderInterval | serviceLevel | onHand | onHandMin | onHandThirdParty | onHandThirdPartyMin | lotMultipleQty | lotMultipleItemName | vendorKey | lotMultipleItemKey | expectedStatus |
             | CSV         | testautoforecast@gmail.com | 10       | New Item Auto | New description | random     | random      | random | random   | random        | random       | random | random    | random           | random              | random         | random              | random    | random             | 200            |
@@ -37,6 +41,9 @@ Feature: API_Dashboard POST /api/item
         Then The expected status code should be <expectedStatus>
         And User checks API contract essential types in item object are correct
         And User checks values in response of create item are correct
+        # Hide item after created
+        And User sets PUT api endpoint to edit isHidden of the above item for company type <companyType> with new value: true
+        When User sends a PUT request to edit the item
         Examples:
             | companyType | email                      | itemName      | asin   | fnsku  | expectedStatus |
             | CSV         | testautoforecast@gmail.com | New Item Auto | random | random | 200            |
@@ -56,6 +63,9 @@ Feature: API_Dashboard POST /api/item
         Then The expected status code should be <expectedStatus>
         And User checks API contract essential types in item object are correct
         And User checks values in response of create item are correct
+        # Hide item after created
+        And User sets PUT api endpoint to edit isHidden of the above item for company type <companyType> with new value: true
+        When User sends a PUT request to edit the item
         Examples:
             | companyType | email                      | limitRow | itemName      | description     | vendorName | vendorPrice | moq    | leadTime | orderInterval | serviceLevel | onHand | onHandMin | onHandThirdParty | onHandThirdPartyMin | lotMultipleQty | lotMultipleItemName | asin   | fnsku  | skuNotes | prepNotes | supplierRebate | inboundShippingCost | reshippingCost | repackagingMaterialCost | repackingLaborCost | rank   | inventorySourcePreference | average7DayPrice | isFbm  | vendorKey | lotMultipleItemKey | expectedStatus |
             | ASC         | testautoforecast@gmail.com | 10       | New Item Auto | New description | random     | random      | random | random   | random        | random       | random | random    | random           | random              | random         | random              | random | random | random   | random    | random         | random              | random         | random                  | random             | random | FBA + FBM                 | random           | random | random    | random             | 200            |
@@ -70,6 +80,9 @@ Feature: API_Dashboard POST /api/item
         Then The expected status code should be <expectedStatus>
         And User checks API contract essential types in item object are correct
         And User checks values in response of create item are correct
+        # Hide item after created
+        And User sets PUT api endpoint to edit isHidden of the above item for company type <companyType> with new value: true
+        When User sends a PUT request to edit the item
         Examples:
             | companyType | email                      | itemName      | asin   | fnsku  | expectedStatus |
             | ASC         | testautoforecast@gmail.com | New Item Auto | random | random | 200            |

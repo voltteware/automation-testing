@@ -30,6 +30,14 @@ Then(`{} sets GET api endpoint to get item with limit row: {}`, async function (
     linkGetItems = `${Links.API_ITEMS}?offset=0&limit=${limitRow}`;
 });
 
+Then(`{} set GET api endpoint to get items with name contains {string}`, async function (actor, containText: string) {
+    linkGetItems = `${Links.API_ITEMS}?offset=0&limit=2&where={"filters":[{"filters":[{"field":"name","operator":"contains","value":"${containText}"}],"logic":"and"}],"logic":"and"}`    
+});
+
+Then(`{} set GET api endpoint to get item that is hidden`, async function (actor) {
+    linkGetItems = `${Links.API_ITEMS}?offset=0&limit=1&where={"filters":[{"filters":[{"field":"name","operator":"eq","value":"${this.nameOfHiddenItem}"}],"logic":"and"}],"logic":"and"}`    
+});
+
 Then(`{} sets GET api endpoint to count items that is active and have lotMultipleItemKey is NULL`, async function (actor: string) {
     linkCountItems = linkGetActiveAndHasLotMultipleItemKeyNullItem = encodeURI(`${Links.API_ITEM_COUNT}?where={"filters":[{"filters":[{"field":"isHidden","operator":"eq","value":false},{"field":"isHidden","operator":"eq","value":null},{"field":"isHidden","operator":"eq","value":null}],"logic":"or"},{"filters":[{"field":"lotMultipleItemName","operator":"isnull","value":null}],"logic":"and"}],"logic":"and"}`);
 });
@@ -82,15 +90,23 @@ Then(`{} sends a GET request to get list items`, async function (actor: string) 
     const responseBodyText = await this.getItemsResponse.text();
     if (this.getItemsResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
         this.responseBody = this.getItemsResponseBody = JSON.parse(await this.getItemsResponse.text());
-        // logger.log('info', `Response GET ${link}` + JSON.stringify(this.getSupplierResponseBody, undefined, 4));
-        // this.attach(`Response GET ${link}` + JSON.stringify(this.getSupplierResponseBody, undefined, 4))
+        logger.log('info', `Response GET ${linkGetItems}` + JSON.stringify(this.getItemsResponseBody, undefined, 4));
+        this.attach(`Response GET ${linkGetItems}` + JSON.stringify(this.getItemsResponseBody, undefined, 4))
     }
     else {
         const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
-        logger.log('info', `Response GET ${link} has status code ${this.response.status()} ${this.response.statusText()} and response body ${responseBodyText}`);
-        this.attach(`Response GET ${link} has status code ${this.response.status()} ${this.response.statusText()} and response body ${actualResponseText}`)
+        logger.log('info', `Response GET ${linkGetItems} has status code ${this.response.status()} ${this.response.statusText()} and response body ${responseBodyText}`);
+        this.attach(`Response GET ${linkGetItems} has status code ${this.response.status()} ${this.response.statusText()} and response body ${actualResponseText}`)
     }
 })
+
+Then('User checks that there are no item in list', function () {
+    expect(this.getItemsResponseBody.length).toEqual(0)
+});
+
+Then('{} checks API contract essential types in the response of hidden item are correct', async function (actor: string) {
+    itemInfoResponseSchema.parse(this.editItemResponseBody);
+});
 
 Then(`{} sends GET api request to get all items`, async function (actor: string) {
     const linkGetItemCount = `${Links.API_ITEMS}/count`
@@ -242,9 +258,9 @@ Then(`{} saves the item key`, async function (actor: string) {
     this.attach(`Item key: ${this.itemKey}`);
 });
 
-Given('User sets PUT api endpoint to edit {} of the above item for company type {} with new value: {}', async function (editColumn: string, companyType: string, value: string) {
+Given('User sets PUT api endpoint to edit {} of the above item for company type {} with new value: {}', async function (editColumn: string, companyType: string, value: string) {    
     // Prepare endpoint for request to edit item
-    link = `${Links.API_ITEMS}/${this.itemKey}`
+    link = `${Links.API_ITEMS}/${this.itemKey === undefined ? this.responseBodyOfAItemObject.key : this.itemKey}`
 
     switch (editColumn) {
         case 'itemName':
@@ -452,6 +468,8 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
         case 'isHidden':
             if (value == 'random') {
                 this.isHidden = !Boolean(this.responseBodyOfAItemObject.isHidden);
+            } else {
+                this.isHidden = Boolean(value)
             }
 
             logger.log('info', `New ${editColumn}: ${this.isHidden}`);
@@ -883,6 +901,7 @@ Then('The new {} of item must be updated successfully', function (editColumn: st
             break;
         case 'isHidden':
             expect(this.isHidden).toEqual(this.editItemResponseBody.isHidden)
+            this.nameOfHiddenItem = this.editItemResponseBody.name
             break;
         case 'useHistoryOverride':
             expect(this.useHistoryOverride).toEqual(this.editItemResponseBody.useHistoryOverride)
