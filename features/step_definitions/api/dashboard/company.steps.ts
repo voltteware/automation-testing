@@ -171,7 +171,7 @@ When(`{} sends a GET request to get company information of {} by company key`, a
     }
 })
 
-Then('{} checks that the lastForecastDate field was updated and jobProcessing is false in company detail information after running forecast', { timeout: 30 * 60 * 1000 }, async function (actor: string) {
+Then('{} checks that the lastForecastDate field was updated and jobInitiator is null in company detail information after running forecast', { timeout: 30 * 60 * 1000 }, async function (actor: string) {
     const linkGetCompanyInfo = `${Links.API_GET_COMPANY}/${this.companyKey}`;
     const options = {
         headers: this.headers
@@ -196,21 +196,38 @@ Then('{} checks that the lastForecastDate field was updated and jobProcessing is
         timeout: 15 * 60 * 1000,
     }).toBeGreaterThan(beforeForecastDate);
 
+    // jobInitiator is a value to check completing forecast
     await expect.poll(async () => {
         const getCompanyInfoResponse = await companyRequest.getCompanyInfo(this.request, linkGetCompanyInfo, options);
         const getCompanyInfoResponseBody = JSON.parse(await getCompanyInfoResponse.text());
-        const jobProcessing = getCompanyInfoResponseBody.jobProcessing;
-        console.log(`jobProcessing is: >>>>>>`, jobProcessing);
-        logger.log('info', `jobProcessing is: >>>>>>` + jobProcessing);
-        this.attach(`jobProcessing is: >>>>>>` + jobProcessing);
-        return jobProcessing;
+        const jobInitiator = getCompanyInfoResponseBody.jobInitiator;
+        console.log(`jobInitiator is: >>>>>> `, jobInitiator);
+        logger.log('info', `jobInitiator is: >>>>>> ` + jobInitiator);
+        this.attach(`jobInitiator is: >>>>>> ` + jobInitiator);
+        return jobInitiator;
     }, {
         // Custom error message, optional.
         message: `make sure Last Forecast Date is after the moment user clicks Run Forecast`, // custom error message
         // Probe, wait 1s, probe, wait 5s, probe, wait 10s, probe, wait 10s, probe, .... Defaults to [100, 250, 500, 1000].
         intervals: [1_000, 2_000, 5_000],
         timeout: 15 * 60 * 1000,
-    }).toBeFalsy();
+    }).toBeNull();
+
+    // await expect.poll(async () => {
+    //     const getCompanyInfoResponse = await companyRequest.getCompanyInfo(this.request, linkGetCompanyInfo, options);
+    //     const getCompanyInfoResponseBody = JSON.parse(await getCompanyInfoResponse.text());
+    //     const jobProcessing = getCompanyInfoResponseBody.jobProcessing;
+    //     console.log(`jobProcessing is: >>>>>>`, jobProcessing);
+    //     logger.log('info', `jobProcessing is: >>>>>>` + jobProcessing);
+    //     this.attach(`jobProcessing is: >>>>>>` + jobProcessing);
+    //     return jobProcessing;
+    // }, {
+    //     // Custom error message, optional.
+    //     message: `make sure Last Forecast Date is after the moment user clicks Run Forecast`, // custom error message
+    //     // Probe, wait 1s, probe, wait 5s, probe, wait 10s, probe, wait 10s, probe, .... Defaults to [100, 250, 500, 1000].
+    //     intervals: [1_000, 2_000, 5_000],
+    //     timeout: 15 * 60 * 1000,
+    // }).toBeFalsy();
 })
 
 Given('User sets GET api to get information of {string} company', function (companyType) {

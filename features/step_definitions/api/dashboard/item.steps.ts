@@ -133,7 +133,9 @@ Then(`{} sends a GET request to get item summary`, async function (actor: string
 
 Given('User picks a random item in above list items', async function () {
     expect(this.getItemsResponseBody.length, 'There is at least 1 item to pick random').toBeGreaterThan(1);
-    this.responseBodyOfAItemObject = await this.getItemsResponseBody[Math.floor(Math.random() * this.getItemsResponseBody.length)];
+
+    this.listItemsNotPurchaseAs = this.getItemsResponseBody.filter((item: any) => item.lotMultipleItemKey == null && item.lotMultipleItemName == null);
+    this.responseBodyOfAItemObject = await this.listItemsNotPurchaseAs[Math.floor(Math.random() * this.listItemsNotPurchaseAs.length)];
     logger.log('info', `Random Item: ${JSON.stringify(this.responseBodyOfAItemObject, undefined, 4)}`);
     this.attach(`Random Item: ${JSON.stringify(this.responseBodyOfAItemObject, undefined, 4)}`);
 });
@@ -218,16 +220,19 @@ Then(`{} checks supplier name of above random items in Manage Company Items`, as
     }
 });
 
-Given('User picks a random imtem in above list items', async function () {
-    this.responseBodyOfAItemObject = await this.getItemsResponseBody[Math.floor(Math.random() * this.getItemsResponseBody.length)];
-    logger.log('info', `Random Item: ${JSON.stringify(this.responseBodyOfAItemObject, undefined, 4)}`);
-    this.attach(`Random Item: ${JSON.stringify(this.responseBodyOfAItemObject, undefined, 4)}`);
-});
+// Given('User picks a random item in above list items', async function () {
+//     this.responseBodyOfAItemObject = await this.getItemsResponseBody[Math.floor(Math.random() * this.getItemsResponseBody.length)];
+//     logger.log('info', `Random Item: ${JSON.stringify(this.responseBodyOfAItemObject, undefined, 4)}`);
+//     this.attach(`Random Item: ${JSON.stringify(this.responseBodyOfAItemObject, undefined, 4)}`);
+// });
 
 Then(`{} saves the item key`, async function (actor: string) {
-    this.itemKey = this.responseBodyOfAItemObject.key
-    logger.log('info', `Item key to edit: ${this.itemKey}`);
-    this.attach(`Item key to edit: ${this.itemKey}`)
+    this.itemKey = this.responseBodyOfAItemObject.key;
+    this.itemName = this.responseBodyOfAItemObject.name;
+    logger.log('info', `Item name: ${this.itemName}`);
+    this.attach(`Item name: ${this.itemName}`);
+    logger.log('info', `Item key: ${this.itemKey}`);
+    this.attach(`Item key: ${this.itemKey}`);
 });
 
 Given('User sets PUT api endpoint to edit {} of the above item for company type {} with new value: {}', async function (editColumn: string, companyType: string, value: string) {
@@ -274,8 +279,8 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
                 // Filter out the excluded supplier have excludedSupplierKey from the list suppliers
                 const filteredArray = this.getSupplierResponseBody.filter((supplier: any) => supplier.key !== excludedSupplierKey);
                 const randomSupplier = filteredArray[Math.floor(Math.random() * this.getSupplierResponseBody.length)];
-                logger.log('info', `Ramdom supplier` + JSON.stringify(randomSupplier, undefined, 4));
-                this.attach(`Ramdom supplier` + JSON.stringify(randomSupplier, undefined, 4))
+                logger.log('info', `Random supplier` + JSON.stringify(randomSupplier, undefined, 4));
+                this.attach(`Random supplier` + JSON.stringify(randomSupplier, undefined, 4))
 
                 this.vendorKey = randomSupplier.key;
                 this.vendorName = randomSupplier.name;
@@ -449,7 +454,9 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
             if (value == 'random') {
                 this.useHistoryOverride = !(Boolean(this.responseBodyOfAItemObject.useHistoryOverride));
             }
-
+            else {
+                this.useHistoryOverride = true;
+            }
             logger.log('info', `New ${editColumn}: ${this.useHistoryOverride}`);
             this.attach(`New ${editColumn}: ${this.useHistoryOverride}`);
             break;
@@ -794,7 +801,6 @@ When('User sends a PUT request to edit the item', async function () {
         logger.log('info', `Edit Item Response edit ${link} has status code ${this.response.status()} ${this.response.statusText()}`)
         this.attach(`Edit Item Response edit ${link} has status code ${this.response.status()} ${this.response.statusText()}`)
     }
-
 });
 
 Then('The new {} of item must be updated successfully', function (editColumn: string) {
