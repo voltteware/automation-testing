@@ -154,6 +154,15 @@ Given('User picks a random item in above list items', async function () {
     this.attach(`Random Item: ${JSON.stringify(this.responseBodyOfAItemObject, undefined, 4)}`);
 });
 
+Given('{} picks a random item which does not have Purchase As', async function (actor: string){
+    expect(this.getItemsResponseBody.length, 'There is at least 1 item to pick random').toBeGreaterThanOrEqual(1);
+    // Get items which are not related to Purchase As
+    this.listItemsNotPurchaseAs = this.getItemsResponseBody.filter((item: any) => item.lotMultipleItemKey == null && item.lotMultipleItemName == null);
+    this.responseBodyOfAItemObject = await this.listItemsNotPurchaseAs[Math.floor(Math.random() * this.listItemsNotPurchaseAs.length)];
+    logger.log('info', `Random Item: ${JSON.stringify(this.responseBodyOfAItemObject, undefined, 4)}`);
+    this.attach(`Random Item: ${JSON.stringify(this.responseBodyOfAItemObject, undefined, 4)}`);
+});
+
 Given('User picks max 10 random items in above list items', async function () {
     // Add this if else condition to skip test in Purchasing My Suggested if system only show Items without Suppliers, there is no item has Supplier Name not null. 
     if (this.getItemsResponseBody != undefined || null) {
@@ -639,7 +648,8 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
             lotMultipleQty: this.lotMultipleQty === undefined ? this.responseBodyOfAItemObject.lotMultipleQty : this.lotMultipleQty,
             lotMultipleItemKey: this.lotMultipleItemKey === undefined ? this.responseBodyOfAItemObject.lotMultipleItemKey : this.lotMultipleItemKey === null ? null : `${this.lotMultipleItemKey}`,
             lotMultipleItemName: this.lotMultipleItemName === undefined ? this.responseBodyOfAItemObject.lotMultipleItemName : this.lotMultipleItemName === null ? null : `${this.lotMultipleItemName}`,
-            forecastDirty: this.responseBodyOfAItemObject.forecastDirty,
+            // forecastDirty is true => Run forecast for this item
+            forecastDirty: true,
             forecastTags: this.responseBodyOfAItemObject.forecastTags,
             tag: this.responseBodyOfAItemObject.tag,
             tags: this.responseBodyOfAItemObject.tags,
@@ -742,7 +752,8 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
             lotMultipleQty: this.lotMultipleQty === undefined ? this.responseBodyOfAItemObject.lotMultipleQty : this.lotMultipleQty,
             lotMultipleItemKey: this.lotMultipleItemKey === undefined ? this.responseBodyOfAItemObject.lotMultipleItemKey : this.lotMultipleItemKey === null ? null : `${this.lotMultipleItemKey}`,
             lotMultipleItemName: this.lotMultipleItemName === undefined ? this.responseBodyOfAItemObject.lotMultipleItemName : this.lotMultipleItemName === null ? null : `${this.lotMultipleItemName}`,
-            forecastDirty: this.responseBodyOfAItemObject.forecastDirty,
+            // forecastDirty is true => Run forecast for this item
+            forecastDirty: true,
             forecastTags: this.responseBodyOfAItemObject.forecastTags,
             tag: this.responseBodyOfAItemObject.tag,
             tags: this.responseBodyOfAItemObject.tags,

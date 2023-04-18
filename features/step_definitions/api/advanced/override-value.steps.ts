@@ -18,9 +18,9 @@ Then(`{} sets PUT api endpoint to update history override`, async function (acto
 Then('{} sends a PUT request to update history override', async function (actor: string) {
     let month: string[] = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     let year: number[] = [new Date().getFullYear() - 1, new Date().getFullYear() - 2, new Date().getFullYear() - 3, new Date().getFullYear() - 4];
-    const gridMonth = Math.floor(Math.random() * month.length); 
-    const gridYear = year[Math.floor(Math.random() * year.length)]; 
-    this.grid = month[gridMonth] + '_' + year[gridYear];
+    const gridMonth = Math.floor(Math.random() * month.length);
+    const gridYear = year[Math.floor(Math.random() * year.length)];
+    this.grid = month[gridMonth] + '_' + gridYear;
     // Example of grid in payload: Apr_2022
 
     let payload = {
@@ -34,6 +34,8 @@ Then('{} sends a PUT request to update history override', async function (actor:
             start: Date.UTC(gridYear, gridMonth, 15)
         }]
     }
+    logger.log('info', `Payload: ` + JSON.stringify(payload));
+    this.attach(`Payload: ` + JSON.stringify(payload));
     this.expectedOrderQty = payload.rows[0].orderQty;
     this.response = await historyOverrideRequest.updateHistoryOverride(this.request, link, payload, this.headers);
     if (this.response.status() == 200) {
