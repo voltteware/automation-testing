@@ -260,8 +260,8 @@ Given('User sets POST api to remove user from company', function () {
         "operation": "removeFromCompany"
     }
 
-    logger.log('info', `Payload add to company ${this.linkApiRemoveFromCompnay}` + JSON.stringify(this.removeFromCompanyPayload, undefined, 4));
-    this.attach(`Payload add to company ${this.linkApiRemoveFromCompnay}` + JSON.stringify(this.removeFromCompanyPayload, undefined, 4))
+    logger.log('info', `Payload remove from company ${this.linkApiRemoveFromCompnay}` + JSON.stringify(this.removeFromCompanyPayload, undefined, 4));
+    this.attach(`Payload remove from company ${this.linkApiRemoveFromCompnay}` + JSON.stringify(this.removeFromCompanyPayload, undefined, 4))
 });
 
 Given('User sends a POST request to remove user from company', async function () {
@@ -270,12 +270,12 @@ Given('User sends a POST request to remove user from company', async function ()
     if (this.removeUserFromCompanyResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
         this.responseBody = this.removeUserFromCompanyResponseBody = JSON.parse(responseBodyText);        
 
-        logger.log('info', `Response POST add to company ${this.linkApiRemoveFromCompnay}` + JSON.stringify(this.responseBody, undefined, 4));
-        this.attach(`Response POST add to company ${this.linkApiRemoveFromCompnay}` + JSON.stringify(this.responseBody, undefined, 4))
+        logger.log('info', `Response POST remove from company ${this.linkApiRemoveFromCompnay}` + JSON.stringify(this.responseBody, undefined, 4));
+        this.attach(`Response POST remove from company ${this.linkApiRemoveFromCompnay}` + JSON.stringify(this.responseBody, undefined, 4))
     }
     else {
         const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
-        logger.log('info', `Response POST add to company ${this.linkApiRemoveFromCompnay} has status code ${this.removeUserFromCompanyResponse.status()} ${this.removeUserFromCompanyResponse.statusText()} and response body ${responseBodyText}`);
-        this.attach(`Response POST add to company ${this.linkApiRemoveFromCompnay} has status code ${this.removeUserFromCompanyResponse.status()} ${this.removeUserFromCompanyResponse.statusText()} and response body ${actualResponseText}`)
+        logger.log('info', `Response POST remove from company ${this.linkApiRemoveFromCompnay} has status code ${this.removeUserFromCompanyResponse.status()} ${this.removeUserFromCompanyResponse.statusText()} and response body ${responseBodyText}`);
+        this.attach(`Response POST remove from company ${this.linkApiRemoveFromCompnay} has status code ${this.removeUserFromCompanyResponse.status()} ${this.removeUserFromCompanyResponse.statusText()} and response body ${actualResponseText}`)
     }
 });
