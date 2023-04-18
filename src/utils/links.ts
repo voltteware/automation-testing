@@ -16,6 +16,7 @@ export class Links {
     static API_SUPPLIER: string = '/api/supplier'
     static API_UPDATE_COMPANY: string = '/api/company/';
     static API_ITEMS: string = '/api/item';
+    static API_HISTORY_OVERRIDE: string = '/api/history-override';
     static API_ITEM_COUNT: string = '/api/item/count';
     static API_BOM: string = '/api/bom';
     static API_DEMAND: string = '/api/demand';
@@ -39,6 +40,7 @@ export class Links {
     static API_SUMMARY_VENDOR_ITEMS_IN_PO = '/api/summary/vendor';
     static API_SUMMARY_ITEMS_IN_PURCHASING_CUSTOM = '/api/summary';
     static API_RESTOCK_SUGGESTION_PURCHASING = '/api/restock-suggestion';
+    static API_RESULT = '/api/result'
     //API RestockAMZ
     static API_GET_RESTOCK_SUGGESTION_BY_VENDOR = '/api/restock-suggestion-by-vendor';
     static API_GET_RESTOCK_SUGGESTION = '/api/restock-suggestion';
@@ -48,10 +50,11 @@ export class Links {
     static API_ADMIN_GET_COMPANIES: string = '/api/admin/companies';
     static API_ADMIN_DELETE_COMPANY: string = '/api/admin/companies/';
     static API_ADMIN_GET_USER: string = '/api/admin/users?';
+    static API_ADMIN_EXTEND_TRIAL: string = '/api/billing/extend-trial';
     //API General
     static API_RUN_FORECAST: string = '/api/forecast';
     static API_SYNC: string = '/api/sync';
-    // API Count Summary
+    //API Count Summary
     static API_SUMMARY_COUNT: string = "/api/summary/count";
 }
 

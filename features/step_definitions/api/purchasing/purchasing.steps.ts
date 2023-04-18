@@ -497,21 +497,21 @@ Then(`{} checks average daily sales rate number of item in {}`, async function (
 
 Then('User sets GET api endpoint to get item in Purchasing Custom to check purchasing daily sales rate', function () {
     const itemName = this.itemName
-    linkGetItemInPurchasingCustom = encodeURI(`${Links.API_SUMMARY_ITEMS_IN_PURCHASING_CUSTOM}?offset=0&limit=100&where={"filters":[{"filters":[{"field":"itemName","operator":"contains","value":"${itemName}"}],"logic":"and"}],"logic":"and"}`);
-
-    console.log(linkGetItemInPurchasingCustom);
+    linkGetItemInPurchasingCustom = encodeURI(`${Links.API_SUMMARY_ITEMS_IN_PURCHASING_CUSTOM}?offset=0&limit=10&where={"filters":[{"filters":[{"field":"itemName","operator":"contains","value":"${itemName}"}],"logic":"and"}],"logic":"and"}`);
+    logger.log('info', `linkGetItemInPurchasingCustom ${linkGetItemInPurchasingCustom}`);
+    this.attach(`linkGetItemInPurchasingCustom: ${linkGetItemInPurchasingCustom}`);
 });
 
 Then('User sends a GET request to get item in Purchasing Custom to check purchasing daily sales rate', async function () {
     const options = {
         headers: this.headers
     }
-    this.getItemInPurchasingCustomResponse = this.response = await itemRequest.getItemsInPurchasingCustom(this.request, linkGetItemsInPurchasingCustom, options);
+    this.getItemInPurchasingCustomResponse = this.response = await itemRequest.getItemsInPurchasingCustom(this.request, linkGetItemInPurchasingCustom, options);
     const responseBodyText = await this.getItemInPurchasingCustomResponse.text();
     if (this.getItemInPurchasingCustomResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
         this.responseBody = this.getItemInPurchasingCustomResponseBody = JSON.parse(await this.getItemInPurchasingCustomResponse.body());
-        logger.log('info', `Item in response GET ${linkGetItemInPurchasingCustom} >>>>>>` + JSON.stringify(this.randomAItemObject, undefined, 4));
-        this.attach(`Item in response GET ${linkGetItemInPurchasingCustom} >>>>>>` + JSON.stringify(this.randomAItemObject, undefined, 4))
+        logger.log('info', `Item in response GET ${linkGetItemInPurchasingCustom} >>>>>> ` + JSON.stringify(this.getItemInPurchasingCustomResponseBody, undefined, 4));
+        this.attach(`Item in response GET ${linkGetItemInPurchasingCustom} >>>>>> ` + JSON.stringify(this.getItemInPurchasingCustomResponseBody, undefined, 4))
     }
     else {
         const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;

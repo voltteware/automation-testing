@@ -2,11 +2,12 @@ import { z } from 'zod';
 
 //Refer define schema here: https://morioh.com/p/cc9d89e8a10b
 export const itemSummaryResponseSchema = z.object({
+    err: z.string().nullable(),
     model: z.object({
-        missingVendorCount: z.string({ invalid_type_error: "missingVendorCount must be string" }),
-        olderThan30DaysCount: z.string({ invalid_type_error: "olderThan30DaysCount must be string" }),
-        onHandCount: z.string({ invalid_type_error: "onHandCount must be string" }),
-        onHandThirdPartyCount: z.string({ invalid_type_error: "onHandThirdPartyCount must be string" })
+        missingVendorCount: z.string({ invalid_type_error: "missingVendorCount must be string" }).nullable(),
+        olderThan30DaysCount: z.string({ invalid_type_error: "olderThan30DaysCount must be string" }).nullable(),
+        onHandCount: z.string({ invalid_type_error: "onHandCount must be string" }).nullable(),
+        onHandThirdPartyCount: z.string({ invalid_type_error: "onHandThirdPartyCount must be string" }).nullable()
     })
 });
 

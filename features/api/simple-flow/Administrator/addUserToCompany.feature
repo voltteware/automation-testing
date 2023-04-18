@@ -24,7 +24,8 @@ Feature: API_Admin Add user to company api/user
     And User sets GET api to get associated users of company
     And User sends a GET request to get associated user of company
     And User verify that the user successfully added
-
+    And User sets POST api to remove user from company
+    And User sends a POST request to remove user from company
     Examples: 
       | email                            | password  | firstName | lastName | companyName         | companyType | phone      |
       | testautocreate<random>@gmail.com | Test1111# | Test      | Auto     | ITC-Company-Testing | ASC         | 0355025511 |

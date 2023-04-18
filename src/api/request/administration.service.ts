@@ -24,9 +24,22 @@ async function deleteCompany(request: APIRequestContext, linkApi:string, company
     logger.log('info',`Send DELETE request ${url}`);
     return await request.delete(url, options);
 }
+
+//Renew Trial
+async function renewTrial(request: APIRequestContext, linkApi: string, payLoad: any, header?: any) {
+    const url = `${linkApi}`;
+    logger.log('info', `Send POST request ${url} with ${JSON.stringify(payLoad, undefined, 4)}`);
+    const response = await request.post(url, {
+        data: payLoad,
+        headers: header
+    });
+    return response;
+}
+
 export {
     deleteUser,
     getCompanies,
     getUser,
-    deleteCompany
+    deleteCompany,
+    renewTrial
 }

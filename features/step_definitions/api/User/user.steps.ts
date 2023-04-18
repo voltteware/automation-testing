@@ -248,3 +248,34 @@ Then('{} checks API contract essential types in the response of add user to comp
 Then('The error message must be {string}', function (errorMessage: string) {
     expect(this.addUserToCompanyResponseBody.err, `The error message mus be ${errorMessage}`).toBe(errorMessage)
 });
+
+Given('User sets POST api to remove user from company', function () {
+    this.linkApiRemoveFromCompnay = `${Links.API_USER}`
+
+    this.removeFromCompanyPayload = {
+        "userId": `${this.userId}`,
+        "companyKey": `${this.companyKey}`,
+        "companyType": `${this.companyType}`,
+        "companyName": `${this.companyName}`,
+        "operation": "removeFromCompany"
+    }
+
+    logger.log('info', `Payload remove from company ${this.linkApiRemoveFromCompnay}` + JSON.stringify(this.removeFromCompanyPayload, undefined, 4));
+    this.attach(`Payload remove from company ${this.linkApiRemoveFromCompnay}` + JSON.stringify(this.removeFromCompanyPayload, undefined, 4))
+});
+
+Given('User sends a POST request to remove user from company', async function () {
+    this.response = this.removeUserFromCompanyResponse = await userRequest.addToCompany(this.request, this.linkApiRemoveFromCompnay, this.removeFromCompanyPayload, this.headers);
+    const responseBodyText = await this.removeUserFromCompanyResponse.text();
+    if (this.removeUserFromCompanyResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
+        this.responseBody = this.removeUserFromCompanyResponseBody = JSON.parse(responseBodyText);        
+
+        logger.log('info', `Response POST remove from company ${this.linkApiRemoveFromCompnay}` + JSON.stringify(this.responseBody, undefined, 4));
+        this.attach(`Response POST remove from company ${this.linkApiRemoveFromCompnay}` + JSON.stringify(this.responseBody, undefined, 4))
+    }
+    else {
+        const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
+        logger.log('info', `Response POST remove from company ${this.linkApiRemoveFromCompnay} has status code ${this.removeUserFromCompanyResponse.status()} ${this.removeUserFromCompanyResponse.statusText()} and response body ${responseBodyText}`);
+        this.attach(`Response POST remove from company ${this.linkApiRemoveFromCompnay} has status code ${this.removeUserFromCompanyResponse.status()} ${this.removeUserFromCompanyResponse.statusText()} and response body ${actualResponseText}`)
+    }
+});
