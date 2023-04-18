@@ -17,7 +17,7 @@ Feature: API_Dashboard Advanced Edit Item History
         #Run Forecast
         And User sets POST api to run forecast
         And User sends a POST request to run forecast
-        And User checks that the lastForecastDate field was updated and jobProcessing is false in company detail information after running forecast
+        And User checks that the lastForecastDate field was updated and jobInitiator is null in company detail information after running forecast
         And User sets GET api endpoint to get count item in Edit Item History
         When User sends a GET request to get count items
         Then The expected status code should be <expectedStatus>

@@ -71,3 +71,18 @@ export const itemsInPurchasingResponseSchema = z.object({
     vendorKey: z.string(),
     vendorName: z.string(),
 });
+
+export const resultsResponseSchema = z.object({
+    err: z.string().nullable(),
+    model: z.object({
+        companyKey: z.string(),
+        companyType: z.string(),
+        historySnapshot: z.array(z.number().nullable()),
+        itemKey: z.string(),
+        itemName: z.string(),
+        leadTime: z.number(),
+        meanForecast: z.array(z.number().nullable()),
+        orderInterval: z.number(),
+        safetyStockForecast: z.array(z.number().nullable())
+    })
+});

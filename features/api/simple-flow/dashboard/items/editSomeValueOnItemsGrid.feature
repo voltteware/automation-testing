@@ -17,7 +17,7 @@ Feature: API_Dashboard PUT /api/item
     And User sends a GET request to get list suppliers
     And User sets GET api endpoint to get item with limit row: <limitRow>
     And User sends a GET request to get list items
-    And User picks a random imtem in above list items
+    And User picks a random item in above list items
     And User saves the item key
     And User sets PUT api endpoint to edit <editColumn> of the above item for company type <companyType> with new value: <value>
     When User sends a PUT request to edit the item
@@ -38,7 +38,7 @@ Feature: API_Dashboard PUT /api/item
     And User sends a GET request to get list suppliers
     And User sets GET api endpoint to get item with limit row: <limitRow>
     And User sends a GET request to get list items
-    And User picks a random imtem in above list items
+    And User picks a random item in above list items
     And User saves the item key
     And User sets PUT api endpoint to edit <editColumn> of the above item for company type <companyType> with new value: <value>
     When User sends a PUT request to edit the item
@@ -144,7 +144,7 @@ Feature: API_Dashboard PUT /api/item
       | TC_ID       | companyType | email                      | limitRow | editColumn | value  | expectedStatus |
       | TC_UI001_43 | CSV         | testautoforecast@gmail.com |       10 | purchaseAs | random |            200 |
 
-  @TC_UI002 @regression-api 
+  @TC_UI002 @regression-api
   Scenario Outline: <TC_ID> - Verify user <email> could call this API to update "<editColumn>" of a items for company type (<companyType>)
     Given User picks company which has onboarded before with type <companyType> in above response
     And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
@@ -152,7 +152,7 @@ Feature: API_Dashboard PUT /api/item
     And User sends a GET request to get list suppliers
     And User sets GET api endpoint to get item with limit row: <limitRow>
     And User sends a GET request to get list items
-    And User picks a random imtem in above list items
+    And User picks a random item in above list items
     And User saves the item key
     And User sets PUT api endpoint to edit <editColumn> of the above item for company type <companyType> with new value: <value>
     When User sends a PUT request to edit the item
