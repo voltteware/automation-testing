@@ -30,6 +30,14 @@ Then(`{} sets GET api endpoint to get item with limit row: {}`, async function (
     linkGetItems = `${Links.API_ITEMS}?offset=0&limit=${limitRow}`;
 });
 
+Then(`{} sets GET api endpoint to get items that have purchase as`, async function (actor) {
+    linkGetItems = `${Links.API_ITEMS}?offset=0&limit=100&where={"filters":[{"filters":[{"field":"lotMultipleItemName","operator":"isnotnull","value":null}],"logic":"and"}],"logic":"and"}`    
+});
+
+Then(`{} sets GET api endpoint to get items that have not purchase as`, async function (actor) {
+    linkGetItems = `${Links.API_ITEMS}?offset=0&limit=50&where={"filters":[{"filters":[{"field":"lotMultipleItemName","operator":"isnull","value":null}],"logic":"and"}],"logic":"and"}`    
+});
+
 Then(`{} set GET api endpoint to get items with name contains {string}`, async function (actor, containText: string) {
     linkGetItems = `${Links.API_ITEMS}?offset=0&limit=2&where={"filters":[{"filters":[{"field":"name","operator":"contains","value":"${containText}"}],"logic":"and"}],"logic":"and"}`    
 });
@@ -152,6 +160,13 @@ Given('User picks a random item in above list items', async function () {
     this.responseBodyOfAItemObject = await this.getItemsResponseBody[Math.floor(Math.random() * this.getItemsResponseBody.length)];
     logger.log('info', `Random Item: ${JSON.stringify(this.responseBodyOfAItemObject, undefined, 4)}`);
     this.attach(`Random Item: ${JSON.stringify(this.responseBodyOfAItemObject, undefined, 4)}`);
+});
+
+Given('User saves list items that have already set as purchas as of orther items', async function () {
+    expect(this.getItemsResponseBody.length, 'There is at least 1 item to pick random').toBeGreaterThanOrEqual(1);
+    this.listItemsAlreadySetAsPurchaseAsOfOrtherItem = this.getItemsResponseBody.map((item: any) => item.lotMultipleItemKey)
+    logger.log('info', `list items that have already set as purchas as of orther items: ${JSON.stringify(this.listItemsAlreadySetAsPurchaseAsOfOrtherItem, undefined, 4)}`);
+    this.attach(`list items that have already set as purchas as of orther items: ${JSON.stringify(this.listItemsAlreadySetAsPurchaseAsOfOrtherItem, undefined, 4)}`);
 });
 
 Given('{} picks a random item which does not have Purchase As', async function (actor: string){
@@ -582,10 +597,9 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
                     this.lotMultipleItemName = responseBodyOfAItemObject.name
                     this.lotMultipleItemKey = responseBodyOfAItemObject.key
                 } else {
-                    const excludedItemKey = this.itemKey
-                    const excludedListPurchaseAs = this.getItemsResponseBody.map((item:any) => item.lotMultipleItemKey)
-                    // Filter out the excluded item have excludedItemKey and purchase as is null from the list items
-                    const filteredArray = this.getItemsResponseBody.filter((item: any) => ((item.key !== excludedItemKey) && (item.lotMultipleItemKey === null) && (!excludedListPurchaseAs.includes(item.key))));
+                    const excludedItemKey = this.itemKey                    
+                    // Filter out the excluded item have already set as purchas as of orther items the list items
+                    const filteredArray = this.getItemsResponseBody.filter((item: any) => ((item.key !== excludedItemKey) && (!this.listItemsAlreadySetAsPurchaseAsOfOrtherItem.includes(item.key))));
                     const randomItem = filteredArray[Math.floor(Math.random() * filteredArray.length)];
 
                     this.lotMultipleItemName = randomItem.name
