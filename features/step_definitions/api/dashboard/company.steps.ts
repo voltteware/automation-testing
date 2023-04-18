@@ -240,11 +240,12 @@ Given('User sets PUT api to change information of {string} company', function (c
     this.linkApiChangeInformationCompany = `${Links.API_UPDATE_COMPANY}${this.companyKey}`
 
     const rows = dataTable.hashes();
+    const {companyName, leadTime, orderInterval, serviceLevel, isNotifyingAfterForecast, isNotifyingAfterSync, isLostSaleTracking, displayRestockAMZ, lastSyncDate, phone} = rows[0]
     this.changeInformationCompanyPayload = this.getInformationCompanyResponseBody
     switch (companyType) {
         case "ASC":
-            const {companyName, leadTime, orderInterval, serviceLevel, isNotifyingAfterForecast, isNotifyingAfterSync, isLostSaleTracking, displayRestockAMZ, lastSyncDate} = rows[0]
-            companyName === "random" ? this.changeInformationCompanyPayload.companyName = `${faker.company.name()}` : this.changeInformationCompanyPayload.companyName = companyName
+            // const {companyName, leadTime, orderInterval, serviceLevel, isNotifyingAfterForecast, isNotifyingAfterSync, isLostSaleTracking, displayRestockAMZ, lastSyncDate} = rows[0]
+            companyName === "random" ? this.changeInformationCompanyPayload.companyName = `${faker.company.name()}-AutoTest` : this.changeInformationCompanyPayload.companyName = companyName
             leadTime === "random" ? this.changeInformationCompanyPayload.leadTime = Number(faker.datatype.number({'min': 1,'max': 365})) : this.changeInformationCompanyPayload.leadTime = leadTime
             orderInterval === "random" ? this.changeInformationCompanyPayload.orderInterval = Number(faker.datatype.number({'min': 1,'max': 365})) : this.changeInformationCompanyPayload.orderInterval = orderInterval
             serviceLevel === "random" ? this.changeInformationCompanyPayload.serviceLevel = Number(faker.datatype.number({'min': 1,'max': 99})) : this.changeInformationCompanyPayload.serviceLevel = serviceLevel
@@ -258,17 +259,30 @@ Given('User sets PUT api to change information of {string} company', function (c
                 const oneYearAgo = new Date(today.getTime() - (365 * 24 * 60 * 60 * 100))                
                 const randomTime = oneYearAgo.getTime() + Math.random() * (today.getTime() - oneYearAgo.getTime())
                 const randomDate = new Date(randomTime)
-                
+
                 this.changeInformationCompanyPayload.lastSyncDate = randomDate.toISOString()                                
             } else {
                 this.changeInformationCompanyPayload.lastSyncDate = lastSyncDate
             }
             break;
         case "CSV":
-            
+            // const {companyName, leadTime, orderInterval, serviceLevel, isNotifyingAfterForecast, isNotifyingAfterSync, isLostSaleTracking} = rows[0]
+            companyName === "random" ? this.changeInformationCompanyPayload.companyName = `${faker.company.name()}-AutoTest` : this.changeInformationCompanyPayload.companyName = companyName
+            leadTime === "random" ? this.changeInformationCompanyPayload.leadTime = Number(faker.datatype.number({'min': 1,'max': 365})) : this.changeInformationCompanyPayload.leadTime = leadTime
+            orderInterval === "random" ? this.changeInformationCompanyPayload.orderInterval = Number(faker.datatype.number({'min': 1,'max': 365})) : this.changeInformationCompanyPayload.orderInterval = orderInterval
+            serviceLevel === "random" ? this.changeInformationCompanyPayload.serviceLevel = Number(faker.datatype.number({'min': 1,'max': 99})) : this.changeInformationCompanyPayload.serviceLevel = serviceLevel
+            isNotifyingAfterForecast === "random" ? this.changeInformationCompanyPayload.isNotifyingAfterForecast = !Boolean(this.changeInformationCompanyPayload.isNotifyingAfterForecast) : this.changeInformationCompanyPayload.isNotifyingAfterForecast = isNotifyingAfterForecast
+            isNotifyingAfterSync === "random" ? this.changeInformationCompanyPayload.isNotifyingAfterSync = !Boolean(this.changeInformationCompanyPayload.isNotifyingAfterSync) : this.changeInformationCompanyPayload.isNotifyingAfterSync = isNotifyingAfterSync
+            isLostSaleTracking === "random" ? this.changeInformationCompanyPayload.isLostSaleTracking = !Boolean(this.changeInformationCompanyPayload.isLostSaleTracking) : this.changeInformationCompanyPayload.isLostSaleTracking = isLostSaleTracking
             break;
         case "QBFS":
-            
+            phone === "random" ? this.changeInformationCompanyPayload.phone = `${faker.phone.phoneNumber('091#######')}` : this.changeInformationCompanyPayload.phone = phone
+            leadTime === "random" ? this.changeInformationCompanyPayload.leadTime = Number(faker.datatype.number({'min': 1,'max': 365})) : this.changeInformationCompanyPayload.leadTime = leadTime
+            orderInterval === "random" ? this.changeInformationCompanyPayload.orderInterval = Number(faker.datatype.number({'min': 1,'max': 365})) : this.changeInformationCompanyPayload.orderInterval = orderInterval
+            serviceLevel === "random" ? this.changeInformationCompanyPayload.serviceLevel = Number(faker.datatype.number({'min': 1,'max': 99})) : this.changeInformationCompanyPayload.serviceLevel = serviceLevel
+            isNotifyingAfterForecast === "random" ? this.changeInformationCompanyPayload.isNotifyingAfterForecast = !Boolean(this.changeInformationCompanyPayload.isNotifyingAfterForecast) : this.changeInformationCompanyPayload.isNotifyingAfterForecast = isNotifyingAfterForecast
+            isNotifyingAfterSync === "random" ? this.changeInformationCompanyPayload.isNotifyingAfterSync = !Boolean(this.changeInformationCompanyPayload.isNotifyingAfterSync) : this.changeInformationCompanyPayload.isNotifyingAfterSync = isNotifyingAfterSync
+            isLostSaleTracking === "random" ? this.changeInformationCompanyPayload.isLostSaleTracking = !Boolean(this.changeInformationCompanyPayload.isLostSaleTracking) : this.changeInformationCompanyPayload.isLostSaleTracking = isLostSaleTracking
             break;
         default:
             break;

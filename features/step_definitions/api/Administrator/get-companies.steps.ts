@@ -58,8 +58,8 @@ Then('{} picks random companies in above response', async function (actor: strin
     this.attach(`Random company: ${JSON.stringify(this.responseBodyOfACompanyObject, undefined, 4)}`);
 })
 
-Given('User sets GET api endpoint to get companies with type {string}', function (companyType: string) {
-    this.linkApiGetCompaniesWithType = `${Links.API_ADMIN_GET_COMPANIES}?offset=0&limit=2&sort=[{"field":"companyName","direction":"asc"}]&where={"filters":[{"filters":[{"field":"companyType","operator":"contains","value":"${companyType}"}],"logic":"and"}],"logic":"and"}`
+Given('User sets GET api endpoint to get companies with type {string} and name contains {string}', function (companyType: string, containText: string) {
+    this.linkApiGetCompaniesWithType = `${Links.API_ADMIN_GET_COMPANIES}?offset=0&limit=2&sort=[{"field":"companyName","direction":"asc"}]&where={"filters":[{"filters":[{"field":"companyName","operator":"contains","value":"${containText}"}],"logic":"and"},{"filters":[{"field":"companyType","operator":"contains","value":"${companyType}"}],"logic":"and"}],"logic":"and"}`            
 });
 
 Given('User sends GET request to get companies with type {string}', async function (string) {
