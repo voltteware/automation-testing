@@ -50,6 +50,7 @@ export class Links {
     static API_ADMIN_GET_COMPANIES: string = '/api/admin/companies';
     static API_ADMIN_DELETE_COMPANY: string = '/api/admin/companies/';
     static API_ADMIN_GET_USER: string = '/api/admin/users?';
+    static API_ADMIN_EXTEND_TRIAL: string = '/api/billing/extend-trial';
     //API General
     static API_RUN_FORECAST: string = '/api/forecast';
     static API_SYNC: string = '/api/sync';
