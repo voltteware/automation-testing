@@ -14,10 +14,9 @@ Feature: API_Admin PUT api/company/<companyKey>
     And Use picks a random companies with type "<companyType>" in above response
     And User sets GET api to get information of "<companyType>" company
     And User sends GET request to get information of company
-    # TODO: change last sync date
     And User sets PUT api to change information of "<companyType>" company
-      | companyName | leadTime | orderInterval | serviceLevel | isNotifyingAfterForecast | isNotifyingAfterSync | isLostSaleTracking | displayRestockAMZ |
-      | random      | random   | random        | random       | random                   | random               | random             | random            |
+      | companyName | leadTime | orderInterval | serviceLevel | isNotifyingAfterForecast | isNotifyingAfterSync | isLostSaleTracking | displayRestockAMZ | lastSyncDate |
+      | random      | random   | random        | random       | random                   | random               | random             | random            | random       |
     When User sends PUT request to change information of company
     Then The expected status code should be <expectedStatus>
     And Information of company must be change successfully

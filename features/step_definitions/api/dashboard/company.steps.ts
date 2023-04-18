@@ -243,7 +243,7 @@ Given('User sets PUT api to change information of {string} company', function (c
     this.changeInformationCompanyPayload = this.getInformationCompanyResponseBody
     switch (companyType) {
         case "ASC":
-            const {companyName, leadTime, orderInterval, serviceLevel, isNotifyingAfterForecast, isNotifyingAfterSync, isLostSaleTracking, displayRestockAMZ} = rows[0]
+            const {companyName, leadTime, orderInterval, serviceLevel, isNotifyingAfterForecast, isNotifyingAfterSync, isLostSaleTracking, displayRestockAMZ, lastSyncDate} = rows[0]
             companyName === "random" ? this.changeInformationCompanyPayload.companyName = `${faker.company.name()}` : this.changeInformationCompanyPayload.companyName = companyName
             leadTime === "random" ? this.changeInformationCompanyPayload.leadTime = Number(faker.datatype.number({'min': 1,'max': 365})) : this.changeInformationCompanyPayload.leadTime = leadTime
             orderInterval === "random" ? this.changeInformationCompanyPayload.orderInterval = Number(faker.datatype.number({'min': 1,'max': 365})) : this.changeInformationCompanyPayload.orderInterval = orderInterval
@@ -252,6 +252,17 @@ Given('User sets PUT api to change information of {string} company', function (c
             isNotifyingAfterSync === "random" ? this.changeInformationCompanyPayload.isNotifyingAfterSync = !Boolean(this.changeInformationCompanyPayload.isNotifyingAfterSync) : this.changeInformationCompanyPayload.isNotifyingAfterSync = isNotifyingAfterSync
             isLostSaleTracking === "random" ? this.changeInformationCompanyPayload.isLostSaleTracking = !Boolean(this.changeInformationCompanyPayload.isLostSaleTracking) : this.changeInformationCompanyPayload.isLostSaleTracking = isLostSaleTracking
             displayRestockAMZ === "random" ? this.changeInformationCompanyPayload.displayRestockAMZ = !Boolean(this.changeInformationCompanyPayload.displayRestockAMZ) : this.changeInformationCompanyPayload.displayRestockAMZ = displayRestockAMZ
+            if (lastSyncDate === "random"){
+                // Generate a random between 1 year ago and today
+                const today = new Date();
+                const oneYearAgo = new Date(today.getTime() - (365 * 24 * 60 * 60 * 100))                
+                const randomTime = oneYearAgo.getTime() + Math.random() * (today.getTime() - oneYearAgo.getTime())
+                const randomDate = new Date(randomTime)
+                
+                this.changeInformationCompanyPayload.lastSyncDate = randomDate.toISOString()                                
+            } else {
+                this.changeInformationCompanyPayload.lastSyncDate = lastSyncDate
+            }
             break;
         case "CSV":
             
