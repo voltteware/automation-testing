@@ -171,7 +171,7 @@ When(`{} sends a GET request to get company information of {} by company key`, a
     }
 })
 
-Then('{} checks that the lastForecastDate field was updated and jobInitiator is null in company detail information after running forecast', { timeout: 30 * 60 * 1000 }, async function (actor: string) {
+Then('{} checks that the lastForecastDate field was updated and jobInitiator is null in company detail information after running forecast', { timeout: 10 * 60 * 1000 }, async function (actor: string) {
     const linkGetCompanyInfo = `${Links.API_GET_COMPANY}/${this.companyKey}`;
     const options = {
         headers: this.headers
@@ -193,7 +193,7 @@ Then('{} checks that the lastForecastDate field was updated and jobInitiator is 
         message: `make sure Last Forecast Date is after the moment user clicks Run Forecast`, // custom error message
         // Probe, wait 1s, probe, wait 5s, probe, wait 10s, probe, wait 10s, probe, .... Defaults to [100, 250, 500, 1000].
         intervals: [1_000, 5_000, 10_000],
-        timeout: 15 * 60 * 1000,
+        timeout: 2 * 60 * 1000,
     }).toBeGreaterThan(beforeForecastDate);
 
     // jobInitiator is a value to check completing forecast
@@ -210,7 +210,7 @@ Then('{} checks that the lastForecastDate field was updated and jobInitiator is 
         message: `make sure Last Forecast Date is after the moment user clicks Run Forecast`, // custom error message
         // Probe, wait 1s, probe, wait 5s, probe, wait 10s, probe, wait 10s, probe, .... Defaults to [100, 250, 500, 1000].
         intervals: [1_000, 2_000, 5_000],
-        timeout: 15 * 60 * 1000,
+        timeout: 8 * 60 * 1000,
     }).toBeNull();
 
     // await expect.poll(async () => {
