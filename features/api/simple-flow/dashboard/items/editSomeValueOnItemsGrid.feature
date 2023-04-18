@@ -100,7 +100,7 @@ Feature: API_Dashboard PUT /api/item
       | TC_UI001_56 | QBFS        | testautoforecast@gmail.com |       10 | useHistoryOverride        | random |            200 |
       | TC_UI001_57 | QBFS        | testautoforecast@gmail.com |       10 | casePackQty               | random |            200 |
 
-  @TC_UI002 @regression-api
+  @TC_UI002 @regression-api 
   Scenario Outline: <TC_ID> - Verify user <email> could call this API to update "<editColumn>" of a items for company type (<companyType>)
     Given User picks company which has onboarded before with type <companyType> in above response
     And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
@@ -114,6 +114,9 @@ Feature: API_Dashboard PUT /api/item
     When User sends a PUT request to edit the item
     Then The expected status code should be <expectedStatus>
     And The new <editColumn> of item must be updated successfully
+    # Hide item after created and edited
+    And User sets PUT api endpoint to edit isHidden of the above item for company type <companyType> with new value: true
+    When User sends a PUT request to edit the item
 
     Examples: 
       | TC_ID       | companyType | email                      | limitRow | editColumn | value  | expectedStatus |
@@ -133,6 +136,9 @@ Feature: API_Dashboard PUT /api/item
     When User sends a PUT request to edit the item
     Then The expected status code should be <expectedStatus>
     And The new <editColumn> of item must be updated successfully
+    # Hide item after created and edited
+    And User sets PUT api endpoint to edit isHidden of the above item for company type <companyType> with new value: true
+    When User sends a PUT request to edit the item
 
     Examples: 
       | TC_ID       | companyType | email                      | limitRow | editColumn | value  | expectedStatus |
