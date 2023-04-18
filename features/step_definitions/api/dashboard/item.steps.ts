@@ -230,9 +230,9 @@ Then(`{} saves the item key`, async function (actor: string) {
     this.attach(`Item key to edit: ${this.itemKey}`)
 });
 
-Given('User sets PUT api endpoint to edit {} of the above item for company type {} with new value: {}', async function (editColumn: string, companyType: string, value: string) {
+Given('User sets PUT api endpoint to edit {} of the above item for company type {} with new value: {}', async function (editColumn: string, companyType: string, value: string) {    
     // Prepare endpoint for request to edit item
-    link = `${Links.API_ITEMS}/${this.itemKey}`
+    link = `${Links.API_ITEMS}/${this.itemKey === undefined ? this.responseBodyOfAItemObject.key : this.itemKey}`
 
     switch (editColumn) {
         case 'itemName':
@@ -440,6 +440,8 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
         case 'isHidden':
             if (value == 'random') {
                 this.isHidden = !Boolean(this.responseBodyOfAItemObject.isHidden);
+            } else {
+                this.isHidden = Boolean(value)
             }
 
             logger.log('info', `New ${editColumn}: ${this.isHidden}`);
