@@ -22,7 +22,8 @@ Feature: API_Dashboard DELETE /api/bom
         When User sends a DELETE method to delete bom child
         Then The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
-        And User checks the total boms is correct
+        # And User checks the total boms is correct
+        And User search the deleted child bom by name and check that no bom found
 
         Examples:
             | TC_ID    | companyType | numberOfBoms | bomParentNameKeyword | expectedStatus | expectedStatusText | email                      |
@@ -74,7 +75,7 @@ Feature: API_Dashboard DELETE /api/bom
             | numberOfBoms | bomParentNameKeyword | userA               | userB                      | password  | expectedStatus | expectedStatusText |
             | 1            | Auto                 | may27user@gmail.com | testautoforecast@gmail.com | Test1111# | 400            | Company not found. |
 
-# TC_DB005, TC_DB006: Fail due to Bug_ID 1870 - Get status 400 Unable to delete some or all the requested items. 
+    # TC_DB005, TC_DB006: Fail due to Bug_ID 1870 - Get status 400 Unable to delete some or all the requested items.
     @TC_DB005 @TC_DB006 @bug1870
     Scenario Outline: <TC_ID> - Verify <user> could call this API to delete bom and his child of a company has type <companyType> belongs to her
         Given User picks company which has onboarded before with type <companyType> in above response
