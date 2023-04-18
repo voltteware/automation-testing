@@ -58,6 +58,40 @@ Then('{} picks random companies in above response', async function (actor: strin
     this.attach(`Random company: ${JSON.stringify(this.responseBodyOfACompanyObject, undefined, 4)}`);
 })
 
+Given('User sets GET api endpoint to get companies with type {string} and name contains {string}', function (companyType: string, containText: string) {
+    this.linkApiGetCompaniesWithType = `${Links.API_ADMIN_GET_COMPANIES}?offset=0&limit=2&sort=[{"field":"companyName","direction":"asc"}]&where={"filters":[{"filters":[{"field":"companyName","operator":"contains","value":"${containText}"}],"logic":"and"},{"filters":[{"field":"companyType","operator":"contains","value":"${companyType}"}],"logic":"and"}],"logic":"and"}`            
+});
+
+Given('User sends GET request to get companies with type {string}', async function (string) {
+    const options = {
+        headers: this.headers
+    }
+    this.getCompaniesWithType = this.response = await companiesRequest.getCompanies(this.request, this.linkApiGetCompaniesWithType, options);
+    const responseBodyText = await this.getCompaniesWithType.text();
+    if (this.getCompaniesWithType.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
+        this.getCompaniesWithTypeBody = this.responseBody = JSON.parse(await this.response.text());
+        logger.log('info', `Response GET ${this.linkApiGetCompaniesWithType}` + JSON.stringify(this.responseBody, undefined, 4));
+        this.attach(`Response GET ${this.linkApiGetCompaniesWithType}` + JSON.stringify(this.responseBody, undefined, 4))
+    }
+    else {
+        const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
+        logger.log('info', `Response GET ${this.linkApiGetCompaniesWithType} has status code ${this.getCompaniesWithType.status()} ${this.getCompaniesWithType.statusText()} and response body ${responseBodyText}`);
+        this.attach(`Response GET ${this.linkApiGetCompaniesWithType} has status code ${this.getCompaniesWithType.status()} ${this.getCompaniesWithType.statusText()} and response body ${actualResponseText}`)
+    }
+});
+
+Given('Use picks a random companies with type {string} in above response', async function (companyType: string) {    
+    this.responseBodyOfACompanyObject = await this.getCompaniesWithTypeBody[Math.floor(Math.random() * this.getCompaniesWithTypeBody.length)];
+    logger.log('info', `Random company type ${companyType}: ${JSON.stringify(this.responseBodyOfACompanyObject, undefined, 4)}`);
+    this.attach(`Random company type ${companyType}: ${JSON.stringify(this.responseBodyOfACompanyObject, undefined, 4)}`);
+
+    this.companyKey = this.responseBodyOfACompanyObject.companyKey
+    this.companyType = this.responseBodyOfACompanyObject.companyType
+    this.companyName = this.responseBodyOfACompanyObject.companyName
+    logger.log('info', `Conpany key: ${this.companyKey}, Company type: ${this.companyType}, Company name: ${this.companyName}`)
+    this.attach(`Conpany key: ${this.companyKey}, Company type: ${this.companyType}, Company name: ${this.companyName}`)  
+});
+  
 Given('User saves information of above company', function () {
     this.companyKey = this.responseBodyOfACompanyObject.companyKey
     this.companyType = this.responseBodyOfACompanyObject.companyType
