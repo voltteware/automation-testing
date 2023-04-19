@@ -1,5 +1,6 @@
 
 var reporter = require('cucumber-html-reporter');
+require('dotenv').config();
 
 let ms = new Date();
 console.log(ms)
