@@ -278,13 +278,13 @@ Then(`{} checks API contract of item object is purchasing is correct`, async fun
         //     expect(this.randomAItemObject.inbound, 'inbound value should be null').toBeNull();
         // }
 
-        // if (this.randomAItemObject.inboundAlert !== null) {
-        // expect(typeof (this.randomAItemObject.inboundAlert), 'inboundAlert in response should be string').toBe("string");
-        // logger.log('info', `inboundAlert type of ${this.randomAItemObject.itemKey}: ${typeof (this.randomAItemObject.inboundAlert)}`);
-        // }
-        // else {
-        //     expect(this.randomAItemObject.inboundAlert, 'inboundAlert value should be null').toBeNull();
-        // }
+        if (this.randomAItemObject.inboundAlert !== null) {
+            expect(typeof (this.randomAItemObject.inboundAlert), 'inboundAlert in response should be string').toBe("string");
+            logger.log('info', `inboundAlert type of ${this.randomAItemObject.inboundAlert}: ${typeof (this.randomAItemObject.inboundAlert)}`);
+        }
+        else {
+            expect(this.randomAItemObject.inboundAlert, 'inboundAlert value should be null').toBeNull();
+        }
 
         // if (this.randomAItemObject.inboundAvailable !== null) {
         expect(typeof (this.randomAItemObject.inboundAvailable), 'inboundAvailable in response should be number').toBe("number");
