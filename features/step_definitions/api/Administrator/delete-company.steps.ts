@@ -144,10 +144,11 @@ Then('Check that the company just soft deleted still exists but the subscription
         headers: this.headers
     }
     const endPointToGetCompanyInfoResponse = encodeURI(`${Links.API_ADMIN_GET_COMPANIES}/${this.companyKeyUrl}/${this.companyTypeUrl}`);
-    this.getCompanyInfoResponse = await adminRequest.getCompanies(this.request, endPointToGetCompanyInfoResponse, options);
-    this.responseBody = JSON.parse(await this.getCompanyInfoResponse.text());
-    this.subscriptionStatus = await this.responseBody.subscriptionStatus;
-    expect(this.subscriptionStatus).toEqual('canceled');
+    const getCompanyInfoResponseAfterSoftDelete = await adminRequest.getCompanies(this.request, endPointToGetCompanyInfoResponse, options);
+    const responseBodyOfCompany = JSON.parse(await getCompanyInfoResponseAfterSoftDelete.text());
+    const subscriptionStatusOfComapny = await responseBodyOfCompany.subscriptionStatus;
+    this.attach(`Response get company info after soft delete ${subscriptionStatusOfComapny}`)
+    expect(subscriptionStatusOfComapny).toEqual('canceled');
 })
 
 Then('User verify that has no item in item summary', async function () {

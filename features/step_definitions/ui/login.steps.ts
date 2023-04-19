@@ -22,7 +22,10 @@ When('User signs in with valid username {string} and the password {string} succe
   await loginPage.enterPassword(password)
   await loginPage.clickButtonSignIn()
   await this.page.waitForLoadState();
-  await expect(this.page.getByRole('link', { name: this.id })).toBeVisible( { timeout: 30000 });
+  await this.page.getByTestId('profile-icon-btn').click;
+  const userName = await this.page.getByTestId('user-name').textContent();
+  console.log("testContent: ", userName);
+  expect(userName).toEqual(this.id);
 });
 
 Then('User clicks SignIn button', { timeout: 5 * 5000 }, async function () {
@@ -31,7 +34,10 @@ Then('User clicks SignIn button', { timeout: 5 * 5000 }, async function () {
 
 Then('Verify the username is displayed', { timeout: 5 * 5000 }, async function () {
   await this.page.waitForLoadState();
-  await expect(this.page.getByRole('link', { name: this.id })).toBeVisible();
+  await this.page.getByTestId('profile-icon-btn').click;
+  const userName = await this.page.getByTestId('user-name').textContent();
+  console.log("testContent: ", userName);
+  expect(userName).toEqual(this.id);
 });
 
 Then('Verify alert {string} is displayed', { timeout: 3 * 5000 }, async function (alertMessage: string) {
