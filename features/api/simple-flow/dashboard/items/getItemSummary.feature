@@ -20,7 +20,7 @@ Feature: API_Dashboard GET /api/item?summary=true&companyKey=<companyKey>&compan
         # Run Forecast
         And User sets POST api to run forecast
         And User sends a POST request to run forecast
-        And User checks that the lastForecastDate field was updated and jobProcessing is false in company detail information after running forecast
+        And User checks that the lastForecastDate field was updated and jobInitiator is null in company detail information after running forecast
 
         And User sets GET api endpoint to get item summary
         When User sends a GET request to get item summary
