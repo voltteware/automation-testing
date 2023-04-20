@@ -231,7 +231,7 @@ export const itemInfoResponseSchema = z.object({
     upc: z.string(),
     ean: z.string(),
     rank: z.number(),
-    growthTrend: z.null(),
+    growthTrend: z.number().nullable(),
     isHidden: z.boolean(),
     useHistoryOverride: z.boolean(),
     useLostSalesOverride: z.boolean(),

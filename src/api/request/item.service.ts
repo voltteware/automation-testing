@@ -83,6 +83,13 @@ async function updateItemSalesVelocitySettings(request: APIRequestContext, linkA
     return editResponse;
 }
 
+// Get get-consolidated-qty
+async function getConsolidatedQty(request: APIRequestContext, linkApi: string, options?: object) {
+    const url = `${linkApi}`;
+    logger.log('info', `Send GET request getConsolidatedQty${url}`);
+    return await request.get(url, options);
+}
+
 export {
     getItemSummary,
     getItemCount,
@@ -94,4 +101,5 @@ export {
     updateItemSalesVelocitySettings,
     getCountItemsInPurchasingCustom,
     getItemsInPurchasingCustom,
+    getConsolidatedQty
 }
