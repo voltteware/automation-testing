@@ -412,27 +412,6 @@ Then('{} sends a GET request to export file', async function (actor: string) {
     }
 });
 
-Then(`{} sets DELETE api endpoint to delete shipment`, async function (actor: string) {
-    link = `${Links.API_SHIPMENT}/${this.shipmentKey}`;
-});
-
-Then('{} sends a DELETE request to delete shipment', async function (actor: string) {
-    //Delete Shipment does not have response body => Not having response body here
-    const options = {
-        headers: this.headers,
-        isSubtractWarehouse: true
-    }
-    this.response = await shipmentRequest.deleteShipment(this.request, link, options);
-    if (this.response.status() == 200) {
-        logger.log('info', `Delete Shipment Response ${link} has status code ${this.response.status()} ${this.response.statusText()}`);
-        this.attach(`Delete Shipment Response ${link} has status code ${this.response.status()} ${this.response.statusText()}`);
-
-    } else {
-        logger.log('info', `Delete Shipment Response ${link} has status code ${this.response.status()}`);
-        this.attach(`Delete Shipment Response ${link} has status code ${this.response.status()}`);
-    }
-});
-
 Then('{} sets GET api endpoint to find the new created shipment', async function (actor: string) {
     linkListShipments = encodeURI(`${Links.API_SHIPMENT}?offset=0&limit=100&sort=[{"field":"createdAt","direction":"desc"}]&where={"logic":"and","filters":[{"logic":"or","filters":[{"field":"shipmentName","operator":"contains","value":"${this.shipmentName}"},{"field":"shipmentSource","operator":"contains","value":"${this.shipmentName}"},{"field":"destinationFulfillmentCenterId","operator":"contains","value":"${this.shipmentName}"},{"field":"status","operator":"contains","value":"${this.shipmentName}"}]}]}`);
 });
@@ -455,10 +434,10 @@ Then(`{} sends a GET request to find the new created shipment`, async function (
     }
 });
 
-Then('{} checks the new created shipment', async function (actor: string) {
+Then('{} checks the new created shipment: {}', async function (actor, shipmentStatus: string) {
     this.shipmentStatus = this.getListShipmentsResponseBody[0].status;
     this.name = this.getListShipmentsResponseBody[0].shipmentName;
-    expect(this.shipmentStatus, `In response body, the expected shipmentStatus should be: WORKING`).toBe('WORKING');
+    expect(this.shipmentStatus, `In response body, the expected shipmentStatus should be: ${shipmentStatus}`).toBe(shipmentStatus);
     expect(this.name.includes(this.shipmentName), `In response body, the expected shipmentName should be: ${this.shipmentName}`).toBeTruthy();
 });
 

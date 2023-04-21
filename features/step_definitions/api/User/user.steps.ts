@@ -4,7 +4,7 @@ import * as userRequest from '../../../../src/api/request/user.service';
 import logger from '../../../../src/Logger/logger';
 import { Links } from '../../../../src/utils/links';
 import * as arrayHelper from "../../../../src/helpers/array-helper";
-import {addUserToCompanyResponseSchema} from '../Administrator/userAssertionSchema'
+import {addUserToCompanyResponseSchema} from '../assertion/administrator/userAssertionSchema'
 import _ from "lodash";
 
 // Get User Information
@@ -39,7 +39,7 @@ Then('{} checks API contract essential types in the response of get user informa
     // else {
     // expect(this.getUserInformationResponseBody.err, 'err value should be null').toBeNull();
     // // }
-    // //Checl model array contains at least 1 user object
+    // //Check model array contains at least 1 user object
     // expect(typeof (this.getUserInformationResponseBody.model), 'model should be array').toBe("object");
     // expect(this.getUserInformationResponseBody.model.length, 'model should be array has at least 1 item').toEqual(1);
     // expect(this.responseBodyOfAUserObject.hasPassword, 'hasPassword should be boolean and be true').toBe(true);
@@ -142,8 +142,8 @@ Then('{} checks API contract essential types in user object are correct', async 
     this.softAssert(typeof (this.responseBodyOfAUserObject.gridStateRestockSuggestionItemList) === "object", 'Type of gridStateRestockSuggestionItemList value should be object');
     //Check gridStateInventorySelection
     this.softAssert(typeof (this.responseBodyOfAUserObject.gridStateInventorySelection) === "object", 'Type of gridStateInventorySelection value should be object');
-    //Check gridStateShipmentSumary
-    this.softAssert(typeof (this.responseBodyOfAUserObject.gridStateShipmentSumary) === "object", 'Type of gridStateShipmentSumary value should be object');
+    //Check gridStateShipmentSummary
+    this.softAssert(typeof (this.responseBodyOfAUserObject.gridStateShipmentSummary) === "object", 'Type of gridStateShipmentSummary value should be object');
     //Check gridStateShipmentReview
     this.softAssert(typeof (this.responseBodyOfAUserObject.gridStateShipmentReview) === "object", 'Type of gridStateShipmentReview value should be object');
     //Check gridStateShipmentComplete
@@ -197,7 +197,7 @@ Then('Error message {} in the response of API is displayed', async function (err
 });
 
 Given('User sets POST api to add user to company', function () {
-    this.linkApiAddUserToCompnay = `${Links.API_USER}`
+    this.linkApiAddUserToCompany = `${Links.API_USER}`
 
     this.addToCompanyPayload = {
         "userId": `${this.userId}`,
@@ -207,23 +207,23 @@ Given('User sets POST api to add user to company', function () {
         "operation": "addToCompany"
     }
 
-    logger.log('info', `Payload add to company ${this.linkApiAddUserToCompnay}` + JSON.stringify(this.addToCompanyPayload, undefined, 4));
-    this.attach(`Payload add to company ${this.linkApiAddUserToCompnay}` + JSON.stringify(this.addToCompanyPayload, undefined, 4))
+    logger.log('info', `Payload add to company ${this.linkApiAddUserToCompany}` + JSON.stringify(this.addToCompanyPayload, undefined, 4));
+    this.attach(`Payload add to company ${this.linkApiAddUserToCompany}` + JSON.stringify(this.addToCompanyPayload, undefined, 4))
 });
 
 Given('User sends a POST request add user to company', async function () {
-    this.response = this.addUserToCompanyResponse = await userRequest.addToCompany(this.request, this.linkApiAddUserToCompnay, this.addToCompanyPayload, this.headers);
+    this.response = this.addUserToCompanyResponse = await userRequest.addToCompany(this.request, this.linkApiAddUserToCompany, this.addToCompanyPayload, this.headers);
     const responseBodyText = await this.addUserToCompanyResponse.text();
     if (this.addUserToCompanyResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
         this.responseBody = this.addUserToCompanyResponseBody = JSON.parse(responseBodyText);        
 
-        logger.log('info', `Response POST add to company ${this.linkApiAddUserToCompnay}` + JSON.stringify(this.responseBody, undefined, 4));
-        this.attach(`Response POST add to company ${this.linkApiAddUserToCompnay}` + JSON.stringify(this.responseBody, undefined, 4))
+        logger.log('info', `Response POST add to company ${this.linkApiAddUserToCompany}` + JSON.stringify(this.responseBody, undefined, 4));
+        this.attach(`Response POST add to company ${this.linkApiAddUserToCompany}` + JSON.stringify(this.responseBody, undefined, 4))
     }
     else {
         const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
-        logger.log('info', `Response POST add to company ${this.linkApiAddUserToCompnay} has status code ${this.addUserToCompanyResponse.status()} ${this.addUserToCompanyResponse.statusText()} and response body ${responseBodyText}`);
-        this.attach(`Response POST add to company ${this.linkApiAddUserToCompnay} has status code ${this.addUserToCompanyResponse.status()} ${this.addUserToCompanyResponse.statusText()} and response body ${actualResponseText}`)
+        logger.log('info', `Response POST add to company ${this.linkApiAddUserToCompany} has status code ${this.addUserToCompanyResponse.status()} ${this.addUserToCompanyResponse.statusText()} and response body ${responseBodyText}`);
+        this.attach(`Response POST add to company ${this.linkApiAddUserToCompany} has status code ${this.addUserToCompanyResponse.status()} ${this.addUserToCompanyResponse.statusText()} and response body ${actualResponseText}`)
     }
 });
 
@@ -250,7 +250,7 @@ Then('The error message must be {string}', function (errorMessage: string) {
 });
 
 Given('User sets POST api to remove user from company', function () {
-    this.linkApiRemoveFromCompnay = `${Links.API_USER}`
+    this.linkApiRemoveFromCompany = `${Links.API_USER}`
 
     this.removeFromCompanyPayload = {
         "userId": `${this.userId}`,
@@ -260,22 +260,22 @@ Given('User sets POST api to remove user from company', function () {
         "operation": "removeFromCompany"
     }
 
-    logger.log('info', `Payload remove from company ${this.linkApiRemoveFromCompnay}` + JSON.stringify(this.removeFromCompanyPayload, undefined, 4));
-    this.attach(`Payload remove from company ${this.linkApiRemoveFromCompnay}` + JSON.stringify(this.removeFromCompanyPayload, undefined, 4))
+    logger.log('info', `Payload remove from company ${this.linkApiRemoveFromCompany}` + JSON.stringify(this.removeFromCompanyPayload, undefined, 4));
+    this.attach(`Payload remove from company ${this.linkApiRemoveFromCompany}` + JSON.stringify(this.removeFromCompanyPayload, undefined, 4))
 });
 
 Given('User sends a POST request to remove user from company', async function () {
-    this.response = this.removeUserFromCompanyResponse = await userRequest.addToCompany(this.request, this.linkApiRemoveFromCompnay, this.removeFromCompanyPayload, this.headers);
+    this.response = this.removeUserFromCompanyResponse = await userRequest.addToCompany(this.request, this.linkApiRemoveFromCompany, this.removeFromCompanyPayload, this.headers);
     const responseBodyText = await this.removeUserFromCompanyResponse.text();
     if (this.removeUserFromCompanyResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
         this.responseBody = this.removeUserFromCompanyResponseBody = JSON.parse(responseBodyText);        
 
-        logger.log('info', `Response POST remove from company ${this.linkApiRemoveFromCompnay}` + JSON.stringify(this.responseBody, undefined, 4));
-        this.attach(`Response POST remove from company ${this.linkApiRemoveFromCompnay}` + JSON.stringify(this.responseBody, undefined, 4))
+        logger.log('info', `Response POST remove from company ${this.linkApiRemoveFromCompany}` + JSON.stringify(this.responseBody, undefined, 4));
+        this.attach(`Response POST remove from company ${this.linkApiRemoveFromCompany}` + JSON.stringify(this.responseBody, undefined, 4))
     }
     else {
         const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
-        logger.log('info', `Response POST remove from company ${this.linkApiRemoveFromCompnay} has status code ${this.removeUserFromCompanyResponse.status()} ${this.removeUserFromCompanyResponse.statusText()} and response body ${responseBodyText}`);
-        this.attach(`Response POST remove from company ${this.linkApiRemoveFromCompnay} has status code ${this.removeUserFromCompanyResponse.status()} ${this.removeUserFromCompanyResponse.statusText()} and response body ${actualResponseText}`)
+        logger.log('info', `Response POST remove from company ${this.linkApiRemoveFromCompany} has status code ${this.removeUserFromCompanyResponse.status()} ${this.removeUserFromCompanyResponse.statusText()} and response body ${responseBodyText}`);
+        this.attach(`Response POST remove from company ${this.linkApiRemoveFromCompany} has status code ${this.removeUserFromCompanyResponse.status()} ${this.removeUserFromCompanyResponse.statusText()} and response body ${actualResponseText}`)
     }
 });
