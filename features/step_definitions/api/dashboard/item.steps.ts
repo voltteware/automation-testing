@@ -752,8 +752,6 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
             hazmat: this.responseBodyOfAItemObject.hazmat,
             oversized: this.responseBodyOfAItemObject.oversized,
             category: this.responseBodyOfAItemObject.category,
-            upc: `${this.responseBodyOfAItemObject.upc}`,
-            ean: `${this.responseBodyOfAItemObject.ean}`,
             rank: this.responseBodyOfAItemObject.rank,
             growthTrend: this.responseBodyOfAItemObject.growthTrend,
             isHidden: this.isHidden === undefined ? this.responseBodyOfAItemObject.isHidden : this.isHidden,
@@ -768,7 +766,7 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
             tag: this.responseBodyOfAItemObject.tag,
             tags: this.responseBodyOfAItemObject.tags,
             useBackfill: this.responseBodyOfAItemObject.useBackfill,
-            createdAt: `${this.responseBodyOfAItemObject.createdAt}`,
+            createdAt: `${this.responseBodyOfAItemObject.created_at}`,
             inbound: this.responseBodyOfAItemObject.inbound,
             inboundPrice: this.responseBodyOfAItemObject.inboundPrice,
             inboundSalesLast30Days: this.responseBodyOfAItemObject.inboundSalesLast30Days,
@@ -800,7 +798,6 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
             syncedFields: this.responseBodyOfAItemObject.syncedFields,
             isFbm: this.responseBodyOfAItemObject.isFbm,
             itemHistoryLength: this.responseBodyOfAItemObject.itemHistoryLength,
-            warehouseQtyUpdatedDate: `${this.responseBodyOfAItemObject.warehouseQtyUpdatedDate}`,
             itemHistoryLengthInDay: this.responseBodyOfAItemObject.itemHistoryLengthInDay,
             created_at: `${this.responseBodyOfAItemObject.created_at}`,
             updated_at: `${this.responseBodyOfAItemObject.updated_at}`,
@@ -856,8 +853,6 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
             hazmat: this.responseBodyOfAItemObject.hazmat,
             oversized: this.responseBodyOfAItemObject.oversized,
             category: this.responseBodyOfAItemObject.category,
-            upc: `${this.responseBodyOfAItemObject.upc}`,
-            ean: `${this.responseBodyOfAItemObject.ean}`,
             rank: this.responseBodyOfAItemObject.rank,
             growthTrend: this.responseBodyOfAItemObject.growthTrend,
             isHidden: this.isHidden === undefined ? this.responseBodyOfAItemObject.isHidden : this.isHidden,
@@ -872,7 +867,7 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
             tag: this.responseBodyOfAItemObject.tag,
             tags: this.responseBodyOfAItemObject.tags,
             useBackfill: this.responseBodyOfAItemObject.useBackfill,
-            createdAt: `${this.responseBodyOfAItemObject.createdAt}`,
+            createdAt: `${this.responseBodyOfAItemObject.created_at}`,
             inbound: this.responseBodyOfAItemObject.inbound,
             inboundPrice: this.responseBodyOfAItemObject.inboundPrice,
             inboundSalesLast30Days: this.responseBodyOfAItemObject.inboundSalesLast30Days,
@@ -904,7 +899,6 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
             syncedFields: this.responseBodyOfAItemObject.syncedFields,
             isFbm: this.responseBodyOfAItemObject.isFbm,
             itemHistoryLength: this.responseBodyOfAItemObject.itemHistoryLength,
-            warehouseQtyUpdatedDate: `${this.responseBodyOfAItemObject.warehouseQtyUpdatedDate}`,
             itemHistoryLengthInDay: this.responseBodyOfAItemObject.itemHistoryLengthInDay,
             created_at: `${this.responseBodyOfAItemObject.created_at}`,
             updated_at: `${this.responseBodyOfAItemObject.updated_at}`,
@@ -1037,8 +1031,8 @@ Then('The new {} of item must be updated successfully', function (editColumn: st
 });
 
 Given(`User sets GET api endpoint to get a item in "Manage Company > Item" to assign supplier`, function () {
-    // Use items with name have DefaultPurchasingSaleVelocity to check
-    const name = 'DefaultPurchasingSaleVelocity';
+    // Use items with name have New_Auto to check
+    const name = 'New_Auto';
     linkGetAItemFilterByName = `${Links.API_ITEMS}?offset=0&limit=1&where={"filters":[{"filters":[{"field":"name","operator":"contains","value":"${name}"}],"logic":"and"}],"logic":"and"}`
 });
 

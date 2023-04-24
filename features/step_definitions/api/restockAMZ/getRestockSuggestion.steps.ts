@@ -8,6 +8,7 @@ import { sumFormulaRestockAMZ, totalInboundFormulaRestockAMZ, estimatedMarginFor
 import { itemRestockAMZInfoResponseSchema } from '../assertion/dashboard/itemAssertionSchema';
 
 let link: any;
+let linkRestockAMZ: any;
 
 Then(`{} sends a GET api method to count all Items have alerts in {}`, async function (actor, optionListSupplier: string) {
     const options = {
@@ -139,24 +140,24 @@ Then(`{} checks value Sum on grid`, async function (actor: string) {
 });
 
 Then(`{} sets GET api method to get restock calculation of specific Item`, async function (actor: string) {
-    link = `${Links.API_GET_RESTOCK_SUGGESTION}/${this.itemKey}/restockAMZ`;
+    linkRestockAMZ = `${Links.API_GET_RESTOCK_SUGGESTION}/${this.itemKey}/restockAMZ`;
 });
 
 Then(`{} sends a GET api method to get restock calculation of specific Item`, async function (actor: string) {
     const options = {
         headers: this.headers
     }
-    this.restockCalculationResponse = this.response = await restockSuggestion.getRestockSuggestion(this.request, link, options);
+    this.restockCalculationResponse = this.response = await restockSuggestion.getRestockSuggestion(this.request, linkRestockAMZ, options);
     const responseBodyText = await this.restockCalculationResponse.text();
     if (this.restockCalculationResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
         this.restockCalculationResponseBody = JSON.parse(await this.restockCalculationResponse.text());
-        logger.log('info', `Response GET ${link}: ` + JSON.stringify(this.restockCalculationResponseBody, undefined, 4));
-        this.attach(`Response GET ${link}: ` + JSON.stringify(this.restockCalculationResponseBody, undefined, 4))
+        logger.log('info', `Response GET ${linkRestockAMZ}: ` + JSON.stringify(this.restockCalculationResponseBody, undefined, 4));
+        this.attach(`Response GET ${linkRestockAMZ}: ` + JSON.stringify(this.restockCalculationResponseBody, undefined, 4))
     }
     else {
         const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
-        logger.log('info', `Response ${link} has status code ${this.restockCalculationResponse.status()} ${this.restockCalculationResponse.statusText()} and response body ${responseBodyText}`);
-        this.attach(`Response ${link} has status code ${this.restockCalculationResponse.status()} ${this.restockCalculationResponse.statusText()} and response body ${actualResponseText}`)
+        logger.log('info', `Response ${linkRestockAMZ} has status code ${this.restockCalculationResponse.status()} ${this.restockCalculationResponse.statusText()} and response body ${responseBodyText}`);
+        this.attach(`Response ${linkRestockAMZ} has status code ${this.restockCalculationResponse.status()} ${this.restockCalculationResponse.statusText()} and response body ${actualResponseText}`)
     }
 });
 

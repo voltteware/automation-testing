@@ -13,17 +13,23 @@ let link: any;
 let payload: any;
 let linkCount: any;
 let linkListShipments: any;
+let itemKeyTmp: any;
 
-Then('{} sets POST api endpoint to create Shipment', async function (actor: string) {
-    // Prepare endpoint for request to edit item
+Then('{} sets POST api endpoint to create Shipment: {}', async function (actor, options: string) {
+    // Hard item to make sure create shipments successfully
     link = `${Links.API_SHIPMENT}`
-
+    if (options == 'Hard') {
+        itemKeyTmp = "B00SU6F970-WC-02-TP1-045-WHT-XL";
+    }
+    else {
+        itemKeyTmp = this.itemKey;
+    }
     this.payLoad = {
         shipmentName: `ITC_Shipment_Auto_${Number(faker.datatype.number({ 'min': 1, 'max': 1000 }))}${faker.company.name()}`,
         shipmentItem: {
             caseQty: 0,
             destinationFulfillmentCenterId: "",
-            itemKey: `${this.itemKey}`,
+            itemKey: itemKeyTmp,
             labelType: "",
             localQty: 0,
             orderQty: 0,
@@ -330,10 +336,14 @@ Then('{} sends a POST request to sync', async function (actor: string) {
     const sleep = (milliseconds: number) => {
         return new Promise(resolve => setTimeout(resolve, milliseconds))
     }
-    await sleep(5000);
+    await sleep(6000);
 });
 
 Then(`{} sets GET api endpoint to count items in Shipment Review`, async function (actor: string) {
+    const sleep = (milliseconds: number) => {
+        return new Promise(resolve => setTimeout(resolve, milliseconds))
+    }
+    await sleep(5000);
     linkCount = `${Links.API_SHIPMENT}-detail/count?where=%7B%22logic%22:%22and%22,%22filters%22:%5B%5D%7D&key=${this.shipmentKey}&type=amazon&restockType=SUPPLIER`;
 });
 
