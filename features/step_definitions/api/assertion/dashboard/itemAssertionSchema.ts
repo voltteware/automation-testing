@@ -198,10 +198,10 @@ export const itemRestockAMZInfoResponseSchema = z.object({
 export const itemInfoResponseSchema = z.object({
     companyKey: z.string(),
     companyType: z.string(),
-    asin: z.string(),
+    asin: z.string().nullable(),
     key: z.string(),
     name: z.string(),
-    fnsku: z.string(),
+    fnsku: z.string().nullable(),
     description: z.string().nullable(),
     packageWeight: z.number(),
     vendorKey: z.string().nullable(),
