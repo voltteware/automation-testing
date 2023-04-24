@@ -13,7 +13,7 @@ Then('{} sets GET api endpoint to get list locked companies', async function (ac
 });
 
 Then('{} checks and finds locked company of {}', async function (actor, email: string) {
-    this.responseBodyOfACompanyObject = selectedCompany = await this.getLockedCompaniesResponseBody.find((co: any) => co.jobInitiator == email && co.companyKey == this.companyKey);
+    this.responseBodyOfACompanyObject = selectedCompany = await this.getLockedCompaniesResponseBody.find((co: any) => co.companyKey == this.companyKey);
     logger.log('info', `Selected Company: ${JSON.stringify(selectedCompany, undefined, 4)}`);
     this.attach(`Selected Company: ${JSON.stringify(selectedCompany, undefined, 4)}`);
     const jobInitiator = selectedCompany.jobInitiator;

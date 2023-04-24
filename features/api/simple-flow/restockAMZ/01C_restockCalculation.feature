@@ -1,9 +1,9 @@
-@test-api @regression-api @restock-calculation
+@test-api @regression-api @restock-calculation @api-runthis
 Feature: API_Regression User can compare and check the formulas
     Background: Send POST /login request to login before each test
         Given user sends a POST login request to get valid cookie with role
-            | role  | username                   | password  |
-            | admin | testautoforecast@gmail.com | Test1111# |
+            | role  | username           | password  |
+            | admin | may27pre@gmail.com | Test1111# |
         And User sets GET api endpoint to get companies information of current user
         And In Header of the request, she sets param Cookie as valid connect.sid
         When User sends a GET request to get companies
@@ -59,6 +59,6 @@ Feature: API_Regression User can compare and check the formulas
         And User checks value Recommendations in Restock Model
 
         Examples:
-            | TC_ID          | companyType | email                      | direction | expectedStatus | expectedStatusText |
-            | TC_ASC_RC001_1 | ASC         | testautoforecast@gmail.com | asc       | 200            | OK                 |
-            | TC_ASC_RC001_2 | ASC         | testautoforecast@gmail.com | desc      | 200            | OK                 |
+            | TC_ID          | companyType | email              | direction | expectedStatus | expectedStatusText |
+            | TC_ASC_RC001_1 | ASC         | may27pre@gmail.com | asc       | 200            | OK                 |
+            | TC_ASC_RC001_2 | ASC         | may27pre@gmail.com | desc      | 200            | OK                 |
