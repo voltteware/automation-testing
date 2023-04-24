@@ -40,15 +40,3 @@ Feature: API_Admin GET/Companies
             | cookie  | expectedStatus | expectedStatusText |
             | empty   | 401            | Unauthorized       |
             | invalid | 401            | Unauthorized       |
-
-
-
-
-
-
-
-
-
-
-
-
