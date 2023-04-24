@@ -458,11 +458,11 @@ Given('User sends PUT request to update sale velocity settings with type {} of a
     this.response = await supplierRequest.updateVendorSalesVelocitySettings(this.request, linkUpdateVendorSalesVelocitySettings, this.payLoad, this.headers)
     if (this.response.status() == 200) {
         this.UpdateVendorSalesVelocitySettingsResponseBody = JSON.parse(await this.response.text())
-        logger.log('info', `Edit Company Response edit ${link} has status code ${this.response.status()} ${this.response.statusText()} and editCompanyResponse body ${JSON.stringify(this.UpdateVendorSalesVelocitySettingsResponseBody, undefined, 4)}`)
-        this.attach(`Edit Company Response edit ${link} has status code ${this.response.status()} ${this.response.statusText()} and editCompanyResponse body ${JSON.stringify(this.UpdateVendorSalesVelocitySettingsResponseBody, undefined, 4)}`)
+        logger.log('info', `Edit supplier sales velocity ${linkUpdateVendorSalesVelocitySettings} has status code ${this.response.status()} ${this.response.statusText()} and Edit supplier sales velocity response body ${JSON.stringify(this.UpdateVendorSalesVelocitySettingsResponseBody, undefined, 4)}`)
+        this.attach(`Edit supplier sales velocity ${linkUpdateVendorSalesVelocitySettings} has status code ${this.response.status()} ${this.response.statusText()} and Edit supplier sales velocity response body ${JSON.stringify(this.UpdateVendorSalesVelocitySettingsResponseBody, undefined, 4)}`)
     } else {
-        logger.log('info', `Edit Company Response edit ${link} has status code ${this.response.status()} ${this.response.statusText()}`)
-        this.attach(`Edit Company Response edit ${link} has status code ${this.response.status()} ${this.response.statusText()}`)
+        logger.log('info', `Edit supplier sales velocity ${linkUpdateVendorSalesVelocitySettings} has status code ${this.response.status()} ${this.response.statusText()}`)
+        this.attach(`Edit supplier sales velocity ${linkUpdateVendorSalesVelocitySettings} has status code ${this.response.status()} ${this.response.statusText()}`)
     }
 });
 
