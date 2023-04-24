@@ -44,7 +44,7 @@ const stepProgressSchema = z.object({
 export const updateItemInfoWithLastStepResponseSchema = simpleShipmentResponseSchema.merge(stepProgressSchema);
 
 export const getListShipmentsResponseSchema = z.object({
-    addressFromKey: z.string(),
+    addressFromKey: z.string().nullable(),
     companyKey: z.string(),
     companyType: z.string(),
     createdAt: z.string(),
@@ -53,7 +53,7 @@ export const getListShipmentsResponseSchema = z.object({
     etaDate: z.string().nullable(),
     isShipByCase: z.boolean().nullable(),
     key: z.string(),
-    labelPrepPreference: z.string(),
+    labelPrepPreference: z.string().nullable(),
     orderNotes: z.string().nullable(),
     receivedQty: z.number(),
     requestedQty: z.number(),
