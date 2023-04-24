@@ -180,8 +180,8 @@ Then(`{} sends a POST request to get list items in PO by vendor key`, async func
             this.getItemsResponseBody = this.getItemsInPOResponseBody.model;
             this.randomAItemObject = this.getItemsInPOResponseBody.model[Math.floor(Math.random() * this.getItemsInPOResponseBody.model.length)];
 
-            // logger.log('info', `Response POST ${linkItemsInPO} >>>>>>` + JSON.stringify(this.getItemsInPOResponseBody, undefined, 4));
-            // this.attach(`Response POST ${linkItemsInPO} >>>>>>` + JSON.stringify(this.getItemsInPOResponseBody, undefined, 4))
+            logger.log('info', `Response POST ${linkItemsInPO} >>>>>>` + JSON.stringify(this.randomAItemObject, undefined, 4));
+            this.attach(`Response POST ${linkItemsInPO} >>>>>>` + JSON.stringify(this.randomAItemObject, undefined, 4))
         }
         else {
             const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
