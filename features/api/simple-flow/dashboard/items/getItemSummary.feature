@@ -1,5 +1,5 @@
 @test-api @api-dashboard @api-item @api-get-item-summary
-Feature: API_Dashboard GET /api/item?summary=true&companyKey=<companyKey>&companyType=<companyType> 
+Feature: API_Dashboard GET /api/item?summary=true&companyKey=<companyKey>&companyType=<companyType>
     Background: Send GET /realm request to get all company keys of current logged in user before each test
         Given user sends a POST login request to get valid cookie with role
             | role  | username                   | password  |
@@ -12,7 +12,16 @@ Feature: API_Dashboard GET /api/item?summary=true&companyKey=<companyKey>&compan
     @TC_GIS001
     Scenario Outline: TC_GIS001 - Verify user <email> could call this API to get item summary by using company key and company type
         Given User sets GET api endpoint to get information of a company belongs to <email> using company key <companyKey>
-        And User sets valid cookie of <email> and valid companyKey and valid companyType in the header        
+        And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
+
+        # Get Company info before run forecast
+        And user sets GET api endpoint to get company information by company key
+        And User sends a GET request to get company information by company key
+        # Run Forecast
+        And User sets POST api to run forecast
+        And User sends a POST request to run forecast
+        And User checks that the lastForecastDate field was updated and jobInitiator is null in company detail information after running forecast
+
         And User sets GET api endpoint to get item summary
         When User sends a GET request to get item summary
         Then The expected status code should be <expectedStatus>

@@ -30,6 +30,22 @@ Then(`{} sets GET api endpoint to get item with limit row: {}`, async function (
     linkGetItems = `${Links.API_ITEMS}?offset=0&limit=${limitRow}`;
 });
 
+Then(`{} sets GET api endpoint to get items that have purchase as`, async function (actor) {
+    linkGetItems = `${Links.API_ITEMS}?offset=0&limit=100&where={"filters":[{"filters":[{"field":"lotMultipleItemName","operator":"isnotnull","value":null}],"logic":"and"}],"logic":"and"}`    
+});
+
+Then(`{} sets GET api endpoint to get items that have not purchase as`, async function (actor) {
+    linkGetItems = `${Links.API_ITEMS}?offset=0&limit=50&where={"filters":[{"filters":[{"field":"lotMultipleItemName","operator":"isnull","value":null}],"logic":"and"}],"logic":"and"}`    
+});
+
+Then(`{} set GET api endpoint to get items with name contains {string}`, async function (actor, containText: string) {
+    linkGetItems = `${Links.API_ITEMS}?offset=0&limit=2&where={"filters":[{"filters":[{"field":"name","operator":"contains","value":"${containText}"}],"logic":"and"}],"logic":"and"}`    
+});
+
+Then(`{} set GET api endpoint to get item that is hidden`, async function (actor) {
+    linkGetItems = `${Links.API_ITEMS}?offset=0&limit=1&where={"filters":[{"filters":[{"field":"name","operator":"eq","value":"${this.nameOfHiddenItem}"}],"logic":"and"}],"logic":"and"}`    
+});
+
 Then(`{} sets GET api endpoint to count items that is active and have lotMultipleItemKey is NULL`, async function (actor: string) {
     linkCountItems = linkGetActiveAndHasLotMultipleItemKeyNullItem = encodeURI(`${Links.API_ITEM_COUNT}?where={"filters":[{"filters":[{"field":"isHidden","operator":"eq","value":false},{"field":"isHidden","operator":"eq","value":null},{"field":"isHidden","operator":"eq","value":null}],"logic":"or"},{"filters":[{"field":"lotMultipleItemName","operator":"isnull","value":null}],"logic":"and"}],"logic":"and"}`);
 });
@@ -82,15 +98,23 @@ Then(`{} sends a GET request to get list items`, async function (actor: string) 
     const responseBodyText = await this.getItemsResponse.text();
     if (this.getItemsResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
         this.responseBody = this.getItemsResponseBody = JSON.parse(await this.getItemsResponse.text());
-        // logger.log('info', `Response GET ${link}` + JSON.stringify(this.getSupplierResponseBody, undefined, 4));
-        // this.attach(`Response GET ${link}` + JSON.stringify(this.getSupplierResponseBody, undefined, 4))
+        logger.log('info', `Response GET ${linkGetItems}` + JSON.stringify(this.getItemsResponseBody, undefined, 4));
+        this.attach(`Response GET ${linkGetItems}` + JSON.stringify(this.getItemsResponseBody, undefined, 4))
     }
     else {
         const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
-        logger.log('info', `Response GET ${link} has status code ${this.response.status()} ${this.response.statusText()} and response body ${responseBodyText}`);
-        this.attach(`Response GET ${link} has status code ${this.response.status()} ${this.response.statusText()} and response body ${actualResponseText}`)
+        logger.log('info', `Response GET ${linkGetItems} has status code ${this.response.status()} ${this.response.statusText()} and response body ${responseBodyText}`);
+        this.attach(`Response GET ${linkGetItems} has status code ${this.response.status()} ${this.response.statusText()} and response body ${actualResponseText}`)
     }
 })
+
+Then('User checks that there are no item in list', function () {
+    expect(this.getItemsResponseBody.length).toEqual(0)
+});
+
+Then('{} checks API contract essential types in the response of hidden item are correct', async function (actor: string) {
+    itemInfoResponseSchema.parse(this.editItemResponseBody);
+});
 
 Then(`{} sends GET api request to get all items`, async function (actor: string) {
     const linkGetItemCount = `${Links.API_ITEMS}/count`
@@ -132,8 +156,24 @@ Then(`{} sends a GET request to get item summary`, async function (actor: string
 })
 
 Given('User picks a random item in above list items', async function () {
-    expect(this.getItemsResponseBody.length, 'There is at least 1 item to pick random').toBeGreaterThan(1);
+    expect(this.getItemsResponseBody.length, 'There is at least 1 item to pick random').toBeGreaterThanOrEqual(1);
     this.responseBodyOfAItemObject = await this.getItemsResponseBody[Math.floor(Math.random() * this.getItemsResponseBody.length)];
+    logger.log('info', `Random Item: ${JSON.stringify(this.responseBodyOfAItemObject, undefined, 4)}`);
+    this.attach(`Random Item: ${JSON.stringify(this.responseBodyOfAItemObject, undefined, 4)}`);
+});
+
+Given('User saves list items that have already set as purchas as of orther items', async function () {
+    expect(this.getItemsResponseBody.length, 'There is at least 1 item to pick random').toBeGreaterThanOrEqual(1);
+    this.listItemsAlreadySetAsPurchaseAsOfOrtherItem = this.getItemsResponseBody.map((item: any) => item.lotMultipleItemKey)
+    logger.log('info', `list items that have already set as purchas as of orther items: ${JSON.stringify(this.listItemsAlreadySetAsPurchaseAsOfOrtherItem, undefined, 4)}`);
+    this.attach(`list items that have already set as purchas as of orther items: ${JSON.stringify(this.listItemsAlreadySetAsPurchaseAsOfOrtherItem, undefined, 4)}`);
+});
+
+Given('{} picks a random item which does not have Purchase As', async function (actor: string){
+    expect(this.getItemsResponseBody.length, 'There is at least 1 item to pick random').toBeGreaterThanOrEqual(1);
+    // Get items which are not related to Purchase As
+    this.listItemsNotPurchaseAs = this.getItemsResponseBody.filter((item: any) => item.lotMultipleItemKey == null && item.lotMultipleItemName == null);
+    this.responseBodyOfAItemObject = await this.listItemsNotPurchaseAs[Math.floor(Math.random() * this.listItemsNotPurchaseAs.length)];
     logger.log('info', `Random Item: ${JSON.stringify(this.responseBodyOfAItemObject, undefined, 4)}`);
     this.attach(`Random Item: ${JSON.stringify(this.responseBodyOfAItemObject, undefined, 4)}`);
 });
@@ -218,21 +258,24 @@ Then(`{} checks supplier name of above random items in Manage Company Items`, as
     }
 });
 
-Given('User picks a random imtem in above list items', async function () {
-    this.responseBodyOfAItemObject = await this.getItemsResponseBody[Math.floor(Math.random() * this.getItemsResponseBody.length)];
-    logger.log('info', `Random Item: ${JSON.stringify(this.responseBodyOfAItemObject, undefined, 4)}`);
-    this.attach(`Random Item: ${JSON.stringify(this.responseBodyOfAItemObject, undefined, 4)}`);
-});
+// Given('User picks a random item in above list items', async function () {
+//     this.responseBodyOfAItemObject = await this.getItemsResponseBody[Math.floor(Math.random() * this.getItemsResponseBody.length)];
+//     logger.log('info', `Random Item: ${JSON.stringify(this.responseBodyOfAItemObject, undefined, 4)}`);
+//     this.attach(`Random Item: ${JSON.stringify(this.responseBodyOfAItemObject, undefined, 4)}`);
+// });
 
 Then(`{} saves the item key`, async function (actor: string) {
-    this.itemKey = this.responseBodyOfAItemObject.key
-    logger.log('info', `Item key to edit: ${this.itemKey}`);
-    this.attach(`Item key to edit: ${this.itemKey}`)
+    this.itemKey = this.responseBodyOfAItemObject.key;
+    this.itemName = this.responseBodyOfAItemObject.name;
+    logger.log('info', `Item name: ${this.itemName}`);
+    this.attach(`Item name: ${this.itemName}`);
+    logger.log('info', `Item key: ${this.itemKey}`);
+    this.attach(`Item key: ${this.itemKey}`);
 });
 
-Given('User sets PUT api endpoint to edit {} of the above item for company type {} with new value: {}', async function (editColumn: string, companyType: string, value: string) {
+Given('User sets PUT api endpoint to edit {} of the above item for company type {} with new value: {}', async function (editColumn: string, companyType: string, value: string) {    
     // Prepare endpoint for request to edit item
-    link = `${Links.API_ITEMS}/${this.itemKey}`
+    link = `${Links.API_ITEMS}/${this.itemKey === undefined ? this.responseBodyOfAItemObject.key : this.itemKey}`
 
     switch (editColumn) {
         case 'itemName':
@@ -274,8 +317,8 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
                 // Filter out the excluded supplier have excludedSupplierKey from the list suppliers
                 const filteredArray = this.getSupplierResponseBody.filter((supplier: any) => supplier.key !== excludedSupplierKey);
                 const randomSupplier = filteredArray[Math.floor(Math.random() * this.getSupplierResponseBody.length)];
-                logger.log('info', `Ramdom supplier` + JSON.stringify(randomSupplier, undefined, 4));
-                this.attach(`Ramdom supplier` + JSON.stringify(randomSupplier, undefined, 4))
+                logger.log('info', `Random supplier` + JSON.stringify(randomSupplier, undefined, 4));
+                this.attach(`Random supplier` + JSON.stringify(randomSupplier, undefined, 4))
 
                 this.vendorKey = randomSupplier.key;
                 this.vendorName = randomSupplier.name;
@@ -440,6 +483,8 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
         case 'isHidden':
             if (value == 'random') {
                 this.isHidden = !Boolean(this.responseBodyOfAItemObject.isHidden);
+            } else {
+                this.isHidden = Boolean(value)
             }
 
             logger.log('info', `New ${editColumn}: ${this.isHidden}`);
@@ -449,7 +494,9 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
             if (value == 'random') {
                 this.useHistoryOverride = !(Boolean(this.responseBodyOfAItemObject.useHistoryOverride));
             }
-
+            else {
+                this.useHistoryOverride = true;
+            }
             logger.log('info', `New ${editColumn}: ${this.useHistoryOverride}`);
             this.attach(`New ${editColumn}: ${this.useHistoryOverride}`);
             break;
@@ -550,10 +597,9 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
                     this.lotMultipleItemName = responseBodyOfAItemObject.name
                     this.lotMultipleItemKey = responseBodyOfAItemObject.key
                 } else {
-                    const excludedItemKey = this.itemKey
-                    const excludedListPurchaseAs = this.getItemsResponseBody.map((item:any) => item.lotMultipleItemKey)
-                    // Filter out the excluded item have excludedItemKey and purchase as is null from the list items
-                    const filteredArray = this.getItemsResponseBody.filter((item: any) => ((item.key !== excludedItemKey) && (item.lotMultipleItemKey === null) && (!excludedListPurchaseAs.includes(item.key))));
+                    const excludedItemKey = this.itemKey                    
+                    // Filter out the excluded item have already set as purchas as of orther items the list items
+                    const filteredArray = this.getItemsResponseBody.filter((item: any) => ((item.key !== excludedItemKey) && (!this.listItemsAlreadySetAsPurchaseAsOfOrtherItem.includes(item.key))));
                     const randomItem = filteredArray[Math.floor(Math.random() * filteredArray.length)];
 
                     this.lotMultipleItemName = randomItem.name
@@ -616,7 +662,8 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
             lotMultipleQty: this.lotMultipleQty === undefined ? this.responseBodyOfAItemObject.lotMultipleQty : this.lotMultipleQty,
             lotMultipleItemKey: this.lotMultipleItemKey === undefined ? this.responseBodyOfAItemObject.lotMultipleItemKey : this.lotMultipleItemKey === null ? null : `${this.lotMultipleItemKey}`,
             lotMultipleItemName: this.lotMultipleItemName === undefined ? this.responseBodyOfAItemObject.lotMultipleItemName : this.lotMultipleItemName === null ? null : `${this.lotMultipleItemName}`,
-            forecastDirty: this.responseBodyOfAItemObject.forecastDirty,
+            // forecastDirty is true => Run forecast for this item
+            forecastDirty: true,
             forecastTags: this.responseBodyOfAItemObject.forecastTags,
             tag: this.responseBodyOfAItemObject.tag,
             tags: this.responseBodyOfAItemObject.tags,
@@ -719,7 +766,8 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
             lotMultipleQty: this.lotMultipleQty === undefined ? this.responseBodyOfAItemObject.lotMultipleQty : this.lotMultipleQty,
             lotMultipleItemKey: this.lotMultipleItemKey === undefined ? this.responseBodyOfAItemObject.lotMultipleItemKey : this.lotMultipleItemKey === null ? null : `${this.lotMultipleItemKey}`,
             lotMultipleItemName: this.lotMultipleItemName === undefined ? this.responseBodyOfAItemObject.lotMultipleItemName : this.lotMultipleItemName === null ? null : `${this.lotMultipleItemName}`,
-            forecastDirty: this.responseBodyOfAItemObject.forecastDirty,
+            // forecastDirty is true => Run forecast for this item
+            forecastDirty: true,
             forecastTags: this.responseBodyOfAItemObject.forecastTags,
             tag: this.responseBodyOfAItemObject.tag,
             tags: this.responseBodyOfAItemObject.tags,
@@ -794,7 +842,6 @@ When('User sends a PUT request to edit the item', async function () {
         logger.log('info', `Edit Item Response edit ${link} has status code ${this.response.status()} ${this.response.statusText()}`)
         this.attach(`Edit Item Response edit ${link} has status code ${this.response.status()} ${this.response.statusText()}`)
     }
-
 });
 
 Then('The new {} of item must be updated successfully', function (editColumn: string) {
@@ -868,6 +915,7 @@ Then('The new {} of item must be updated successfully', function (editColumn: st
             break;
         case 'isHidden':
             expect(this.isHidden).toEqual(this.editItemResponseBody.isHidden)
+            this.nameOfHiddenItem = this.editItemResponseBody.name
             break;
         case 'useHistoryOverride':
             expect(this.useHistoryOverride).toEqual(this.editItemResponseBody.useHistoryOverride)

@@ -18,7 +18,7 @@ Feature: API_Purchasing My Suggested
         # Run Forecast
         And User sets POST api to run forecast
         And User sends a POST request to run forecast
-        And User checks that the lastForecastDate field was updated and jobProcessing is false in company detail information after running forecast
+        And User checks that the lastForecastDate field was updated and jobInitiator is null in company detail information after running forecast
 
         And User sets GET api endpoint to get count summary by vendor
         When User sends a GET request to get count summary by vendor
@@ -77,6 +77,6 @@ Feature: API_Purchasing My Suggested
         Examples:
             | TC_ID     | user  | email                      | password  | companyType | expectedStatus |
             | TC_PMS001 | admin | testautoforecast@gmail.com | Test1111# | CSV         | 200            |
-            # | TC_PMS002 | admin | testautoforecast@gmail.com | Test1111# | ASC         | 200            |
-            # | TC_PMS003 | admin | testautoforecast@gmail.com | Test1111# | QBFS        | 200            |
-# | TC_PMS004 | admin | testautoforecast@gmail.com | Test1111# | QBO         | 200            |
+            | TC_PMS002 | admin | testautoforecast@gmail.com | Test1111# | ASC         | 200            |
+            | TC_PMS003 | admin | testautoforecast@gmail.com | Test1111# | QBFS        | 200            |
+            # | TC_PMS004 | admin | testautoforecast@gmail.com | Test1111# | QBO         | 200            |

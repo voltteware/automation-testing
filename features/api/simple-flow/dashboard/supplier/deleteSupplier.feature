@@ -18,11 +18,14 @@ Feature: API_SUPPLIER DELETE /api/vendor
     @TC_DV001
     Scenario Outline: TC_DV001 - Verify <user> could call this API to delete suppliers of a company belongs to her
         Given User filters <numberOfSuppliers> suppliers which has the name includes <supplierNameKeyword>
+        And User checks there is at least 1 supplier found
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         When User sends a DELETE method to delete supplier
         Then The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
-        And User checks the total suppliers is correct
+        And User filters <numberOfSuppliers> suppliers which has the name includes <supplierNameKeyword>
+        # And User checks the total suppliers is correct
+        And User search the deleted suppliers and checks that there is no supplier found
 
         Examples:
             | numberOfSuppliers | supplierNameKeyword | expectedStatus | expectedStatusText | email                      |

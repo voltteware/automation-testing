@@ -6,7 +6,7 @@
   "scripts": {
     "pretest-api": "npm i",
     "pretest-ui": "npm i",
-    "test-api": "npx cucumber-js --tags \"@test-api and not @low-bug-skip\"; node cucumber-report.js",
+    "test-api": "npx cucumber-js --tags \"@test-api and not @low-bug-skip\"; node cucumber-report.js; node cucumber-multiple-html-report.js",
     "test-api-extra": "npx cucumber-js --tags @test-api; node cucumber-report.js",
     "regression-api": "npx cucumber-js --tags @regression-api; node cucumber-report.js",
     "smoke-test-api": "npx cucumber-js --tags @smoke-test-api; node cucumber-report.js",
@@ -30,13 +30,14 @@
   "license": "",
   "dependencies": {
     "@types/cucumber-html-reporter": "^5.0.1",
+    "adm-zip": "0.5.10",
     "allure-js-commons": "^2.0.0-beta.19",
     "assert": "2.0.0",
     "aws-sdk": "2.1353.0",
     "date-fns": "2.29.3",
     "dotenv": "16.0.3",
-    "soft-assert": "0.2.6",
     "googleapis": "115.0.0",
+    "soft-assert": "0.2.6",
     "zod": "3.21.4"
   },
   "devDependencies": {

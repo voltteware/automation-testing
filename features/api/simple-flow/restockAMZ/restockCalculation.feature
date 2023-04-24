@@ -8,11 +8,19 @@ Feature: API_Regression User can compare and check the formulas
         And In Header of the request, she sets param Cookie as valid connect.sid
         When User sends a GET request to get companies
 
-    # Pre-condition: Company should run forecast manually to save time
     @TC_ASC_RC001 @smoke-test-api
     Scenario Outline: <TC_ID> - Verify user <email> could call APIs to compare and check the formulas
         Given User picks company which has onboarded before with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
+        # Get Company info before run forecast
+        And user sets GET api endpoint to get company information by company key
+        And User sends a GET request to get company information by company key
+        # Run Forecast
+        And User sets POST api to run forecast
+        And User sends a POST request to run forecast
+        And The expected status code should be <expectedStatus>
+        And The status text is "<expectedStatusText>"
+        And User checks that the lastForecastDate field was updated and jobInitiator is null in company detail information after running forecast
         And User sets GET api method to get restock suggestion by vendor
         And User sends a GET api method to get restock suggestion by vendor
         And The expected status code should be <expectedStatus>
@@ -53,4 +61,4 @@ Feature: API_Regression User can compare and check the formulas
         Examples:
             | TC_ID          | companyType | email                      | direction | expectedStatus | expectedStatusText |
             | TC_ASC_RC001_1 | ASC         | testautoforecast@gmail.com | asc       | 200            | OK                 |
-            | TC_ASC_RC002_2 | ASC         | testautoforecast@gmail.com | desc      | 200            | OK                 |
+            | TC_ASC_RC001_2 | ASC         | testautoforecast@gmail.com | desc      | 200            | OK                 |

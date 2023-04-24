@@ -16,10 +16,10 @@ export class HeaderComponent {
 
     constructor(page: Page) {
         this.page = page;
-        this.userName = page.locator('.drp-user');
+        this.userName = page.getByTestId('profile-icon-btn');
         this.companyName = page.getByRole('combobox');
         this.profileLink = page.getByText('Profile');
-        this.subscriptionLink = page.locator('text=Subscription(s)');
+        this.subscriptionLink = page.getByTestId('subscription-item');
         this.logOutLink = page.getByText('Logout');
         this.userInfoJSON = "";
         this.subscriptionsJSON = "";
@@ -30,7 +30,7 @@ export class HeaderComponent {
     }
 
     async switchToAnotherCompany(companyName: string) {
-        await this.companyName.selectOption(companyName);
+        await this.page.getByRole('listitem').filter({ hasText: `${companyName}` }).click();
         await expect(this.page).toHaveURL(/.*home/);
     }
 

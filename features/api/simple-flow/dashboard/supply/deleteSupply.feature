@@ -23,7 +23,8 @@ Feature: API_SUPPLY DELETE /api/supply
         When User sends a DELETE method to delete supply
         Then The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
-        And User checks the total supplies is correct
+        # And User checks the total supplies is correct
+        And User searches the deleted supplies by refNum and checks that there is no supply found
 
         Examples:
             | TC_ID     | companyType | numberOfSupplies | supplyRefnumKeyword | expectedStatus | expectedStatusText | email                      |

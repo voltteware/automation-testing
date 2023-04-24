@@ -184,6 +184,31 @@ Then('{} checks the total supplies is correct', async function (actor: string) {
     expect(currentTotalSupplies).toEqual(beforeTotalSupplies - this.selectedSupplies.length);
 });
 
+Then('{} searches the deleted supplies by refNum and checks that there is no supply found', async function (actor: string) {
+    const options = {
+        headers: this.headers
+    }
+
+    for await (const supply of this.selectedSupplies) {
+        const PONum = supply.refNum;
+        const link = encodeURI(`${Links.API_SUPPLY}?offset=0&limit=50&where={"filters":[{"filters":[{"field":"refNum","operator":"contains","value":"${PONum}"}],"logic":"and"}],"logic":"and"}`);
+        const searchSupplyResponse = await supplyRequest.getSupply(this.request, link, options);
+        const responseBodyText = await searchSupplyResponse.text();
+        var searchSupplyResponseBody = JSON.parse(responseBodyText);
+        if (searchSupplyResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
+            logger.log('info', `Response GET ${link}>>>>>>>` + JSON.stringify(responseBodyText, undefined, 4));
+            this.attach(`Response GET ${link}>>>>>>>>` + JSON.stringify(responseBodyText, undefined, 4))
+        }
+        else {
+            const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
+            logger.log('info', `Response GET ${link} has status code ${searchSupplyResponse.status()} ${searchSupplyResponse.statusText()} and response body ${responseBodyText}`);
+            this.attach(`Response GET ${link} has status code ${searchSupplyResponse.status()} ${searchSupplyResponse.statusText()} and response body ${actualResponseText}`)
+        }
+
+        expect(searchSupplyResponseBody.length, `Expect that there is no supply ${PONum} in the system`).toBe(0);
+    }
+})
+
 Then('{} checks values in response of random supply are correct', async function (actor: string) {
     const companyType = ['ASC', 'CSV', 'QBFS', 'QBO'];
     expect(companyType, `Company Type should be one of ${companyType}`).toContain(this.responseBodyOfASupplyObject.companyType);

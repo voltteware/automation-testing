@@ -89,8 +89,8 @@ Then('{} checks {} bom exist in the system, if it does not exist will create new
         const payload = {
             childKey: randomChildItem.key,
             childName: randomChildItem.name,
-            companyKey: this.getRealmResponseBody.companyKey,
-            companyType: this.getRealmResponseBody.companyType,
+            companyKey: this.getCompaniesResponseBody.companyKey,
+            companyType: this.getCompaniesResponseBody.companyType,
             parentKey: randomParentItem.key,
             parentName: randomParentItem.name,
             qty: Math.floor(Math.random() * 101),
@@ -196,6 +196,32 @@ Then('{} check that the deleted BOM and its child are not included in the curren
     expect(foundBom, 'Bom should not be included in the list boms').toBeFalsy();
 })
 
+Then('{} search the deleted child bom by name and check that no bom found', async function (actor: string) {
+    const options = {
+        headers: this.headers
+    }
+
+    for await (const bom of this.selectedBoms) {
+        const childName = bom.childName;
+        const linkSearchBom = encodeURI(`${Links.API_BOM}?offset=0&limit=100&where={"filters":[{"filters":[{"field":"childName","operator":"contains","value":"${childName}"}],"logic":"and"}],"logic":"and"}`);
+        const searchChildBomResponse = await bomRequest.getBom(this.request, linkSearchBom, options);
+        const responseBodyText = await searchChildBomResponse.text();
+        var searchChildBomResponseBody;
+        if (searchChildBomResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
+            logger.log('info', `Response GET ${linkSearchBom}>>>>>>>` + JSON.stringify(responseBodyText, undefined, 4));
+            this.attach(`Response GET ${linkSearchBom}>>>>>>>>` + JSON.stringify(responseBodyText, undefined, 4))
+            searchChildBomResponseBody = JSON.parse(await searchChildBomResponse.text());
+        }
+        else {
+            const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
+            logger.log('info', `Response GET ${linkSearchBom} has status code ${searchChildBomResponse.status()} ${searchChildBomResponse.statusText()} and response body ${responseBodyText}`);
+            this.attach(`Response GET ${linkSearchBom} has status code ${searchChildBomResponse.status()} ${searchChildBomResponse.statusText()} and response body ${actualResponseText}`)
+        }
+
+        expect(searchChildBomResponseBody.length, `There are no bom has child name ${childName}`).toBe(0);
+    }
+})
+
 Then(`{} sets GET api endpoint to get bom keys with limit row: {} and sort field: {} with direction: {}`, async function (actor, limitRow, sortField, direction: string) {
     linkSorted = encodeURI(`${Links.API_BOM}?offset=0&limit=${limitRow}&sort=[{"field":"${sortField}","direction":"${direction}"}]&where={"logic":"and","filters":[]}`);
 });
@@ -239,9 +265,9 @@ Given('User sets PUT api endpoint to edit {} of the above bom for company type {
 
     switch (editColumn) {
         case 'parentName':
-            if (value == 'random') {                
-                const listParentKey = this.getBomResponseBody.map((bom: any) => bom.parentKey)        
-                const listChildKey = this.getBomResponseBody.map((bom: any) => bom.childKey)                
+            if (value == 'random') {
+                const listParentKey = this.getBomResponseBody.map((bom: any) => bom.parentKey)
+                const listChildKey = this.getBomResponseBody.map((bom: any) => bom.childKey)
 
                 // Filter out the excluded item that is a child or parent from the list items 
                 const filteredArray = this.getItemsResponseBody.filter((item: any) => ((!listChildKey.includes(item.key)) && (!listParentKey.includes(item.key))));
@@ -257,9 +283,9 @@ Given('User sets PUT api endpoint to edit {} of the above bom for company type {
             this.attach(`New ${editColumn}: ${this.parentName}`);
             break;
         case 'componentName':
-            if (value == 'random') {                
+            if (value == 'random') {
                 const listParentKey = this.getBomResponseBody.map((bom: any) => bom.parentKey)
-                const listChildKey = this.getBomResponseBody.map((bom: any) => bom.childKey)                
+                const listChildKey = this.getBomResponseBody.map((bom: any) => bom.childKey)
 
                 // Filter out the excluded item that is a child or parent from the list items 
                 const filteredArray = this.getItemsResponseBody.filter((item: any) => ((!listChildKey.includes(item.key)) && (!listParentKey.includes(item.key))));
