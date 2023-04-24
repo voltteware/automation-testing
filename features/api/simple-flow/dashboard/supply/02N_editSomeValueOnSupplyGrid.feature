@@ -59,4 +59,4 @@ Feature: API_Dashboard PUT /api/supply/manual
             | TC_US001_9  | CSV         | testautoforecast@gmail.com | 10       | suppliername | random | 200            |
             | TC_US001_10 | CSV         | testautoforecast@gmail.com | 10       | receiveDate  | random | 200            |
             | TC_US001_11 | CSV         | testautoforecast@gmail.com | 10       | poDate       | random | 200            |
-            | TC_US001_13 | CSV         | testautoforecast@gmail.com | 10       | openQty      | random | 200            |
+            | TC_US001_12 | CSV         | testautoforecast@gmail.com | 10       | openQty      | random | 200            |
