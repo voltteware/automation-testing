@@ -9,14 +9,14 @@ import _, { endsWith } from "lodash";
 import { payLoadCompany } from '../../../../src/utils/companyPayLoad';
 import { addUserToCompanyResponseSchema } from '../assertion/administrator/userAssertionSchema';
 
-Then('User sets POST api endpoint to add company to Admin has username {}', async function (username: string) {
+Then('User sets POST api endpoint to {} company {} Admin with usernames {} and operation {}', async function (action: string, preposition: string, username: string, operation: string) {
     this.linkApiAddCompanyToAdmin = `${Links.API_USER}`
     
     this.addCompanyToAdminPayload = {
         "companyKey": `${this.companyKey}`,
         "companyName": `${this.companyName}`,
         "companyType": `${this.companyType}`,
-        "operation": "addToCompany",
+        "operation": operation,
         "userId": username
     }
 
@@ -24,8 +24,8 @@ Then('User sets POST api endpoint to add company to Admin has username {}', asyn
     this.attach(`Payload add to billing ${this.linkApiAddCompanyToAdmin}` + JSON.stringify(this.addCompanyToAdminPayload, undefined, 4))
 })
 
-When('User sends a POST method to add company to Admin', async function () {
-    this.response = this.addCompanyToAdminResponse = await adminRequest.addCompanyToAdmin(this.request, this.linkApiAddCompanyToAdmin, this.addCompanyToAdminPayload, this.headers);
+When('User sends a POST method to {} company {} Admin', async function (action: string, preposition: string) {
+    this.response = this.addCompanyToAdminResponse = await adminRequest.addCompanyToAdminThenRemove(this.request, this.linkApiAddCompanyToAdmin, this.addCompanyToAdminPayload, this.headers);
     const responseBodyText = await this.addCompanyToAdminResponse.text();
     if (this.addCompanyToAdminResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
         this.responseBody = this.addCompanyToAdminResponseBody = JSON.parse(responseBodyText);   
@@ -40,12 +40,17 @@ When('User sends a POST method to add company to Admin', async function () {
     }
 })
 
-When('User checks company that just added above exists in Realm', async function () {
+When('User verifies the above-mentioned company\'s existence in the Realm after {} successfully', async function (action: string) {
+    let length = null;
+    if(action == "adding"){
+        length = 1;
+    }
+    else length = 0;
     const existCompany = await this.getRealmResponseBody.filter((co: any) => co.companyName.includes(this.companyName)).length;
     console.log("existCompany >>>>>>> ", existCompany);
-    expect(existCompany).toEqual(1);
+    expect(existCompany).toEqual(length);
 })
 
-Then('{} checks API contract essential types in the response of add company to admin are correct', async function (actor: string) {
+Then('{} checks API contract essential types in the response of {} company {} admin are correct', async function (actor: string, action: string, preposition: string) {
     addUserToCompanyResponseSchema.parse(this.responseBody)
 })
