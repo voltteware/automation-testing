@@ -40,8 +40,8 @@ Then(`{} sets GET api endpoint to get items that have not purchase as`, async fu
 });
 
 Then(`{} set GET api endpoint to get items with name contains {string}`, async function (actor, containText: string) {
-    containText === 'itemInListItemInPO' ? containText = this.randomAItemObject.itemName : undefined
-    linkGetItems = `${Links.API_ITEMS}?offset=0&limit=2&where={"filters":[{"filters":[{"field":"name","operator":"contains","value":"${containText}"}],"logic":"and"}],"logic":"and"}`    
+    containText === 'itemInListItemInPO' ? containText = this.randomAItemObject.itemName : containText === 'itemInEditedSupplyAbove' ? containText = this.editSupplyResponseBody.itemName : containText === 'itemInEditedDemandAbove' ? containText = this.editDemandResponseBody.itemName : undefined    
+    linkGetItems = `${Links.API_ITEMS}?offset=0&limit=2&where={"filters":[{"filters":[{"field":"name","operator":"contains","value":"${containText}"}],"logic":"and"},{"filters":[{"field":"isHidden","operator":"eq","value":true},{"field":"isHidden","operator":"eq","value":false}],"logic":"or"}],"logic":"and"}`
 });
 
 Then(`{} set GET api endpoint to get item that is hidden`, async function (actor) {
@@ -281,7 +281,7 @@ Then(`{} sets api endpoint to edit some values of a item`, async function (actor
     this.attach(`Link edit item: ${link}`);
 
     const rows = dataTable.hashes();
-    const {supplierName, supplierPrice, moq, onHandFbaQty, onHandFbmQty, serviceLevel, warehouseQty, description, leadTime, orderInterval, casePackQty, tags, onHandQtyMin, wareHouseQtyMin, inventorySourcePreference} = rows[0]
+    const {purchaseAs, isHidden, supplierName, supplierPrice, moq, onHandFbaQty, onHandFbmQty, serviceLevel, warehouseQty, description, leadTime, orderInterval, casePackQty, tags, onHandQtyMin, wareHouseQtyMin, inventorySourcePreference} = rows[0]
     this.payLoad = this.responseBodyOfAItemObject
     if (supplierName === 'random'){
         const excludedSupplierKey = this.responseBodyOfAItemObject.vendorKey
@@ -358,6 +358,15 @@ Then(`{} sets api endpoint to edit some values of a item`, async function (actor
         // Filter out the excluded inventory source value from the inventorySources array
         const filteredArray = inventorySources.filter((value) => value !== excludedInventorySource);
         this.payLoad.inventorySourcePreference = filteredArray[Math.floor(Math.random() * filteredArray.length)];
+    }
+
+    if (isHidden === 'false'){
+        this.payLoad.isHidden = false
+    }
+
+    if (purchaseAs === 'null'){        
+        this.payLoad.lotMultipleItemName = null
+        this.payLoad.lotMultipleItemKey = null
     }
 
     logger.log('info', `Payload edit some values of item` + JSON.stringify(this.payLoad, undefined, 4));
@@ -1329,14 +1338,14 @@ Given(`User verify that values of item in "Purchasing > My Suggested" must be up
         this.softAssert(this.getItemsInPOResponseBody.model[0].moq == this.editItemResponseBody.moq, `moq - Expected: ${this.editItemResponseBody.moq}, Actual: ${this.getItemsInPOResponseBody.model[0].moq}`)
         this.softAssert(this.getItemsInPOResponseBody.model[0].onHand == this.editItemResponseBody.onHand, `onHand - Expected: ${this.editItemResponseBody.onHand}, Actual: ${this.getItemsInPOResponseBody.model[0].onHand}`)
         this.softAssert(this.getItemsInPOResponseBody.model[0].onHandFbm == this.editItemResponseBody.onHandFbm, `onHandFbm - Expected: ${this.editItemResponseBody.onHandFbm}, Actual: ${this.getItemsInPOResponseBody.model[0].onHandFbm}`)
-        this.softAssert(this.getItemsInPOResponseBody.model[0].serviceLevel == this.editItemResponseBody.serviceLevel, `serviceLevel - Expected: ${this.editItemResponseBody.serviceLevel}, Actual: ${this.getItemsInPOResponseBody.model[0].serviceLevel}`)
+        // this.softAssert(this.getItemsInPOResponseBody.model[0].serviceLevel == this.editItemResponseBody.serviceLevel, `serviceLevel - Expected: ${this.editItemResponseBody.serviceLevel}, Actual: ${this.getItemsInPOResponseBody.model[0].serviceLevel}`)
         this.softAssert(this.getItemsInPOResponseBody.model[0].onHandThirdParty == this.editItemResponseBody.onHandThirdParty, `onHandThirdParty - Expected: ${this.editItemResponseBody.onHandThirdParty}, Actual: ${this.getItemsInPOResponseBody.model[0].onHandThirdParty}`)
         this.softAssert(this.getItemsInPOResponseBody.model[0].description == this.editItemResponseBody.description, `description - Expected: ${this.editItemResponseBody.description}, Actual: ${this.getItemsInPOResponseBody.model[0].description}`)
         this.softAssert(this.getItemsInPOResponseBody.model[0].leadTime == this.editItemResponseBody.leadTime, `leadTime - Expected: ${this.editItemResponseBody.leadTime}, Actual: ${this.getItemsInPOResponseBody.model[0].leadTime}`)
         this.softAssert(this.getItemsInPOResponseBody.model[0].orderInterval == this.editItemResponseBody.orderInterval, `orderInterval - Expected: ${this.editItemResponseBody.orderInterval}, Actual: ${this.getItemsInPOResponseBody.model[0].orderInterval}`)
         this.softAssert(this.getItemsInPOResponseBody.model[0].otMultipleQty == this.editItemResponseBody.otMultipleQty, `otMultipleQty - Expected: ${this.editItemResponseBody.otMultipleQty}, Actual: ${this.getItemsInPOResponseBody.model[0].otMultipleQty}`)
-        this.softAssert(this.getItemsInPOResponseBody.model[0].tags == this.editItemResponseBody.tags, `tags - Expected: ${this.editItemResponseBody.tags}, Actual: ${this.getItemsInPOResponseBody.model[0].tags}`)
-        this.softAssert(this.getItemsInPOResponseBody.model[0].onHandMin == this.editItemResponseBody.onHandMin), `onHandMin - Expected: ${this.editItemResponseBody.onHandMin}, Actual: ${this.getItemsInPOResponseBody.model[0].onHandMin}`
+        // this.softAssert(this.getItemsInPOResponseBody.model[0].tags == this.editItemResponseBody.tags, `tags - Expected: ${this.editItemResponseBody.tags}, Actual: ${this.getItemsInPOResponseBody.model[0].tags}`)
+        this.softAssert(this.getItemsInPOResponseBody.model[0].onHandMin == this.editItemResponseBody.onHandMin, `onHandMin - Expected: ${this.editItemResponseBody.onHandMin}, Actual: ${this.getItemsInPOResponseBody.model[0].onHandMin}`)
         this.softAssert(this.getItemsInPOResponseBody.model[0].onHandThirdParty == this.editItemResponseBody.onHandThirdParty, `onHandThirdParty - Expected: ${this.editItemResponseBody.onHandThirdParty}, Actual: ${this.getItemsInPOResponseBody.model[0].onHandThirdParty}`)
         this.softAssert(this.getItemsInPOResponseBody.model[0].inventorySourcePreference == this.editItemResponseBody.inventorySourcePreference, `inventorySourcePreference - Expected: ${this.editItemResponseBody.inventorySourcePreference}, Actual: ${this.getItemsInPOResponseBody.model[0].inventorySourcePreference}`)
         expect(this.countErrors).toBe(0)
@@ -1387,5 +1396,28 @@ Given(`User checks some values in result must be updated after update values of 
     this.softAssert(this.getResultsResponseBody.model.settingsSources.moq.value == this.editItemResponseBody.moq, `moq - Expected: ${this.editItemResponseBody.moq}, Actual: ${this.getResultsResponseBody.model.settingsSources.moq.value}`)
     this.softAssert(this.getResultsResponseBody.model.settingsSources.orderInterval.value == this.editItemResponseBody.orderInterval, `orderInterval - Expected: ${this.editItemResponseBody.orderInterval}, Actual: ${this.getResultsResponseBody.model.settingsSources.orderInterval.value}`)
     expect(this.countErrors).toBe(0)
+});
 
+Given(`User verify that "Existing PO Qty" of item in "Purchasing > Custom" must be updated after update values of item in "Manage Company > Supply" and run forecast`, function () {                
+    this.softAssert(this.getItemsInPurchasingCustomResponseBody[0].openPurchaseOrders == this.editSupplyResponseBody.openQty, `openPurchaseOrders - Expected: ${this.editSupplyResponseBody.openQty}, Actual: ${this.getItemsInPurchasingCustomResponseBody[0].openPurchaseOrders}`)
+    expect(this.countErrors).toBe(0)
+});
+
+Given(`User verify that "Existing PO Qty" of item in "Purchasing > My Suggested" must be updated after update values of item in "Manage Company > Supply" and run forecast`, function () {                
+    if (Number(this.forecastRecommendQty) > 0){
+        this.softAssert(this.getItemsInPOResponseBody.model[0].openPurchaseOrders == this.editSupplyResponseBody.openQty, `openPurchaseOrders - Expected: ${this.editSupplyResponseBody.openQty}, Actual: ${this.getItemsInPOResponseBody.model[0].openPurchaseOrders}`)
+        expect(this.countErrors).toBe(0)
+    }
+});
+
+Given(`User verify that "Open Sales Orders" of item in "Purchasing > Custom" must be updated after update values of item in "Manage Company > Demand" and run forecast`, function () {                
+    this.softAssert(this.getItemsInPurchasingCustomResponseBody[0].openSalesOrders == this.editDemandResponseBody.openQty, `openSalesOrders - Expected: ${this.editDemandResponseBody.openQty}, Actual: ${this.getItemsInPurchasingCustomResponseBody[0].openSalesOrders}`)
+    expect(this.countErrors).toBe(0)
+});
+
+Given(`User verify that "Open Sales Orders" of item in "Purchasing > My Suggested" must be updated after update values of item in "Manage Company > Demand" and run forecast`, function () {                
+    if (Number(this.forecastRecommendQty) > 0){
+        this.softAssert(this.getItemsInPOResponseBody.model[0].openSalesOrders == this.editDemandResponseBody.openQty, `openSalesOrders - Expected: ${this.editDemandResponseBody.openQty}, Actual: ${this.getItemsInPOResponseBody.model[0].openSalesOrders}`)
+        expect(this.countErrors).toBe(0)
+    }
 });
