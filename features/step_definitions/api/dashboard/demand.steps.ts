@@ -157,7 +157,7 @@ When('User saves the demand key and order key', function () {
     logger.log('info', `Demand key to edit: ${this.demandKey}`);
     this.attach(`Demand key to edit: ${this.demandKey}`)
 
-    this.orderkey = this.responseBodyOfADemandObject.orderKey
+    this.orderKey = this.responseBodyOfADemandObject.orderKey
     logger.log('info', `Order key to edit: ${this.orderkey}`);
     this.attach(`Order key to edit: ${this.orderkey}`)
 });
