@@ -4,7 +4,7 @@ import { ActionWords } from "../utils/actionwords";
 import { setParallelCanAssign, parallelCanAssignHelpers } from '@cucumber/cucumber'
 
 const { atMostOnePicklePerTag } = parallelCanAssignHelpers;
-const myTagRule = atMostOnePicklePerTag(['@api-createBom', '@api-createItem', '@api-createSupplier', '@api-createSupply', '@api-edit-purchasing-daily-sale-rate-rules-average', '@api-overrideValue', '@api-dashboard-advanced']);
+const myTagRule = atMostOnePicklePerTag(['@api-createBom', '@api-createItem', '@api-createSupplier', '@api-createSupply', '@api-change-password', '@api-overrideValue', '@api-editItemHistory', '@api-get-item-summary', '@api-purchasing-custom', '@api-purchasing-mySuggested', '@restock-calculation']);
 
 setParallelCanAssign(function (pickleInQuestion, picklesInProgress) {
     return (
@@ -18,7 +18,7 @@ export let currentTestCaseID: string;
 Before({ tags: "@test-api or @test-api-extra" }, async function (scenario: ITestCaseHookParameter) {
     currentTestCaseID = scenario.pickle.name.split('-')[0].trim();
     // Only one pickle with @tag1 can run at a time
-    // AND only one pickle with @tag2 can run at a time
+    // And only one pickle with @tag2 can run at a time
     setParallelCanAssign(myTagRule)
     logger.log('info', '==============' + scenario.pickle.name + '==============')
     this.request = await actionwords.createRequestContext()
