@@ -1,6 +1,7 @@
-import { When, Then, Given } from '@cucumber/cucumber';
+import { When, Then, Given, DataTable } from '@cucumber/cucumber';
 import { expect } from '@playwright/test';
 import * as itemRequest from '../../../../src/api/request/item.service';
+import * as vendorRequest from '../../../../src/api/request/vendor.service';
 import logger from '../../../../src/Logger/logger';
 import { Links } from '../../../../src/utils/links';
 import { faker } from '@faker-js/faker';
@@ -39,6 +40,7 @@ Then(`{} sets GET api endpoint to get items that have not purchase as`, async fu
 });
 
 Then(`{} set GET api endpoint to get items with name contains {string}`, async function (actor, containText: string) {
+    containText === 'itemInListItemInPO' ? containText = this.randomAItemObject.itemName : undefined
     linkGetItems = `${Links.API_ITEMS}?offset=0&limit=2&where={"filters":[{"filters":[{"field":"name","operator":"contains","value":"${containText}"}],"logic":"and"}],"logic":"and"}`    
 });
 
@@ -271,6 +273,95 @@ Then(`{} saves the item key`, async function (actor: string) {
     this.attach(`Item name: ${this.itemName}`);
     logger.log('info', `Item key: ${this.itemKey}`);
     this.attach(`Item key: ${this.itemKey}`);
+});
+
+Then(`{} sets api endpoint to edit some values of a item`, async function (actor: string, dataTable: DataTable) {
+    link = `${Links.API_ITEMS}/${this.itemKey}`
+    logger.log('info', `Link edit item: ${link}`);
+    this.attach(`Link edit item: ${link}`);
+
+    const rows = dataTable.hashes();
+    const {supplierName, supplierPrice, moq, onHandFbaQty, onHandFbmQty, serviceLevel, warehouseQty, description, leadTime, orderInterval, casePackQty, tags, onHandQtyMin, wareHouseQtyMin, inventorySourcePreference} = rows[0]
+    this.payLoad = this.responseBodyOfAItemObject
+    if (supplierName === 'random'){
+        const excludedSupplierKey = this.responseBodyOfAItemObject.vendorKey
+
+        // Filter out the excluded supplier have excludedSupplierKey from the list suppliers
+        const filteredArray = this.getSupplierResponseBody.filter((supplier: any) => supplier.key !== excludedSupplierKey);
+        const randomSupplier = filteredArray[Math.floor(Math.random() * this.getSupplierResponseBody.length)];
+        logger.log('info', `Random supplier` + JSON.stringify(randomSupplier, undefined, 4));
+        this.attach(`Random supplier` + JSON.stringify(randomSupplier, undefined, 4))
+
+        this.payLoad.vendorKey = randomSupplier.key;
+        this.payLoad.vendorName = randomSupplier.name;
+    }
+
+    if (supplierPrice === 'random'){
+        this.payLoad.vendorPrice = Number(faker.random.numeric());
+    }
+
+    if (moq === 'random'){
+        this.payLoad.moq = Number(faker.random.numeric());
+    }
+
+    if (onHandFbaQty === 'random') {
+        this.payLoad.onHand = Number(faker.random.numeric(3));
+    }
+
+    if (onHandFbmQty === 'random') {
+        this.payLoad.onHandFbm = Number(faker.random.numeric(3));
+    }
+
+    if (serviceLevel === 'random') {
+        this.payLoad.serviceLevel = Number(faker.random.numeric(2));
+    }
+
+    if (warehouseQty === 'random') {
+        this.payLoad.onHandThirdParty = Number(faker.random.numeric(2));
+    }
+
+    if (description === 'random') {
+        this.payLoad.description = faker.lorem.words(3);
+    }
+
+    if (leadTime === 'random') {
+        this.payLoad.leadTime = Number(faker.datatype.number({
+            'min': 1,
+            'max': 365
+        }));
+    }
+
+    if (orderInterval === 'random') {
+        this.payLoad.orderInterval = Number(faker.random.numeric());
+    }
+
+    if (casePackQty == 'random') {
+        this.payLoad.lotMultipleQty = Number(faker.random.numeric(3));
+    }
+
+    if (tags === 'random') {
+        // TODO: If there is a tag, delete it, if not, add a new tag
+    }
+
+    if (onHandQtyMin === 'random') {
+        this.payLoad.onHandMin = Number(faker.random.numeric(3));
+    }
+
+    if (wareHouseQtyMin === 'random') {
+        this.payLoad.onHandThirdPartyMin = Number(faker.random.numeric(3));
+    }
+
+    if (inventorySourcePreference == 'random') {
+        const inventorySources = ['FBA', 'FBM', 'FBA+FBM'];
+        const excludedInventorySource = this.responseBodyOfAItemObject.inventorySourcePreference;
+
+        // Filter out the excluded inventory source value from the inventorySources array
+        const filteredArray = inventorySources.filter((value) => value !== excludedInventorySource);
+        this.payLoad.inventorySourcePreference = filteredArray[Math.floor(Math.random() * filteredArray.length)];
+    }
+
+    logger.log('info', `Payload edit some values of item` + JSON.stringify(this.payLoad, undefined, 4));
+    this.attach(`Payload edit some values of item` + JSON.stringify(this.payLoad, undefined, 4))
 });
 
 Given('User sets PUT api endpoint to edit {} of the above item for company type {} with new value: {}', async function (editColumn: string, companyType: string, value: string) {    
@@ -652,8 +743,6 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
             hazmat: this.responseBodyOfAItemObject.hazmat,
             oversized: this.responseBodyOfAItemObject.oversized,
             category: this.responseBodyOfAItemObject.category,
-            upc: `${this.responseBodyOfAItemObject.upc}`,
-            ean: `${this.responseBodyOfAItemObject.ean}`,
             rank: this.responseBodyOfAItemObject.rank,
             growthTrend: this.responseBodyOfAItemObject.growthTrend,
             isHidden: this.isHidden === undefined ? this.responseBodyOfAItemObject.isHidden : this.isHidden,
@@ -668,7 +757,7 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
             tag: this.responseBodyOfAItemObject.tag,
             tags: this.responseBodyOfAItemObject.tags,
             useBackfill: this.responseBodyOfAItemObject.useBackfill,
-            createdAt: `${this.responseBodyOfAItemObject.createdAt}`,
+            createdAt: `${this.responseBodyOfAItemObject.created_at}`,
             inbound: this.responseBodyOfAItemObject.inbound,
             inboundPrice: this.responseBodyOfAItemObject.inboundPrice,
             inboundSalesLast30Days: this.responseBodyOfAItemObject.inboundSalesLast30Days,
@@ -700,7 +789,6 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
             syncedFields: this.responseBodyOfAItemObject.syncedFields,
             isFbm: this.responseBodyOfAItemObject.isFbm,
             itemHistoryLength: this.responseBodyOfAItemObject.itemHistoryLength,
-            warehouseQtyUpdatedDate: `${this.responseBodyOfAItemObject.warehouseQtyUpdatedDate}`,
             itemHistoryLengthInDay: this.responseBodyOfAItemObject.itemHistoryLengthInDay,
             created_at: `${this.responseBodyOfAItemObject.created_at}`,
             updated_at: `${this.responseBodyOfAItemObject.updated_at}`,
@@ -756,8 +844,6 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
             hazmat: this.responseBodyOfAItemObject.hazmat,
             oversized: this.responseBodyOfAItemObject.oversized,
             category: this.responseBodyOfAItemObject.category,
-            upc: `${this.responseBodyOfAItemObject.upc}`,
-            ean: `${this.responseBodyOfAItemObject.ean}`,
             rank: this.responseBodyOfAItemObject.rank,
             growthTrend: this.responseBodyOfAItemObject.growthTrend,
             isHidden: this.isHidden === undefined ? this.responseBodyOfAItemObject.isHidden : this.isHidden,
@@ -772,7 +858,7 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
             tag: this.responseBodyOfAItemObject.tag,
             tags: this.responseBodyOfAItemObject.tags,
             useBackfill: this.responseBodyOfAItemObject.useBackfill,
-            createdAt: `${this.responseBodyOfAItemObject.createdAt}`,
+            createdAt: `${this.responseBodyOfAItemObject.created_at}`,
             inbound: this.responseBodyOfAItemObject.inbound,
             inboundPrice: this.responseBodyOfAItemObject.inboundPrice,
             inboundSalesLast30Days: this.responseBodyOfAItemObject.inboundSalesLast30Days,
@@ -804,7 +890,6 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
             syncedFields: this.responseBodyOfAItemObject.syncedFields,
             isFbm: this.responseBodyOfAItemObject.isFbm,
             itemHistoryLength: this.responseBodyOfAItemObject.itemHistoryLength,
-            warehouseQtyUpdatedDate: `${this.responseBodyOfAItemObject.warehouseQtyUpdatedDate}`,
             itemHistoryLengthInDay: this.responseBodyOfAItemObject.itemHistoryLengthInDay,
             created_at: `${this.responseBodyOfAItemObject.created_at}`,
             updated_at: `${this.responseBodyOfAItemObject.updated_at}`,
@@ -937,8 +1022,8 @@ Then('The new {} of item must be updated successfully', function (editColumn: st
 });
 
 Given(`User sets GET api endpoint to get a item in "Manage Company > Item" to assign supplier`, function () {
-    // Use items with name have DefaultPurchasingSaleVelocity to check
-    const name = 'DefaultPurchasingSaleVelocity';
+    // Use items with name have New_Auto to check
+    const name = 'New_Auto';
     linkGetAItemFilterByName = `${Links.API_ITEMS}?offset=0&limit=1&where={"filters":[{"filters":[{"field":"name","operator":"contains","value":"${name}"}],"logic":"and"}],"logic":"and"}`
 });
 
@@ -1115,4 +1200,192 @@ Then('User sends a GET request to get Item by Item key', async function () {
 
 Then('{} checks API contract of get Item by Item key api', async function (actor: string) {
     itemInfoResponseSchema.parse(this.getItemByItemKeyResponseBody);
+});
+
+Then('{} checks new values of item in "Manage Company > Items" must be display exactly', async function (actor: string) {
+    expect(this.editItemResponseBody.vendorKey).toBe(this.payLoad.vendorKey)
+    expect(this.editItemResponseBody.vendorName).toBe(this.payLoad.vendorName)
+    expect(this.editItemResponseBody.vendorPrice).toBe(this.payLoad.vendorPrice)
+    expect(this.editItemResponseBody.moq).toBe(this.payLoad.moq)
+    expect(this.editItemResponseBody.onHand).toBe(this.payLoad.onHand)
+    expect(this.editItemResponseBody.onHandFbm).toBe(this.payLoad.onHandFbm)
+    expect(this.editItemResponseBody.serviceLevel).toBe(this.payLoad.serviceLevel)
+    expect(this.editItemResponseBody.onHandThirdParty).toBe(this.payLoad.onHandThirdParty)
+    expect(this.editItemResponseBody.description).toBe(this.payLoad.description)
+    expect(this.editItemResponseBody.leadTime).toBe(this.payLoad.leadTime)
+    expect(this.editItemResponseBody.orderInterval).toBe(this.payLoad.orderInterval)
+    expect(this.editItemResponseBody.otMultipleQty).toBe(this.payLoad.otMultipleQty)
+    expect(this.editItemResponseBody.tags).toStrictEqual(this.payLoad.tags)
+    expect(this.editItemResponseBody.onHandMin).toBe(this.payLoad.onHandMin)
+    expect(this.editItemResponseBody.onHandThirdParty).toBe(this.payLoad.onHandThirdParty)
+    expect(this.editItemResponseBody.inventorySourcePreference).toBe(this.payLoad.inventorySourcePreference)   
+});
+
+Then('{} checks API contract essential types in the response of edit item are correct', async function (actor: string) {
+    itemInfoResponseSchema.parse(this.editItemResponseBody);
+});
+
+Given(`User sets api endpoint to get consolidated of item`, function () {    
+    this.linkApiGetConsolidatedQtyItem = `${Links.API_ITEMS}/${this.itemKey}/get-consolidated-qty`
+});
+
+Given(`User sends a GET request to get consolidated of item`, async function () {
+    const options = {
+        headers: this.headers
+    }
+    this.getConsolidatedQtyResponse = this.response = await itemRequest.getConsolidatedQty(this.request, this.linkApiGetConsolidatedQtyItem, options);
+    const responseBodyText = await this.getConsolidatedQtyResponse.text();
+    if (this.getConsolidatedQtyResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
+        this.responseBody = this.getConsolidatedQtyResponseBody = JSON.parse(await this.getConsolidatedQtyResponse.text());        
+        logger.log('info', `Response GET consolidated qty ${this.linkApiGetConsolidatedQtyItem}  >>>>>` + JSON.stringify(this.getConsolidatedQtyResponseBody, undefined, 4));
+        this.attach(`Response GET consolidated qty ${this.linkApiGetConsolidatedQtyItem}  >>>>>>` + JSON.stringify(this.getConsolidatedQtyResponseBody, undefined, 4))       
+    }
+    else {
+        const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
+        logger.log('info', `Response GET consolidated qty ${this.linkApiGetConsolidatedQtyItem} has status code ${this.response.status()} ${this.response.statusText()} and response body ${responseBodyText}`);
+        this.attach(`Response GET consolidated qty ${this.linkApiGetConsolidatedQtyItem} has status code ${this.response.status()} ${this.response.statusText()} and response body ${actualResponseText}`)
+    }
+});
+
+Given(`User saves the forecast recommended qty`, function () {    
+    this.forecastRecommendQty = (this.getConsolidatedQtyResponseBody[0].consolidatedQty)
+
+    logger.log('info', `Forecast Recommended Qty >>>>>>> ${this.forecastRecommendQty}`);
+    this.attach(`Forecast Recommended Qty >>>>>>> ${this.forecastRecommendQty}`);
+});
+
+Given(`User sets api endpoint to get a item in PO  of vendor key in My Suggested`, function () {        
+        this.linkGetItemsInPO = encodeURI(`${Links.API_SUMMARY_VENDOR_ITEMS_IN_PO}?offset=0&limit=1&where={"filters":[{"filters":[{"field":"itemName","operator":"contains","value":"${this.editItemResponseBody.name}"}],"logic":"and"}],"logic":"and"}&vendorKey=${this.editItemResponseBody.vendorKey}`);        
+});
+
+Given(`User sets api endpoint to get a item in Custom`, function () {                
+        this.linkGetItemsInCustom = encodeURI(`${Links.API_SUMMARY_ITEMS_IN_PURCHASING_CUSTOM}?offset=0&limit=100&where={"filters":[{"filters":[{"field":"itemName","operator":"contains","value":"${this.editItemResponseBody.name}"}],"logic":"and"}],"logic":"and"}`);            
+});
+
+Given(`User sends a POST request to get a item in PO by vendor key in My Suggested`, async function () {    
+    if (Number(this.forecastRecommendQty) > 0){
+        const payload = { "removedItemKeys": [] };
+        this.getItemsinPOResponse = this.response = await vendorRequest.getItemsInPO(this.request, this.linkGetItemsInPO, payload, this.headers);
+        const responseBodyText = await this.getItemsinPOResponse.text();
+        if (this.getItemsinPOResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
+            this.responseBody = this.getItemsInPOResponseBody = JSON.parse(await this.getItemsinPOResponse.body());
+            this.getItemsResponseBody = this.getItemsInPOResponseBody.model;
+            this.randomAItemObject = this.getItemsInPOResponseBody.model[Math.floor(Math.random() * this.getItemsInPOResponseBody.model.length)];
+
+            logger.log('info', `Response POST get item in po ${this.linkGetItemsInPO} >>>>>>` + JSON.stringify(this.randomAItemObject, undefined, 4));
+            this.attach(`Response POST get item in po ${this.linkGetItemsInPO} >>>>>>` + JSON.stringify(this.randomAItemObject, undefined, 4))
+        }
+        else {
+            const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
+            logger.log('info', `Response POST ${this.linkGetItemsInPO} has status code ${this.response.status()} ${this.response.statusText()} and response body >>>>>> ${responseBodyText}`);
+            this.attach(`Response POST ${this.linkGetItemsInPO} has status code ${this.response.status()} ${this.response.statusText()} and response body >>>>>> ${actualResponseText}`)
+        }
+    } else {
+        logger.log('info', `Forecast Recommended Qty = ${this.forecastRecommendQty} < 0`);
+        this.attach(`Forecast Recommended Qty = ${this.forecastRecommendQty} < 0`)
+    }
+});
+
+Given(`User sends a GET request to get a item in Custom`, async function () {        
+        const options = {
+            headers: this.headers
+        }
+        this.getItemsInPurchasingCustomResponse = this.response = await itemRequest.getItemsInPurchasingCustom(this.request, this.linkGetItemsInCustom, options);
+        const responseBodyText = await this.getItemsInPurchasingCustomResponse.text();
+        if (this.getItemsInPurchasingCustomResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
+            this.responseBody = this.getItemsInPurchasingCustomResponseBody = this.getItemsResponseBody = JSON.parse(await this.getItemsInPurchasingCustomResponse.body());
+            this.randomAItemObject = this.getItemsInPurchasingCustomResponseBody[Math.floor(Math.random() * this.getItemsInPurchasingCustomResponseBody.length)];
+            logger.log('info', `Random object in response GET ${this.linkGetItemsInCustom} >>>>>>` + JSON.stringify(this.randomAItemObject, undefined, 4));
+            this.attach(`Random object in response GET ${this.linkGetItemsInCustom} >>>>>>` + JSON.stringify(this.randomAItemObject, undefined, 4))
+        }
+        else {
+            const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
+            logger.log('info', `Random object in Response GET ${this.linkGetItemsInCustom} has status code ${this.response.status()} ${this.response.statusText()} and response body >>>>>> ${responseBodyText}`);
+            this.attach(`Random object in Response GET ${this.linkGetItemsInCustom} has status code ${this.response.status()} ${this.response.statusText()} and response body >>>>>> ${actualResponseText}`)
+        }    
+});
+
+Given(`User verify that values of item in "Purchasing > My Suggested" must be updated after update values of item in "Manage Company > Items" and run forecast`, function () {    
+    // expect(this.getItemsInPOResponseBody.model[0].vendorKey).toBe(this.editItemResponseBody.vendorKey)
+    // expect(this.getItemsInPOResponseBody.model[0].vendorName).toBe(this.editItemResponseBody.vendorName)
+    // expect(this.getItemsInPOResponseBody.model[0].vendorPrice).toBe(this.editItemResponseBody.vendorPrice)
+    // expect(this.getItemsInPOResponseBody.model[0].moq).toBe(this.editItemResponseBody.moq)
+    // expect(this.getItemsInPOResponseBody.model[0].onHand).toBe(this.editItemResponseBody.onHand)
+    // expect(this.getItemsInPOResponseBody.model[0].onHandFbm).toBe(this.editItemResponseBody.onHandFbm)
+    // expect(this.getItemsInPOResponseBody.model[0].serviceLevel).toBe(this.editItemResponseBody.serviceLevel)
+    // expect(this.getItemsInPOResponseBody.model[0].onHandThirdParty).toBe(this.editItemResponseBody.onHandThirdParty)
+    // expect(this.getItemsInPOResponseBody.model[0].description).toBe(this.editItemResponseBody.description)
+    // expect(this.getItemsInPOResponseBody.model[0].leadTime).toBe(this.editItemResponseBody.leadTime)
+    // expect(this.getItemsInPOResponseBody.model[0].orderInterval).toBe(this.editItemResponseBody.orderInterval)
+    // expect(this.getItemsInPOResponseBody.model[0].otMultipleQty).toBe(this.editItemResponseBody.otMultipleQty)
+    // expect(this.getItemsInPOResponseBody.model[0].tags).toBe(this.editItemResponseBody.tags)
+    // expect(this.getItemsInPOResponseBody.model[0].onHandMin).toBe(this.editItemResponseBody.onHandMin)
+    // expect(this.getItemsInPOResponseBody.model[0].onHandThirdParty).toBe(this.editItemResponseBody.onHandThirdParty)
+    // expect(this.getItemsInPOResponseBody.model[0].inventorySourcePreference).toBe(this.editItemResponseBody.inventorySourcePreference)    
+    if (Number(this.forecastRecommendQty) > 0){
+        this.softAssert(this.getItemsInPOResponseBody.model[0].vendorKey == this.editItemResponseBody.vendorKey, `Vendor key - Expected: ${this.editItemResponseBody.vendorKey}, Actual: ${this.getItemsInPOResponseBody.model[0].vendorKey}`) 
+        this.softAssert(this.getItemsInPOResponseBody.model[0].vendorName == this.editItemResponseBody.vendorName, `vendorName - Expected: ${this.editItemResponseBody.vendorName}, Actual: ${this.getItemsInPOResponseBody.model[0].vendorName}`)
+        this.softAssert(this.getItemsInPOResponseBody.model[0].vendorPrice == this.editItemResponseBody.vendorPrice, `vendorPrice - Expected: ${this.editItemResponseBody.vendorPrice}, Actual: ${this.getItemsInPOResponseBody.model[0].vendorPrice}`)
+        this.softAssert(this.getItemsInPOResponseBody.model[0].moq == this.editItemResponseBody.moq, `moq - Expected: ${this.editItemResponseBody.moq}, Actual: ${this.getItemsInPOResponseBody.model[0].moq}`)
+        this.softAssert(this.getItemsInPOResponseBody.model[0].onHand == this.editItemResponseBody.onHand, `onHand - Expected: ${this.editItemResponseBody.onHand}, Actual: ${this.getItemsInPOResponseBody.model[0].onHand}`)
+        this.softAssert(this.getItemsInPOResponseBody.model[0].onHandFbm == this.editItemResponseBody.onHandFbm, `onHandFbm - Expected: ${this.editItemResponseBody.onHandFbm}, Actual: ${this.getItemsInPOResponseBody.model[0].onHandFbm}`)
+        this.softAssert(this.getItemsInPOResponseBody.model[0].serviceLevel == this.editItemResponseBody.serviceLevel, `serviceLevel - Expected: ${this.editItemResponseBody.serviceLevel}, Actual: ${this.getItemsInPOResponseBody.model[0].serviceLevel}`)
+        this.softAssert(this.getItemsInPOResponseBody.model[0].onHandThirdParty == this.editItemResponseBody.onHandThirdParty, `onHandThirdParty - Expected: ${this.editItemResponseBody.onHandThirdParty}, Actual: ${this.getItemsInPOResponseBody.model[0].onHandThirdParty}`)
+        this.softAssert(this.getItemsInPOResponseBody.model[0].description == this.editItemResponseBody.description, `description - Expected: ${this.editItemResponseBody.description}, Actual: ${this.getItemsInPOResponseBody.model[0].description}`)
+        this.softAssert(this.getItemsInPOResponseBody.model[0].leadTime == this.editItemResponseBody.leadTime, `leadTime - Expected: ${this.editItemResponseBody.leadTime}, Actual: ${this.getItemsInPOResponseBody.model[0].leadTime}`)
+        this.softAssert(this.getItemsInPOResponseBody.model[0].orderInterval == this.editItemResponseBody.orderInterval, `orderInterval - Expected: ${this.editItemResponseBody.orderInterval}, Actual: ${this.getItemsInPOResponseBody.model[0].orderInterval}`)
+        this.softAssert(this.getItemsInPOResponseBody.model[0].otMultipleQty == this.editItemResponseBody.otMultipleQty, `otMultipleQty - Expected: ${this.editItemResponseBody.otMultipleQty}, Actual: ${this.getItemsInPOResponseBody.model[0].otMultipleQty}`)
+        this.softAssert(this.getItemsInPOResponseBody.model[0].tags == this.editItemResponseBody.tags, `tags - Expected: ${this.editItemResponseBody.tags}, Actual: ${this.getItemsInPOResponseBody.model[0].tags}`)
+        this.softAssert(this.getItemsInPOResponseBody.model[0].onHandMin == this.editItemResponseBody.onHandMin), `onHandMin - Expected: ${this.editItemResponseBody.onHandMin}, Actual: ${this.getItemsInPOResponseBody.model[0].onHandMin}`
+        this.softAssert(this.getItemsInPOResponseBody.model[0].onHandThirdParty == this.editItemResponseBody.onHandThirdParty, `onHandThirdParty - Expected: ${this.editItemResponseBody.onHandThirdParty}, Actual: ${this.getItemsInPOResponseBody.model[0].onHandThirdParty}`)
+        this.softAssert(this.getItemsInPOResponseBody.model[0].inventorySourcePreference == this.editItemResponseBody.inventorySourcePreference, `inventorySourcePreference - Expected: ${this.editItemResponseBody.inventorySourcePreference}, Actual: ${this.getItemsInPOResponseBody.model[0].inventorySourcePreference}`)
+        expect(this.countErrors).toBe(0)
+    } else {
+        logger.log('info', `Forecast Recommended Qty = ${this.forecastRecommendQty} < 0`);
+        this.attach(`Forecast Recommended Qty = ${this.forecastRecommendQty} < 0`)
+    }
+});
+
+Given(`User verify that values of item in "Purchasing > Custom" must be updated after update values of item in "Manage Company > Items" and run forecast`, function () {    
+    // expect(this.getItemsInPurchasingCustomResponseBody[0].vendorKey).toBe(this.editItemResponseBody.vendorKey)
+    // expect(this.getItemsInPurchasingCustomResponseBody[0].vendorName).toBe(this.editItemResponseBody.vendorName)
+    // expect(this.getItemsInPurchasingCustomResponseBody[0].vendorPrice).toBe(this.editItemResponseBody.vendorPrice)
+    // expect(this.getItemsInPurchasingCustomResponseBody[0].moq).toBe(this.editItemResponseBody.moq)
+    // expect(this.getItemsInPurchasingCustomResponseBody[0].onHand).toBe(this.editItemResponseBody.onHand)
+    // expect(this.getItemsInPurchasingCustomResponseBody[0].onHandFbm).toBe(this.editItemResponseBody.onHandFbm)
+    // expect(this.getItemsInPurchasingCustomResponseBody[0].serviceLevel).toBe(this.editItemResponseBody.serviceLevel)
+    // expect(this.getItemsInPurchasingCustomResponseBody[0].onHandThirdParty).toBe(this.editItemResponseBody.onHandThirdParty)
+    // expect(this.getItemsInPurchasingCustomResponseBody[0].description).toBe(this.editItemResponseBody.description)
+    // expect(this.getItemsInPurchasingCustomResponseBody[0].leadTime).toBe(this.editItemResponseBody.leadTime)
+    // expect(this.getItemsInPurchasingCustomResponseBody[0].orderInterval).toBe(this.editItemResponseBody.orderInterval)
+    // expect(this.getItemsInPurchasingCustomResponseBody[0].otMultipleQty).toBe(this.editItemResponseBody.otMultipleQty)
+    // expect(this.getItemsInPurchasingCustomResponseBody[0].tags).toBe(this.editItemResponseBody.tags)
+    // expect(this.getItemsInPurchasingCustomResponseBody[0].onHandMin).toBe(this.editItemResponseBody.onHandMin)
+    // expect(this.getItemsInPurchasingCustomResponseBody[0].onHandThirdParty).toBe(this.editItemResponseBody.onHandThirdParty)
+    // expect(this.getItemsInPurchasingCustomResponseBody[0].inventorySourcePreference).toBe(this.editItemResponseBody.inventorySourcePreference) 
+    this.softAssert(this.getItemsInPurchasingCustomResponseBody[0].vendorKey == this.editItemResponseBody.vendorKey, `Vendor key - Expected: ${this.editItemResponseBody.vendorKey}, Actual: ${this.getItemsInPurchasingCustomResponseBody[0].vendorKey}`) 
+        this.softAssert(this.getItemsInPurchasingCustomResponseBody[0].vendorName == this.editItemResponseBody.vendorName, `vendorName - Expected: ${this.editItemResponseBody.vendorName}, Actual: ${this.getItemsInPurchasingCustomResponseBody[0].vendorName}`)
+        this.softAssert(this.getItemsInPurchasingCustomResponseBody[0].vendorPrice == this.editItemResponseBody.vendorPrice, `vendorPrice - Expected: ${this.editItemResponseBody.vendorPrice}, Actual: ${this.getItemsInPurchasingCustomResponseBody[0].vendorPrice}`)
+        this.softAssert(this.getItemsInPurchasingCustomResponseBody[0].moq == this.editItemResponseBody.moq, `moq - Expected: ${this.editItemResponseBody.moq}, Actual: ${this.getItemsInPurchasingCustomResponseBody[0].moq}`)
+        this.softAssert(this.getItemsInPurchasingCustomResponseBody[0].onHand == this.editItemResponseBody.onHand, `onHand - Expected: ${this.editItemResponseBody.onHand}, Actual: ${this.getItemsInPurchasingCustomResponseBody[0].onHand}`)
+        this.softAssert(this.getItemsInPurchasingCustomResponseBody[0].onHandFbm == this.editItemResponseBody.onHandFbm, `onHandFbm - Expected: ${this.editItemResponseBody.onHandFbm}, Actual: ${this.getItemsInPurchasingCustomResponseBody[0].onHandFbm}`)       
+        this.softAssert(this.getItemsInPurchasingCustomResponseBody[0].onHandThirdParty == this.editItemResponseBody.onHandThirdParty, `onHandThirdParty - Expected: ${this.editItemResponseBody.onHandThirdParty}, Actual: ${this.getItemsInPurchasingCustomResponseBody[0].onHandThirdParty}`)
+        this.softAssert(this.getItemsInPurchasingCustomResponseBody[0].description == this.editItemResponseBody.description, `description - Expected: ${this.editItemResponseBody.description}, Actual: ${this.getItemsInPurchasingCustomResponseBody[0].description}`)
+        this.softAssert(this.getItemsInPurchasingCustomResponseBody[0].leadTime == this.editItemResponseBody.leadTime, `leadTime - Expected: ${this.editItemResponseBody.leadTime}, Actual: ${this.getItemsInPurchasingCustomResponseBody[0].leadTime}`)
+        this.softAssert(this.getItemsInPurchasingCustomResponseBody[0].orderInterval == this.editItemResponseBody.orderInterval, `orderInterval - Expected: ${this.editItemResponseBody.orderInterval}, Actual: ${this.getItemsInPurchasingCustomResponseBody[0].orderInterval}`)
+        this.softAssert(this.getItemsInPurchasingCustomResponseBody[0].otMultipleQty == this.editItemResponseBody.otMultipleQty, `otMultipleQty - Expected: ${this.editItemResponseBody.otMultipleQty}, Actual: ${this.getItemsInPurchasingCustomResponseBody[0].otMultipleQty}`)
+        // this.softAssert(this.getItemsInPurchasingCustomResponseBody[0].tags == this.editItemResponseBody.tags, `tags - Expected: ${this.editItemResponseBody.tags}, Actual: ${this.getItemsInPurchasingCustomResponseBody[0].tags}`)
+        this.softAssert(this.getItemsInPurchasingCustomResponseBody[0].onHandMin == this.editItemResponseBody.onHandMin), `onHandMin - Expected: ${this.editItemResponseBody.onHandMin}, Actual: ${this.getItemsInPurchasingCustomResponseBody[0].onHandMin}`
+        this.softAssert(this.getItemsInPurchasingCustomResponseBody[0].onHandThirdParty == this.editItemResponseBody.onHandThirdParty, `onHandThirdParty - Expected: ${this.editItemResponseBody.onHandThirdParty}, Actual: ${this.getItemsInPurchasingCustomResponseBody[0].onHandThirdParty}`)
+        this.softAssert(this.getItemsInPurchasingCustomResponseBody[0].inventorySourcePreference == this.editItemResponseBody.inventorySourcePreference, `inventorySourcePreference - Expected: ${this.editItemResponseBody.inventorySourcePreference}, Actual: ${this.getItemsInPurchasingCustomResponseBody[0].inventorySourcePreference}`)
+        expect(this.countErrors).toBe(0)
+});
+
+Given(`User checks some values in result must be updated after update values of item in "Manage Company > Items" and run forecast`, function () {                
+    this.softAssert(this.getResultsResponseBody.model.settingsSources.serviceLevel.value == this.editItemResponseBody.serviceLevel, `serviceLevel - Expected: ${this.editItemResponseBody.serviceLevel}, Actual: ${this.getResultsResponseBody.model.settingsSources.serviceLevel.value}`)
+    this.softAssert(this.getResultsResponseBody.model.settingsSources.leadTime.value == this.editItemResponseBody.leadTime, `leadTime - Expected: ${this.editItemResponseBody.leadTime}, Actual: ${this.getResultsResponseBody.model.settingsSources.leadTime.value}`)
+    this.softAssert(this.getResultsResponseBody.model.settingsSources.moq.value == this.editItemResponseBody.moq, `moq - Expected: ${this.editItemResponseBody.moq}, Actual: ${this.getResultsResponseBody.model.settingsSources.moq.value}`)
+    this.softAssert(this.getResultsResponseBody.model.settingsSources.orderInterval.value == this.editItemResponseBody.orderInterval, `orderInterval - Expected: ${this.editItemResponseBody.orderInterval}, Actual: ${this.getResultsResponseBody.model.settingsSources.orderInterval.value}`)
+    expect(this.countErrors).toBe(0)
+
 });

@@ -143,7 +143,7 @@ Then('{} checks API contract essential types in user object are correct', async 
     //Check gridStateInventorySelection
     this.softAssert(typeof (this.responseBodyOfAUserObject.gridStateInventorySelection) === "object", 'Type of gridStateInventorySelection value should be object');
     //Check gridStateShipmentSummary
-    this.softAssert(typeof (this.responseBodyOfAUserObject.gridStateShipmentSummary) === "object", 'Type of gridStateShipmentSummary value should be object');
+    this.softAssert(typeof (this.responseBodyOfAUserObject.gridStateShipmentSumary) === "object", 'Type of gridStateShipmentSummary value should be object');
     //Check gridStateShipmentReview
     this.softAssert(typeof (this.responseBodyOfAUserObject.gridStateShipmentReview) === "object", 'Type of gridStateShipmentReview value should be object');
     //Check gridStateShipmentComplete
