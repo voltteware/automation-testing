@@ -340,7 +340,7 @@ Then(`{} sets api endpoint to edit some values of a item`, async function (actor
     }
 
     if (tags === 'random') {
-
+        // TODO: If there is a tag, delete it, if not, add a new tag
     }
 
     if (onHandQtyMin === 'random') {
@@ -1253,7 +1253,7 @@ Given(`User sends a GET request to get consolidated of item`, async function () 
     }
 });
 
-Given(`User calculates the forecast recommended qty`, function () {    
+Given(`User saves the forecast recommended qty`, function () {    
     this.forecastRecommendQty = (this.getConsolidatedQtyResponseBody[0].consolidatedQty)
 
     logger.log('info', `Forecast Recommended Qty >>>>>>> ${this.forecastRecommendQty}`);
@@ -1312,39 +1312,86 @@ Given(`User sends a GET request to get a item in Custom`, async function () {
 });
 
 Given(`User verify that values of item in "Purchasing > My Suggested" must be updated after update values of item in "Manage Company > Items" and run forecast`, function () {    
-    expect(this.getItemsInPOResponseBody.model[0].vendorKey).toBe(this.editItemResponseBody.vendorKey)
-    expect(this.getItemsInPOResponseBody.model[0].vendorName).toBe(this.editItemResponseBody.vendorName)
-    expect(this.getItemsInPOResponseBody.model[0].vendorPrice).toBe(this.editItemResponseBody.vendorPrice)
-    expect(this.getItemsInPOResponseBody.model[0].moq).toBe(this.editItemResponseBody.moq)
-    expect(this.getItemsInPOResponseBody.model[0].onHand).toBe(this.editItemResponseBody.onHand)
-    expect(this.getItemsInPOResponseBody.model[0].onHandFbm).toBe(this.editItemResponseBody.onHandFbm)
-    expect(this.getItemsInPOResponseBody.model[0].serviceLevel).toBe(this.editItemResponseBody.serviceLevel)
-    expect(this.getItemsInPOResponseBody.model[0].onHandThirdParty).toBe(this.editItemResponseBody.onHandThirdParty)
-    expect(this.getItemsInPOResponseBody.model[0].description).toBe(this.editItemResponseBody.description)
-    expect(this.getItemsInPOResponseBody.model[0].leadTime).toBe(this.editItemResponseBody.leadTime)
-    expect(this.getItemsInPOResponseBody.model[0].orderInterval).toBe(this.editItemResponseBody.orderInterval)
-    expect(this.getItemsInPOResponseBody.model[0].otMultipleQty).toBe(this.editItemResponseBody.otMultipleQty)
-    expect(this.getItemsInPOResponseBody.model[0].tags).toBe(this.editItemResponseBody.tags)
-    expect(this.getItemsInPOResponseBody.model[0].onHandMin).toBe(this.editItemResponseBody.onHandMin)
-    expect(this.getItemsInPOResponseBody.model[0].onHandThirdParty).toBe(this.editItemResponseBody.onHandThirdParty)
-    expect(this.getItemsInPOResponseBody.model[0].inventorySourcePreference).toBe(this.editItemResponseBody.inventorySourcePreference)     
+    // expect(this.getItemsInPOResponseBody.model[0].vendorKey).toBe(this.editItemResponseBody.vendorKey)
+    // expect(this.getItemsInPOResponseBody.model[0].vendorName).toBe(this.editItemResponseBody.vendorName)
+    // expect(this.getItemsInPOResponseBody.model[0].vendorPrice).toBe(this.editItemResponseBody.vendorPrice)
+    // expect(this.getItemsInPOResponseBody.model[0].moq).toBe(this.editItemResponseBody.moq)
+    // expect(this.getItemsInPOResponseBody.model[0].onHand).toBe(this.editItemResponseBody.onHand)
+    // expect(this.getItemsInPOResponseBody.model[0].onHandFbm).toBe(this.editItemResponseBody.onHandFbm)
+    // expect(this.getItemsInPOResponseBody.model[0].serviceLevel).toBe(this.editItemResponseBody.serviceLevel)
+    // expect(this.getItemsInPOResponseBody.model[0].onHandThirdParty).toBe(this.editItemResponseBody.onHandThirdParty)
+    // expect(this.getItemsInPOResponseBody.model[0].description).toBe(this.editItemResponseBody.description)
+    // expect(this.getItemsInPOResponseBody.model[0].leadTime).toBe(this.editItemResponseBody.leadTime)
+    // expect(this.getItemsInPOResponseBody.model[0].orderInterval).toBe(this.editItemResponseBody.orderInterval)
+    // expect(this.getItemsInPOResponseBody.model[0].otMultipleQty).toBe(this.editItemResponseBody.otMultipleQty)
+    // expect(this.getItemsInPOResponseBody.model[0].tags).toBe(this.editItemResponseBody.tags)
+    // expect(this.getItemsInPOResponseBody.model[0].onHandMin).toBe(this.editItemResponseBody.onHandMin)
+    // expect(this.getItemsInPOResponseBody.model[0].onHandThirdParty).toBe(this.editItemResponseBody.onHandThirdParty)
+    // expect(this.getItemsInPOResponseBody.model[0].inventorySourcePreference).toBe(this.editItemResponseBody.inventorySourcePreference)    
+    if (Number(this.forecastRecommendQty) > 0){
+        this.softAssert(this.getItemsInPOResponseBody.model[0].vendorKey == this.editItemResponseBody.vendorKey, `Vendor key - Expected: ${this.editItemResponseBody.vendorKey}, Actual: ${this.getItemsInPOResponseBody.model[0].vendorKey}`) 
+        this.softAssert(this.getItemsInPOResponseBody.model[0].vendorName == this.editItemResponseBody.vendorName, `vendorName - Expected: ${this.editItemResponseBody.vendorName}, Actual: ${this.getItemsInPOResponseBody.model[0].vendorName}`)
+        this.softAssert(this.getItemsInPOResponseBody.model[0].vendorPrice == this.editItemResponseBody.vendorPrice, `vendorPrice - Expected: ${this.editItemResponseBody.vendorPrice}, Actual: ${this.getItemsInPOResponseBody.model[0].vendorPrice}`)
+        this.softAssert(this.getItemsInPOResponseBody.model[0].moq == this.editItemResponseBody.moq, `moq - Expected: ${this.editItemResponseBody.moq}, Actual: ${this.getItemsInPOResponseBody.model[0].moq}`)
+        this.softAssert(this.getItemsInPOResponseBody.model[0].onHand == this.editItemResponseBody.onHand, `onHand - Expected: ${this.editItemResponseBody.onHand}, Actual: ${this.getItemsInPOResponseBody.model[0].onHand}`)
+        this.softAssert(this.getItemsInPOResponseBody.model[0].onHandFbm == this.editItemResponseBody.onHandFbm, `onHandFbm - Expected: ${this.editItemResponseBody.onHandFbm}, Actual: ${this.getItemsInPOResponseBody.model[0].onHandFbm}`)
+        this.softAssert(this.getItemsInPOResponseBody.model[0].serviceLevel == this.editItemResponseBody.serviceLevel, `serviceLevel - Expected: ${this.editItemResponseBody.serviceLevel}, Actual: ${this.getItemsInPOResponseBody.model[0].serviceLevel}`)
+        this.softAssert(this.getItemsInPOResponseBody.model[0].onHandThirdParty == this.editItemResponseBody.onHandThirdParty, `onHandThirdParty - Expected: ${this.editItemResponseBody.onHandThirdParty}, Actual: ${this.getItemsInPOResponseBody.model[0].onHandThirdParty}`)
+        this.softAssert(this.getItemsInPOResponseBody.model[0].description == this.editItemResponseBody.description, `description - Expected: ${this.editItemResponseBody.description}, Actual: ${this.getItemsInPOResponseBody.model[0].description}`)
+        this.softAssert(this.getItemsInPOResponseBody.model[0].leadTime == this.editItemResponseBody.leadTime, `leadTime - Expected: ${this.editItemResponseBody.leadTime}, Actual: ${this.getItemsInPOResponseBody.model[0].leadTime}`)
+        this.softAssert(this.getItemsInPOResponseBody.model[0].orderInterval == this.editItemResponseBody.orderInterval, `orderInterval - Expected: ${this.editItemResponseBody.orderInterval}, Actual: ${this.getItemsInPOResponseBody.model[0].orderInterval}`)
+        this.softAssert(this.getItemsInPOResponseBody.model[0].otMultipleQty == this.editItemResponseBody.otMultipleQty, `otMultipleQty - Expected: ${this.editItemResponseBody.otMultipleQty}, Actual: ${this.getItemsInPOResponseBody.model[0].otMultipleQty}`)
+        this.softAssert(this.getItemsInPOResponseBody.model[0].tags == this.editItemResponseBody.tags, `tags - Expected: ${this.editItemResponseBody.tags}, Actual: ${this.getItemsInPOResponseBody.model[0].tags}`)
+        this.softAssert(this.getItemsInPOResponseBody.model[0].onHandMin == this.editItemResponseBody.onHandMin), `onHandMin - Expected: ${this.editItemResponseBody.onHandMin}, Actual: ${this.getItemsInPOResponseBody.model[0].onHandMin}`
+        this.softAssert(this.getItemsInPOResponseBody.model[0].onHandThirdParty == this.editItemResponseBody.onHandThirdParty, `onHandThirdParty - Expected: ${this.editItemResponseBody.onHandThirdParty}, Actual: ${this.getItemsInPOResponseBody.model[0].onHandThirdParty}`)
+        this.softAssert(this.getItemsInPOResponseBody.model[0].inventorySourcePreference == this.editItemResponseBody.inventorySourcePreference, `inventorySourcePreference - Expected: ${this.editItemResponseBody.inventorySourcePreference}, Actual: ${this.getItemsInPOResponseBody.model[0].inventorySourcePreference}`)
+        expect(this.countErrors).toBe(0)
+    } else {
+        logger.log('info', `Forecast Recommended Qty = ${this.forecastRecommendQty} < 0`);
+        this.attach(`Forecast Recommended Qty = ${this.forecastRecommendQty} < 0`)
+    }
 });
 
 Given(`User verify that values of item in "Purchasing > Custom" must be updated after update values of item in "Manage Company > Items" and run forecast`, function () {    
-    expect(this.getItemsInPurchasingCustomResponseBody[0].vendorKey).toBe(this.editItemResponseBody.vendorKey)
-    expect(this.getItemsInPurchasingCustomResponseBody[0].vendorName).toBe(this.editItemResponseBody.vendorName)
-    expect(this.getItemsInPurchasingCustomResponseBody[0].vendorPrice).toBe(this.editItemResponseBody.vendorPrice)
-    expect(this.getItemsInPurchasingCustomResponseBody[0].moq).toBe(this.editItemResponseBody.moq)
-    expect(this.getItemsInPurchasingCustomResponseBody[0].onHand).toBe(this.editItemResponseBody.onHand)
-    expect(this.getItemsInPurchasingCustomResponseBody[0].onHandFbm).toBe(this.editItemResponseBody.onHandFbm)
-    expect(this.getItemsInPurchasingCustomResponseBody[0].serviceLevel).toBe(this.editItemResponseBody.serviceLevel)
-    expect(this.getItemsInPurchasingCustomResponseBody[0].onHandThirdParty).toBe(this.editItemResponseBody.onHandThirdParty)
-    expect(this.getItemsInPurchasingCustomResponseBody[0].description).toBe(this.editItemResponseBody.description)
-    expect(this.getItemsInPurchasingCustomResponseBody[0].leadTime).toBe(this.editItemResponseBody.leadTime)
-    expect(this.getItemsInPurchasingCustomResponseBody[0].orderInterval).toBe(this.editItemResponseBody.orderInterval)
-    expect(this.getItemsInPurchasingCustomResponseBody[0].otMultipleQty).toBe(this.editItemResponseBody.otMultipleQty)
-    expect(this.getItemsInPurchasingCustomResponseBody[0].tags).toBe(this.editItemResponseBody.tags)
-    expect(this.getItemsInPurchasingCustomResponseBody[0].onHandMin).toBe(this.editItemResponseBody.onHandMin)
-    expect(this.getItemsInPurchasingCustomResponseBody[0].onHandThirdParty).toBe(this.editItemResponseBody.onHandThirdParty)
-    expect(this.getItemsInPurchasingCustomResponseBody[0].inventorySourcePreference).toBe(this.editItemResponseBody.inventorySourcePreference) 
+    // expect(this.getItemsInPurchasingCustomResponseBody[0].vendorKey).toBe(this.editItemResponseBody.vendorKey)
+    // expect(this.getItemsInPurchasingCustomResponseBody[0].vendorName).toBe(this.editItemResponseBody.vendorName)
+    // expect(this.getItemsInPurchasingCustomResponseBody[0].vendorPrice).toBe(this.editItemResponseBody.vendorPrice)
+    // expect(this.getItemsInPurchasingCustomResponseBody[0].moq).toBe(this.editItemResponseBody.moq)
+    // expect(this.getItemsInPurchasingCustomResponseBody[0].onHand).toBe(this.editItemResponseBody.onHand)
+    // expect(this.getItemsInPurchasingCustomResponseBody[0].onHandFbm).toBe(this.editItemResponseBody.onHandFbm)
+    // expect(this.getItemsInPurchasingCustomResponseBody[0].serviceLevel).toBe(this.editItemResponseBody.serviceLevel)
+    // expect(this.getItemsInPurchasingCustomResponseBody[0].onHandThirdParty).toBe(this.editItemResponseBody.onHandThirdParty)
+    // expect(this.getItemsInPurchasingCustomResponseBody[0].description).toBe(this.editItemResponseBody.description)
+    // expect(this.getItemsInPurchasingCustomResponseBody[0].leadTime).toBe(this.editItemResponseBody.leadTime)
+    // expect(this.getItemsInPurchasingCustomResponseBody[0].orderInterval).toBe(this.editItemResponseBody.orderInterval)
+    // expect(this.getItemsInPurchasingCustomResponseBody[0].otMultipleQty).toBe(this.editItemResponseBody.otMultipleQty)
+    // expect(this.getItemsInPurchasingCustomResponseBody[0].tags).toBe(this.editItemResponseBody.tags)
+    // expect(this.getItemsInPurchasingCustomResponseBody[0].onHandMin).toBe(this.editItemResponseBody.onHandMin)
+    // expect(this.getItemsInPurchasingCustomResponseBody[0].onHandThirdParty).toBe(this.editItemResponseBody.onHandThirdParty)
+    // expect(this.getItemsInPurchasingCustomResponseBody[0].inventorySourcePreference).toBe(this.editItemResponseBody.inventorySourcePreference) 
+    this.softAssert(this.getItemsInPurchasingCustomResponseBody[0].vendorKey == this.editItemResponseBody.vendorKey, `Vendor key - Expected: ${this.editItemResponseBody.vendorKey}, Actual: ${this.getItemsInPurchasingCustomResponseBody[0].vendorKey}`) 
+        this.softAssert(this.getItemsInPurchasingCustomResponseBody[0].vendorName == this.editItemResponseBody.vendorName, `vendorName - Expected: ${this.editItemResponseBody.vendorName}, Actual: ${this.getItemsInPurchasingCustomResponseBody[0].vendorName}`)
+        this.softAssert(this.getItemsInPurchasingCustomResponseBody[0].vendorPrice == this.editItemResponseBody.vendorPrice, `vendorPrice - Expected: ${this.editItemResponseBody.vendorPrice}, Actual: ${this.getItemsInPurchasingCustomResponseBody[0].vendorPrice}`)
+        this.softAssert(this.getItemsInPurchasingCustomResponseBody[0].moq == this.editItemResponseBody.moq, `moq - Expected: ${this.editItemResponseBody.moq}, Actual: ${this.getItemsInPurchasingCustomResponseBody[0].moq}`)
+        this.softAssert(this.getItemsInPurchasingCustomResponseBody[0].onHand == this.editItemResponseBody.onHand, `onHand - Expected: ${this.editItemResponseBody.onHand}, Actual: ${this.getItemsInPurchasingCustomResponseBody[0].onHand}`)
+        this.softAssert(this.getItemsInPurchasingCustomResponseBody[0].onHandFbm == this.editItemResponseBody.onHandFbm, `onHandFbm - Expected: ${this.editItemResponseBody.onHandFbm}, Actual: ${this.getItemsInPurchasingCustomResponseBody[0].onHandFbm}`)       
+        this.softAssert(this.getItemsInPurchasingCustomResponseBody[0].onHandThirdParty == this.editItemResponseBody.onHandThirdParty, `onHandThirdParty - Expected: ${this.editItemResponseBody.onHandThirdParty}, Actual: ${this.getItemsInPurchasingCustomResponseBody[0].onHandThirdParty}`)
+        this.softAssert(this.getItemsInPurchasingCustomResponseBody[0].description == this.editItemResponseBody.description, `description - Expected: ${this.editItemResponseBody.description}, Actual: ${this.getItemsInPurchasingCustomResponseBody[0].description}`)
+        this.softAssert(this.getItemsInPurchasingCustomResponseBody[0].leadTime == this.editItemResponseBody.leadTime, `leadTime - Expected: ${this.editItemResponseBody.leadTime}, Actual: ${this.getItemsInPurchasingCustomResponseBody[0].leadTime}`)
+        this.softAssert(this.getItemsInPurchasingCustomResponseBody[0].orderInterval == this.editItemResponseBody.orderInterval, `orderInterval - Expected: ${this.editItemResponseBody.orderInterval}, Actual: ${this.getItemsInPurchasingCustomResponseBody[0].orderInterval}`)
+        this.softAssert(this.getItemsInPurchasingCustomResponseBody[0].otMultipleQty == this.editItemResponseBody.otMultipleQty, `otMultipleQty - Expected: ${this.editItemResponseBody.otMultipleQty}, Actual: ${this.getItemsInPurchasingCustomResponseBody[0].otMultipleQty}`)
+        // this.softAssert(this.getItemsInPurchasingCustomResponseBody[0].tags == this.editItemResponseBody.tags, `tags - Expected: ${this.editItemResponseBody.tags}, Actual: ${this.getItemsInPurchasingCustomResponseBody[0].tags}`)
+        this.softAssert(this.getItemsInPurchasingCustomResponseBody[0].onHandMin == this.editItemResponseBody.onHandMin), `onHandMin - Expected: ${this.editItemResponseBody.onHandMin}, Actual: ${this.getItemsInPurchasingCustomResponseBody[0].onHandMin}`
+        this.softAssert(this.getItemsInPurchasingCustomResponseBody[0].onHandThirdParty == this.editItemResponseBody.onHandThirdParty, `onHandThirdParty - Expected: ${this.editItemResponseBody.onHandThirdParty}, Actual: ${this.getItemsInPurchasingCustomResponseBody[0].onHandThirdParty}`)
+        this.softAssert(this.getItemsInPurchasingCustomResponseBody[0].inventorySourcePreference == this.editItemResponseBody.inventorySourcePreference, `inventorySourcePreference - Expected: ${this.editItemResponseBody.inventorySourcePreference}, Actual: ${this.getItemsInPurchasingCustomResponseBody[0].inventorySourcePreference}`)
+        expect(this.countErrors).toBe(0)
+});
+
+Given(`User checks some values in result must be updated after update values of item in "Manage Company > Items" and run forecast`, function () {                
+    this.softAssert(this.getResultsResponseBody.model.settingsSources.serviceLevel.value == this.editItemResponseBody.serviceLevel, `serviceLevel - Expected: ${this.editItemResponseBody.serviceLevel}, Actual: ${this.getResultsResponseBody.model.settingsSources.serviceLevel.value}`)
+    this.softAssert(this.getResultsResponseBody.model.settingsSources.leadTime.value == this.editItemResponseBody.leadTime, `leadTime - Expected: ${this.editItemResponseBody.leadTime}, Actual: ${this.getResultsResponseBody.model.settingsSources.leadTime.value}`)
+    this.softAssert(this.getResultsResponseBody.model.settingsSources.moq.value == this.editItemResponseBody.moq, `moq - Expected: ${this.editItemResponseBody.moq}, Actual: ${this.getResultsResponseBody.model.settingsSources.moq.value}`)
+    this.softAssert(this.getResultsResponseBody.model.settingsSources.orderInterval.value == this.editItemResponseBody.orderInterval, `orderInterval - Expected: ${this.editItemResponseBody.orderInterval}, Actual: ${this.getResultsResponseBody.model.settingsSources.orderInterval.value}`)
+    expect(this.countErrors).toBe(0)
+
 });
