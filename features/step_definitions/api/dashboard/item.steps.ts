@@ -305,11 +305,11 @@ Then(`{} sets api endpoint to edit some values of a item`, async function (actor
     }
 
     if (onHandFbaQty === 'random') {
-        this.payLoad.onHand = Number(faker.random.numeric(3));
+        this.payLoad.onHand = Number(faker.random.numeric(1));
     }
 
     if (onHandFbmQty === 'random') {
-        this.payLoad.onHandFbm = Number(faker.random.numeric(3));
+        this.payLoad.onHandFbm = Number(faker.random.numeric(1));
     }
 
     if (serviceLevel === 'random') {
@@ -317,7 +317,7 @@ Then(`{} sets api endpoint to edit some values of a item`, async function (actor
     }
 
     if (warehouseQty === 'random') {
-        this.payLoad.onHandThirdParty = Number(faker.random.numeric(2));
+        this.payLoad.onHandThirdParty = Number(faker.random.numeric(1));
     }
 
     if (description === 'random') {
@@ -352,11 +352,11 @@ Then(`{} sets api endpoint to edit some values of a item`, async function (actor
     }
 
     if (onHandQtyMin === 'random') {
-        this.payLoad.onHandMin = Number(faker.random.numeric(3));
+        this.payLoad.onHandMin = Number(faker.random.numeric(1));
     }
 
     if (wareHouseQtyMin === 'random') {
-        this.payLoad.onHandThirdPartyMin = Number(faker.random.numeric(3));
+        this.payLoad.onHandThirdPartyMin = Number(faker.random.numeric(1));
     }
 
     if (inventorySourcePreference == 'random') {
