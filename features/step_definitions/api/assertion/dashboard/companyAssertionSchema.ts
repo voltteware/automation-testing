@@ -47,7 +47,7 @@ export const companyResponseSchema = z.object({
     website: z.null(),
     addressShippingUuid: z.string().nullable(),
     addressBillingUuid: z.string().nullable(),
-    criticalErrorCode: z.null(),
+    criticalErrorCode: z.string().nullable(),
     companyPreferences: z.object({}),
     accessToken: z.string().optional().nullable(),
     refreshToken: z.string().optional().nullable(),
