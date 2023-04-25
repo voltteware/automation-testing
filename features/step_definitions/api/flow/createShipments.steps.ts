@@ -317,7 +317,7 @@ Then('{} sends a POST request to complete shipment', async function (actor: stri
 });
 
 Then(`{} sets POST api endpoint to sync`, async function (actor: string) {
-    let link = `${Links.API_SYNC}/sync`;
+    link = `${Links.API_SYNC}/sync`;
 });
 
 Then('{} sends a POST request to sync', async function (actor: string) {
