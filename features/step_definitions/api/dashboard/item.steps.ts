@@ -313,7 +313,7 @@ Then(`{} sets api endpoint to edit some values of a item`, async function (actor
     }
 
     if (serviceLevel === 'random') {
-        this.payLoad.serviceLevel = Number(faker.random.numeric(2));
+        this.payLoad.serviceLevel = Number(faker.random.numeric(1));
     }
 
     if (warehouseQty === 'random') {
@@ -336,7 +336,7 @@ Then(`{} sets api endpoint to edit some values of a item`, async function (actor
     }
 
     if (casePackQty == 'random') {
-        this.payLoad.lotMultipleQty = Number(faker.random.numeric(3));
+        this.payLoad.lotMultipleQty = Number(faker.random.numeric(1));
     }
 
     if (tags === 'random') {
@@ -696,14 +696,26 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
                         "ean": ""
                     }
                     
-                    // Create new item Item has already set as Purchase As of other items            
-                    this.attach(`Payload Create new item: ${JSON.stringify(this.payloadCreateItem, undefined, 4)}`)
+                    // Create new item to set purchase as      
+                    this.attach(`Payload Create new item to set purchase as: ${JSON.stringify(this.payloadCreateItem, undefined, 4)}`)
     
                     const createItemResponse = await itemRequest.createItem(this.request, Links.API_ITEMS, this.payloadCreateItem, this.headers);
-                    const responseBodyOfAItemObject = JSON.parse(await createItemResponse.text());
+                    const responseBodyText = await createItemResponse.text();                    
 
-                    this.lotMultipleItemName = responseBodyOfAItemObject.name
-                    this.lotMultipleItemKey = responseBodyOfAItemObject.key
+                    if (createItemResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
+                        const responseBodyOfAItemObject = JSON.parse(responseBodyText);
+                        this.lotMultipleItemName = responseBodyOfAItemObject.name
+                        this.lotMultipleItemKey = responseBodyOfAItemObject.key
+                        logger.log('info', `Response POST Create new item to set purchase as ${link}` + JSON.stringify(responseBodyOfAItemObject, undefined, 4));
+                        this.attach(`Response POST Create new item to set purchase as ${link}` + JSON.stringify(responseBodyOfAItemObject, undefined, 4))
+                    }
+                    else {
+                        this.lotMultipleItemName = null
+                        this.lotMultipleItemKey = null
+                        const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
+                        logger.log('info', `Response POST Create new item to set purchase as ${link} has status code ${createItemResponse.status()} ${createItemResponse.statusText()} and response body ${responseBodyText}`);
+                        this.attach(`Response POST Create new item to set purchase as ${link} has status code ${createItemResponse.status()} ${createItemResponse.statusText()} and response body ${actualResponseText}`)
+                    }                    
                 } else {
                     const excludedItemKey = this.itemKey                    
                     // Filter out the excluded item have already set as purchas as of orther items the list items
