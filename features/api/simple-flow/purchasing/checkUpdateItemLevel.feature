@@ -69,6 +69,7 @@ Feature: API Purchasing: Check all values of item must be updated in purchasing 
     And User checks API contract of get results of item
     And User checks some values in result must be updated after update values of item in "Manage Company > Items" and run forecast   
 
+    # Check some value must be updated in Purchasing > My Suggested  
     And User sets api endpoint to get a item in PO  of vendor key in My Suggested
     And User sends a POST request to get a item in PO by vendor key in My Suggested
     And User verify that values of item in "Purchasing > My Suggested" must be updated after update values of item in "Manage Company > Items" and run forecast
@@ -77,8 +78,8 @@ Feature: API Purchasing: Check all values of item must be updated in purchasing 
     Examples: 
       | TC_ID           | companyType | companyKey | email                      | expectedStatus |
       | TC_CUIL001_1    | ASC         | random     | testautoforecast@gmail.com |            200 |
-      # | TC_CUIL001_2    | CSV         | random     | testautoforecast@gmail.com |            200 |
-      # | TC_CUIL001_3    | QBFS        | random     | testautoforecast@gmail.com |            200 |
+      | TC_CUIL001_2    | CSV         | random     | testautoforecast@gmail.com |            200 |
+      | TC_CUIL001_3    | QBFS        | random     | testautoforecast@gmail.com |            200 |
 
   @TC_CUIL002 @bug1915
   Scenario Outline: <TC_ID> - Verify that values of item in "Purchasing > Custom" must be updated when update values of item in "Manage Company > Items" and run forecast of <companyType> company
@@ -242,7 +243,7 @@ Feature: API Purchasing: Check all values of item must be updated in purchasing 
     And User sends a GET request to get consolidated of item
     And User saves the forecast recommended qty  
 
-    # Check Existing PO Qty of item in Purchasing > My Suggested
+    # Check Open Sales Orders of item in Purchasing > My Suggested
     And User sets api endpoint to get a item in PO  of vendor key in My Suggested
     And User sends a POST request to get a item in PO by vendor key in My Suggested
     And User verify that "Open Sales Orders" of item in "Purchasing > My Suggested" must be updated after update values of item in "Manage Company > Demand" and run forecast
