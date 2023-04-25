@@ -46,7 +46,7 @@ export class Links {
     static API_GET_RESTOCK_SUGGESTION = '/api/restock-suggestion';
     static API_SHIPMENT = '/api/shipment';
     //API Admin
-    static API_ADMIN_DELETE_USER: string = '/api/admin/users/';
+    static API_ADMIN_USER: string = '/api/admin/users/';
     static API_ADMIN_GET_COMPANIES: string = '/api/admin/companies';
     static API_ADMIN_DELETE_COMPANY: string = '/api/admin/companies/';
     static API_ADMIN_GET_USER: string = '/api/admin/users?';
