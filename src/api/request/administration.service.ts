@@ -37,7 +37,7 @@ async function renewTrial(request: APIRequestContext, linkApi: string, payLoad: 
 }
 
 //Add company to Admin
-async function addCompanyToAdmin(request: APIRequestContext, linkApi: string, payLoad: any, header?: any) {
+async function addCompanyToAdminThenRemove(request: APIRequestContext, linkApi: string, payLoad: any, header?: any) {
     const url = `${linkApi}`;
     logger.log('info', `Send POST request ${url} with ${JSON.stringify(payLoad, undefined, 4)}`);
     const response = await request.post(url, {
@@ -47,12 +47,11 @@ async function addCompanyToAdmin(request: APIRequestContext, linkApi: string, pa
     return response;
 }
 
-
 export {
     deleteUser,
     getCompanies,
     getUser,
     deleteCompany,
     renewTrial,
-    addCompanyToAdmin
+    addCompanyToAdminThenRemove,
 }
