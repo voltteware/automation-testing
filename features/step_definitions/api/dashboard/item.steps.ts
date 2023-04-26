@@ -288,7 +288,7 @@ Then(`{} sets api endpoint to edit some values of a item`, async function (actor
 
         // Filter out the excluded supplier have excludedSupplierKey from the list suppliers
         const filteredArray = this.getSupplierResponseBody.filter((supplier: any) => supplier.key !== excludedSupplierKey);
-        const randomSupplier = filteredArray[Math.floor(Math.random() * this.getSupplierResponseBody.length)];
+        const randomSupplier = filteredArray[Math.floor(Math.random() * filteredArray.length)];
         logger.log('info', `Random supplier` + JSON.stringify(randomSupplier, undefined, 4));
         this.attach(`Random supplier` + JSON.stringify(randomSupplier, undefined, 4))
 
@@ -422,9 +422,9 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
             if (value == 'random') {
                 const excludedSupplierKey = this.responseBodyOfAItemObject.vendorKey
 
-                // Filter out the excluded supplier have excludedSupplierKey from the list suppliers
-                const filteredArray = this.getSupplierResponseBody.filter((supplier: any) => supplier.key !== excludedSupplierKey);
-                const randomSupplier = filteredArray[Math.floor(Math.random() * this.getSupplierResponseBody.length)];
+                // Filter out the excluded supplier have excludedSupplierKey from the list suppliers                
+                const filteredArray = this.getSupplierResponseBody.filter((supplier: any) => supplier.key !== excludedSupplierKey);                          
+                const randomSupplier = filteredArray[Math.floor(Math.random() * filteredArray.length)];
                 logger.log('info', `Random supplier` + JSON.stringify(randomSupplier, undefined, 4));
                 this.attach(`Random supplier` + JSON.stringify(randomSupplier, undefined, 4))
 
