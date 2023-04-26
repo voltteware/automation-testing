@@ -78,8 +78,8 @@ Feature: API Purchasing: Check all values of item must be updated in purchasing 
     Examples: 
       | TC_ID           | companyType | companyKey | email                      | expectedStatus |
       | TC_CUIL001_1    | ASC         | random     | testautoforecast@gmail.com |            200 |
-      # | TC_CUIL001_2    | CSV         | random     | testautoforecast@gmail.com |            200 |
-      # | TC_CUIL001_3    | QBFS        | random     | testautoforecast@gmail.com |            200 |
+      | TC_CUIL001_2    | CSV         | random     | testautoforecast@gmail.com |            200 |
+      | TC_CUIL001_3    | QBFS        | random     | testautoforecast@gmail.com |            200 |
 
   @TC_CUIL002 @bug1915
   Scenario Outline: <TC_ID> - Verify that values of item in "Purchasing > Custom" must be updated when update values of item in "Manage Company > Items" and run forecast of <companyType> company
