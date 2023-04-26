@@ -9,6 +9,10 @@ let link: any;
 
 Then(`{} sets GET api method to get restock suggestion by vendor`, async function (actor: string) {
     link = Links.API_GET_RESTOCK_SUGGESTION_BY_VENDOR;
+    const sleep = (milliseconds: number) => {
+        return new Promise(resolve => setTimeout(resolve, milliseconds))
+    }
+    await sleep(5000);
 });
 
 Then('{} checks API contract of get restock suggestion by vendor api', async function (actor: string) {

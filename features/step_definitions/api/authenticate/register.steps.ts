@@ -64,5 +64,5 @@ Then('User sends a DELETE method to delete user just created', async function ()
     headers: this.headers
   }
   const email = registerResponseBody.userId;
-  this.response = await adminRequest.deleteUser(this.request, Links.API_ADMIN_DELETE_USER, email, options);
+  this.response = await adminRequest.deleteUser(this.request, Links.API_ADMIN_USER, email, options);
 })

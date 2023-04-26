@@ -237,8 +237,14 @@ function inventoryAvailableFormulaRestockAMZ(input: Input, attach: ICreateAttach
     }
 
     // Remaining Days at Amazon = Local Inventory Days / Average Daily Sales Rate ; if Average Daily Sales Rate = 0 => Remaining = Infinite
-    if (demand === 0) {
+    if (demand === 0 && currentAmazonInventory != 0) {
         let expectedRemaining = 'Infinite';
+        expect(remaining, `In response body, the expected Remaining Days at Amazon should be: ${expectedRemaining}`).toBe(expectedRemaining);
+        logger.log('info', `Remaining Days at Amazon: Actual: ${remaining} and Expected: ${expectedRemaining}`);
+        attach(`Remaining Days at Amazon: Actual: ${remaining} and Expected: ${expectedRemaining}`);
+    }
+    if (demand === 0 && currentAmazonInventory === 0) {
+        let expectedRemaining = 0;
         expect(remaining, `In response body, the expected Remaining Days at Amazon should be: ${expectedRemaining}`).toBe(expectedRemaining);
         logger.log('info', `Remaining Days at Amazon: Actual: ${remaining} and Expected: ${expectedRemaining}`);
         attach(`Remaining Days at Amazon: Actual: ${remaining} and Expected: ${expectedRemaining}`);

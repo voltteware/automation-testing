@@ -46,11 +46,12 @@ export class Links {
     static API_GET_RESTOCK_SUGGESTION = '/api/restock-suggestion';
     static API_SHIPMENT = '/api/shipment';
     //API Admin
-    static API_ADMIN_DELETE_USER: string = '/api/admin/users/';
+    static API_ADMIN_USER: string = '/api/admin/users/';
     static API_ADMIN_GET_COMPANIES: string = '/api/admin/companies';
     static API_ADMIN_DELETE_COMPANY: string = '/api/admin/companies/';
     static API_ADMIN_GET_USER: string = '/api/admin/users?';
     static API_ADMIN_EXTEND_TRIAL: string = '/api/billing/extend-trial';
+    static API_UNLOCK_COMPANY: string = '/api/company/in-progress'
     //API General
     static API_RUN_FORECAST: string = '/api/forecast';
     static API_SYNC: string = '/api/sync';

@@ -14,12 +14,13 @@ let selectedUser: any;
 let link: any;
 
 Then(`{} sets DELETE api endpoint to delete user keys`, async function (actor: string) {
-    link = Links.API_ADMIN_DELETE_USER;
+    link = Links.API_ADMIN_USER;
 });
 
 Then('Check {} exist in the system, if it does not exist will create user with same email', async function (email: string) {
     allUser = arrayHelper.flattenArray(this.get20LatestUsersResponseBody || [], 'data');
     const foundUser = allUser.find((element: { userId: any; }) => element.userId === email);
+    console.log("Found User: ", foundUser);
     if (typeof foundUser == 'undefined') {
         this.payload = {
             firstName: 'Test',
@@ -115,6 +116,8 @@ Then('{} filters user to get user which has the email as {}', async function (ac
     selectedUser = await this.get20LatestUsersResponseBody.find((us: any) => us.userId == expectedEmail)
     logger.log('info', `Response Body before filter: ${JSON.stringify(selectedUser.userId, undefined, 4)}`);
     this.attach(`Response Body before filter: ${JSON.stringify(selectedUser.userId, undefined, 4)}`);
+    console.log("selectedUser.userId: ", selectedUser.userId);
+    return this.userId = selectedUser.userId;
 })
 
 Then('{} sends a DELETE method to delete user {}', async function (actor, email: string) {
@@ -130,9 +133,9 @@ Then('{} sends a DELETE method to delete user {}', async function (actor, email:
         emailWantToDelete = email.includes('random') ? this.randomEmail : email;
     }
 
-    this.response = await adminRequest.deleteUser(this.request, Links.API_ADMIN_DELETE_USER, emailWantToDelete, options);
+    this.response = await adminRequest.deleteUser(this.request, Links.API_ADMIN_USER, emailWantToDelete, options);
     const responseBodyText = await this.response.text();
-    logger.log('info', `Response Delete ${Links.API_ADMIN_DELETE_USER} has status code ${this.response.status()} ${this.response.statusText()} and response body ${responseBodyText}`);
-    this.attach(`Response Delete ${Links.API_ADMIN_DELETE_USER} has status code ${this.response.status()} ${this.response.statusText()} and response body ${responseBodyText}`)
+    logger.log('info', `Response Delete ${Links.API_ADMIN_USER} has status code ${this.response.status()} ${this.response.statusText()} and response body ${responseBodyText}`);
+    this.attach(`Response Delete ${Links.API_ADMIN_USER} has status code ${this.response.status()} ${this.response.statusText()} and response body ${responseBodyText}`)
 })
 

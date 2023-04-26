@@ -196,8 +196,13 @@ Then('Error message {} in the response of API is displayed', async function (err
     // }
 });
 
-Given('User sets POST api to add user to company', function () {
+Given('User sets POST api to add users that {} in the system to company', function (newUser: string) {
     this.linkApiAddUserToCompany = `${Links.API_USER}`
+    
+    if(newUser == "exist") {
+        this.userId;
+    }
+    else this.userId = "nonexistentuserauto@gmail.com";
 
     this.addToCompanyPayload = {
         "userId": `${this.userId}`,
