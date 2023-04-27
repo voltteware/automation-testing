@@ -212,7 +212,10 @@ Then('{} checks that the lastForecastDate field was updated and jobInitiator is 
         intervals: [1_000, 2_000, 5_000],
         timeout: 8 * 60 * 1000,
     }).toBeNull();
-
+    const sleep = (milliseconds: number) => {
+        return new Promise(resolve => setTimeout(resolve, milliseconds))
+    }
+    await sleep(5000);
     // await expect.poll(async () => {
     //     const getCompanyInfoResponse = await companyRequest.getCompanyInfo(this.request, linkGetCompanyInfo, options);
     //     const getCompanyInfoResponseBody = JSON.parse(await getCompanyInfoResponse.text());
@@ -372,4 +375,3 @@ Then('User verify that the user successfully added', function () {
 
     expect(hasUserWithUserId, "User just created must be display in associated users").toBeTruthy()
 });
-

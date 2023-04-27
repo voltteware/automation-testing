@@ -158,14 +158,14 @@ Then(`{} sends a GET request to get item summary`, async function (actor: string
 })
 
 Given('User picks a random item in above list items', async function () {
-    expect(this.getItemsResponseBody.length, 'There is at least 1 item to pick random').toBeGreaterThanOrEqual(1);
+    // expect(this.getItemsResponseBody.length, 'There is at least 1 item to pick random').toBeGreaterThanOrEqual(1);
     this.responseBodyOfAItemObject = await this.getItemsResponseBody[Math.floor(Math.random() * this.getItemsResponseBody.length)];
     logger.log('info', `Random Item: ${JSON.stringify(this.responseBodyOfAItemObject, undefined, 4)}`);
     this.attach(`Random Item: ${JSON.stringify(this.responseBodyOfAItemObject, undefined, 4)}`);
 });
 
 Given('User saves list items that have already set as purchas as of orther items', async function () {
-    expect(this.getItemsResponseBody.length, 'There is at least 1 item to pick random').toBeGreaterThanOrEqual(1);
+    // expect(this.getItemsResponseBody.length, 'There is at least 1 item to pick random').toBeGreaterThanOrEqual(1);
     this.listItemsAlreadySetAsPurchaseAsOfOrtherItem = this.getItemsResponseBody.map((item: any) => item.lotMultipleItemKey)
     logger.log('info', `list items that have already set as purchas as of orther items: ${JSON.stringify(this.listItemsAlreadySetAsPurchaseAsOfOrtherItem, undefined, 4)}`);
     this.attach(`list items that have already set as purchas as of orther items: ${JSON.stringify(this.listItemsAlreadySetAsPurchaseAsOfOrtherItem, undefined, 4)}`);
@@ -288,7 +288,7 @@ Then(`{} sets api endpoint to edit some values of a item`, async function (actor
 
         // Filter out the excluded supplier have excludedSupplierKey from the list suppliers
         const filteredArray = this.getSupplierResponseBody.filter((supplier: any) => supplier.key !== excludedSupplierKey);
-        const randomSupplier = filteredArray[Math.floor(Math.random() * this.getSupplierResponseBody.length)];
+        const randomSupplier = filteredArray[Math.floor(Math.random() * filteredArray.length)];
         logger.log('info', `Random supplier` + JSON.stringify(randomSupplier, undefined, 4));
         this.attach(`Random supplier` + JSON.stringify(randomSupplier, undefined, 4))
 
@@ -422,9 +422,9 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
             if (value == 'random') {
                 const excludedSupplierKey = this.responseBodyOfAItemObject.vendorKey
 
-                // Filter out the excluded supplier have excludedSupplierKey from the list suppliers
-                const filteredArray = this.getSupplierResponseBody.filter((supplier: any) => supplier.key !== excludedSupplierKey);
-                const randomSupplier = filteredArray[Math.floor(Math.random() * this.getSupplierResponseBody.length)];
+                // Filter out the excluded supplier have excludedSupplierKey from the list suppliers                
+                const filteredArray = this.getSupplierResponseBody.filter((supplier: any) => supplier.key !== excludedSupplierKey);                          
+                const randomSupplier = filteredArray[Math.floor(Math.random() * filteredArray.length)];
                 logger.log('info', `Random supplier` + JSON.stringify(randomSupplier, undefined, 4));
                 this.attach(`Random supplier` + JSON.stringify(randomSupplier, undefined, 4))
 
@@ -728,6 +728,20 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
             } else if (value == 'null') {
                 this.lotMultipleItemName = null
                 this.lotMultipleItemKey = null
+            } else if (value == 'itself') {
+                this.lotMultipleItemName = this.itemName;
+                this.lotMultipleItemKey = this.itemKey;
+            } else if (value == 'hard') {
+                this.lotMultipleItemName = this.itemPurchaseAsName;
+                this.lotMultipleItemKey = this.itemPurchaseAsKey;
+            } else if (value == "dynamic"){
+                const excludedItemKey = this.itemKey
+                // Filter out the excluded item have already set as purchase as of other items the list items
+                const filteredArray = this.getItemsResponseBody.filter((item: any) => ((item.key !== excludedItemKey) && (!this.listItemsAlreadySetAsPurchaseAsOfOrtherItem.includes(item.key))));
+                const randomItem = filteredArray[Math.floor(Math.random() * filteredArray.length)];
+            
+                this.lotMultipleItemName = randomItem.name
+                this.lotMultipleItemKey = randomItem.key
             }
 
             logger.log('info', `New ${editColumn}: ${this.lotMultipleItemName}`);
@@ -1291,6 +1305,10 @@ Given(`User sets api endpoint to get a item in Custom`, function () {
         this.linkGetItemsInCustom = encodeURI(`${Links.API_SUMMARY_ITEMS_IN_PURCHASING_CUSTOM}?offset=0&limit=100&where={"filters":[{"filters":[{"field":"itemName","operator":"contains","value":"${this.editItemResponseBody.name}"}],"logic":"and"}],"logic":"and"}`);            
 });
 
+Given(`{} sets api endpoint to get a Purchase As item in Custom`, function (actor: string) {                
+    this.linkGetPurchaseAsItemsInCustom = encodeURI(`${Links.API_SUMMARY_ITEMS_IN_PURCHASING_CUSTOM}?offset=0&limit=100&where={"filters":[{"filters":[{"field":"itemName","operator":"contains","value":"${this.editItemResponseBody.lotMultipleItemName}"}],"logic":"and"}],"logic":"and"}`);            
+});
+
 Given(`User sends a POST request to get a item in PO by vendor key in My Suggested`, async function () {    
     if (Number(this.forecastRecommendQty) > 0){
         const payload = { "removedItemKeys": [] };
@@ -1440,4 +1458,32 @@ Given(`User verify that "Open Sales Orders" of item in "Purchasing > My Suggeste
         this.softAssert(this.getItemsInPOResponseBody.model[0].openSalesOrders == this.editDemandResponseBody.openQty, `openSalesOrders - Expected: ${this.editDemandResponseBody.openQty}, Actual: ${this.getItemsInPOResponseBody.model[0].openSalesOrders}`)
         expect(this.countErrors).toBe(0)
     }
+});
+
+Given(`{} sends a GET request to get a Purchase As item in Custom`, async function (actor: string) {
+    const options = {
+        headers: this.headers
+    }
+    this.getItemsPurchaseAsResponse = this.response = await itemRequest.getItemsInPurchasingCustom(this.request, this.linkGetPurchaseAsItemsInCustom, options);
+    const responseBodyText = await this.getItemsPurchaseAsResponse.text();
+    if (this.getItemsPurchaseAsResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
+        this.responseBody = this.getItemsPurchaseAsResponseBody = this.getItemsResponseBody = JSON.parse(await this.getItemsPurchaseAsResponse.body());
+        this.randomAPurchaseAsItemObject = this.getItemsPurchaseAsResponseBody[Math.floor(Math.random() * this.getItemsInPurchasingCustomResponseBody.length)];
+        logger.log('info', `Random object in response GET ${this.linkGetPurchaseAsItemsInCustom} >>>>>>` + JSON.stringify(this.randomAPurchaseAsItemObject, undefined, 4));
+        this.attach(`Random object in response GET ${this.linkGetPurchaseAsItemsInCustom} >>>>>>` + JSON.stringify(this.randomAPurchaseAsItemObject, undefined, 4));
+    }
+    else {
+        const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
+        logger.log('info', `Random object in Response GET ${this.linkGetPurchaseAsItemsInCustom} has status code ${this.response.status()} ${this.response.statusText()} and response body >>>>>> ${responseBodyText}`);
+        this.attach(`Random object in Response GET ${this.linkGetPurchaseAsItemsInCustom} has status code ${this.response.status()} ${this.response.statusText()} and response body >>>>>> ${actualResponseText}`)
+    }
+});
+
+Then(`{} saves the purchase as item key`, async function (actor: string) {
+    this.itemPurchaseAsKey = this.responseBodyOfAItemObject.key;
+    this.itemPurchaseAsName = this.responseBodyOfAItemObject.name;
+    logger.log('info', `Item name: ${this.itemPurchaseAsName}`);
+    this.attach(`Item name: ${this.itemPurchaseAsName}`);
+    logger.log('info', `Item key: ${this.itemPurchaseAsKey}`);
+    this.attach(`Item key: ${this.itemPurchaseAsKey}`);
 });

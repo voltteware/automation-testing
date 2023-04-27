@@ -251,7 +251,7 @@ When('User sets PUT api endpoint to edit {} of the above supply for company type
 
                 // Filter out the excluded supplier have excludedSupplierKey from the list suppliers
                 const filteredArray = this.getSupplierResponseBody.filter((supplier: any) => supplier.key !== excludedSupplierKey);
-                const randomSupplier = filteredArray[Math.floor(Math.random() * this.getSupplierResponseBody.length)];
+                const randomSupplier = filteredArray[Math.floor(Math.random() * filteredArray.length)];
 
                 this.vendorKey = randomSupplier.key;
                 this.vendorName = randomSupplier.name;
