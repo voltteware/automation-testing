@@ -114,8 +114,8 @@ Feature: API_Dashboard PUT /api/item
     When User sends a PUT request to edit the item
     Then The expected status code should be <expectedStatus>
     And The new <editColumn> of item must be updated successfully
-    And User sets PUT api endpoint to edit isHidden of the above item for company type <companyType> with new value: true
-    When User sends a PUT request to edit the item
+    # And User sets PUT api endpoint to edit isHidden of the above item for company type <companyType> with new value: true
+    # When User sends a PUT request to edit the item
 
     Examples: 
       | TC_ID       | companyType | email                      | limitRow | editColumn | value  | expectedStatus |
@@ -135,8 +135,8 @@ Feature: API_Dashboard PUT /api/item
     When User sends a PUT request to edit the item
     Then The expected status code should be <expectedStatus>
     And The new <editColumn> of item must be updated successfully
-    And User sets PUT api endpoint to edit isHidden of the above item for company type <companyType> with new value: true
-    When User sends a PUT request to edit the item
+    # And User sets PUT api endpoint to edit isHidden of the above item for company type <companyType> with new value: true
+    # When User sends a PUT request to edit the item
 
     Examples: 
       | TC_ID       | companyType | email                      | limitRow | editColumn | value  | expectedStatus |
