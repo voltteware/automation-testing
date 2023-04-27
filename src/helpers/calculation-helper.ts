@@ -1,6 +1,6 @@
 import { expect } from '@playwright/test';
 import logger from '../Logger/logger';
-import _ from "lodash";
+import _, { round } from "lodash";
 import { ICreateAttachment } from '@cucumber/cucumber/lib/runtime/attachment_manager';
 
 // Parse number
@@ -14,6 +14,15 @@ function parseNumber(number: number) {
 // Rounding 2 decimals
 function roundFloatNumber(number: number) {
     return Math.round((parseNumber(number) + Number.EPSILON) * 100) / 100;
+};
+
+function purchasing_consolidations_get_quantity(n: number, m: number) {
+	if (n <= 0) return n;
+	if (m == null) m = 1;
+
+	if (n % m == 0) return n;
+
+	return n + (m - (n % m));
 };
 
 // Refer the mind map here: https://whimsical.com/restockamz-beta-restock-from-supplier-2y8q1eQFoikbzF7VcaqvYo
@@ -68,7 +77,62 @@ function estimatedMarginFormulaRestockAMZ(price: number, totalCost: number, tota
 };
 
 interface Input {
-    s2d?: number, s7d?: number, s14d?: number, s30d?: number, s60d?: number, s90d?: number, s180d?: number, sv2d?: number, sv7d?: number, sv14d?: number, sv30d?: number, sv60d?: number, sv90d?: number, sv180d?: number, svDemand?: number, percent2Day?: number, percent7Day?: number, percent14Day?: number, percent30Day?: number, percent60Day?: number, percent90Day?: number, percent180Day?: number, percentForecasted?: number, outOfStock2d?: number, outOfStock7d?: number, outOfStock14d?: number, outOfStock30d?: number, outOfStock60d?: number, outOfStock90d?: number, outOfStock180d?: number, adjSv2d?: number, adjSv7d?: number, adjSv14d?: number, adjSv30d?: number, adjSv60d?: number, adjSv90d?: number, adjSv180d?: number, demand?: number, unitsRequired?: number, qtySupplierLeadTime?: number, qtyToLocalLeadTime?: number, targetQtyOnHand?: number, warehouseLeadTime?: number, targetMaxDays?: number, supplierLeadTime?: number, currentAmazonInventory?: number, amazonInventoryDays?: number, warehouseQty?: number, onOrder?: number, localInventoryDays?: number, onOrderDays?: number, remaining?: number, recommendedWarehouseQty?: number, recommendedSupplierQty?: number, unitsAvailable?: number, unitsOnPO?: number, suggShip?: number, suggReorder?: number, restockNeeded?: number, onHand?: number, sum?: number
+    s2d?: number, s7d?: number, s14d?: number, s30d?: number, s60d?: number, s90d?: number, s180d?: number, sv2d?: number, sv7d?: number, sv14d?: number, sv30d?: number, sv60d?: number, sv90d?: number, sv180d?: number, svDemand?: number, percent2Day?: number, percent7Day?: number, percent14Day?: number, percent30Day?: number, percent60Day?: number, percent90Day?: number, percent180Day?: number, percentForecasted?: number, outOfStock2d?: number, outOfStock7d?: number, outOfStock14d?: number, outOfStock30d?: number, outOfStock60d?: number, outOfStock90d?: number, outOfStock180d?: number, adjSv2d?: number, adjSv7d?: number, adjSv14d?: number, adjSv30d?: number, adjSv60d?: number, adjSv90d?: number, adjSv180d?: number, demand?: number, unitsRequired?: number, qtySupplierLeadTime?: number, qtyToLocalLeadTime?: number, targetQtyOnHand?: number, warehouseLeadTime?: number, targetMaxDays?: number, supplierLeadTime?: number, currentAmazonInventory?: number, amazonInventoryDays?: number, warehouseQty?: number, onOrder?: number, localInventoryDays?: number, onOrderDays?: number, remaining?: number, recommendedWarehouseQty?: number, recommendedSupplierQty?: number, unitsAvailable?: number, unitsOnPO?: number, suggShip?: number, suggReorder?: number, restockNeeded?: number, onHand?: number, sum?: number, meanLtd?: number, safetyStockLtd?: number, snapshotQty?: number, openSalesOrders?: number, openPurchaseOrders?: number, onHandThirdParty?: number, inventorySourcePreference?: string, inbound?: number, inboundFcTransfer?: number, onHandFbm?: number, consolidatedQty?: number, lotMultipleQty?: number
+};
+
+// Reference: https://github.com/helen-dh/forecast-calculation
+function forecastRecommendedPurchasing(input: Input, attach: ICreateAttachment) {
+    const { meanLtd, safetyStockLtd, openSalesOrders, openPurchaseOrders, onHandThirdParty, inventorySourcePreference, onHand, inbound, inboundFcTransfer, onHandFbm, lotMultipleQty, snapshotQty, consolidatedQty } = input;
+    let demand, inventorySupply, fbaSupply, fbmSupply, supply, expectedSnapshotQty, expectedConsolidatedQty;
+    switch (inventorySourcePreference) {
+        case "FBA+FBM":
+            fbaSupply = (onHand || 0) + (inbound || 0) + (inboundFcTransfer || 0);
+            fbmSupply = (onHandFbm || 0);
+            inventorySupply = (onHandThirdParty || 0) + (fbaSupply || 0) + (fbmSupply || 0);
+            supply = (openPurchaseOrders || 0) + inventorySupply;
+            demand = (openSalesOrders || 0) + (meanLtd || 0) + (safetyStockLtd || 0);
+
+            expectedSnapshotQty = roundFloatNumber(demand - supply);
+            logger.log('info', `snapshotQty: Actual: ${snapshotQty} and Expected: ${expectedSnapshotQty}`);
+            expect(snapshotQty, `In response body, the expected snapshotQty should be: ${expectedSnapshotQty}`).toBe(expectedSnapshotQty);
+            attach(`snapshotQty: Actual: ${snapshotQty} and Expected: ${expectedSnapshotQty}`);
+            
+            expectedConsolidatedQty = round(purchasing_consolidations_get_quantity((snapshotQty || 0), (lotMultipleQty || 0)), 2 );
+            logger.log('info', `consolidatedQty: Actual: ${consolidatedQty} and Expected: ${expectedConsolidatedQty}`);
+            expect(consolidatedQty, `In response body, the expected consolidatedQty should be: ${expectedConsolidatedQty}`).toBe(expectedConsolidatedQty);
+            attach(`consolidatedQty: Actual: ${consolidatedQty} and Expected: ${expectedConsolidatedQty}`);
+            break;
+        case "FBA":
+            inventorySupply = (onHandThirdParty || 0) + (fbaSupply || 0);
+            supply = (openPurchaseOrders || 0) + inventorySupply;
+            demand = (openSalesOrders || 0) + (meanLtd || 0) + (safetyStockLtd || 0);
+
+            expectedSnapshotQty = roundFloatNumber(demand - supply);
+            logger.log('info', `snapshotQty: Actual: ${snapshotQty} and Expected: ${expectedSnapshotQty}`);
+            expect(snapshotQty, `In response body, the expected snapshotQty should be: ${expectedSnapshotQty}`).toBe(expectedSnapshotQty);
+            attach(`snapshotQty: Actual: ${snapshotQty} and Expected: ${expectedSnapshotQty}`);
+            
+            expectedConsolidatedQty = round(purchasing_consolidations_get_quantity((snapshotQty || 0), (lotMultipleQty || 0)), 2 );
+            logger.log('info', `consolidatedQty: Actual: ${consolidatedQty} and Expected: ${expectedConsolidatedQty}`);
+            expect(consolidatedQty, `In response body, the expected consolidatedQty should be: ${expectedConsolidatedQty}`).toBe(expectedConsolidatedQty);
+            attach(`consolidatedQty: Actual: ${consolidatedQty} and Expected: ${expectedConsolidatedQty}`);
+            break;
+        case "FBM":
+            inventorySupply = (onHandThirdParty || 0) + (fbmSupply || 0); 
+            supply = (openPurchaseOrders || 0) + inventorySupply;
+            demand = (openSalesOrders || 0) + (meanLtd || 0) + (safetyStockLtd || 0);
+            
+            expectedSnapshotQty = roundFloatNumber(demand - supply);
+            logger.log('info', `snapshotQty: Actual: ${snapshotQty} and Expected: ${expectedSnapshotQty}`);
+            expect(snapshotQty, `In response body, the expected snapshotQty should be: ${expectedSnapshotQty}`).toBe(expectedSnapshotQty);
+            attach(`snapshotQty: Actual: ${snapshotQty} and Expected: ${expectedSnapshotQty}`);
+            
+            expectedConsolidatedQty = round(purchasing_consolidations_get_quantity((snapshotQty || 0), (lotMultipleQty || 0)), 2 );
+            logger.log('info', `consolidatedQty: Actual: ${consolidatedQty} and Expected: ${expectedConsolidatedQty}`);
+            expect(consolidatedQty, `In response body, the expected consolidatedQty should be: ${expectedConsolidatedQty}`).toBe(expectedConsolidatedQty);
+            attach(`consolidatedQty: Actual: ${consolidatedQty} and Expected: ${expectedConsolidatedQty}`);
+            break;
+    }
 };
 
 function averageDailySalesRateFormulaRestockAMZ(input: Input, attach: ICreateAttachment) {
@@ -308,5 +372,6 @@ export {
     requiredInventoryFormulaRestockAMZ,
     inventoryAvailableFormulaRestockAMZ,
     recommendationsFormulaRestockAMZ,
-    suggestionsFormulaRestockAMZ
+    suggestionsFormulaRestockAMZ,
+    forecastRecommendedPurchasing
 };
