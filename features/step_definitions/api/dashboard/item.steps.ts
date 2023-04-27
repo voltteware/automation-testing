@@ -1437,13 +1437,13 @@ Given(`User checks some values in result must be updated after update values of 
 });
 
 Given(`User verify that "Existing PO Qty" of item in "Purchasing > Custom" must be updated after update values of item in "Manage Company > Supply" and run forecast`, function () {                
-    this.softAssert(this.getItemsInPurchasingCustomResponseBody[0].openPurchaseOrders == this.editSupplyResponseBody.openQty, `openPurchaseOrders - Expected: ${this.editSupplyResponseBody.openQty}, Actual: ${this.getItemsInPurchasingCustomResponseBody[0].openPurchaseOrders}`)
+    this.softAssert(this.getItemsInPurchasingCustomResponseBody[0].openPurchaseOrders == this.expectedOpenTy, `openPurchaseOrders - Expected: ${this.expectedOpenTy}, Actual: ${this.getItemsInPurchasingCustomResponseBody[0].openPurchaseOrders}`)
     expect(this.countErrors).toBe(0)
 });
 
 Given(`User verify that "Existing PO Qty" of item in "Purchasing > My Suggested" must be updated after update values of item in "Manage Company > Supply" and run forecast`, function () {                
     if (Number(this.forecastRecommendQty) > 0){
-        this.softAssert(this.getItemsInPOResponseBody.model[0].openPurchaseOrders == this.editSupplyResponseBody.openQty, `openPurchaseOrders - Expected: ${this.editSupplyResponseBody.openQty}, Actual: ${this.getItemsInPOResponseBody.model[0].openPurchaseOrders}`)
+        this.softAssert(this.getItemsInPOResponseBody.model[0].openPurchaseOrders == this.expectedOpenTy, `openPurchaseOrders - Expected: ${this.expectedOpenTy}, Actual: ${this.getItemsInPOResponseBody.model[0].openPurchaseOrders}`)
         expect(this.countErrors).toBe(0)
     }
 });

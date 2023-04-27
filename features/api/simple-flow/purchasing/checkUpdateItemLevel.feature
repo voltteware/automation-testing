@@ -173,6 +173,11 @@ Feature: API Purchasing: Check all values of item must be updated in purchasing 
     And User sends a POST request to run forecast
     And User checks that the lastForecastDate field was updated and jobInitiator is null in company detail information after running forecast   
 
+    # Calculate Open Qty
+    And User sets GET api endpoint to get supplies by item name "itemAbove"
+    And User sends a GET request to get list supplies
+    And User saves the Open qty of supply
+
     # Check Existing PO Qty of item in Purchasing > Custom
     And User sets api endpoint to get a item in Custom
     And User sends a GET request to get a item in Custom
