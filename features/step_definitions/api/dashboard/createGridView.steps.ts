@@ -97,7 +97,7 @@ Then('{} sets request body with payload as name: {string} and itemType: {string}
         };
         payload.itemType = itemType;
         if (name == 'random') {
-            payload.name = `sortedNameByAsc ${Number(faker.random.numeric(3))}`;
+            payload.name = `sortedNameByAsc_${Number(faker.datatype.number({ 'min': 1, 'max': 1000 }))}_${faker.animal.dog()}`;
         }else{
             payload.name = name;
         }
@@ -206,7 +206,7 @@ Then('{} sets request body with payload as name: {string} and itemType: {string}
         };
         payload.itemType = itemType;
         if (name == 'random') {
-            payload.name = `filterServiceLevel ${Number(faker.random.numeric(3))}`;
+            payload.name = `filterServiceLevel_${Number(faker.datatype.number({ 'min': 1, 'max': 1000 }))}_${faker.animal.cat()}`;
         }else{
             payload.name = name;
         }
