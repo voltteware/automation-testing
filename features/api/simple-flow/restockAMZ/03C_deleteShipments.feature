@@ -163,7 +163,7 @@ Feature: API_Regression User can delete shipments which have Pending status
         And User sends a GET request to count items in Shipment Review
         And The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
-        And User checks Items in Shipment Review
+        # And User checks Items in Shipment Review
         # If failed here => Amazon returns the error for Items in Shipment. Please run again
         And User sets POST api endpoint to create shipment on Amazon
         And User sends a POST request to create shipment on Amazon
