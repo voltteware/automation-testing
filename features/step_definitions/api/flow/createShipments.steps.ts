@@ -444,6 +444,15 @@ Then(`{} sends a GET request to find the new created shipment`, async function (
     }
 });
 
+Then (`User picks a just created shipment`, async function () {
+    expect(this.getListShipmentsResponseBody.length).toBeGreaterThan(0)
+    const justCreatedShipment = this.getListShipmentsResponseBody[Math.floor(Math.random() * this.getListShipmentsResponseBody.length)];
+    logger.log('info', `Just created shipment >>>>> ` + JSON.stringify(justCreatedShipment, undefined, 4));
+    this.attach(`Just created shipment >>>>> ` + JSON.stringify(justCreatedShipment, undefined, 4));
+    this.shipmentKey = justCreatedShipment.key
+    this.shipmentName = justCreatedShipment.shipmentName
+});
+
 Then('{} checks the new created shipment: {}', async function (actor, shipmentStatus: string) {
     this.shipmentStatus = this.getListShipmentsResponseBody[0].status;
     this.name = this.getListShipmentsResponseBody[0].shipmentName;

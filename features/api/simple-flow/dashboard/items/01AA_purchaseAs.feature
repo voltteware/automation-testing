@@ -9,9 +9,9 @@ Feature: API_Dashboard Set and Check Purchase As PUT /api/item
         And In Header of the request, she sets param Cookie as valid connect.sid
         And User sends a GET request to get companies
 
-    @TC_PA001
-    #Calculate failed due to calculation bug => Ticket 1925
-    Scenario Outline: <TC_ID> - Verify user <email> could call APIs to assign Purchase As and check formula - bugId: 1925
+    @TC_PA001 @bug1915
+    #Calculate failed due to calculation bug => Ticket 1915
+    Scenario Outline: <TC_ID> - Verify user <email> could call APIs to assign Purchase As and check formula
         Given User picks company which has onboarded before with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get items that have purchase as

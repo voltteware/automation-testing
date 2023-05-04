@@ -25,6 +25,13 @@ Then(`{} sets GET api endpoint to get supplies with limit row: {}`, async functi
     linkLimitRow = `${Links.API_SUPPLY}?offset=0&limit=${limitRow}`;
 });
 
+Then(`{} sets GET api endpoint to get supplies by item name {string}`, async function (actor, itemName: string) {
+    if (itemName == 'itemAbove') {
+        itemName = this.editItemResponseBody.name
+    }
+    linkLimitRow = encodeURI(`${Links.API_SUPPLY}?offset=0&limit=100&where={"filters":[{"filters":[{"field":"itemName","operator":"contains","value":"${itemName}"}],"logic":"and"}],"logic":"and"}`);
+});
+
 Then(`{} sends a GET request to get list supplies`, async function (actor: string) {
     const options = {
         headers: this.headers
@@ -41,6 +48,17 @@ Then(`{} sends a GET request to get list supplies`, async function (actor: strin
         logger.log('info', `Response GET ${linkLimitRow} has status code ${this.response.status()} ${this.response.statusText()} and response body ${responseBodyText}`);
         this.attach(`Response GET ${linkLimitRow} has status code ${this.response.status()} ${this.response.statusText()} and response body ${actualResponseText}`)
     }
+});
+
+Then(`User saves the Open qty of supply`, async function () {
+    expect(this.getSupplyResponseBody.length).toBeGreaterThan(0)
+    this.expectedOpenTy = 0
+    Array.from(this.getSupplyResponseBody).forEach((supply: any) => {
+        this.expectedOpenTy += Number(supply.openQty)
+    })
+
+    logger.log('info', `The expected open qty: ${this.expectedOpenTy}`);
+    this.attach(`The expected open qty: ${this.expectedOpenTy}`)
 });
 
 Then(`{} sends a GET request to get sorted supplies`, async function (actor: string) {
