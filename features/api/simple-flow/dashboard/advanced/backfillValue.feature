@@ -18,11 +18,12 @@ Feature: API_Dashboard PUT /api/history-override
         And The status text is "<expectedStatusText>"
         And User picks a random item which does not have Purchase As
         And User saves the item key
-
         # Turn ON Override history
         And User sets PUT api endpoint to edit useHistoryOverride of the above item for company type <companyType> with new value: <value>
         And User sends a PUT request to edit the item
         And The expected status code should be <expectedStatus>
+        And User sets DELETE api to delete history override
+        And User sends a DELETE request to delete history override        
         # You must have at least one full year worth of data for this item in order to use Backfill feature
         And User sets PUT api endpoint to update history override for one full year of data
         And User sends a PUT request to update history override for one full year of data

@@ -19,7 +19,18 @@ async function getHistoryOverride(request: APIRequestContext, linkApi: string, o
     return await request.get(url, options);
 };
 
+//delete History Override
+async function deleteHistoryOverride(request: APIRequestContext, linkApi: string, payLoad: any, header?: any) {
+    const url = `${linkApi}`;    
+    logger.log('info', `Send PUT request ${url} with ${JSON.stringify(payLoad, undefined, 4)}`);
+    const deleteHistoryOverrideResponse = await request.delete(url, {
+        data: payLoad,
+        headers: header
+    });
+    return deleteHistoryOverrideResponse;
+};
 export {
     updateHistoryOverride,
-    getHistoryOverride
+    getHistoryOverride,
+    deleteHistoryOverride
 }

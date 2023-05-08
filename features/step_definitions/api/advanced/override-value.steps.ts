@@ -229,7 +229,7 @@ Then(`{} sets PUT api endpoint to update history override for one full year of d
             grid: `${this.grid}`,
             forecastKey: "m",
             orderQty: Number(faker.datatype.number({ 'min': 1, 'max': 100 })),
-            start: Date.UTC(gridYear, monthNumber, 15)
+            start: `${Date.UTC(gridYear, monthNumber-1, 15)}`
         }
         this.payloadUpdateHistoryOverrideOneYear.rows.push(row)
     }    
@@ -247,5 +247,32 @@ Then('{} sends a PUT request to update history override for one full year of dat
     } else {
         logger.log('info', `Update History Override ${this.linkApiUpdateHistoryOverride} has status code ${this.response.status()} ${this.response.statusText()}`)
         this.attach(`Update History Override ${this.linkApiUpdateHistoryOverride} has status code ${this.response.status()} ${this.response.statusText()}`)
+    }
+});
+
+Then(`User sets DELETE api to delete history override`, async function () {
+    this.linkApiDeleteHistoryOverride = `${Links.API_HISTORY_OVERRIDE}`;    
+
+    this.payloadDeleteHistoryOverride = {
+        "itemKey": `${this.itemKey}`,
+        "itemName": `${this.itemName}`,
+        "grid": "",
+        "forecastKey": "",
+        "start": null
+    }
+
+    logger.log('info', `Payload Delete history override one year >>>>>> ` + JSON.stringify(this.payloadDeleteHistoryOverride, undefined, 4));
+    this.attach(`Payload Delete history override one year >>>>>> ` + JSON.stringify(this.payloadDeleteHistoryOverride, undefined, 4));
+});
+
+Then('User sends a DELETE request to delete history override', async function () {    
+    this.response = await historyOverrideRequest.deleteHistoryOverride(this.request, this.linkApiDeleteHistoryOverride, this.payloadDeleteHistoryOverride, this.headers);
+    if (this.response.status() == 200) {
+        this.deleteHistoryOverrideResponseBody = JSON.parse(await this.response.text());
+        logger.log('info', `Delete History Override ${this.linkApiDeleteHistoryOverride} has status code ${this.response.status()} ${this.response.statusText()} and deleteHistoryOverrideResponse body ${JSON.stringify(this.deleteHistoryOverrideResponseBody, undefined, 4)}`)
+        this.attach(`Delete History Override ${this.linkApiDeleteHistoryOverride} has status code ${this.response.status()} ${this.response.statusText()} and deleteHistoryOverrideResponseBody body ${JSON.stringify(this.deleteHistoryOverrideResponseBody, undefined, 4)}`)
+    } else {
+        logger.log('info', `Delete History Override ${this.linkApiDeleteHistoryOverride} has status code ${this.response.status()} ${this.response.statusText()}`)
+        this.attach(`Delete History Override ${this.linkApiDeleteHistoryOverride} has status code ${this.response.status()} ${this.response.statusText()}`)
     }
 });
