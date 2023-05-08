@@ -747,6 +747,16 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
             logger.log('info', `New ${editColumn}: ${this.lotMultipleItemName}`);
             this.attach(`New ${editColumn}: ${this.lotMultipleItemName}`);
             break;
+        case 'useBackfill':
+            if (value == 'random') {
+                this.useBackfill = !(Boolean(this.responseBodyOfAItemObject.useBackfill));
+            }
+            else {
+                this.useBackfill = Boolean(value);
+            }
+            logger.log('info', `New ${editColumn}: ${this.useBackfill}`);
+            this.attach(`New ${editColumn}: ${this.useBackfill}`);
+            break;
         default:
             break;
     }
@@ -799,7 +809,7 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
             forecastTags: this.responseBodyOfAItemObject.forecastTags,
             tag: this.responseBodyOfAItemObject.tag,
             tags: this.responseBodyOfAItemObject.tags,
-            useBackfill: this.responseBodyOfAItemObject.useBackfill,
+            useBackfill: this.useBackfill === undefined ? this.responseBodyOfAItemObject.useHistoryOverride : this.useBackfill,
             createdAt: `${this.responseBodyOfAItemObject.created_at}`,
             inbound: this.responseBodyOfAItemObject.inbound,
             inboundPrice: this.responseBodyOfAItemObject.inboundPrice,
@@ -900,7 +910,7 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
             forecastTags: this.responseBodyOfAItemObject.forecastTags,
             tag: this.responseBodyOfAItemObject.tag,
             tags: this.responseBodyOfAItemObject.tags,
-            useBackfill: this.responseBodyOfAItemObject.useBackfill,
+            useBackfill: this.useBackfill === undefined ? this.responseBodyOfAItemObject.useHistoryOverride : this.useBackfill,
             createdAt: `${this.responseBodyOfAItemObject.created_at}`,
             inbound: this.responseBodyOfAItemObject.inbound,
             inboundPrice: this.responseBodyOfAItemObject.inboundPrice,
@@ -1057,6 +1067,9 @@ Then('The new {} of item must be updated successfully', function (editColumn: st
         case 'purchaseAs':
             expect(this.lotMultipleItemName).toEqual(this.editItemResponseBody.lotMultipleItemName)
             expect(this.lotMultipleItemKey).toEqual(this.editItemResponseBody.lotMultipleItemKey)
+            break;
+        case 'useBackfill':
+            expect(this.useBackfill).toEqual(this.editItemResponseBody.useBackfill)            
             break;
         default:
             break;

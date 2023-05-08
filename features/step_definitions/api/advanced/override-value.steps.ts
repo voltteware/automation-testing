@@ -72,6 +72,81 @@ Then(`{} sends a GET request to get history override of item`, async function (a
     }
 });
 
+Then('User saves the history override values', async function(){
+    const historyOverrideModels = this.getHistoryOverrideResponseBody.model
+    let months: string[] = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];        
+    const currentMonth = new Date().getMonth() + 1;
+    const afterCurrentMonths = months.slice(currentMonth - 1)
+    const beforeCurrentMonths = months.slice(0, currentMonth - 1)
+    console.log(afterCurrentMonths , beforeCurrentMonths)
+    const currentYear = new Date().getFullYear();
+
+    let grids: string[] = []
+    for(let index = 4; index > 0; index--){
+        let year = currentYear - index
+        afterCurrentMonths.forEach(month =>{
+            let grid = month + '_' + year
+            grids.push(grid)
+        })
+        year = currentYear - index + 1
+        beforeCurrentMonths.forEach(month =>{
+            let grid = month + '_' + year
+            grids.push(grid)
+        })
+    }
+    console.log(grids)
+
+    let historyOverrideValues: Number[] = []
+    for(let index = 0; index < grids.length; index ++){
+        const value = await historyOverrideModels.find((model: any) => model.grid == grids[index])
+        if (value == undefined) {
+            historyOverrideValues.push(0)
+        } else {
+            historyOverrideValues.push(value.orderQty)
+        }
+    }
+    console.log('historyVAlue:' ,historyOverrideValues)
+
+    let historyOverrideValues1 = historyOverrideValues.slice(0, 12)
+    let historyOverrideValues2 = historyOverrideValues.slice(12, 24)          
+    let historyOverrideValues3 = historyOverrideValues.slice(24, 36)
+    let historyOverrideValues4 = historyOverrideValues.slice(36)
+
+    historyOverrideValues1[11] = historyOverrideValues1[11] === 0 ? historyOverrideValues4[11] : historyOverrideValues1[11]
+    historyOverrideValues2 = historyOverrideValues2.map((value, index) => {
+        if (value === 0) {
+          return historyOverrideValues4[index];
+        } else {
+          return value;
+        }
+      });
+
+    historyOverrideValues3 = historyOverrideValues3.map((value, index) => {
+        if (value === 0) {
+          return historyOverrideValues4[index];
+        } else {
+          return value;
+        }
+      });
+
+    console.log(historyOverrideValues1)
+    console.log(historyOverrideValues2)
+    console.log(historyOverrideValues3)
+    console.log(historyOverrideValues4)
+
+    historyOverrideValues = [...historyOverrideValues1, ...historyOverrideValues2, ...historyOverrideValues3, ...historyOverrideValues4]
+    console.log(historyOverrideValues)
+
+    const firstNonZeroIndex = historyOverrideValues.findIndex((el) => el !== 0);
+    if (firstNonZeroIndex !== -1) {
+        historyOverrideValues.splice(0, firstNonZeroIndex);
+    }
+    console.log(historyOverrideValues)
+    this.expectedHistoryOverrideValues = historyOverrideValues
+    logger.log('info', `History Override Values expected >>> ${this.expectedHistoryOverrideValues}`);
+    this.attach(`History Override Values expected >>> ${this.expectedHistoryOverrideValues}`);
+})
+
 Then('{} checks API contract of get history override of item api', async function (actor: string) {
     getHistoryOverrideOfItemResponseSchema.parse(this.getHistoryOverrideResponseBody);
 });
@@ -121,4 +196,56 @@ Then('{} checks override history values in Purchasing', async function (actor: s
     // If historySnapShot includes override history value will return true
     const actual = this.historySnapshot.includes(this.expectedOrderQty);
     expect(actual,'Order Qty should be in historySnapShot').toBe(true)
+});
+
+Then('{} checks override history values must be displayed exactly in Purchasing', async function (actor: string) {
+    const actualHistoryOverrideValues = this.getResultsResponseBody.model.historySnapshot;
+    logger.log('info', `History Override Values expected >>> ${this.expectedHistoryOverrideValues}`);
+    this.attach(`History Override Values expected >>> ${this.expectedHistoryOverrideValues}`);
+    logger.log('info', `History Override Values actual >>>>> ${actualHistoryOverrideValues}`);
+    this.attach(`History Override Values actual >>>>> ${actualHistoryOverrideValues}`);
+    expect(_.isEqual(actualHistoryOverrideValues, this.expectedHistoryOverrideValues)).toBeTruthy()
+});
+
+Then(`{} sets PUT api endpoint to update history override for one full year of data`, async function (actor: string) {
+    this.linkApiUpdateHistoryOverride = `${Links.API_HISTORY_OVERRIDE}`;
+
+    let month: string[] = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];    
+
+    this.payloadUpdateHistoryOverrideOneYear = {
+        key: `${this.itemKey}`,
+        rows: []
+    }
+
+    const currentMonth = new Date().getMonth() + 1;
+    for (let monthNumber = 1; monthNumber <= 12; monthNumber++){
+        const gridMonth = month[monthNumber-1]        
+        let gridYear = new Date().getFullYear() - 1;
+        if (monthNumber < currentMonth) gridYear = new Date().getFullYear();
+        this.grid = gridMonth + '_' + gridYear;
+        const row = {
+            itemKey: `${this.itemKey}`,
+            itemName: `${this.itemName}`,
+            grid: `${this.grid}`,
+            forecastKey: "m",
+            orderQty: Number(faker.datatype.number({ 'min': 1, 'max': 100 })),
+            start: Date.UTC(gridYear, monthNumber, 15)
+        }
+        this.payloadUpdateHistoryOverrideOneYear.rows.push(row)
+    }    
+
+    logger.log('info', `Payload update history override one year >>>>>> ` + JSON.stringify(this.payloadUpdateHistoryOverrideOneYear, undefined, 4));
+    this.attach(`Payload update history override one year >>>>>> ` + JSON.stringify(this.payloadUpdateHistoryOverrideOneYear, undefined, 4));
+});
+
+Then('{} sends a PUT request to update history override for one full year of data', async function (actor: string) {    
+    this.response = await historyOverrideRequest.updateHistoryOverride(this.request, this.linkApiUpdateHistoryOverride, this.payloadUpdateHistoryOverrideOneYear, this.headers);
+    if (this.response.status() == 200) {
+        this.updateHistoryOverrideResponseBody = JSON.parse(await this.response.text());
+        logger.log('info', `Update History Override ${this.linkApiUpdateHistoryOverride} has status code ${this.response.status()} ${this.response.statusText()} and updateHistoryOverrideResponse body ${JSON.stringify(this.updateHistoryOverrideResponseBody, undefined, 4)}`)
+        this.attach(`Update History Override ${this.linkApiUpdateHistoryOverride} has status code ${this.response.status()} ${this.response.statusText()} and updateHistoryOverrideResponseBody body ${JSON.stringify(this.updateHistoryOverrideResponseBody, undefined, 4)}`)
+    } else {
+        logger.log('info', `Update History Override ${this.linkApiUpdateHistoryOverride} has status code ${this.response.status()} ${this.response.statusText()}`)
+        this.attach(`Update History Override ${this.linkApiUpdateHistoryOverride} has status code ${this.response.status()} ${this.response.statusText()}`)
+    }
 });
