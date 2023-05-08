@@ -138,7 +138,7 @@ Feature: APIs Advanced Edit Item History, PUT /api/history-override, Purchase As
             | TC_OV001_3 | QBFS        | testautoforecast@gmail.com | 20       | 200            | OK                 | useHistoryOverride | true  |
 
     # purchaseAs
-    @TC_PA001 @api-dashboard @api-items @api-purchaseAs @regression-api @run-this
+    @TC_PA001 @api-dashboard @api-items @api-purchaseAs @regression-api
     Scenario Outline: <TC_ID> - Verify user <email> could call APIs to assign Purchase As and check formula
         Given User picks company which has onboarded before with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
