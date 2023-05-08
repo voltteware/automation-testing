@@ -22,11 +22,11 @@ Feature: API_Dashboard PUT /api/history-override
         And User sets PUT api endpoint to edit useHistoryOverride of the above item for company type <companyType> with new value: <value>
         And User sends a PUT request to edit the item
         And The expected status code should be <expectedStatus>
-        And User sets DELETE api to delete history override
-        And User sends a DELETE request to delete history override        
+        # And User sets DELETE api to delete history override
+        # And User sends a DELETE request to delete history override
         # You must have at least one full year worth of data for this item in order to use Backfill feature
-        And User sets PUT api endpoint to update history override for one full year of data
-        And User sends a PUT request to update history override for one full year of data
+        And User sets PUT api endpoint to update history override for <numberOfYear> full year of data
+        And User sends a PUT request to update history override for <numberOfYear> full year of data
         And The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
         And User checks API contract of update history override api
@@ -40,9 +40,9 @@ Feature: API_Dashboard PUT /api/history-override
         And User sets GET api endpoint to get history override of item
         And User sends a GET request to get history override of item
         And User checks API contract of get history override of item api
-        # And User checks value after editing history override of item
         And The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
+        And User checks value after editing history override values of item
         And User saves the history override values
 
         # Get Company info before run forecast
@@ -65,7 +65,8 @@ Feature: API_Dashboard PUT /api/history-override
         And The status text is "<expectedStatusText>"
         And User checks override history values must be displayed exactly in Purchasing
         Examples:
-            | TC_ID       | companyType | email                      | limitRow | expectedStatus | expectedStatusText | editColumn  | value |
-            | TC_BFV001_1 | CSV         | testautoforecast@gmail.com | 20       | 200            | OK                 | useBackfill | true  |
-            | TC_BFV001_2 | ASC         | testautoforecast@gmail.com | 20       | 200            | OK                 | useBackfill | true  |
-            | TC_BFV001_3 | QBFS        | testautoforecast@gmail.com | 20       | 200            | OK                 | useBackfill | true  |
+            | TC_ID       | companyType | email                      | limitRow | numberOfYear | expectedStatus | expectedStatusText | editColumn  | value |
+            | TC_BFV001_1 | CSV         | testautoforecast@gmail.com | 20       | 1            | 200            | OK                 | useBackfill | true  |
+            | TC_BFV001_2 | ASC         | testautoforecast@gmail.com | 20       | 2            | 200            | OK                 | useBackfill | true  |
+            | TC_BFV001_3 | QBFS        | testautoforecast@gmail.com | 20       | 3            | 200            | OK                 | useBackfill | true  |
+            
