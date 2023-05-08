@@ -68,16 +68,16 @@ Then('Check {} company exist in the system, if it does not exist will create com
             logger.log('info', `Response ${Links.API_CREATE_COMPANY} has status code ${this.response.status()} ${this.response.statusText()} and response body ${responseBodyText}`);
             this.attach(`Response ${Links.API_CREATE_COMPANY} has status code ${this.response.status()} ${this.response.statusText()} and response body ${actualResponseText}`)
         }
-    }    
+    }   
+    
+    this.get20LatestCompaniesResponse = await adminRequest.getCompanies(this.request, endPointToGet20LatestCompany, options);
+    this.get20LatestCompaniesResponseBody = JSON.parse(await this.get20LatestCompaniesResponse.text());
 })
 
 Then('{} filters company to get company which has the company name included {}', async function (actor, companyNameKeyWord: string) {
     const options = {
         headers: this.headers
     }
-
-    this.get20LatestCompaniesResponse = await adminRequest.getCompanies(this.request, endPointToGet20LatestCompany, options);
-    this.get20LatestCompaniesResponseBody = JSON.parse(await this.get20LatestCompaniesResponse.text());
     selectedCompany = await this.get20LatestCompaniesResponseBody.filter((co: any) => (co.companyName).endsWith(companyNameKeyWord));
     randomCompany = selectedCompany[Math.floor(Math.random() * selectedCompany.length)];
     //logger.log('info', `Response Body before filter: ${JSON.stringify(selectedCompany, undefined, 4)}`);
@@ -85,7 +85,7 @@ Then('{} filters company to get company which has the company name included {}',
     this.companyType = randomCompany.companyType;
     this.companyName = randomCompany.companyName;
     this.customerId = randomCompany.customerId;
-    this.attach(`Response Body before filter: ${JSON.stringify(this.randomCompany, undefined, 4)}`);
+    this.attach(`Response Body before filter: ${JSON.stringify(randomCompany, undefined, 4)}`);
 })
 
 Then('{} sends a DELETE method to {} delete the {} company', async function (actor, deleteType: string, actionCompany: string) {
@@ -146,9 +146,9 @@ Then('Check that the company just soft deleted still exists but the subscription
     const endPointToGetCompanyInfoResponse = encodeURI(`${Links.API_ADMIN_GET_COMPANIES}/${this.companyKeyUrl}/${this.companyTypeUrl}`);
     const getCompanyInfoResponseAfterSoftDelete = await adminRequest.getCompanies(this.request, endPointToGetCompanyInfoResponse, options);
     const responseBodyOfCompany = JSON.parse(await getCompanyInfoResponseAfterSoftDelete.text());
-    const subscriptionStatusOfComapny = await responseBodyOfCompany.subscriptionStatus;
-    this.attach(`Response get company info after soft delete ${subscriptionStatusOfComapny}`)
-    expect(subscriptionStatusOfComapny).toEqual('canceled');
+    const subscriptionStatusOfCompany = await responseBodyOfCompany.subscriptionStatus;
+    this.attach(`Response get company info after soft delete ${subscriptionStatusOfCompany}`)
+    expect(subscriptionStatusOfCompany).toEqual('canceled');
 })
 
 Then('User verify that has no item in item summary', async function () {

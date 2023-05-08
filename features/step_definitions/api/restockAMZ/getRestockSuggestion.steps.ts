@@ -35,7 +35,7 @@ Then('{} compares and checks the total of Items which have alerts', async functi
 });
 
 Then(`{} sets GET api method to get Items belonged to {} with direction: {}`, async function (actor, supplierOption, direction: string) {
-    link = encodeURI(`${Links.API_GET_RESTOCK_SUGGESTION}?offset=0&limit=5&sort=[{"field":"recommendedSupplierQty","direction":"${direction}"}]&where={"logic":"and","filters":[{"logic":"or","filters":[{"filters":[{"field":"flag","operator":"eq","value":"RED"},{"field":"flag","operator":"eq","value":"YELLOW"},{"field":"flag","operator":"eq","value":"ORANGE"},{"field":"flag","operator":"eq","value":"TEAL"},{"field":"flag","operator":"eq","value":"GREEN"}],"logic":"or"},{"filters":[{"field":"status","operator":"eq","value":"WATCH"}],"logic":"or"}],"currentSupplierFilters":[{"text":"[${supplierOption}]","value":"[${supplierOption}]"}]},{"logic":"or","filters":[{"field":"sku","operator":"contains","value":"HB"},{"field":"productName","operator":"contains","value":"HB"},{"field":"category","operator":"contains","value":"HB"},{"field":"supplier","operator":"contains","value":"HB"},{"field":"supplierSku","operator":"contains","value":"HB"},{"field":"asin","operator":"contains","value":"HB"}]},{"logic":"and","filters":[]},{"logic":"and","filters":[{"field":"status","operator":"neq","value":"IGNORE"}]},{"logic":"and","filters":[{"field":"status","operator":"neq","value":"INACTIVE"}]}]}`);    
+    link = encodeURI(`${Links.API_GET_RESTOCK_SUGGESTION}?offset=0&limit=5&sort=[{"field":"recommendedSupplierQty","direction":"${direction}"}]&where={"logic":"and","filters":[{"logic":"or","filters":[{"filters":[{"field":"flag","operator":"eq","value":"RED"},{"field":"flag","operator":"eq","value":"YELLOW"},{"field":"flag","operator":"eq","value":"ORANGE"},{"field":"flag","operator":"eq","value":"TEAL"},{"field":"flag","operator":"eq","value":"GREEN"}],"logic":"or"},{"filters":[{"field":"status","operator":"eq","value":"WATCH"}],"logic":"or"}],"currentSupplierFilters":[{"text":"[${supplierOption}]","value":"[${supplierOption}]"}]},{"logic":"or","filters":[{"field":"sku","operator":"contains","value":"HB"},{"field":"productName","operator":"contains","value":"HB"},{"field":"category","operator":"contains","value":"HB"},{"field":"supplier","operator":"contains","value":"HB"},{"field":"supplierSku","operator":"contains","value":"HB"},{"field":"asin","operator":"contains","value":"HB"}]},{"logic":"and","filters":[]},{"logic":"and","filters":[{"field":"status","operator":"neq","value":"IGNORE"}]},{"logic":"and","filters":[{"field":"status","operator":"neq","value":"INACTIVE"}]}]}`);
 });
 
 Then(`{} sends a GET api method to get Items belonged to {}`, async function (actor, optionListSupplier: string) {
@@ -63,7 +63,7 @@ Then('{} checks API contract of get items in Item list', async function (actor: 
 Then('{} picks random item in Item list', async function (actor: string) {
     this.responseOfAItem = await this.restockSuggestionResponseBody[Math.floor(Math.random() * this.restockSuggestionResponseBody.length)];
     this.itemKey = this.responseOfAItem.forecastconstant.itemKey;
-
+    this.itemName = this.responseOfAItem.forecastconstant.itemName;
     logger.log('info', `Random Item: ${JSON.stringify(this.responseOfAItem, undefined, 4)}`);
     this.attach(`Random Item: ${JSON.stringify(this.responseOfAItem, undefined, 4)}`);
 });
@@ -163,13 +163,28 @@ Then(`{} sends a GET api method to get restock calculation of specific Item`, as
 
 Then('{} saves values in Restock model for calculations', async function (actor: string) {
     // Data Sales
-    this.s2d = this.restockCalculationResponseBody.s2d;
-    this.s7d = this.restockCalculationResponseBody.s7d;
-    this.s14d = this.restockCalculationResponseBody.s14d;
-    this.s30d = this.restockCalculationResponseBody.s30d;
-    this.s60d = this.restockCalculationResponseBody.s60d;
-    this.s90d = this.restockCalculationResponseBody.s90d;
-    this.s180d = this.restockCalculationResponseBody.s180d;
+    this.responseBodyOfAFilteredItem = await this.getItemByFilteredResponseBody[Math.floor(Math.random() * this.getItemByFilteredResponseBody.length)];
+    this.s2d = this.responseBodyOfAFilteredItem.s2d;
+    this.s7d = this.responseBodyOfAFilteredItem.s7d;
+    this.s14d = this.responseBodyOfAFilteredItem.s14d;
+    this.s30d = this.responseBodyOfAFilteredItem.s30d;
+    this.s60d = this.responseBodyOfAFilteredItem.s60d;
+    this.s90d = this.responseBodyOfAFilteredItem.s90d;
+    this.s180d = this.responseBodyOfAFilteredItem.s180d;
+    logger.log('info', `s2d:: ` + this.s2d);
+    this.attach(`s2d:: ` + this.s2d);
+    logger.log('info', `s7d:: ` + this.s7d);
+    this.attach(`s2d:: ` + this.s7d);
+    logger.log('info', `s14d:: ` + this.s14d);
+    this.attach(`s14d:: ` + this.s14d);
+    logger.log('info', `s30d:: ` + this.s30d);
+    this.attach(`s30d:: ` + this.s30d);
+    logger.log('info', `s60d:: ` + this.s60d);
+    this.attach(`s60d:: ` + this.s60d);
+    logger.log('info', `s90d:: ` + this.s90d);
+    this.attach(`s90d:: ` + this.s90d);
+    logger.log('info', `s180d:: ` + this.s180d);
+    this.attach(`s180d:: ` + this.s180d);
 
     // Daily Sales Rate
     this.sv2d = this.restockCalculationResponseBody.sv2d;

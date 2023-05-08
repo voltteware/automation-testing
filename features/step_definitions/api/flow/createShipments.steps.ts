@@ -15,15 +15,10 @@ let linkCount: any;
 let linkListShipments: any;
 let itemKeyTmp: any;
 
-Then('{} sets POST api endpoint to create Shipment: {}', async function (actor, options: string) {
+Then('{} sets POST api endpoint to create Shipment', async function (actor: string) {
     // Hard item to make sure create shipments successfully
     link = `${Links.API_SHIPMENT}`
-    if (options == 'Hard') {
-        itemKeyTmp = "B00SU6F970-WC-02-TP1-045-WHT-XL";
-    }
-    else {
-        itemKeyTmp = this.itemKey;
-    }
+    itemKeyTmp = this.itemKey;
     this.payLoad = {
         shipmentName: `ITC_Shipment_Auto_${Number(faker.datatype.number({ 'min': 1, 'max': 1000 }))}${faker.company.name()}`,
         shipmentItem: {
