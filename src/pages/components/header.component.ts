@@ -30,7 +30,8 @@ export class HeaderComponent {
     }
 
     async switchToAnotherCompany(companyName: string) {
-        await this.page.getByRole('listitem').filter({ hasText: `${companyName}` }).click();
+        await this.page.getByTestId('company-dropdown').filter({ hasText: `${companyName}` }).click();
+        await this.page.getByTestId(`${companyName}-option`).click()
         await expect(this.page).toHaveURL(/.*home/);
     }
 

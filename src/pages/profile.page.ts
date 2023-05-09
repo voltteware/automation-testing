@@ -13,14 +13,14 @@ export class ProfilePage {
 
   constructor(page: Page) {
     this.page = page;
-    this.emailTextbox = page.getByLabel('Email');
-    this.displayNameTextbox = page.getByLabel('Display Name');
+    this.emailTextbox = page.getByTestId('email-input');
+    this.displayNameTextbox = page.getByTestId('display-name-input');
     this.currentPasswordTextbox = page.locator('#password');
-    this.newPasswordTextbox = page.getByLabel('New Password', { exact: true });
-    this.confirmNewPasswordTextbox = page.getByLabel('Confirm New Password', { exact: true });
+    this.newPasswordTextbox = page.locator('#newPassword');
+    this.confirmNewPasswordTextbox = page.locator('#confirmPassword');
     this.submitButton = page.getByRole('button', { name: 'Submit' });
-    this.newPasswordError = page.locator('label[for="newPassword"] ~.alert');
-    this.confirmNewPasswordError = page.locator('label[for="confirmPassword"] ~.alert');
+    this.newPasswordError = page.getByTestId('password-strength-error-message');
+    this.confirmNewPasswordError = page.getByTestId('password-matching-error-message');
   }
 
   async enterCurrentPassword(password: string) {
