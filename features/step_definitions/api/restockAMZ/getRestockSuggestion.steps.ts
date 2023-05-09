@@ -163,7 +163,9 @@ Then(`{} sends a GET api method to get restock calculation of specific Item`, as
 
 Then('{} saves values in Restock model for calculations', async function (actor: string) {
     // Data Sales
-    this.responseBodyOfAFilteredItem = await this.getItemByFilteredResponseBody[Math.floor(Math.random() * this.getItemByFilteredResponseBody.length)];
+    this.responseBodyOfAFilteredItem = await this.getItemByFilteredResponseBody.find((item: any) => item.name === `${this.itemName}`)
+    logger.log('info', `Response of Item: ` + JSON.stringify(this.responseBodyOfAFilteredItem, undefined, 4));
+    this.attach(`Response of Item: ` + JSON.stringify(this.responseBodyOfAFilteredItem, undefined, 4));
     this.s2d = this.responseBodyOfAFilteredItem.s2d;
     this.s7d = this.responseBodyOfAFilteredItem.s7d;
     this.s14d = this.responseBodyOfAFilteredItem.s14d;
