@@ -86,7 +86,7 @@ Then('Login with admin account to check new user {} is showed in the response of
     this.loginResponse = await authenticateRequest.sendPOSTAuthenticateRequest(Links.API_LOGIN, this.payloadLogin);
     if (this.loginResponse.status() == 201) {
         const responseHeaders = this.loginResponse.headers();
-        this.cookieLogin = responseHeaders['set-cookie'];
+        this.cookie = this.cookieLogin = responseHeaders['set-cookie'];
         this.loginResponseBody = JSON.parse(await this.loginResponse.text())
         logger.log('info', 'Login with admin account to check new user is showed in the response of get all users');
         this.attach('Login with admin account to check new user is showed in the response of get all users');

@@ -42,7 +42,7 @@ Feature: API_Regression User can delete shipments which have Pending status
         # And User sends a PUT request to edit the item
         # And The expected status code should be <expectedStatus>
         # And The status text is "<expectedStatusText>"
-        And User sets POST api endpoint to create Shipment: <option>
+        And User sets POST api endpoint to create Shipment
         And User sends a POST request to create Shipment
         And The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
@@ -86,8 +86,8 @@ Feature: API_Regression User can delete shipments which have Pending status
         And User checks the deleted shipments does not exist in the list
 
         Examples:
-            | TC_ID        | companyType | option  | casePackOption | restockType | editColumn   | value  | email                      | direction | expectedStatus | expectedStatusText | limitRow | shipmentStatus |
-            | TC_ASC_DS001 | ASC         | Dynamic | No             | SUPPLIER    | supplierName | random | testautoforecast@gmail.com | desc      | 200            | OK                 | 10       | PENDING        |
+            | TC_ID        | companyType | casePackOption | restockType | editColumn   | value  | email                      | direction | expectedStatus | expectedStatusText | limitRow | shipmentStatus |
+            | TC_ASC_DS001 | ASC         | No             | SUPPLIER    | supplierName | random | testautoforecast@gmail.com | desc      | 200            | OK                 | 10       | PENDING        |
 
     @TC_ASC_DS002 @smoke-test-api
     Scenario Outline: <TC_ID> - Verify user <email> could call APIs to delete shipments which have WORKING status
@@ -124,7 +124,7 @@ Feature: API_Regression User can delete shipments which have Pending status
         # And The expected status code should be <expectedStatus>
         # And The status text is "<expectedStatusText>"
         # Hard Item to makse sure always create shipment successfully
-        And User sets POST api endpoint to create Shipment: <option>
+        And User sets POST api endpoint to create Shipment
         And User sends a POST request to create Shipment
         And The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
@@ -204,5 +204,5 @@ Feature: API_Regression User can delete shipments which have Pending status
         And User checks the deleted shipments must be existed in the list        
 
         Examples:
-            | TC_ID        | companyType | casePackOption | option | restockType | editColumn   | value  | email                      | direction | expectedStatus | expectedStatusText | limitRow | shipmentStatus |
-            | TC_ASC_DS002 | ASC         | No             | Hard   | SUPPLIER    | supplierName | random | testautoforecast@gmail.com | desc      | 200            | OK                 | 10       | WORKING        |
+            | TC_ID        | companyType | casePackOption | restockType | editColumn   | value  | email                      | direction | expectedStatus | expectedStatusText | limitRow | shipmentStatus |
+            | TC_ASC_DS002 | ASC         | No             | SUPPLIER    | supplierName | random | testautoforecast@gmail.com | desc      | 200            | OK                 | 10       | WORKING        |

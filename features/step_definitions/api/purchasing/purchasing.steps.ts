@@ -546,7 +546,7 @@ Then('User sends GET request to get restock suggestion purchasing of an above it
 });
 
 Then('User sets GET api endpoint to get list items in "Purchasing > My Suggested"', function () {
-    linkItemsInPO = encodeURI(`${Links.API_SUMMARY_VENDOR_ITEMS_IN_PO}?offset=0&limit=100&where={"logic":"and","filters":[]}&vendorKey=null`);
+    linkItemsInPO = encodeURI(`${Links.API_SUMMARY_VENDOR_ITEMS_IN_PO}?offset=0&limit=5&where={"filters":[{"filters":[{"field":"itemName","operator":"contains","value":"DefaultPurchasingSaleVelocity"}],"logic":"and"}],"logic":"and"}&vendorKey=null`);
     console.log(linkItemsInPO);
 });
 
@@ -556,8 +556,8 @@ Then('User sends GET request to get list items in "Purchasing > My Suggested"', 
     const responseBodyText = await this.getItemsInPOResponse.text();
     if (this.getItemsInPOResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
         this.responseBody = this.getItemsInPOResponseBody = JSON.parse(await this.getItemsInPOResponse.body());
-        // logger.log('info', `Response POST ${linkItemsInPO} >>>>>>` + JSON.stringify(this.getItemsInPOResponseBody, undefined, 4));
-        // this.attach(`Response POST ${linkItemsInPO} >>>>>>` + JSON.stringify(this.getItemsInPOResponseBody, undefined, 4))
+        logger.log('info', `Response POST ${linkItemsInPO} >>>>>>` + JSON.stringify(this.getItemsInPOResponseBody, undefined, 4));
+        this.attach(`Response POST ${linkItemsInPO} >>>>>>` + JSON.stringify(this.getItemsInPOResponseBody, undefined, 4))
     }
     else {
         const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
