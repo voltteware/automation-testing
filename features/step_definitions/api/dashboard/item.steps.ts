@@ -22,6 +22,8 @@ let linkCountItems: string;
 let linkGetItems: string;
 var linkGetActiveAndHasLotMultipleItemKeyNullItem: string;
 let linkItemKey: any;
+let linkItemByFiltered: any;
+let linkCountItemsThatIsHidden: any;
 
 Then(`{} sets GET api endpoint to get item summary`, async function (actor: string) {
     link = `${Links.API_ITEMS}?summary=true&companyKey=${this.companyKey}&companyType=${this.companyType}`;
@@ -46,6 +48,10 @@ Then(`{} set GET api endpoint to get items with name contains {string}`, async f
 
 Then(`{} set GET api endpoint to get item that is hidden`, async function (actor) {
     linkGetItems = `${Links.API_ITEMS}?offset=0&limit=1&where={"filters":[{"filters":[{"field":"name","operator":"eq","value":"${this.nameOfHiddenItem}"}],"logic":"and"}],"logic":"and"}`    
+});
+
+Then(`{} set GET api endpoint to count item that is hidden`, async function (actor) {
+    linkCountItemsThatIsHidden = encodeURI(`${Links.API_ITEM_COUNT}?where={"filters":[{"filters":[{"field":"isHidden","operator":"eq","value":"true"}],"logic":"and"}],"logic":"and"}`);    
 });
 
 Then(`{} sets GET api endpoint to count items that is active and have lotMultipleItemKey is NULL`, async function (actor: string) {
@@ -92,6 +98,24 @@ Then(`{} sends a GET request to get count items`, async function (actor: string)
     }
 })
 
+Then('{} sends GET api endpoint to count item that is hidden', async function (actor: string) {
+    const options = {
+        headers: this.headers
+    }
+    this.getCountItemsThatIsHiddenResponse = await itemRequest.getCountItemsThatIsHidden(this.request, linkCountItemsThatIsHidden, options);
+    const responseBodyText = await this.getCountItemsThatIsHiddenResponse.text();
+    if (this.getCountItemsThatIsHiddenResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
+        this.getCountItemsThatIsHiddenResponseBody = JSON.parse(await this.getCountItemsThatIsHiddenResponse.text());
+        logger.log('info', `Response GET ${linkCountItemsThatIsHidden}>>>>>` + JSON.stringify(this.getCountItemsThatIsHiddenResponseBody, undefined, 4));
+        this.attach(`Response GET ${linkCountItemsThatIsHidden}>>>>>>` + JSON.stringify(this.getCountItemsThatIsHiddenResponseBody, undefined, 4))
+    }
+    else {
+        const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
+        logger.log('info', `Response GET ${linkCountItemsThatIsHidden} has status code ${this.response.status()} ${this.response.statusText()} and response body >>>>>>${responseBodyText}`);
+        this.attach(`Response GET ${linkCountItemsThatIsHidden} has status code ${this.response.status()} ${this.response.statusText()} and response body >>>>>>${actualResponseText}`)
+    }
+})
+
 Then(`{} sends a GET request to get list items`, async function (actor: string) {
     const options = {
         headers: this.headers
@@ -123,6 +147,7 @@ Then(`{} sends GET api request to get all items`, async function (actor: string)
     const getItemCountResponse = await itemRequest.getItemCount(this.request, linkGetItemCount, { headers: this.headers });
     expect(getItemCountResponse.status()).toBe(200);
     const totalItemsCount = Number(await getItemCountResponse.text());
+    this.countItem = totalItemsCount;
     logger.log('info', `Total Items: ${totalItemsCount}`);
     this.attach(`Total Items: ${totalItemsCount}`)
     linkGetAllItems = `${Links.API_ITEMS}?offset=0&limit=${totalItemsCount}`;
@@ -160,6 +185,7 @@ Then(`{} sends a GET request to get item summary`, async function (actor: string
 Given('User picks a random item in above list items', async function () {
     // expect(this.getItemsResponseBody.length, 'There is at least 1 item to pick random').toBeGreaterThanOrEqual(1);
     this.responseBodyOfAItemObject = await this.getItemsResponseBody[Math.floor(Math.random() * this.getItemsResponseBody.length)];
+    this.randomItem = this.responseBodyOfAItemObject;
     logger.log('info', `Random Item: ${JSON.stringify(this.responseBodyOfAItemObject, undefined, 4)}`);
     this.attach(`Random Item: ${JSON.stringify(this.responseBodyOfAItemObject, undefined, 4)}`);
 });
@@ -1234,6 +1260,10 @@ Then(`{} sets GET api endpoint to get Item by Item key`, async function (actor: 
     linkItemKey = `${Links.API_ITEMS}/${this.itemKey}`;
 });
 
+Then(`{} sets GET api endpoint to get item by filtered`, async function (actor: string) {
+    linkItemByFiltered = `${Links.API_ITEMS}?offset=0&limit=100&where={"filters":[{"filters":[{"field":"name","operator":"contains","value":"${this.itemName}"}],"logic":"and"}],"logic":"and"}`;
+});
+
 Then('User sends a GET request to get Item by Item key', async function () {
     const options = {
         headers: this.headers
@@ -1251,6 +1281,26 @@ Then('User sends a GET request to get Item by Item key', async function () {
         const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
         logger.log('info', `Response GET ${linkItemKey} has status code ${this.response.status()} ${this.response.statusText()} and response body ${responseBodyText}`);
         this.attach(`Response GET ${linkItemKey} has status code ${this.response.status()} ${this.response.statusText()} and response body ${actualResponseText}`)
+    }
+});
+
+Then('User sends a GET request to get item by by filtered', async function () {
+    const options = {
+        headers: this.headers
+    }
+
+    this.getItemByFilteredResponse = this.response = await itemRequest.getItems(this.request, linkItemByFiltered, options);
+    const responseBodyText = await this.getItemByFilteredResponse.text();
+
+    if (this.getItemByFilteredResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
+        this.responseBodyOfAItemObject = this.responseBody = this.getItemByFilteredResponseBody = JSON.parse(await this.getItemByFilteredResponse.text());
+        logger.log('info', `Response GET ${linkItemByFiltered}` + JSON.stringify(this.getItemByFilteredResponseBody, undefined, 4));
+        this.attach(`Response GET ${linkItemByFiltered}` + JSON.stringify(this.getItemByFilteredResponseBody, undefined, 4))
+    }
+    else {
+        const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
+        logger.log('info', `Response GET ${linkItemByFiltered} has status code ${this.response.status()} ${this.response.statusText()} and response body ${responseBodyText}`);
+        this.attach(`Response GET ${linkItemByFiltered} has status code ${this.response.status()} ${this.response.statusText()} and response body ${actualResponseText}`)
     }
 });
 

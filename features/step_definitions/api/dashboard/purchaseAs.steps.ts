@@ -133,8 +133,7 @@ Then(`{} checks value in Item card`, async function (actor: string) {
 });
 
 Then(`{} calculates Purchase As item`, async function (actor: string) {
-    this.purchaseAsMeanLtd = this.meanLtdOfItem + this.meanLtdOfPurchaseAsItem;
-    this.meanLtdOfItem = this.purchaseAsMeanLtd;
+    this.meanLtdOfItem = this.meanLtdActualOfItem;
     this.safetyStockLtdOfItem = this.safetyStockLtdActualOfItem ;
     this.openSalesOrdersOfItem = this.openSalesOrdersActualOfItem;
     this.openPurchaseOrdersOfItem = this.openPurchaseOrdersActualOfItem;

@@ -43,7 +43,7 @@ Feature: API_Regression User can create shipments from Supplier
         # And The expected status code should be <expectedStatus>
         # And The status text is "<expectedStatusText>"
         # Hard Item to makse sure always create shipment successfully
-        And User sets POST api endpoint to create Shipment: <option>
+        And User sets POST api endpoint to create Shipment
         And User sends a POST request to create Shipment
         And The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
@@ -108,8 +108,8 @@ Feature: API_Regression User can create shipments from Supplier
         And User checks API contract of get list shipments api
 
         Examples:
-            | TC_ID        | companyType | casePackOption | option | restockType | editColumn   | value  | email                      | direction | expectedStatus | expectedStatusText | limitRow | shipmentStatus |
-            | TC_ASC_CS001 | ASC         | No             | Hard   | SUPPLIER    | supplierName | random | testautoforecast@gmail.com | desc      | 200            | OK                 | 10       | WORKING        |
+            | TC_ID        | companyType | casePackOption | restockType | editColumn   | value  | email                      | direction | expectedStatus | expectedStatusText | limitRow | shipmentStatus |
+            | TC_ASC_CS001 | ASC         | No             | SUPPLIER    | supplierName | random | testautoforecast@gmail.com | desc      | 200            | OK                 | 10       | WORKING        |
 
     @TC_ASC_CS002 @smoke-test-api
     Scenario Outline: <TC_ID> - Verify user <email> could call APIs to create shipments from Supplier having Case packs
@@ -147,7 +147,7 @@ Feature: API_Regression User can create shipments from Supplier
         # And User sends a PUT request to edit the item
         # And The expected status code should be <expectedStatus>
         # And The status text is "<expectedStatusText>"
-        And User sets POST api endpoint to create Shipment: <option>
+        And User sets POST api endpoint to create Shipment
         And User sends a POST request to create Shipment
         And The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
@@ -200,7 +200,7 @@ Feature: API_Regression User can create shipments from Supplier
         And User checks the deleted shipments does not exist in the list
 
         Examples:
-            | TC_ID        | companyType | casePackOption | option  | restockType | editColumn   | value  | email                      | direction | expectedStatus | expectedStatusText | limitRow |
-            | TC_ASC_CS002 | ASC         | Yes            | Dynamic | SUPPLIER    | supplierName | random | testautoforecast@gmail.com | asc       | 200            | OK                 | 10       |
+            | TC_ID        | companyType | casePackOption | restockType | editColumn   | value  | email                      | direction | expectedStatus | expectedStatusText | limitRow |
+            | TC_ASC_CS002 | ASC         | Yes            | SUPPLIER    | supplierName | random | testautoforecast@gmail.com | asc       | 200            | OK                 | 10       |
 
     # TO DO Create Shipments from Warehouse

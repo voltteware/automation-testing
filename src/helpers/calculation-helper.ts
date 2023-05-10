@@ -84,10 +84,10 @@ interface Input {
 function forecastRecommendedPurchasing(input: Input, attach: ICreateAttachment) {
     const { meanLtd, safetyStockLtd, openSalesOrders, openPurchaseOrders, onHandThirdParty, inventorySourcePreference, onHand, inbound, inboundFcTransfer, onHandFbm, lotMultipleQty, snapshotQty, consolidatedQty } = input;
     let demand, inventorySupply, fbaSupply, fbmSupply, supply, expectedSnapshotQty, expectedConsolidatedQty;
+    fbaSupply = (onHand || 0) + (inbound || 0) + (inboundFcTransfer || 0);
+    fbmSupply = (onHandFbm || 0);
     switch (inventorySourcePreference) {
         case "FBA+FBM":
-            fbaSupply = (onHand || 0) + (inbound || 0) + (inboundFcTransfer || 0);
-            fbmSupply = (onHandFbm || 0);
             inventorySupply = (onHandThirdParty || 0) + (fbaSupply || 0) + (fbmSupply || 0);
             supply = (openPurchaseOrders || 0) + inventorySupply;
             demand = (openSalesOrders || 0) + (meanLtd || 0) + (safetyStockLtd || 0);
