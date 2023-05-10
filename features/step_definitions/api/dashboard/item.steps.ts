@@ -28,7 +28,7 @@ Then(`{} sets GET api endpoint to get item summary`, async function (actor: stri
 });
 
 Then(`{} sets GET api endpoint to get item with limit row: {}`, async function (actor, limitRow: string) {
-    linkGetItems = `${Links.API_ITEMS}?offset=0&limit=${limitRow}`;
+    linkGetItems = `${Links.API_ITEMS}?offset=0&limit=${limitRow}&where={"logic":"and","filters":[{"logic":"and","filters":[{"field":"isHidden","operator":"eq","value":false}]}]}`;
 });
 
 Then(`{} sets GET api endpoint to get items that have purchase as`, async function (actor) {
