@@ -180,8 +180,8 @@ Then(`{} sends a POST request to get list items in PO by vendor key`, async func
             this.getItemsResponseBody = this.getItemsInPOResponseBody.model;
             this.randomAItemObject = this.getItemsInPOResponseBody.model[Math.floor(Math.random() * this.getItemsInPOResponseBody.model.length)];
 
-            logger.log('info', `Response POST ${linkItemsInPO} >>>>>>` + JSON.stringify(this.randomAItemObject, undefined, 4));
-            this.attach(`Response POST ${linkItemsInPO} >>>>>>` + JSON.stringify(this.randomAItemObject, undefined, 4))
+            logger.log('info', `Random object in Response POST ${linkItemsInPO} >>>>>>` + JSON.stringify(this.randomAItemObject, undefined, 4));
+            this.attach(`Random object in Response POST ${linkItemsInPO} >>>>>>` + JSON.stringify(this.randomAItemObject, undefined, 4))
         }
         else {
             const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
@@ -259,10 +259,14 @@ Then('{} checks Total Qty of all Items in PO is matched with Total Qty in sugges
         let totalQtyInSuggestedPO: Number = 0;
 
         totalQtyInSuggestedPO = this.getSummaryByVendorResponseBody.find((v: { vendorKey: null; }) => v.vendorKey == this.selectedVendorKey).totalQty;
+        const qtyOfAllItems: Number[] = [];
         this.getItemsInPOResponseBody.model.forEach((v: { purchaseQty: any; }) => {
             totalQtyOfItemsinPOOfSelectedSuggestedPO += v.purchaseQty;
+            qtyOfAllItems.push(v.purchaseQty);
         });
 
+        logger.log('info', `Qty of all items in Items in PO of ${supplierName} >>>>>> ${qtyOfAllItems}`);
+        this.attach(`Qty of all items in Items in PO of ${supplierName} >>>>>> ${qtyOfAllItems}`);
         logger.log('info', `Total Qty of all items in Items in PO of ${supplierName} >>>>>> ${totalQtyOfItemsinPOOfSelectedSuggestedPO}`);
         this.attach(`Total Qty of all items in Items in PO of ${supplierName} >>>>>> ${totalQtyOfItemsinPOOfSelectedSuggestedPO}`);
         logger.log('info', `Total Qty in suggested PO of ${supplierName} >>>>>> ${totalQtyInSuggestedPO}`);
@@ -284,9 +288,13 @@ Then('{} checks Total Cost of all Items in PO is matched with Total Cost in sugg
         let totalCostInSuggestedPO: Number = 0;
 
         totalCostInSuggestedPO = this.getSummaryByVendorResponseBody.find((v: { vendorKey: null; }) => v.vendorKey == this.selectedVendorKey).totalPrice;
+        const costOfAllItems: Number[] = [];
         this.getItemsInPOResponseBody.model.forEach((v: { total: any; }) => {
             totalCostOfItemsinPOOfSelectedSuggestedPO += v.total;
+            costOfAllItems.push(v.total);
         });
+        logger.log('info', `Cost of all items in Items in PO of ${supplierName} >>>>>> ${costOfAllItems}`);
+        this.attach(`Cost of all items in Items in PO of ${supplierName} >>>>>> ${costOfAllItems}`);
 
         logger.log('info', `Total Cost of all items in Items in PO of ${supplierName} >>>>>> ${totalCostOfItemsinPOOfSelectedSuggestedPO}`);
         this.attach(`Total Cost of all items in Items in PO of ${supplierName} >>>>>> ${totalCostOfItemsinPOOfSelectedSuggestedPO}`);

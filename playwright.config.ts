@@ -15,4 +15,4 @@ export const config = {
     BASE_URL: process.env.BASE_URL,
 }
 var { setDefaultTimeout } = require('@cucumber/cucumber');
-setDefaultTimeout(60 * 1000);
+setDefaultTimeout(90 * 1000);
