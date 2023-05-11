@@ -400,5 +400,9 @@ Then('User checks override history values must be displayed exactly in Purchasin
     const historyValuesOfFourthYear = historyValuesOfYears[4];
     const historySnapShotExpected = [...historyValuesOfFourthYear, ...historyValuesOfThirthYear, ...historyValuesOfSecondYear, ...historyValuesOfFirstYear];  
     const historySnapShotActual = this.getResultsResponseBody.model.historySnapshot; 
+    logger.log('info', `History Override Values expected >>> ${historySnapShotExpected}`);
+    this.attach(`History Override Values expected >>> ${historySnapShotExpected}`);
+    logger.log('info', `History Override Values actual >>>>> ${historySnapShotActual}`);
+    this.attach(`History Override Values actual >>>>> ${historySnapShotActual}`);
     expect(_.isEqual(historySnapShotExpected, historySnapShotActual)).toBeTruthy()
 })
