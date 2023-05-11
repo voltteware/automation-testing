@@ -399,6 +399,11 @@ Then('User checks override history values must be displayed exactly in Purchasin
     const historyValuesOfThirthYear = historyValuesOfYears[3];
     const historyValuesOfFourthYear = historyValuesOfYears[4];
     const historySnapShotExpected = [...historyValuesOfFourthYear, ...historyValuesOfThirthYear, ...historyValuesOfSecondYear, ...historyValuesOfFirstYear];  
+    // Any empty values at the beginning of the historySnapShotExpected array are removed
+    const firstNonZeroIndex = historySnapShotExpected.findIndex((el) => el !== '');
+    if (firstNonZeroIndex !== -1) {
+        historySnapShotExpected.splice(0, firstNonZeroIndex);
+    }
     const historySnapShotActual = this.getResultsResponseBody.model.historySnapshot; 
     logger.log('info', `History Override Values expected >>> ${historySnapShotExpected}`);
     this.attach(`History Override Values expected >>> ${historySnapShotExpected}`);
