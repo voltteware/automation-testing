@@ -1,4 +1,4 @@
-import { Then } from '@cucumber/cucumber';
+import { Then, DataTable } from '@cucumber/cucumber';
 import { expect } from '@playwright/test';
 import * as historyOverrideRequest from '../../../../src/api/request/historyOverride.service';
 import * as resultsRequest from '../../../../src/api/request/result.service';
@@ -333,3 +333,20 @@ Then('User sends a DELETE request to delete history override', async function ()
         this.attach(`Delete History Override ${this.linkApiDeleteHistoryOverride} has status code ${this.response.status()} ${this.response.statusText()}`)
     }
 });
+
+Then('User sets PUT api to update history override with the following data:', async function (dataTable: DataTable) {
+    const rows = dataTable.raw();
+    const dataFirstYear = rows[1];
+    const dataSecondYear = rows[2];
+    const dataThirthYear = rows[3];
+    const dataFourthYear = rows[4];
+    console.log('asdd',dataFourthYear)
+});
+
+Then('User sends a PUT request to update history override values', function () {
+    
+});
+
+Then('User checks override history values must be displayed exactly in Purchasing as the following data:', async function (dataTable: DataTable) {
+    const rows = dataTable.rows();
+})
