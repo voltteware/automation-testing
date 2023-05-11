@@ -243,6 +243,8 @@ Then('{} checks API contract of get results of item', async function (actor: str
 Then('{} checks override history values in Purchasing', async function (actor: string) {
     this.historySnapshot = this.getResultsResponseBody.model.historySnapshot;
     console.log("this.historySnapshot: " + this.historySnapshot);
+    logger.log('info', `historySnapshot: >>> ${this.historySnapshot}`);
+    this.attach(`historySnapshot: >>> ${this.historySnapshot}`);
     // If historySnapShot includes override history value will return true
     const actual = this.historySnapshot.includes(this.expectedOrderQty);
     expect(actual,'Order Qty should be in historySnapShot').toBe(true)
