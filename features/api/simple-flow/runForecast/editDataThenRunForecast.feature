@@ -558,7 +558,7 @@ Feature: APIs Advanced Edit Item History, PUT /api/history-override, Purchase As
             | TC_BFV001_3 | QBFS        | testautoforecast@gmail.com | 20       | 1      | 200            | OK                 | useBackfill | true  |
 
     @TC_BFV002 @smoke-test-api @regression-api @api-backfill-value
-    Scenario Outline: <TC_ID> - Verify the the system can backfill for 25 months (12 months of 2nd year, 12 months of 3rd year and the last month of 4th year) with the 1st year has full values for <companyType> company
+    Scenario Outline: <TC_ID> - Verify the the system can backfill for 37 months (12 months of 1st year, 12 months of 2nd year, 12 months of 3rd year and the last month of 4th year) with the 1st year has full values for <companyType> company
         Given User picks company which has onboarded before with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get item with limit row: <limitRow>
@@ -623,3 +623,7 @@ Feature: APIs Advanced Edit Item History, PUT /api/history-override, Purchase As
             | TC_BFV002_1 | CSV         | testautoforecast@gmail.com | 20       | 200            | OK                 | useBackfill | true  |
             | TC_BFV002_2 | ASC         | testautoforecast@gmail.com | 20       | 200            | OK                 | useBackfill | true  |
             | TC_BFV002_3 | QBFS        | testautoforecast@gmail.com | 20       | 200            | OK                 | useBackfill | true  |
+
+            # TODO: Verify that the system can backfill for 37 months( 12 months of 1st year, 12 months of 2nd year, 12 months of 3rd year, the last month of 4th year). If the 1st year has full values and the 2nd year has some values
+            # TODO: Verify that the system can backfill for 37 months( 12 months of 1st year, 12 months of 2nd year, 12 months of 3rd year, the last month of 4th year). If the 1st year has full values and the 3th year has some values
+            # TODO: Verify that the system will fill "0" for other months. if the 1st year has no value and the 2nd year has full values
