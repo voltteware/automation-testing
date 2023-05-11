@@ -348,8 +348,7 @@ Then('User sets PUT api to update history override with the following data:', as
         key: `${this.itemKey}`,
         rows: []
     }        
-    let row = 1;
-    let editedHistoryData = new Map<string, number>();
+    let row = 1;    
     while (row <= historyValuesOfYears.length - 1)
     {
         for (let monthNumber = 1; monthNumber <= 12; monthNumber++){
@@ -366,16 +365,12 @@ Then('User sets PUT api to update history override with the following data:', as
                     forecastKey: "m",
                     orderQty: Number(orderQty),
                     start: `${Date.UTC(gridYear, monthNumber-1, 15)}`
-                }
-                editedHistoryData.set(row.grid, row.orderQty)                
+                }                            
                 this.payloadUpdateHistoryOverride.rows.push(row)
-            } else {
-                editedHistoryData.set(this.grid, 0)                
-            }            
+            }           
         }    
         row ++;
-    }
-    this.editedHistoryData = editedHistoryData
+    }    
     logger.log('info', `Payload update history override one year >>>>>> ` + JSON.stringify(this.payloadUpdateHistoryOverride, undefined, 4));
     this.attach(`Payload update history override one year >>>>>> ` + JSON.stringify(this.payloadUpdateHistoryOverride, undefined, 4));
 });
