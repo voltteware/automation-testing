@@ -1,4 +1,4 @@
-import { Then } from '@cucumber/cucumber';
+import { Then, DataTable } from '@cucumber/cucumber';
 import { expect } from '@playwright/test';
 import * as historyOverrideRequest from '../../../../src/api/request/historyOverride.service';
 import * as resultsRequest from '../../../../src/api/request/result.service';
@@ -335,3 +335,74 @@ Then('User sends a DELETE request to delete history override', async function ()
         this.attach(`Delete History Override ${this.linkApiDeleteHistoryOverride} has status code ${this.response.status()} ${this.response.statusText()}`)
     }
 });
+
+Then('User sets PUT api to update history override with the following data:', async function (dataTable: DataTable) {
+    const historyValuesOfYears = dataTable.raw();    
+
+    this.linkApiUpdateHistoryOverride = `${Links.API_HISTORY_OVERRIDE}`;    
+
+    let months: string[] = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];         
+    const currentMonth = new Date().getMonth() + 1;       
+
+    this.payloadUpdateHistoryOverride = {
+        key: `${this.itemKey}`,
+        rows: []
+    }        
+    let row = 1;    
+    while (row <= historyValuesOfYears.length - 1)
+    {
+        for (let monthNumber = 1; monthNumber <= 12; monthNumber++){
+            const gridMonth = months[monthNumber-1]        
+            let gridYear = new Date().getFullYear() - row;
+            if (monthNumber < currentMonth) gridYear = new Date().getFullYear() - row + 1;
+            this.grid = gridMonth + '_' + gridYear;
+            const orderQty = historyValuesOfYears[row][(monthNumber + 12 + -5)%12]
+            if (orderQty !== ''){
+                const row = {
+                    itemKey: `${this.itemKey}`,
+                    itemName: `${this.itemName}`,
+                    grid: `${this.grid}`,
+                    forecastKey: "m",
+                    orderQty: Number(orderQty),
+                    start: `${Date.UTC(gridYear, monthNumber-1, 15)}`
+                }                            
+                this.payloadUpdateHistoryOverride.rows.push(row)
+            }           
+        }    
+        row ++;
+    }    
+    logger.log('info', `Payload update history override one year >>>>>> ` + JSON.stringify(this.payloadUpdateHistoryOverride, undefined, 4));
+    this.attach(`Payload update history override one year >>>>>> ` + JSON.stringify(this.payloadUpdateHistoryOverride, undefined, 4));
+});
+
+Then('User sends a PUT request to update history override values', async function () {
+    this.response = await historyOverrideRequest.updateHistoryOverride(this.request, this.linkApiUpdateHistoryOverride, this.payloadUpdateHistoryOverride, this.headers);
+    if (this.response.status() == 200) {
+        this.updateHistoryOverrideResponseBody = JSON.parse(await this.response.text());
+        logger.log('info', `Update History Override ${this.linkApiUpdateHistoryOverride} has status code ${this.response.status()} ${this.response.statusText()} and updateHistoryOverrideResponse body ${JSON.stringify(this.updateHistoryOverrideResponseBody, undefined, 4)}`)
+        this.attach(`Update History Override ${this.linkApiUpdateHistoryOverride} has status code ${this.response.status()} ${this.response.statusText()} and updateHistoryOverrideResponseBody body ${JSON.stringify(this.updateHistoryOverrideResponseBody, undefined, 4)}`)
+    } else {
+        logger.log('info', `Update History Override ${this.linkApiUpdateHistoryOverride} has status code ${this.response.status()} ${this.response.statusText()}`)
+        this.attach(`Update History Override ${this.linkApiUpdateHistoryOverride} has status code ${this.response.status()} ${this.response.statusText()}`)
+    }
+});
+
+Then('User checks override history values must be displayed exactly in Purchasing as the following data:', async function (dataTable: DataTable) {
+    const historyValuesOfYears = dataTable.raw();
+    const historyValuesOfFirstYear = historyValuesOfYears[1];
+    const historyValuesOfSecondYear = historyValuesOfYears[2];
+    const historyValuesOfThirthYear = historyValuesOfYears[3];
+    const historyValuesOfFourthYear = historyValuesOfYears[4];
+    const historySnapShotExpected = [...historyValuesOfFourthYear, ...historyValuesOfThirthYear, ...historyValuesOfSecondYear, ...historyValuesOfFirstYear];  
+    // Any empty values at the beginning of the historySnapShotExpected array are removed
+    const firstNonEmptyIndex = historySnapShotExpected.findIndex((el) => el !== '');
+    if (firstNonEmptyIndex !== -1) {
+        historySnapShotExpected.splice(0, firstNonEmptyIndex);
+    }
+    const historySnapShotActual = this.getResultsResponseBody.model.historySnapshot; 
+    logger.log('info', `History Override Values expected >>> ${historySnapShotExpected}`);
+    this.attach(`History Override Values expected >>> ${historySnapShotExpected}`);
+    logger.log('info', `History Override Values actual >>>>> ${historySnapShotActual}`);
+    this.attach(`History Override Values actual >>>>> ${historySnapShotActual}`);
+    expect(_.isEqual(historySnapShotExpected.map(Number), historySnapShotActual.map(Number))).toBeTruthy()
+})
