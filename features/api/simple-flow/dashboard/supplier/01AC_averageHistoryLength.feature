@@ -6,7 +6,7 @@ Feature: API_Dashboard Cannot update average history length
             | admin | testuserforecastrx@gmail.com | Test1111# |
 
     @TC_AHL001_CSV @smoke-test-api @bug1972
-    Scenario Outline: <TC_ID> - Verify user <email> cannot update average history length in supplier
+    Scenario Outline: <TC_ID> - Verify user <email> cannot update average history length in Supplier section when company is Onboarding
         Given In Header of the request, User sets param Cookie as valid connect.sid
         And User sets request body of create company api with payload
             | companyName   | companyKey | companyType   | serviceLevel   | leadTime   | orderInterval   | initialSyncDate | marketplaceId |
@@ -49,7 +49,7 @@ Feature: API_Dashboard Cannot update average history length
             | TC_AHL001_CSV | leadTime   | testuserforecastrx@gmail.com | random      | CSV         | averageHistoryLength | random | random       | random   | random        | 200            | OK                 | New Supplier Auto | New description | newemail@gmail.com | random | 20       | random     |
 
     @TC_AHL001_ASC @smoke-test-api @bug1972
-    Scenario Outline: <TC_ID> - Verify user <email> cannot update average history length in supplier
+    Scenario Outline: <TC_ID> - Verify user <email> cannot update average history length in Supplier section when company is Onboarding
         Given In Header of the request, user sets param Cookie as valid connect.sid
         And User sends a GET request to get all company
         And User selects onboarding company with type <companyType>
