@@ -3,8 +3,8 @@ import http from 'k6/http';
 import { Trend, Rate } from 'k6/metrics';
 import { Links, Url } from '../../src/utils/links';
 
-const getCompanyByCompanyKey = new Trend('Get Comany By Company Key');
-const getCompanyByCompanyKeyErrorRate = new Rate('Get Comany By Company Key errors');
+const getCompanyByCompanyKey = new Trend('Get Company By Company Key');
+const getCompanyByCompanyKeyErrorRate = new Rate('Get Company By Company Key errors');
 
 export default class CompanyRequest {
     params: any;

@@ -510,3 +510,202 @@ Then('{} picks random supplier address in above response', async function (actor
 Then('{} checks API contract of get supplier address api', async function (actor: string) {
     supplierAddressResponseSchema.parse(this.responseBodyOfASupplierAddressObject);
 });
+
+Given('{} sets request body of edit supplier api with payload', async function (actor: string, dataTable: DataTable) {
+    // Prepare endpoint for request to edit supplier
+    link = `${Links.API_SUPPLIERS}/${supplierKey}`
+    var editColumn: string = dataTable.hashes()[0].editColumn;
+    var companyType: string = dataTable.hashes()[0].companyType;
+    var value: string = dataTable.hashes()[0].value;
+    switch (editColumn) {
+        case 'averageHistoryLength':
+            if (value == 'random') {
+                this.responseBodyOfASupplierObject.averageHistoryLength = this.averageHistoryLength =  Number(faker.random.numeric());
+            }
+
+            logger.log('info', `New ${editColumn}: ${this.averageHistoryLength}`);
+            this.attach(`New ${editColumn}: ${this.averageHistoryLength}`);
+        case 'supplierName':
+            if (value == 'random') {
+                this.newSupplierName = `${faker.company.name()} ${faker.random.numeric(3)} Auto`;
+            } else if (value.includes('Exist Supplier Name')) {
+                var randomSupplier = await this.getSupplierResponseBody.filter((su: any) => !(su.key.includes(supplierKey)))
+                this.newSupplierName = randomSupplier[1].name
+            }
+
+            logger.log('info', `New ${editColumn}: ${this.newSupplierName}`);
+            this.attach(`New ${editColumn}: ${this.newSupplierName}`);
+            break;
+        case 'leadTime':
+            if (value == 'random') {
+                this.leadTime = Number(faker.datatype.number({
+                    'min': 1,
+                    'max': 365
+                }));
+            }
+
+            logger.log('info', `New ${editColumn}: ${this.leadTime}`);
+            this.attach(`New ${editColumn}: ${this.leadTime}`);
+            break;
+        case 'serviceLevel':
+            if (value == 'random') {
+                this.serviceLevel = Number(faker.random.numeric(2));
+            }
+
+            logger.log('info', `New ${editColumn}: ${this.serviceLevel}`);
+            this.attach(`New ${editColumn}: ${this.serviceLevel}`);
+            break;
+        case 'orderInterval':
+            if (value == 'random') {
+                this.orderInterval = Number(faker.random.numeric());
+            }
+
+            logger.log('info', `New ${editColumn}: ${this.orderInterval}`);
+            this.attach(`New ${editColumn}: ${this.orderInterval}`);
+            break;
+        case 'description':
+            if (value == 'random') {
+                this.description = faker.lorem.words(3);
+            }
+
+            logger.log('info', `New ${editColumn}: ${this.description}`);
+            this.attach(`New ${editColumn}: ${this.description}`);
+            break;
+        case 'targetOrderValue':
+            if (value == 'random') {
+                this.targetOrderValue = Number(faker.random.numeric(3));
+            }
+
+            logger.log('info', `New ${editColumn}: ${this.targetOrderValue}`);
+            this.attach(`New ${editColumn}: ${this.targetOrderValue}`);
+            break;
+        case 'freeFreightMinimum':
+            if (value == 'random') {
+                this.freeFreightMinimum = Number(faker.random.numeric(3));
+            }
+
+            logger.log('info', `New ${editColumn}: ${this.freeFreightMinimum}`);
+            this.attach(`New ${editColumn}: ${this.freeFreightMinimum}`);
+            break;
+        case 'fabReplenishmentModel':
+            var restockModel = ['LOCAL', 'DIRECT_SHIP', 'GLOBAL'];
+            const excludedRestockModelValue = this.responseBodyOfASupplierObject.restockModel;
+
+            // Filter out the excluded RestockModel value from the restockModel array
+            const filteredArray = restockModel.filter((value) => value !== excludedRestockModelValue);
+            this.RestockModel = filteredArray[Math.floor(Math.random() * filteredArray.length)];
+
+            logger.log('info', `New ${editColumn}: ${this.RestockModel}`);
+            this.attach(`New ${editColumn}: ${this.RestockModel}`);
+            break;
+        case 'email':
+            if (value == 'random') {
+                const timeSendRequest = Date.now();
+                this.email = `auto_newemail${timeSendRequest}@gmail.com`;
+            }
+
+            logger.log('info', `New ${editColumn}: ${this.email}`);
+            this.attach(`New ${editColumn}: ${this.email}`);
+            break;
+        case 'moq':
+            if (value == 'random') {
+                this.moq = Number(faker.datatype.number({
+                    'min': 1,
+                    'max': 10
+                }));
+            }
+
+            logger.log('info', `New ${editColumn}: ${this.moq}`);
+            this.attach(`New ${editColumn}: ${this.moq}`);
+            break;
+        default:
+            break;
+    }
+
+    // Prepare payload for request to edit supplier
+    if (companyType === 'CSV') {
+        this.payLoad = {
+            companyType: `${this.responseBodyOfASupplierObject.companyType}`,
+            companyKey: `${this.responseBodyOfASupplierObject.companyKey}`,
+            key: `${this.responseBodyOfASupplierObject.key}`,
+            name: this.newSupplierName === undefined ? this.responseBodyOfASupplierObject.name : `${this.newSupplierName}`,
+            description: this.description === undefined ? this.responseBodyOfASupplierObject.description : `${this.description}`,
+            isHidden: this.responseBodyOfASupplierObject.isHidden,
+            shipVia: this.responseBodyOfASupplierObject.shipVia,
+            email: this.email === undefined ? this.responseBodyOfASupplierObject.email : `${this.email}`,
+            moq: this.moq === undefined ? this.responseBodyOfASupplierObject.moq : this.moq,
+            leadTime: this.leadTime === undefined ? this.responseBodyOfASupplierObject.leadTime : this.leadTime,
+            orderInterval: this.orderInterval === undefined ? this.responseBodyOfASupplierObject.orderInterval : this.orderInterval,
+            serviceLevel: this.serviceLevel === undefined ? this.responseBodyOfASupplierObject.serviceLevel : this.serviceLevel,
+            forecastTags: this.responseBodyOfASupplierObject.forecastTags,
+            phone: this.responseBodyOfASupplierObject.phone,
+            fax: this.responseBodyOfASupplierObject.fax,
+            website: this.responseBodyOfASupplierObject.website,
+            addressShippingUuid: this.responseBodyOfASupplierObject.addressShippingUuid,
+            addressBillingUuid: this.responseBodyOfASupplierObject.addressBillingUuid,
+            targetOrderValue: this.targetOrderValue === undefined ? this.responseBodyOfASupplierObject.targetOrderValue : this.targetOrderValue,
+            freeFreightMinimum: this.freeFreightMinimum === undefined ? this.responseBodyOfASupplierObject.freeFreightMinimum : this.freeFreightMinimum,
+            averageHistoryLength: this.responseBodyOfASupplierObject.averageHistoryLength,
+            created_at: `${this.responseBodyOfASupplierObject.created_at}`,
+            updated_at: `${this.responseBodyOfASupplierObject.updated_at}`
+        }
+    } else if (companyType === 'ASC') {
+        this.payLoad = {
+            companyType: `${this.responseBodyOfASupplierObject.companyType}`,
+            companyKey: `${this.responseBodyOfASupplierObject.companyKey}`,
+            key: `${this.responseBodyOfASupplierObject.key}`,
+            name: this.newSupplierName === undefined ? this.responseBodyOfASupplierObject.name : `${this.newSupplierName}`,
+            description: this.description === undefined ? this.responseBodyOfASupplierObject.description : `${this.description}`,
+            isHidden: this.responseBodyOfASupplierObject.isHidden,
+            shipVia: this.responseBodyOfASupplierObject.shipVia,
+            email: this.email === undefined ? this.responseBodyOfASupplierObject.email : `${this.email}`,
+            moq: this.moq === undefined ? this.responseBodyOfASupplierObject.moq : this.moq,
+            leadTime: this.leadTime === undefined ? this.responseBodyOfASupplierObject.leadTime : this.leadTime,
+            orderInterval: this.orderInterval === undefined ? this.responseBodyOfASupplierObject.orderInterval : this.orderInterval,
+            serviceLevel: this.serviceLevel === undefined ? this.responseBodyOfASupplierObject.serviceLevel : this.serviceLevel,
+            forecastTags: this.responseBodyOfASupplierObject.forecastTags,
+            phone: this.responseBodyOfASupplierObject.phone,
+            fax: this.responseBodyOfASupplierObject.fax,
+            website: this.responseBodyOfASupplierObject.website,
+            addressShippingUuid: this.responseBodyOfASupplierObject.addressShippingUuid,
+            addressBillingUuid: this.responseBodyOfASupplierObject.addressBillingUuid,
+            targetOrderValue: this.targetOrderValue === undefined ? this.responseBodyOfASupplierObject.targetOrderValue : this.targetOrderValue,
+            freeFreightMinimum: this.freeFreightMinimum === undefined ? this.responseBodyOfASupplierObject.freeFreightMinimum : this.freeFreightMinimum,
+            restockModel: this.RestockModel === undefined ? this.responseBodyOfASupplierObject.restockModel : this.RestockModel,
+            averageHistoryLength: this.responseBodyOfASupplierObject.averageHistoryLength,
+            created_at: `${this.responseBodyOfASupplierObject.created_at}`,
+            updated_at: `${this.responseBodyOfASupplierObject.updated_at}`,
+            links: this.responseBodyOfASupplierObject.links === undefined ? "" : undefined
+        }
+    } else if (companyType === 'QBFS' || companyType === 'QBO') {
+        this.payLoad = {
+            companyType: `${this.responseBodyOfASupplierObject.companyType}`,
+            companyKey: `${this.responseBodyOfASupplierObject.companyKey}`,
+            key: `${this.responseBodyOfASupplierObject.key}`,
+            name: this.newSupplierName === undefined ? this.responseBodyOfASupplierObject.name : this.newSupplierName,
+            description: this.description === undefined ? this.responseBodyOfASupplierObject.description : `${this.description}`,
+            isHidden: this.responseBodyOfASupplierObject.isHidden,
+            shipVia: this.responseBodyOfASupplierObject.shipVia,
+            email: this.email === undefined ? this.responseBodyOfASupplierObject.email : `${this.email}`,
+            moq: this.moq === undefined ? this.responseBodyOfASupplierObject.moq : this.moq,
+            leadTime: this.leadTime === undefined ? this.responseBodyOfASupplierObject.leadTime : this.leadTime,
+            orderInterval: this.orderInterval === undefined ? this.responseBodyOfASupplierObject.orderInterval : this.orderInterval,
+            serviceLevel: this.serviceLevel === undefined ? this.responseBodyOfASupplierObject.serviceLevel : this.serviceLevel,
+            forecastTags: this.responseBodyOfASupplierObject.forecastTags,
+            phone: this.responseBodyOfASupplierObject.phone,
+            fax: this.responseBodyOfASupplierObject.fax,
+            website: this.responseBodyOfASupplierObject.website,
+            addressShippingUuid: this.responseBodyOfASupplierObject.addressShippingUuid,
+            addressBillingUuid: this.responseBodyOfASupplierObject.addressBillingUuid,
+            targetOrderValue: this.targetOrderValue === undefined ? this.responseBodyOfASupplierObject.targetOrderValue : this.targetOrderValue,
+            freeFreightMinimum: this.freeFreightMinimum === undefined ? this.responseBodyOfASupplierObject.freeFreightMinimum : this.freeFreightMinimum,
+            restockModel: this.RestockModel === undefined ? this.responseBodyOfASupplierObject.restockModel : this.RestockModel,
+            averageHistoryLength: this.responseBodyOfASupplierObject.averageHistoryLength,
+            created_at: `${this.responseBodyOfASupplierObject.created_at}`,
+            updated_at: `${this.responseBodyOfASupplierObject.updated_at}`,
+        }
+    }
+
+    logger.log('info', `Payload` + JSON.stringify(this.payLoad, undefined, 4));
+    this.attach(`Payload` + JSON.stringify(this.payLoad, undefined, 4))
+});

@@ -34,24 +34,24 @@ Then(`{} sets GET api endpoint to get item with limit row: {}`, async function (
 });
 
 Then(`{} sets GET api endpoint to get items that have purchase as`, async function (actor) {
-    linkGetItems = `${Links.API_ITEMS}?offset=0&limit=100&where={"filters":[{"filters":[{"field":"lotMultipleItemName","operator":"isnotnull","value":null}],"logic":"and"}],"logic":"and"}`    
+    linkGetItems = `${Links.API_ITEMS}?offset=0&limit=100&where={"filters":[{"filters":[{"field":"lotMultipleItemName","operator":"isnotnull","value":null}],"logic":"and"}],"logic":"and"}`
 });
 
 Then(`{} sets GET api endpoint to get items that have not purchase as`, async function (actor) {
-    linkGetItems = `${Links.API_ITEMS}?offset=0&limit=50&where={"filters":[{"filters":[{"field":"lotMultipleItemName","operator":"isnull","value":null}],"logic":"and"}],"logic":"and"}`    
+    linkGetItems = `${Links.API_ITEMS}?offset=0&limit=50&where={"filters":[{"filters":[{"field":"lotMultipleItemName","operator":"isnull","value":null}],"logic":"and"}],"logic":"and"}`
 });
 
 Then(`{} set GET api endpoint to get items with name contains {string}`, async function (actor, containText: string) {
-    containText === 'itemInListItemInPO' ? containText = this.randomAItemObject.itemName : containText === 'itemInEditedSupplyAbove' ? containText = this.editSupplyResponseBody.itemName : containText === 'itemInEditedDemandAbove' ? containText = this.editDemandResponseBody.itemName : undefined    
+    containText === 'itemInListItemInPO' ? containText = this.randomAItemObject.itemName : containText === 'itemInEditedSupplyAbove' ? containText = this.editSupplyResponseBody.itemName : containText === 'itemInEditedDemandAbove' ? containText = this.editDemandResponseBody.itemName : undefined
     linkGetItems = `${Links.API_ITEMS}?offset=0&limit=2&where={"filters":[{"filters":[{"field":"name","operator":"contains","value":"${containText}"}],"logic":"and"},{"filters":[{"field":"isHidden","operator":"eq","value":true},{"field":"isHidden","operator":"eq","value":false}],"logic":"or"}],"logic":"and"}`
 });
 
 Then(`{} set GET api endpoint to get item that is hidden`, async function (actor) {
-    linkGetItems = `${Links.API_ITEMS}?offset=0&limit=1&where={"filters":[{"filters":[{"field":"name","operator":"eq","value":"${this.nameOfHiddenItem}"}],"logic":"and"}],"logic":"and"}`    
+    linkGetItems = `${Links.API_ITEMS}?offset=0&limit=1&where={"filters":[{"filters":[{"field":"name","operator":"eq","value":"${this.nameOfHiddenItem}"}],"logic":"and"}],"logic":"and"}`
 });
 
 Then(`{} set GET api endpoint to count item that is hidden`, async function (actor) {
-    linkCountItemsThatIsHidden = encodeURI(`${Links.API_ITEM_COUNT}?where={"filters":[{"filters":[{"field":"isHidden","operator":"eq","value":"true"}],"logic":"and"}],"logic":"and"}`);    
+    linkCountItemsThatIsHidden = encodeURI(`${Links.API_ITEM_COUNT}?where={"filters":[{"filters":[{"field":"isHidden","operator":"eq","value":"true"}],"logic":"and"}],"logic":"and"}`);
 });
 
 Then(`{} sets GET api endpoint to count items that is active and have lotMultipleItemKey is NULL`, async function (actor: string) {
@@ -197,7 +197,7 @@ Given('User saves list items that have already set as purchas as of orther items
     this.attach(`list items that have already set as purchas as of orther items: ${JSON.stringify(this.listItemsAlreadySetAsPurchaseAsOfOrtherItem, undefined, 4)}`);
 });
 
-Given('{} picks a random item which does not have Purchase As', async function (actor: string){
+Given('{} picks a random item which does not have Purchase As', async function (actor: string) {
     expect(this.getItemsResponseBody.length, 'There is at least 1 item to pick random').toBeGreaterThanOrEqual(1);
     // Get items which are not related to Purchase As
     this.listItemsNotPurchaseAs = this.getItemsResponseBody.filter((item: any) => item.lotMultipleItemKey == null && item.lotMultipleItemName == null);
@@ -222,7 +222,7 @@ Given('User picks max 10 random items in above list items', async function () {
 });
 
 Then(`{} checks random items has status is Active`, async function (actor) {
-     // Add this if else condition to skip test in Purchasing My Suggested if system only show Items without Suppliers, there is no item has Supplier Name not null. 
+    // Add this if else condition to skip test in Purchasing My Suggested if system only show Items without Suppliers, there is no item has Supplier Name not null. 
     if (this.randomMax10Items != undefined || null) {
         const options = {
             headers: this.headers
@@ -307,9 +307,9 @@ Then(`{} sets api endpoint to edit some values of a item`, async function (actor
     this.attach(`Link edit item: ${link}`);
 
     const rows = dataTable.hashes();
-    const {purchaseAs, isHidden, supplierName, supplierPrice, moq, onHandFbaQty, onHandFbmQty, serviceLevel, warehouseQty, description, leadTime, orderInterval, casePackQty, tags, onHandQtyMin, wareHouseQtyMin, inventorySourcePreference} = rows[0]
+    const { purchaseAs, isHidden, supplierName, supplierPrice, moq, onHandFbaQty, onHandFbmQty, serviceLevel, warehouseQty, description, leadTime, orderInterval, casePackQty, tags, onHandQtyMin, wareHouseQtyMin, inventorySourcePreference } = rows[0]
     this.payLoad = this.responseBodyOfAItemObject
-    if (supplierName === 'random'){
+    if (supplierName === 'random') {
         const excludedSupplierKey = this.responseBodyOfAItemObject.vendorKey
 
         // Filter out the excluded supplier have excludedSupplierKey from the list suppliers
@@ -322,11 +322,11 @@ Then(`{} sets api endpoint to edit some values of a item`, async function (actor
         this.payLoad.vendorName = randomSupplier.name;
     }
 
-    if (supplierPrice === 'random'){
+    if (supplierPrice === 'random') {
         this.payLoad.vendorPrice = Number(faker.random.numeric());
     }
 
-    if (moq === 'random'){
+    if (moq === 'random') {
         this.payLoad.moq = Number(faker.random.numeric());
     }
 
@@ -368,7 +368,7 @@ Then(`{} sets api endpoint to edit some values of a item`, async function (actor
     if (tags === 'random') {
         // TODO: If there is a tag, delete it, if not, add a new tag
         const tags = this.payLoad.tags
-        if(tags.length < 3)  {
+        if (tags.length < 3) {
             tags.push(`Tag${Number(faker.random.numeric(2))}`)
         } else {
             tags.shift()
@@ -394,11 +394,11 @@ Then(`{} sets api endpoint to edit some values of a item`, async function (actor
         this.payLoad.inventorySourcePreference = filteredArray[Math.floor(Math.random() * filteredArray.length)];
     }
 
-    if (isHidden === 'false'){
+    if (isHidden === 'false') {
         this.payLoad.isHidden = false
     }
 
-    if (purchaseAs === 'null'){        
+    if (purchaseAs === 'null') {
         this.payLoad.lotMultipleItemName = null
         this.payLoad.lotMultipleItemKey = null
     }
@@ -407,7 +407,7 @@ Then(`{} sets api endpoint to edit some values of a item`, async function (actor
     this.attach(`Payload edit some values of item` + JSON.stringify(this.payLoad, undefined, 4))
 });
 
-Given('User sets PUT api endpoint to edit {} of the above item for company type {} with new value: {}', async function (editColumn: string, companyType: string, value: string) {    
+Given('User sets PUT api endpoint to edit {} of the above item for company type {} with new value: {}', async function (editColumn: string, companyType: string, value: string) {
     // Prepare endpoint for request to edit item
     link = `${Links.API_ITEMS}/${this.itemKey === undefined ? this.responseBodyOfAItemObject.key : this.itemKey}`
 
@@ -449,7 +449,7 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
                 const excludedSupplierKey = this.responseBodyOfAItemObject.vendorKey
 
                 // Filter out the excluded supplier have excludedSupplierKey from the list suppliers                
-                const filteredArray = this.getSupplierResponseBody.filter((supplier: any) => supplier.key !== excludedSupplierKey);                          
+                const filteredArray = this.getSupplierResponseBody.filter((supplier: any) => supplier.key !== excludedSupplierKey);
                 const randomSupplier = filteredArray[Math.floor(Math.random() * filteredArray.length)];
                 logger.log('info', `Random supplier` + JSON.stringify(randomSupplier, undefined, 4));
                 this.attach(`Random supplier` + JSON.stringify(randomSupplier, undefined, 4))
@@ -657,7 +657,7 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
             break;
         case 'purchaseAs':
             if (value == 'random') {
-                if(companyType !== "QBFS"){
+                if (companyType !== "QBFS") {
                     this.payloadCreateItem = {
                         "key": "",
                         "name": `${faker.random.alphaNumeric(6).toUpperCase()}-${faker.datatype.number(500)}-Auto`,
@@ -721,12 +721,12 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
                         "upc": "",
                         "ean": ""
                     }
-                    
+
                     // Create new item to set purchase as      
                     this.attach(`Payload Create new item to set purchase as: ${JSON.stringify(this.payloadCreateItem, undefined, 4)}`)
-    
+
                     const createItemResponse = await itemRequest.createItem(this.request, Links.API_ITEMS, this.payloadCreateItem, this.headers);
-                    const responseBodyText = await createItemResponse.text();                    
+                    const responseBodyText = await createItemResponse.text();
 
                     if (createItemResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
                         const responseBodyOfAItemObject = JSON.parse(responseBodyText);
@@ -741,16 +741,16 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
                         const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
                         logger.log('info', `Response POST Create new item to set purchase as ${link} has status code ${createItemResponse.status()} ${createItemResponse.statusText()} and response body ${responseBodyText}`);
                         this.attach(`Response POST Create new item to set purchase as ${link} has status code ${createItemResponse.status()} ${createItemResponse.statusText()} and response body ${actualResponseText}`)
-                    }                    
+                    }
                 } else {
-                    const excludedItemKey = this.itemKey                    
+                    const excludedItemKey = this.itemKey
                     // Filter out the excluded item have already set as purchas as of orther items the list items
                     const filteredArray = this.getItemsResponseBody.filter((item: any) => ((item.key !== excludedItemKey) && (!this.listItemsAlreadySetAsPurchaseAsOfOrtherItem.includes(item.key))));
                     const randomItem = filteredArray[Math.floor(Math.random() * filteredArray.length)];
 
                     this.lotMultipleItemName = randomItem.name
                     this.lotMultipleItemKey = randomItem.key
-                }                                
+                }
             } else if (value == 'null') {
                 this.lotMultipleItemName = null
                 this.lotMultipleItemKey = null
@@ -760,12 +760,12 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
             } else if (value == 'hard') {
                 this.lotMultipleItemName = this.itemPurchaseAsName;
                 this.lotMultipleItemKey = this.itemPurchaseAsKey;
-            } else if (value == "dynamic"){
+            } else if (value == "dynamic") {
                 const excludedItemKey = this.itemKey
                 // Filter out the excluded item have already set as purchase as of other items the list items
                 const filteredArray = this.getItemsResponseBody.filter((item: any) => ((item.key !== excludedItemKey) && (!this.listItemsAlreadySetAsPurchaseAsOfOrtherItem.includes(item.key))));
                 const randomItem = filteredArray[Math.floor(Math.random() * filteredArray.length)];
-            
+
                 this.lotMultipleItemName = randomItem.name
                 this.lotMultipleItemKey = randomItem.key
             }
@@ -1095,7 +1095,7 @@ Then('The new {} of item must be updated successfully', function (editColumn: st
             expect(this.lotMultipleItemKey).toEqual(this.editItemResponseBody.lotMultipleItemKey)
             break;
         case 'useBackfill':
-            expect(this.useBackfill).toEqual(this.editItemResponseBody.useBackfill)            
+            expect(this.useBackfill).toEqual(this.editItemResponseBody.useBackfill)
             break;
         default:
             break;
@@ -1324,14 +1324,14 @@ Then('{} checks new values of item in "Manage Company > Items" must be display e
     expect(this.editItemResponseBody.tags).toStrictEqual(this.payLoad.tags)
     expect(this.editItemResponseBody.onHandMin).toBe(this.payLoad.onHandMin)
     expect(this.editItemResponseBody.onHandThirdParty).toBe(this.payLoad.onHandThirdParty)
-    expect(this.editItemResponseBody.inventorySourcePreference).toBe(this.payLoad.inventorySourcePreference)   
+    expect(this.editItemResponseBody.inventorySourcePreference).toBe(this.payLoad.inventorySourcePreference)
 });
 
 Then('{} checks API contract essential types in the response of edit item are correct', async function (actor: string) {
     itemInfoResponseSchema.parse(this.editItemResponseBody);
 });
 
-Given(`User sets api endpoint to get consolidated of item`, function () {    
+Given(`User sets api endpoint to get consolidated of item`, function () {
     this.linkApiGetConsolidatedQtyItem = `${Links.API_ITEMS}/${this.itemKey}/get-consolidated-qty`
 });
 
@@ -1342,9 +1342,9 @@ Given(`User sends a GET request to get consolidated of item`, async function () 
     this.getConsolidatedQtyResponse = this.response = await itemRequest.getConsolidatedQty(this.request, this.linkApiGetConsolidatedQtyItem, options);
     const responseBodyText = await this.getConsolidatedQtyResponse.text();
     if (this.getConsolidatedQtyResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
-        this.responseBody = this.getConsolidatedQtyResponseBody = JSON.parse(await this.getConsolidatedQtyResponse.text());        
+        this.responseBody = this.getConsolidatedQtyResponseBody = JSON.parse(await this.getConsolidatedQtyResponse.text());
         logger.log('info', `Response GET consolidated qty ${this.linkApiGetConsolidatedQtyItem}  >>>>>` + JSON.stringify(this.getConsolidatedQtyResponseBody, undefined, 4));
-        this.attach(`Response GET consolidated qty ${this.linkApiGetConsolidatedQtyItem}  >>>>>>` + JSON.stringify(this.getConsolidatedQtyResponseBody, undefined, 4))       
+        this.attach(`Response GET consolidated qty ${this.linkApiGetConsolidatedQtyItem}  >>>>>>` + JSON.stringify(this.getConsolidatedQtyResponseBody, undefined, 4))
     }
     else {
         const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
@@ -1353,27 +1353,27 @@ Given(`User sends a GET request to get consolidated of item`, async function () 
     }
 });
 
-Given(`User saves the forecast recommended qty`, function () {    
+Given(`User saves the forecast recommended qty`, function () {
     this.forecastRecommendQty = (this.getConsolidatedQtyResponseBody[0].consolidatedQty)
 
     logger.log('info', `Forecast Recommended Qty >>>>>>> ${this.forecastRecommendQty}`);
     this.attach(`Forecast Recommended Qty >>>>>>> ${this.forecastRecommendQty}`);
 });
 
-Given(`User sets api endpoint to get a item in PO  of vendor key in My Suggested`, function () {        
-        this.linkGetItemsInPO = encodeURI(`${Links.API_SUMMARY_VENDOR_ITEMS_IN_PO}?offset=0&limit=1&where={"filters":[{"filters":[{"field":"itemName","operator":"contains","value":"${this.editItemResponseBody.name}"}],"logic":"and"}],"logic":"and"}&vendorKey=${this.editItemResponseBody.vendorKey}`);        
+Given(`User sets api endpoint to get a item in PO  of vendor key in My Suggested`, function () {
+    this.linkGetItemsInPO = encodeURI(`${Links.API_SUMMARY_VENDOR_ITEMS_IN_PO}?offset=0&limit=1&where={"filters":[{"filters":[{"field":"itemName","operator":"contains","value":"${this.editItemResponseBody.name}"}],"logic":"and"}],"logic":"and"}&vendorKey=${this.editItemResponseBody.vendorKey}`);
 });
 
-Given(`User sets api endpoint to get a item in Custom`, function () {                
-        this.linkGetItemsInCustom = encodeURI(`${Links.API_SUMMARY_ITEMS_IN_PURCHASING_CUSTOM}?offset=0&limit=100&where={"filters":[{"filters":[{"field":"itemName","operator":"contains","value":"${this.editItemResponseBody.name}"}],"logic":"and"}],"logic":"and"}`);            
+Given(`User sets api endpoint to get a item in Custom`, function () {
+    this.linkGetItemsInCustom = encodeURI(`${Links.API_SUMMARY_ITEMS_IN_PURCHASING_CUSTOM}?offset=0&limit=100&where={"filters":[{"filters":[{"field":"itemName","operator":"contains","value":"${this.editItemResponseBody.name}"}],"logic":"and"}],"logic":"and"}`);
 });
 
-Given(`{} sets api endpoint to get a Purchase As item in Custom`, function (actor: string) {                
-    this.linkGetPurchaseAsItemsInCustom = encodeURI(`${Links.API_SUMMARY_ITEMS_IN_PURCHASING_CUSTOM}?offset=0&limit=100&where={"filters":[{"filters":[{"field":"itemName","operator":"contains","value":"${this.editItemResponseBody.lotMultipleItemName}"}],"logic":"and"}],"logic":"and"}`);            
+Given(`{} sets api endpoint to get a Purchase As item in Custom`, function (actor: string) {
+    this.linkGetPurchaseAsItemsInCustom = encodeURI(`${Links.API_SUMMARY_ITEMS_IN_PURCHASING_CUSTOM}?offset=0&limit=100&where={"filters":[{"filters":[{"field":"itemName","operator":"contains","value":"${this.editItemResponseBody.lotMultipleItemName}"}],"logic":"and"}],"logic":"and"}`);
 });
 
-Given(`User sends a POST request to get a item in PO by vendor key in My Suggested`, async function () {    
-    if (Number(this.forecastRecommendQty) > 0){
+Given(`User sends a POST request to get a item in PO by vendor key in My Suggested`, async function () {
+    if (Number(this.forecastRecommendQty) > 0) {
         const payload = { "removedItemKeys": [] };
         this.getItemsinPOResponse = this.response = await vendorRequest.getItemsInPO(this.request, this.linkGetItemsInPO, payload, this.headers);
         const responseBodyText = await this.getItemsinPOResponse.text();
@@ -1396,26 +1396,26 @@ Given(`User sends a POST request to get a item in PO by vendor key in My Suggest
     }
 });
 
-Given(`User sends a GET request to get a item in Custom`, async function () {        
-        const options = {
-            headers: this.headers
-        }
-        this.getItemsInPurchasingCustomResponse = this.response = await itemRequest.getItemsInPurchasingCustom(this.request, this.linkGetItemsInCustom, options);
-        const responseBodyText = await this.getItemsInPurchasingCustomResponse.text();
-        if (this.getItemsInPurchasingCustomResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
-            this.responseBody = this.getItemsInPurchasingCustomResponseBody = this.getItemsResponseBody = JSON.parse(await this.getItemsInPurchasingCustomResponse.body());
-            this.randomAItemObject = this.getItemsInPurchasingCustomResponseBody[Math.floor(Math.random() * this.getItemsInPurchasingCustomResponseBody.length)];
-            logger.log('info', `Random object in response GET ${this.linkGetItemsInCustom} >>>>>>` + JSON.stringify(this.randomAItemObject, undefined, 4));
-            this.attach(`Random object in response GET ${this.linkGetItemsInCustom} >>>>>>` + JSON.stringify(this.randomAItemObject, undefined, 4))
-        }
-        else {
-            const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
-            logger.log('info', `Random object in Response GET ${this.linkGetItemsInCustom} has status code ${this.response.status()} ${this.response.statusText()} and response body >>>>>> ${responseBodyText}`);
-            this.attach(`Random object in Response GET ${this.linkGetItemsInCustom} has status code ${this.response.status()} ${this.response.statusText()} and response body >>>>>> ${actualResponseText}`)
-        }    
+Given(`User sends a GET request to get a item in Custom`, async function () {
+    const options = {
+        headers: this.headers
+    }
+    this.getItemsInPurchasingCustomResponse = this.response = await itemRequest.getItemsInPurchasingCustom(this.request, this.linkGetItemsInCustom, options);
+    const responseBodyText = await this.getItemsInPurchasingCustomResponse.text();
+    if (this.getItemsInPurchasingCustomResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
+        this.responseBody = this.getItemsInPurchasingCustomResponseBody = this.getItemsResponseBody = JSON.parse(await this.getItemsInPurchasingCustomResponse.body());
+        this.randomAItemObject = this.getItemsInPurchasingCustomResponseBody[Math.floor(Math.random() * this.getItemsInPurchasingCustomResponseBody.length)];
+        logger.log('info', `Random object in response GET ${this.linkGetItemsInCustom} >>>>>>` + JSON.stringify(this.randomAItemObject, undefined, 4));
+        this.attach(`Random object in response GET ${this.linkGetItemsInCustom} >>>>>>` + JSON.stringify(this.randomAItemObject, undefined, 4))
+    }
+    else {
+        const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
+        logger.log('info', `Random object in Response GET ${this.linkGetItemsInCustom} has status code ${this.response.status()} ${this.response.statusText()} and response body >>>>>> ${responseBodyText}`);
+        this.attach(`Random object in Response GET ${this.linkGetItemsInCustom} has status code ${this.response.status()} ${this.response.statusText()} and response body >>>>>> ${actualResponseText}`)
+    }
 });
 
-Given(`User verify that values of item in "Purchasing > My Suggested" must be updated after update values of item in "Manage Company > Items" and run forecast`, function () {    
+Given(`User verify that values of item in "Purchasing > My Suggested" must be updated after update values of item in "Manage Company > Items" and run forecast`, function () {
     // expect(this.getItemsInPOResponseBody.model[0].vendorKey).toBe(this.editItemResponseBody.vendorKey)
     // expect(this.getItemsInPOResponseBody.model[0].vendorName).toBe(this.editItemResponseBody.vendorName)
     // expect(this.getItemsInPOResponseBody.model[0].vendorPrice).toBe(this.editItemResponseBody.vendorPrice)
@@ -1432,8 +1432,8 @@ Given(`User verify that values of item in "Purchasing > My Suggested" must be up
     // expect(this.getItemsInPOResponseBody.model[0].onHandMin).toBe(this.editItemResponseBody.onHandMin)
     // expect(this.getItemsInPOResponseBody.model[0].onHandThirdParty).toBe(this.editItemResponseBody.onHandThirdParty)
     // expect(this.getItemsInPOResponseBody.model[0].inventorySourcePreference).toBe(this.editItemResponseBody.inventorySourcePreference)    
-    if (Number(this.forecastRecommendQty) > 0){
-        this.softAssert(this.getItemsInPOResponseBody.model[0].vendorKey == this.editItemResponseBody.vendorKey, `Vendor key - Expected: ${this.editItemResponseBody.vendorKey}, Actual: ${this.getItemsInPOResponseBody.model[0].vendorKey}`) 
+    if (Number(this.forecastRecommendQty) > 0) {
+        this.softAssert(this.getItemsInPOResponseBody.model[0].vendorKey == this.editItemResponseBody.vendorKey, `Vendor key - Expected: ${this.editItemResponseBody.vendorKey}, Actual: ${this.getItemsInPOResponseBody.model[0].vendorKey}`)
         this.softAssert(this.getItemsInPOResponseBody.model[0].vendorName == this.editItemResponseBody.vendorName, `vendorName - Expected: ${this.editItemResponseBody.vendorName}, Actual: ${this.getItemsInPOResponseBody.model[0].vendorName}`)
         this.softAssert(this.getItemsInPOResponseBody.model[0].vendorPrice == this.editItemResponseBody.vendorPrice, `vendorPrice - Expected: ${this.editItemResponseBody.vendorPrice}, Actual: ${this.getItemsInPOResponseBody.model[0].vendorPrice}`)
         this.softAssert(this.getItemsInPOResponseBody.model[0].moq == this.editItemResponseBody.moq, `moq - Expected: ${this.editItemResponseBody.moq}, Actual: ${this.getItemsInPOResponseBody.model[0].moq}`)
@@ -1456,7 +1456,7 @@ Given(`User verify that values of item in "Purchasing > My Suggested" must be up
     }
 });
 
-Given(`User verify that values of item in "Purchasing > Custom" must be updated after update values of item in "Manage Company > Items" and run forecast`, function () {    
+Given(`User verify that values of item in "Purchasing > Custom" must be updated after update values of item in "Manage Company > Items" and run forecast`, function () {
     // expect(this.getItemsInPurchasingCustomResponseBody[0].vendorKey).toBe(this.editItemResponseBody.vendorKey)
     // expect(this.getItemsInPurchasingCustomResponseBody[0].vendorName).toBe(this.editItemResponseBody.vendorName)
     // expect(this.getItemsInPurchasingCustomResponseBody[0].vendorPrice).toBe(this.editItemResponseBody.vendorPrice)
@@ -1473,25 +1473,25 @@ Given(`User verify that values of item in "Purchasing > Custom" must be updated 
     // expect(this.getItemsInPurchasingCustomResponseBody[0].onHandMin).toBe(this.editItemResponseBody.onHandMin)
     // expect(this.getItemsInPurchasingCustomResponseBody[0].onHandThirdParty).toBe(this.editItemResponseBody.onHandThirdParty)
     // expect(this.getItemsInPurchasingCustomResponseBody[0].inventorySourcePreference).toBe(this.editItemResponseBody.inventorySourcePreference) 
-    this.softAssert(this.getItemsInPurchasingCustomResponseBody[0].vendorKey == this.editItemResponseBody.vendorKey, `Vendor key - Expected: ${this.editItemResponseBody.vendorKey}, Actual: ${this.getItemsInPurchasingCustomResponseBody[0].vendorKey}`) 
-        this.softAssert(this.getItemsInPurchasingCustomResponseBody[0].vendorName == this.editItemResponseBody.vendorName, `vendorName - Expected: ${this.editItemResponseBody.vendorName}, Actual: ${this.getItemsInPurchasingCustomResponseBody[0].vendorName}`)
-        this.softAssert(this.getItemsInPurchasingCustomResponseBody[0].vendorPrice == this.editItemResponseBody.vendorPrice, `vendorPrice - Expected: ${this.editItemResponseBody.vendorPrice}, Actual: ${this.getItemsInPurchasingCustomResponseBody[0].vendorPrice}`)
-        this.softAssert(this.getItemsInPurchasingCustomResponseBody[0].moq == this.editItemResponseBody.moq, `moq - Expected: ${this.editItemResponseBody.moq}, Actual: ${this.getItemsInPurchasingCustomResponseBody[0].moq}`)
-        this.softAssert(this.getItemsInPurchasingCustomResponseBody[0].onHand == this.editItemResponseBody.onHand, `onHand - Expected: ${this.editItemResponseBody.onHand}, Actual: ${this.getItemsInPurchasingCustomResponseBody[0].onHand}`)
-        this.softAssert(this.getItemsInPurchasingCustomResponseBody[0].onHandFbm == this.editItemResponseBody.onHandFbm, `onHandFbm - Expected: ${this.editItemResponseBody.onHandFbm}, Actual: ${this.getItemsInPurchasingCustomResponseBody[0].onHandFbm}`)       
-        this.softAssert(this.getItemsInPurchasingCustomResponseBody[0].onHandThirdParty == this.editItemResponseBody.onHandThirdParty, `onHandThirdParty - Expected: ${this.editItemResponseBody.onHandThirdParty}, Actual: ${this.getItemsInPurchasingCustomResponseBody[0].onHandThirdParty}`)
-        this.softAssert(this.getItemsInPurchasingCustomResponseBody[0].description == this.editItemResponseBody.description, `description - Expected: ${this.editItemResponseBody.description}, Actual: ${this.getItemsInPurchasingCustomResponseBody[0].description}`)
-        this.softAssert(this.getItemsInPurchasingCustomResponseBody[0].leadTime == this.editItemResponseBody.leadTime, `leadTime - Expected: ${this.editItemResponseBody.leadTime}, Actual: ${this.getItemsInPurchasingCustomResponseBody[0].leadTime}`)
-        this.softAssert(this.getItemsInPurchasingCustomResponseBody[0].orderInterval == this.editItemResponseBody.orderInterval, `orderInterval - Expected: ${this.editItemResponseBody.orderInterval}, Actual: ${this.getItemsInPurchasingCustomResponseBody[0].orderInterval}`)
-        this.softAssert(this.getItemsInPurchasingCustomResponseBody[0].otMultipleQty == this.editItemResponseBody.otMultipleQty, `otMultipleQty - Expected: ${this.editItemResponseBody.otMultipleQty}, Actual: ${this.getItemsInPurchasingCustomResponseBody[0].otMultipleQty}`)
-        this.softAssert(_.isEqual(this.getItemsInPurchasingCustomResponseBody[0].tags, this.editItemResponseBody.tags), `tags - Expected: ${this.editItemResponseBody.tags}, Actual: ${this.getItemsInPurchasingCustomResponseBody[0].tags}`)
-        this.softAssert(this.getItemsInPurchasingCustomResponseBody[0].onHandMin == this.editItemResponseBody.onHandMin), `onHandMin - Expected: ${this.editItemResponseBody.onHandMin}, Actual: ${this.getItemsInPurchasingCustomResponseBody[0].onHandMin}`
-        this.softAssert(this.getItemsInPurchasingCustomResponseBody[0].onHandThirdParty == this.editItemResponseBody.onHandThirdParty, `onHandThirdParty - Expected: ${this.editItemResponseBody.onHandThirdParty}, Actual: ${this.getItemsInPurchasingCustomResponseBody[0].onHandThirdParty}`)
-        this.softAssert(this.getItemsInPurchasingCustomResponseBody[0].inventorySourcePreference == this.editItemResponseBody.inventorySourcePreference, `inventorySourcePreference - Expected: ${this.editItemResponseBody.inventorySourcePreference}, Actual: ${this.getItemsInPurchasingCustomResponseBody[0].inventorySourcePreference}`)
-        expect(this.countErrors).toBe(0)
+    this.softAssert(this.getItemsInPurchasingCustomResponseBody[0].vendorKey == this.editItemResponseBody.vendorKey, `Vendor key - Expected: ${this.editItemResponseBody.vendorKey}, Actual: ${this.getItemsInPurchasingCustomResponseBody[0].vendorKey}`)
+    this.softAssert(this.getItemsInPurchasingCustomResponseBody[0].vendorName == this.editItemResponseBody.vendorName, `vendorName - Expected: ${this.editItemResponseBody.vendorName}, Actual: ${this.getItemsInPurchasingCustomResponseBody[0].vendorName}`)
+    this.softAssert(this.getItemsInPurchasingCustomResponseBody[0].vendorPrice == this.editItemResponseBody.vendorPrice, `vendorPrice - Expected: ${this.editItemResponseBody.vendorPrice}, Actual: ${this.getItemsInPurchasingCustomResponseBody[0].vendorPrice}`)
+    this.softAssert(this.getItemsInPurchasingCustomResponseBody[0].moq == this.editItemResponseBody.moq, `moq - Expected: ${this.editItemResponseBody.moq}, Actual: ${this.getItemsInPurchasingCustomResponseBody[0].moq}`)
+    this.softAssert(this.getItemsInPurchasingCustomResponseBody[0].onHand == this.editItemResponseBody.onHand, `onHand - Expected: ${this.editItemResponseBody.onHand}, Actual: ${this.getItemsInPurchasingCustomResponseBody[0].onHand}`)
+    this.softAssert(this.getItemsInPurchasingCustomResponseBody[0].onHandFbm == this.editItemResponseBody.onHandFbm, `onHandFbm - Expected: ${this.editItemResponseBody.onHandFbm}, Actual: ${this.getItemsInPurchasingCustomResponseBody[0].onHandFbm}`)
+    this.softAssert(this.getItemsInPurchasingCustomResponseBody[0].onHandThirdParty == this.editItemResponseBody.onHandThirdParty, `onHandThirdParty - Expected: ${this.editItemResponseBody.onHandThirdParty}, Actual: ${this.getItemsInPurchasingCustomResponseBody[0].onHandThirdParty}`)
+    this.softAssert(this.getItemsInPurchasingCustomResponseBody[0].description == this.editItemResponseBody.description, `description - Expected: ${this.editItemResponseBody.description}, Actual: ${this.getItemsInPurchasingCustomResponseBody[0].description}`)
+    this.softAssert(this.getItemsInPurchasingCustomResponseBody[0].leadTime == this.editItemResponseBody.leadTime, `leadTime - Expected: ${this.editItemResponseBody.leadTime}, Actual: ${this.getItemsInPurchasingCustomResponseBody[0].leadTime}`)
+    this.softAssert(this.getItemsInPurchasingCustomResponseBody[0].orderInterval == this.editItemResponseBody.orderInterval, `orderInterval - Expected: ${this.editItemResponseBody.orderInterval}, Actual: ${this.getItemsInPurchasingCustomResponseBody[0].orderInterval}`)
+    this.softAssert(this.getItemsInPurchasingCustomResponseBody[0].otMultipleQty == this.editItemResponseBody.otMultipleQty, `otMultipleQty - Expected: ${this.editItemResponseBody.otMultipleQty}, Actual: ${this.getItemsInPurchasingCustomResponseBody[0].otMultipleQty}`)
+    this.softAssert(_.isEqual(this.getItemsInPurchasingCustomResponseBody[0].tags, this.editItemResponseBody.tags), `tags - Expected: ${this.editItemResponseBody.tags}, Actual: ${this.getItemsInPurchasingCustomResponseBody[0].tags}`)
+    this.softAssert(this.getItemsInPurchasingCustomResponseBody[0].onHandMin == this.editItemResponseBody.onHandMin), `onHandMin - Expected: ${this.editItemResponseBody.onHandMin}, Actual: ${this.getItemsInPurchasingCustomResponseBody[0].onHandMin}`
+    this.softAssert(this.getItemsInPurchasingCustomResponseBody[0].onHandThirdParty == this.editItemResponseBody.onHandThirdParty, `onHandThirdParty - Expected: ${this.editItemResponseBody.onHandThirdParty}, Actual: ${this.getItemsInPurchasingCustomResponseBody[0].onHandThirdParty}`)
+    this.softAssert(this.getItemsInPurchasingCustomResponseBody[0].inventorySourcePreference == this.editItemResponseBody.inventorySourcePreference, `inventorySourcePreference - Expected: ${this.editItemResponseBody.inventorySourcePreference}, Actual: ${this.getItemsInPurchasingCustomResponseBody[0].inventorySourcePreference}`)
+    expect(this.countErrors).toBe(0)
 });
 
-Given(`User checks some values in result must be updated after update values of item in "Manage Company > Items" and run forecast`, function () {                
+Given(`User checks some values in result must be updated after update values of item in "Manage Company > Items" and run forecast`, function () {
     this.softAssert(this.getResultsResponseBody.model.settingsSources.serviceLevel.value == this.editItemResponseBody.serviceLevel, `serviceLevel - Expected: ${this.editItemResponseBody.serviceLevel}, Actual: ${this.getResultsResponseBody.model.settingsSources.serviceLevel.value}`)
     this.softAssert(this.getResultsResponseBody.model.settingsSources.leadTime.value == this.editItemResponseBody.leadTime, `leadTime - Expected: ${this.editItemResponseBody.leadTime}, Actual: ${this.getResultsResponseBody.model.settingsSources.leadTime.value}`)
     this.softAssert(this.getResultsResponseBody.model.settingsSources.moq.value == this.editItemResponseBody.moq, `moq - Expected: ${this.editItemResponseBody.moq}, Actual: ${this.getResultsResponseBody.model.settingsSources.moq.value}`)
@@ -1499,25 +1499,25 @@ Given(`User checks some values in result must be updated after update values of 
     expect(this.countErrors).toBe(0)
 });
 
-Given(`User verify that "Existing PO Qty" of item in "Purchasing > Custom" must be updated after update values of item in "Manage Company > Supply" and run forecast`, function () {                
+Given(`User verify that "Existing PO Qty" of item in "Purchasing > Custom" must be updated after update values of item in "Manage Company > Supply" and run forecast`, function () {
     this.softAssert(this.getItemsInPurchasingCustomResponseBody[0].openPurchaseOrders == this.expectedOpenTy, `openPurchaseOrders - Expected: ${this.expectedOpenTy}, Actual: ${this.getItemsInPurchasingCustomResponseBody[0].openPurchaseOrders}`)
     expect(this.countErrors).toBe(0)
 });
 
-Given(`User verify that "Existing PO Qty" of item in "Purchasing > My Suggested" must be updated after update values of item in "Manage Company > Supply" and run forecast`, function () {                
-    if (Number(this.forecastRecommendQty) > 0){
+Given(`User verify that "Existing PO Qty" of item in "Purchasing > My Suggested" must be updated after update values of item in "Manage Company > Supply" and run forecast`, function () {
+    if (Number(this.forecastRecommendQty) > 0) {
         this.softAssert(this.getItemsInPOResponseBody.model[0].openPurchaseOrders == this.expectedOpenTy, `openPurchaseOrders - Expected: ${this.expectedOpenTy}, Actual: ${this.getItemsInPOResponseBody.model[0].openPurchaseOrders}`)
         expect(this.countErrors).toBe(0)
     }
 });
 
-Given(`User verify that "Open Sales Orders" of item in "Purchasing > Custom" must be updated after update values of item in "Manage Company > Demand" and run forecast`, function () {                
+Given(`User verify that "Open Sales Orders" of item in "Purchasing > Custom" must be updated after update values of item in "Manage Company > Demand" and run forecast`, function () {
     this.softAssert(this.getItemsInPurchasingCustomResponseBody[0].openSalesOrders == this.editDemandResponseBody.openQty, `openSalesOrders - Expected: ${this.editDemandResponseBody.openQty}, Actual: ${this.getItemsInPurchasingCustomResponseBody[0].openSalesOrders}`)
     expect(this.countErrors).toBe(0)
 });
 
-Given(`User verify that "Open Sales Orders" of item in "Purchasing > My Suggested" must be updated after update values of item in "Manage Company > Demand" and run forecast`, function () {                
-    if (Number(this.forecastRecommendQty) > 0){
+Given(`User verify that "Open Sales Orders" of item in "Purchasing > My Suggested" must be updated after update values of item in "Manage Company > Demand" and run forecast`, function () {
+    if (Number(this.forecastRecommendQty) > 0) {
         this.softAssert(this.getItemsInPOResponseBody.model[0].openSalesOrders == this.editDemandResponseBody.openQty, `openSalesOrders - Expected: ${this.editDemandResponseBody.openQty}, Actual: ${this.getItemsInPOResponseBody.model[0].openSalesOrders}`)
         expect(this.countErrors).toBe(0)
     }
@@ -1549,4 +1549,602 @@ Then(`{} saves the purchase as item key`, async function (actor: string) {
     this.attach(`Item name: ${this.itemPurchaseAsName}`);
     logger.log('info', `Item key: ${this.itemPurchaseAsKey}`);
     this.attach(`Item key: ${this.itemPurchaseAsKey}`);
+});
+
+Given('{} sets request body of edit item api with payload', async function (actor: string, dataTable: DataTable) {
+    // Prepare endpoint for request to edit item
+    link = `${Links.API_ITEMS}/${this.itemKey === undefined ? this.responseBodyOfAItemObject.key : this.itemKey}`
+    var editColumn: string = dataTable.hashes()[0].editColumn;
+    var companyType: string = dataTable.hashes()[0].companyType;
+    var value: string = dataTable.hashes()[0].value;
+    switch (editColumn) {
+        case 'itemName':
+            if (value == 'random') {
+                this.name = `${faker.random.alphaNumeric(10).toUpperCase()}-${faker.datatype.number(500)}-Auto`;
+            }
+
+            logger.log('info', `New ${editColumn}: ${this.name}`);
+            this.attach(`New ${editColumn}: ${this.name}`);
+            break;
+        case 'asin':
+            if (value == 'random') {
+                this.asin = `${faker.random.alphaNumeric(10).toUpperCase()}`;
+            }
+
+            logger.log('info', `New ${editColumn}: ${this.asin}`);
+            this.attach(`New ${editColumn}: ${this.asin}`);
+            break;
+        case 'fnsku':
+            if (value == 'random') {
+                this.fnsku = `${faker.random.alphaNumeric(10).toUpperCase()}`;
+            }
+
+            logger.log('info', `New ${editColumn}: ${this.fnsku}`);
+            this.attach(`New ${editColumn}: ${this.fnsku}`);
+            break;
+        case 'itemHistoryLength':
+            if (value == 'random') {
+                this.responseBodyOfAItemObject.itemHistoryLength = this.itemHistoryLength =  Number(faker.random.numeric());
+            }
+
+            logger.log('info', `New ${editColumn}: ${this.itemHistoryLength}`);
+            this.attach(`New ${editColumn}: ${this.itemHistoryLength}`);
+            break;
+        case 'description':
+            if (value == 'random') {
+                this.description = faker.lorem.words(3);
+            }
+
+            logger.log('info', `New ${editColumn}: ${this.description}`);
+            this.attach(`New ${editColumn}: ${this.description}`);
+            break;
+        case 'supplierName':
+            if (value == 'random') {
+                const excludedSupplierKey = this.responseBodyOfAItemObject.vendorKey
+
+                // Filter out the excluded supplier have excludedSupplierKey from the list suppliers                
+                const filteredArray = this.getSupplierResponseBody.filter((supplier: any) => supplier.key !== excludedSupplierKey);
+                const randomSupplier = filteredArray[Math.floor(Math.random() * filteredArray.length)];
+                logger.log('info', `Random supplier` + JSON.stringify(randomSupplier, undefined, 4));
+                this.attach(`Random supplier` + JSON.stringify(randomSupplier, undefined, 4))
+
+                this.vendorKey = randomSupplier.key;
+                this.vendorName = randomSupplier.name;
+            } else if (value == 'supplierUpdatedSalesVelocity') {
+                this.vendorKey = this.supplierKey;
+                this.vendorName = this.supplierName;
+            } else if (value == 'null') {
+                this.vendorKey = null
+                this.vendorName = null
+            }
+
+            logger.log('info', `New ${editColumn}: ${this.vendorName} - ${this.supplierKey}`);
+            this.attach(`New ${editColumn}: ${this.vendorName} - ${this.supplierKey}`);
+            break;
+        case 'supplierPrice':
+            if (value == 'random') {
+                this.vendorPrice = Number(faker.random.numeric());
+            }
+
+            logger.log('info', `New ${editColumn}: ${this.vendorPrice}`);
+            this.attach(`New ${editColumn}: ${this.vendorPrice}`);
+            break;
+        case 'moq':
+            if (value == 'random') {
+                this.moq = Number(faker.random.numeric());
+            }
+
+            logger.log('info', `New ${editColumn}: ${this.moq}`);
+            this.attach(`New ${editColumn}: ${this.moq}`);
+            break;
+        case 'leadTime':
+            if (value == 'random') {
+                this.leadTime = Number(faker.datatype.number({
+                    'min': 1,
+                    'max': 365
+                }));
+            }
+
+            logger.log('info', `New ${editColumn}: ${this.leadTime}`);
+            this.attach(`New ${editColumn}: ${this.leadTime}`);
+            break;
+        case 'orderInterval':
+            if (value == 'random') {
+                this.orderInterval = Number(faker.random.numeric());
+            }
+
+            logger.log('info', `New ${editColumn}: ${this.orderInterval}`);
+            this.attach(`New ${editColumn}: ${this.orderInterval}`);
+            break;
+        case 'serviceLevel':
+            if (value == 'random') {
+                this.serviceLevel = Number(faker.random.numeric(2));
+            }
+
+            logger.log('info', `New ${editColumn}: ${this.serviceLevel}`);
+            this.attach(`New ${editColumn}: ${this.serviceLevel}`);
+            break;
+        case 'onHanFBAQty':
+            if (value == 'random') {
+                this.onHand = Number(faker.random.numeric(3));
+            }
+
+            logger.log('info', `New ${editColumn}: ${this.onHand}`);
+            this.attach(`New ${editColumn}: ${this.onHand}`);
+            break;
+        case 'onHanQty':
+            if (value == 'random') {
+                this.onHand = Number(faker.random.numeric(3));
+            }
+
+            logger.log('info', `New ${editColumn}: ${this.onHand}`);
+            this.attach(`New ${editColumn}: ${this.onHand}`);
+            break;
+        case 'onHandQtyMin':
+            if (value == 'random') {
+                this.onHandMin = Number(faker.random.numeric(3));
+            }
+
+            logger.log('info', `New ${editColumn}: ${this.onHandMin}`);
+            this.attach(`New ${editColumn}: ${this.onHandMin}`);
+            break;
+        case 'warehouseQty':
+            if (value == 'random') {
+                this.onHandThirdParty = Number(faker.random.numeric(3));
+            }
+
+            logger.log('info', `New ${editColumn}: ${this.onHandThirdParty}`);
+            this.attach(`New ${editColumn}: ${this.onHandThirdParty}`);
+            break;
+        case 'warehouseQtyMin':
+            if (value == 'random') {
+                this.onHandThirdPartyMin = Number(faker.random.numeric(3));
+            }
+
+            logger.log('info', `New ${editColumn}: ${this.onHandThirdPartyMin}`);
+            this.attach(`New ${editColumn}: ${this.onHandThirdPartyMin}`);
+            break;
+        case 'onHandFBMQty':
+            if (value == 'random') {
+                this.onHandFbm = Number(faker.random.numeric(3));
+            }
+
+            logger.log('info', `New ${editColumn}: ${this.onHandFbm}`);
+            this.attach(`New ${editColumn}: ${this.onHandFbm}`);
+            break;
+        case 'skuNotes':
+            if (value == 'random') {
+                this.skuNotes = `SkuNotes ${faker.lorem.word(2)}`;
+            }
+
+            logger.log('info', `New ${editColumn}: ${this.skuNotes}`);
+            this.attach(`New ${editColumn}: ${this.skuNotes}`);
+            break;
+        case 'prepNotes':
+            if (value == 'random') {
+                this.prepNotes = `PrepNotes ${faker.lorem.word(2)}`;
+            }
+
+            logger.log('info', `New ${editColumn}: ${this.prepNotes}`);
+            this.attach(`New ${editColumn}: ${this.prepNotes}`);
+            break;
+        case 'supplierRebate':
+            if (value == 'random') {
+                this.supplierRebate = Number(faker.random.numeric(3));
+            }
+
+            logger.log('info', `New ${editColumn}: ${this.supplierRebate}`);
+            this.attach(`New ${editColumn}: ${this.supplierRebate}`);
+            break;
+        case 'inboundShippingCost':
+            if (value == 'random') {
+                this.inboundShippingCost = Number(faker.random.numeric(3));
+            }
+
+            logger.log('info', `New ${editColumn}: ${this.supplierRebate}`);
+            this.attach(`New ${editColumn}: ${this.supplierRebate}`);
+            break;
+        case 'reshippingCost':
+            if (value == 'random') {
+                this.reshippingCost = Number(faker.random.numeric(3));
+            }
+
+            logger.log('info', `New ${editColumn}: ${this.reshippingCost}`);
+            this.attach(`New ${editColumn}: ${this.reshippingCost}`);
+            break;
+        case 'repackagingMaterialCost':
+            if (value == 'random') {
+                this.repackagingMaterialCost = Number(faker.random.numeric(3));
+            }
+
+            logger.log('info', `New ${editColumn}: ${this.repackagingMaterialCost}`);
+            this.attach(`New ${editColumn}: ${this.repackagingMaterialCost}`);
+            break;
+        case 'repackingLaborCost':
+            if (value == 'random') {
+                this.repackingLaborCost = Number(faker.random.numeric(3));
+            }
+
+            logger.log('info', `New ${editColumn}: ${this.repackingLaborCost}`);
+            this.attach(`New ${editColumn}: ${this.repackingLaborCost}`);
+            break;
+        case 'isHidden':
+            if (value == 'random') {
+                this.isHidden = !Boolean(this.responseBodyOfAItemObject.isHidden);
+            } else {
+                this.isHidden = Boolean(value)
+            }
+
+            logger.log('info', `New ${editColumn}: ${this.isHidden}`);
+            this.attach(`New ${editColumn}: ${this.isHidden}`);
+            break;
+        case 'useHistoryOverride':
+            if (value == 'random') {
+                this.useHistoryOverride = !(Boolean(this.responseBodyOfAItemObject.useHistoryOverride));
+            }
+            else {
+                this.useHistoryOverride = true;
+            }
+            logger.log('info', `New ${editColumn}: ${this.useHistoryOverride}`);
+            this.attach(`New ${editColumn}: ${this.useHistoryOverride}`);
+            break;
+        case 'casePackQty':
+            if (value == 'random') {
+                this.lotMultipleQty = Number(faker.random.numeric(3));
+            }
+
+            logger.log('info', `New ${editColumn}: ${this.lotMultipleQty}`);
+            this.attach(`New ${editColumn}: ${this.lotMultipleQty}`);
+            break;
+        case 'inventorySourcePreference':
+            if (value == 'random') {
+                const inventorySources = ['FBA', 'FBM', 'FBA+FBM'];
+                const excludedInventorySource = this.responseBodyOfAItemObject.inventorySourcePreference;
+
+                // Filter out the excluded inventory source value from the inventorySources array
+                const filteredArray = inventorySources.filter((value) => value !== excludedInventorySource);
+                this.inventorySourcePreference = filteredArray[Math.floor(Math.random() * filteredArray.length)];
+            }
+
+            logger.log('info', `New ${editColumn}: ${this.inventorySourcePreference}`);
+            this.attach(`New ${editColumn}: ${this.inventorySourcePreference}`);
+            break;
+        case 'purchaseAs':
+            if (value == 'random') {
+                if (companyType !== "QBFS") {
+                    this.payloadCreateItem = {
+                        "key": "",
+                        "name": `${faker.random.alphaNumeric(6).toUpperCase()}-${faker.datatype.number(500)}-Auto`,
+                        "asin": companyType === "ASC" ? `${faker.random.alphaNumeric(10).toUpperCase()}` : "",
+                        "fnsku": companyType === "ASC" ? `${faker.random.alphaNumeric(10).toUpperCase()}` : "",
+                        "description": "",
+                        "vendorKey": null,
+                        "vendorName": null,
+                        "vendorPrice": 0,
+                        "moq": 1,
+                        "leadTime": 1,
+                        "orderInterval": 0,
+                        "serviceLevel": 85,
+                        "onHand": 0,
+                        "onHandMin": "",
+                        "onHandThirdParty": 0,
+                        "onHandThirdPartyMin": "",
+                        "growthTrend": 0,
+                        "isHidden": false,
+                        "useHistoryOverride": false,
+                        "lotMultipleQty": 1,
+                        "lotMultipleItemKey": null,
+                        "lotMultipleItemName": null,
+                        "forecastDirty": false,
+                        "forecastTags": [],
+                        "tags": [],
+                        "useBackfill": false,
+                        "useLostSalesOverride": false,
+                        "createdAt": "2023-04-11T08:09:03.909Z",
+                        "isFbm": false,
+                        "inventorySourcePreference": "",
+                        "skuNotes": "",
+                        "prepNotes": "",
+                        "supplierRebate": "",
+                        "inboundShippingCost": 0,
+                        "reshippingCost": 0,
+                        "repackagingMaterialCost": 0,
+                        "repackingLaborCost": 0,
+                        "inboundShipped": 0,
+                        "inboundReceiving": 0,
+                        "inbound": 0,
+                        "inboundFcTransfer": 0,
+                        "referralFee": 0,
+                        "fbaFee": 0,
+                        "rank": 0,
+                        "variableClosingFee": 0,
+                        "lowestFba": 0,
+                        "newBuyBox": 0,
+                        "listPrice": 0,
+                        "average7DayPrice": 0,
+                        "itemHistoryLength": 0,
+                        "history": null,
+                        "links": null,
+                        "packageWeight": "",
+                        "onHandFbm": "",
+                        "prepGuide": "",
+                        "dimensionalWeight": "",
+                        "hazmat": "",
+                        "oversized": "",
+                        "category": "",
+                        "upc": "",
+                        "ean": ""
+                    }
+
+                    // Create new item to set purchase as      
+                    this.attach(`Payload Create new item to set purchase as: ${JSON.stringify(this.payloadCreateItem, undefined, 4)}`)
+
+                    const createItemResponse = await itemRequest.createItem(this.request, Links.API_ITEMS, this.payloadCreateItem, this.headers);
+                    const responseBodyText = await createItemResponse.text();
+
+                    if (createItemResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
+                        const responseBodyOfAItemObject = JSON.parse(responseBodyText);
+                        this.lotMultipleItemName = responseBodyOfAItemObject.name
+                        this.lotMultipleItemKey = responseBodyOfAItemObject.key
+                        logger.log('info', `Response POST Create new item to set purchase as ${link}` + JSON.stringify(responseBodyOfAItemObject, undefined, 4));
+                        this.attach(`Response POST Create new item to set purchase as ${link}` + JSON.stringify(responseBodyOfAItemObject, undefined, 4))
+                    }
+                    else {
+                        this.lotMultipleItemName = null
+                        this.lotMultipleItemKey = null
+                        const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
+                        logger.log('info', `Response POST Create new item to set purchase as ${link} has status code ${createItemResponse.status()} ${createItemResponse.statusText()} and response body ${responseBodyText}`);
+                        this.attach(`Response POST Create new item to set purchase as ${link} has status code ${createItemResponse.status()} ${createItemResponse.statusText()} and response body ${actualResponseText}`)
+                    }
+                } else {
+                    const excludedItemKey = this.itemKey
+                    // Filter out the excluded item have already set as purchas as of orther items the list items
+                    const filteredArray = this.getItemsResponseBody.filter((item: any) => ((item.key !== excludedItemKey) && (!this.listItemsAlreadySetAsPurchaseAsOfOrtherItem.includes(item.key))));
+                    const randomItem = filteredArray[Math.floor(Math.random() * filteredArray.length)];
+
+                    this.lotMultipleItemName = randomItem.name
+                    this.lotMultipleItemKey = randomItem.key
+                }
+            } else if (value == 'null') {
+                this.lotMultipleItemName = null
+                this.lotMultipleItemKey = null
+            } else if (value == 'itself') {
+                this.lotMultipleItemName = this.itemName;
+                this.lotMultipleItemKey = this.itemKey;
+            } else if (value == 'hard') {
+                this.lotMultipleItemName = this.itemPurchaseAsName;
+                this.lotMultipleItemKey = this.itemPurchaseAsKey;
+            } else if (value == "dynamic") {
+                const excludedItemKey = this.itemKey
+                // Filter out the excluded item have already set as purchase as of other items the list items
+                const filteredArray = this.getItemsResponseBody.filter((item: any) => ((item.key !== excludedItemKey) && (!this.listItemsAlreadySetAsPurchaseAsOfOrtherItem.includes(item.key))));
+                const randomItem = filteredArray[Math.floor(Math.random() * filteredArray.length)];
+
+                this.lotMultipleItemName = randomItem.name
+                this.lotMultipleItemKey = randomItem.key
+            }
+
+            logger.log('info', `New ${editColumn}: ${this.lotMultipleItemName}`);
+            this.attach(`New ${editColumn}: ${this.lotMultipleItemName}`);
+            break;
+        case 'useBackfill':
+            if (value == 'random') {
+                this.useBackfill = !(Boolean(this.responseBodyOfAItemObject.useBackfill));
+            }
+            else {
+                this.useBackfill = Boolean(value);
+            }
+            logger.log('info', `New ${editColumn}: ${this.useBackfill}`);
+            this.attach(`New ${editColumn}: ${this.useBackfill}`);
+            break;
+        default:
+            break;
+    }
+
+    // Prepare payload for request to edit item
+    if (companyType === 'ASC') {
+        this.payLoad = {
+            companyType: `${this.responseBodyOfAItemObject.companyType}`,
+            companyKey: `${this.responseBodyOfAItemObject.companyKey}`,
+            key: `${this.responseBodyOfAItemObject.key === undefined ? this.responseBodyOfAItemObject.itemKey : this.responseBodyOfAItemObject.key}`,
+            name: this.name === undefined ? this.responseBodyOfAItemObject.name : `${this.name}`,
+            asin: this.asin === undefined ? this.responseBodyOfAItemObject.asin : `${this.asin}`,
+            fnsku: this.fnsku === undefined ? this.responseBodyOfAItemObject.fnsku : `${this.fnsku}`,
+            description: this.description === undefined ? this.responseBodyOfAItemObject.description : `${this.description}`,
+            packageWeight: this.responseBodyOfAItemObject.packageWeight,
+            vendorKey: this.vendorKey === undefined ? this.responseBodyOfAItemObject.vendorKey : this.vendorKey === null ? null : `${this.vendorKey}`,
+            vendorName: this.vendorName === undefined ? this.responseBodyOfAItemObject.vendorName : this.vendorName === null ? null : `${this.vendorName}`,
+            vendorPrice: this.vendorPrice === undefined ? this.responseBodyOfAItemObject.vendorPrice : this.vendorPrice,
+            moq: this.moq === undefined ? this.responseBodyOfAItemObject.moq : this.moq,
+            leadTime: this.leadTime === undefined ? this.responseBodyOfAItemObject.leadTime : this.leadTime,
+            orderInterval: this.orderInterval === undefined ? this.responseBodyOfAItemObject.orderInterval : this.orderInterval,
+            serviceLevel: this.serviceLevel === undefined ? this.responseBodyOfAItemObject.serviceLevel : this.serviceLevel,
+            onHand: this.onHand === undefined ? this.responseBodyOfAItemObject.onHand : this.onHand,
+            onHandMin: this.onHandMin === undefined ? this.responseBodyOfAItemObject.onHandMin : this.onHandMin,
+            onHandThirdParty: this.onHandThirdParty === undefined ? this.responseBodyOfAItemObject.onHandThirdParty : this.onHandThirdParty,
+            onHandThirdPartyMin: this.onHandThirdPartyMin === undefined ? this.responseBodyOfAItemObject.onHandThirdPartyMin : this.onHandThirdPartyMin,
+            onHandFbm: this.onHandFbm === undefined ? this.responseBodyOfAItemObject.onHandFbm : this.onHandFbm,
+            skuNotes: this.skuNotes === undefined ? this.responseBodyOfAItemObject.skuNotes : `${this.skuNotes}`,
+            prepGuide: this.responseBodyOfAItemObject.prepGuide,
+            prepNotes: this.prepNotes === undefined ? this.responseBodyOfAItemObject.prepNotes : `${this.prepNotes}`,
+            supplierRebate: this.supplierRebate === undefined ? this.responseBodyOfAItemObject.supplierRebate : this.supplierRebate,
+            inboundShippingCost: this.inboundShippingCost === undefined ? this.responseBodyOfAItemObject.inboundShippingCost : this.inboundShippingCost,
+            reshippingCost: this.reshippingCost === undefined ? this.responseBodyOfAItemObject.reshippingCost : this.reshippingCost,
+            repackagingMaterialCost: this.repackagingMaterialCost === undefined ? this.responseBodyOfAItemObject.repackagingMaterialCost : this.repackagingMaterialCost,
+            repackingLaborCost: this.repackingLaborCost === undefined ? this.responseBodyOfAItemObject.repackingLaborCost : this.repackingLaborCost,
+            dimensionalWeight: this.responseBodyOfAItemObject.dimensionalWeight,
+            hazmat: this.responseBodyOfAItemObject.hazmat,
+            oversized: this.responseBodyOfAItemObject.oversized,
+            category: this.responseBodyOfAItemObject.category,
+            rank: this.responseBodyOfAItemObject.rank,
+            growthTrend: this.responseBodyOfAItemObject.growthTrend,
+            isHidden: this.isHidden === undefined ? this.responseBodyOfAItemObject.isHidden : this.isHidden,
+            useHistoryOverride: this.useHistoryOverride === undefined ? this.responseBodyOfAItemObject.useHistoryOverride : this.useHistoryOverride,
+            useLostSalesOverride: this.responseBodyOfAItemObject.useLostSalesOverride,
+            lotMultipleQty: this.lotMultipleQty === undefined ? this.responseBodyOfAItemObject.lotMultipleQty : this.lotMultipleQty,
+            lotMultipleItemKey: this.lotMultipleItemKey === undefined ? this.responseBodyOfAItemObject.lotMultipleItemKey : this.lotMultipleItemKey === null ? null : `${this.lotMultipleItemKey}`,
+            lotMultipleItemName: this.lotMultipleItemName === undefined ? this.responseBodyOfAItemObject.lotMultipleItemName : this.lotMultipleItemName === null ? null : `${this.lotMultipleItemName}`,
+            // forecastDirty is true => Run forecast for this item
+            forecastDirty: true,
+            forecastTags: this.responseBodyOfAItemObject.forecastTags,
+            tag: this.responseBodyOfAItemObject.tag,
+            tags: this.responseBodyOfAItemObject.tags,
+            useBackfill: this.useBackfill === undefined ? this.responseBodyOfAItemObject.useHistoryOverride : this.useBackfill,
+            createdAt: `${this.responseBodyOfAItemObject.created_at}`,
+            inbound: this.responseBodyOfAItemObject.inbound,
+            inboundPrice: this.responseBodyOfAItemObject.inboundPrice,
+            inboundSalesLast30Days: this.responseBodyOfAItemObject.inboundSalesLast30Days,
+            inboundAvailable: this.responseBodyOfAItemObject.inboundAvailable,
+            inboundFcTransfer: this.responseBodyOfAItemObject.inboundFcTransfer,
+            inboundFcProcessing: this.responseBodyOfAItemObject.inboundFcProcessing,
+            inboundCustomerOrder: this.responseBodyOfAItemObject.inboundCustomerOrder,
+            inboundUnfulfillable: this.responseBodyOfAItemObject.inboundUnfulfillable,
+            inboundAlert: this.responseBodyOfAItemObject.inboundAlert,
+            inboundWorking: this.responseBodyOfAItemObject.inboundWorking,
+            mwsFulfillmentFee: this.responseBodyOfAItemObject.mwsFulfillmentFee,
+            inventorySourcePreference: this.inventorySourcePreference === undefined ? this.responseBodyOfAItemObject.inventorySourcePreference : `${this.inventorySourcePreference}`,
+            reserved: this.responseBodyOfAItemObject.reserved,
+            imageUrl: this.responseBodyOfAItemObject.imageUrl,
+            fba: this.responseBodyOfAItemObject.fba,
+            lowestFba: this.responseBodyOfAItemObject.lowestFba,
+            nonFba: this.responseBodyOfAItemObject.nonFba,
+            lowestNonFba: this.responseBodyOfAItemObject.lowestNonFba,
+            soldBy: this.responseBodyOfAItemObject.soldBy,
+            fbaFee: this.responseBodyOfAItemObject.fbaFee,
+            variableClosingFee: this.responseBodyOfAItemObject.variableClosingFee,
+            newBuyBox: this.responseBodyOfAItemObject.newBuyBox,
+            inboundShipped: this.responseBodyOfAItemObject.inboundShipped,
+            inboundReceiving: this.responseBodyOfAItemObject.inboundReceiving,
+            referralFee: this.responseBodyOfAItemObject.referralFee,
+            listPrice: this.responseBodyOfAItemObject.listPrice,
+            average7DayPrice: this.responseBodyOfAItemObject.average7DayPrice,
+            condition: this.responseBodyOfAItemObject.condition,
+            syncedFields: this.responseBodyOfAItemObject.syncedFields,
+            isFbm: this.responseBodyOfAItemObject.isFbm,
+            itemHistoryLength: this.responseBodyOfAItemObject.itemHistoryLength,
+            itemHistoryLengthInDay: this.responseBodyOfAItemObject.itemHistoryLengthInDay,
+            created_at: `${this.responseBodyOfAItemObject.created_at}`,
+            updated_at: `${this.responseBodyOfAItemObject.updated_at}`,
+            s2d: this.responseBodyOfAItemObject.s2d,
+            s7d: this.responseBodyOfAItemObject.s7d,
+            s14d: this.responseBodyOfAItemObject.s14d,
+            s30d: this.responseBodyOfAItemObject.s30d,
+            s60d: this.responseBodyOfAItemObject.s60d,
+            s90d: this.responseBodyOfAItemObject.s90d,
+            s180d: this.responseBodyOfAItemObject.s180d,
+            s365d: this.responseBodyOfAItemObject.s365d,
+            outOfStock2d: this.responseBodyOfAItemObject.outOfStock2d,
+            outOfStock7d: this.responseBodyOfAItemObject.outOfStock7d,
+            outOfStock14d: this.responseBodyOfAItemObject.outOfStock14d,
+            outOfStock30d: this.responseBodyOfAItemObject.outOfStock30d,
+            outOfStock60d: this.responseBodyOfAItemObject.outOfStock60d,
+            outOfStock90d: this.responseBodyOfAItemObject.outOfStock90d,
+            outOfStock180d: this.responseBodyOfAItemObject.outOfStock180d,
+            history: this.responseBodyOfAItemObject.history === undefined ? null : this.responseBodyOfAItemObject.history,
+            links: this.responseBodyOfAItemObject.links === undefined ? null : this.responseBodyOfAItemObject.links
+        }
+    } else if (companyType === 'CSV' || companyType === 'QBFS') {
+        this.payLoad = {
+            companyType: `${this.responseBodyOfAItemObject.companyType}`,
+            companyKey: `${this.responseBodyOfAItemObject.companyKey}`,
+            key: `${this.responseBodyOfAItemObject.key}`,
+            name: this.name === undefined ? this.responseBodyOfAItemObject.name : `${this.name}`,
+            asin: this.asin === undefined ? this.responseBodyOfAItemObject.asin : `${this.asin}`,
+            fnsku: this.fnsku === undefined ? this.responseBodyOfAItemObject.fnsku : `${this.fnsku}`,
+            description: this.description === undefined ? this.responseBodyOfAItemObject.description : `${this.description}`,
+            packageWeight: this.responseBodyOfAItemObject.packageWeight,
+            vendorKey: this.vendorKey === undefined ? this.responseBodyOfAItemObject.vendorKey : `${this.vendorKey}`,
+            vendorName: this.vendorName === undefined ? this.responseBodyOfAItemObject.vendorName : `${this.vendorName}`,
+            vendorPrice: this.vendorPrice === undefined ? this.responseBodyOfAItemObject.vendorPrice : this.vendorPrice,
+            moq: this.moq === undefined ? this.responseBodyOfAItemObject.moq : this.moq,
+            leadTime: this.leadTime === undefined ? this.responseBodyOfAItemObject.leadTime : this.leadTime,
+            orderInterval: this.orderInterval === undefined ? this.responseBodyOfAItemObject.orderInterval : this.orderInterval,
+            serviceLevel: this.serviceLevel === undefined ? this.responseBodyOfAItemObject.serviceLevel : this.serviceLevel,
+            onHand: this.onHand === undefined ? this.responseBodyOfAItemObject.onHand : this.onHand,
+            onHandMin: this.onHandMin === undefined ? this.responseBodyOfAItemObject.onHandMin : this.onHandMin,
+            onHandThirdParty: this.onHandThirdParty === undefined ? this.responseBodyOfAItemObject.onHandThirdParty : this.onHandThirdParty,
+            onHandThirdPartyMin: this.onHandThirdPartyMin === undefined ? this.responseBodyOfAItemObject.onHandThirdPartyMin : this.onHandThirdPartyMin,
+            onHandFbm: this.onHandFbm === undefined ? this.responseBodyOfAItemObject.onHandFbm : this.onHandFbm,
+            skuNotes: this.skuNotes === undefined ? this.responseBodyOfAItemObject.skuNotes : `${this.skuNotes}`,
+            prepGuide: this.responseBodyOfAItemObject.prepGuide,
+            prepNotes: this.prepNotes === undefined ? this.responseBodyOfAItemObject.prepNotes : `${this.prepNotes}`,
+            supplierRebate: this.supplierRebate === undefined ? this.responseBodyOfAItemObject.supplierRebate : this.supplierRebate,
+            inboundShippingCost: this.inboundShippingCost === undefined ? this.responseBodyOfAItemObject.inboundShippingCost : this.inboundShippingCost,
+            reshippingCost: this.reshippingCost === undefined ? this.responseBodyOfAItemObject.reshippingCost : this.reshippingCost,
+            repackagingMaterialCost: this.repackagingMaterialCost === undefined ? this.responseBodyOfAItemObject.repackagingMaterialCost : this.repackagingMaterialCost,
+            repackingLaborCost: this.repackingLaborCost === undefined ? this.responseBodyOfAItemObject.repackingLaborCost : this.repackingLaborCost,
+            dimensionalWeight: this.responseBodyOfAItemObject.dimensionalWeight,
+            hazmat: this.responseBodyOfAItemObject.hazmat,
+            oversized: this.responseBodyOfAItemObject.oversized,
+            category: this.responseBodyOfAItemObject.category,
+            rank: this.responseBodyOfAItemObject.rank,
+            growthTrend: this.responseBodyOfAItemObject.growthTrend,
+            isHidden: this.isHidden === undefined ? this.responseBodyOfAItemObject.isHidden : this.isHidden,
+            useHistoryOverride: this.useHistoryOverride === undefined ? this.responseBodyOfAItemObject.useHistoryOverride : this.useHistoryOverride,
+            useLostSalesOverride: this.responseBodyOfAItemObject.useLostSalesOverride,
+            lotMultipleQty: this.lotMultipleQty === undefined ? this.responseBodyOfAItemObject.lotMultipleQty : this.lotMultipleQty,
+            lotMultipleItemKey: this.lotMultipleItemKey === undefined ? this.responseBodyOfAItemObject.lotMultipleItemKey : this.lotMultipleItemKey === null ? null : `${this.lotMultipleItemKey}`,
+            lotMultipleItemName: this.lotMultipleItemName === undefined ? this.responseBodyOfAItemObject.lotMultipleItemName : this.lotMultipleItemName === null ? null : `${this.lotMultipleItemName}`,
+            // forecastDirty is true => Run forecast for this item
+            forecastDirty: true,
+            forecastTags: this.responseBodyOfAItemObject.forecastTags,
+            tag: this.responseBodyOfAItemObject.tag,
+            tags: this.responseBodyOfAItemObject.tags,
+            useBackfill: this.useBackfill === undefined ? this.responseBodyOfAItemObject.useHistoryOverride : this.useBackfill,
+            createdAt: `${this.responseBodyOfAItemObject.created_at}`,
+            inbound: this.responseBodyOfAItemObject.inbound,
+            inboundPrice: this.responseBodyOfAItemObject.inboundPrice,
+            inboundSalesLast30Days: this.responseBodyOfAItemObject.inboundSalesLast30Days,
+            inboundAvailable: this.responseBodyOfAItemObject.inboundAvailable,
+            inboundFcTransfer: this.responseBodyOfAItemObject.inboundFcTransfer,
+            inboundFcProcessing: this.responseBodyOfAItemObject.inboundFcProcessing,
+            inboundCustomerOrder: this.responseBodyOfAItemObject.inboundCustomerOrder,
+            inboundUnfulfillable: this.responseBodyOfAItemObject.inboundUnfulfillable,
+            inboundAlert: this.responseBodyOfAItemObject.inboundAlert,
+            inboundWorking: this.responseBodyOfAItemObject.inboundWorking,
+            mwsFulfillmentFee: this.responseBodyOfAItemObject.mwsFulfillmentFee,
+            inventorySourcePreference: this.inventorySourcePreference === undefined ? this.responseBodyOfAItemObject.inventorySourcePreference : `${this.inventorySourcePreference}`,
+            reserved: this.responseBodyOfAItemObject.reserved,
+            imageUrl: this.responseBodyOfAItemObject.imageUrl,
+            fba: this.responseBodyOfAItemObject.fba,
+            lowestFba: this.responseBodyOfAItemObject.lowestFba,
+            nonFba: this.responseBodyOfAItemObject.nonFba,
+            lowestNonFba: this.responseBodyOfAItemObject.lowestNonFba,
+            soldBy: this.responseBodyOfAItemObject.soldBy,
+            fbaFee: this.responseBodyOfAItemObject.fbaFee,
+            variableClosingFee: this.responseBodyOfAItemObject.variableClosingFee,
+            newBuyBox: this.responseBodyOfAItemObject.newBuyBox,
+            inboundShipped: this.responseBodyOfAItemObject.inboundShipped,
+            inboundReceiving: this.responseBodyOfAItemObject.inboundReceiving,
+            referralFee: this.responseBodyOfAItemObject.referralFee,
+            listPrice: this.responseBodyOfAItemObject.listPrice,
+            average7DayPrice: this.responseBodyOfAItemObject.average7DayPrice,
+            condition: this.responseBodyOfAItemObject.condition,
+            syncedFields: this.responseBodyOfAItemObject.syncedFields,
+            isFbm: this.responseBodyOfAItemObject.isFbm,
+            itemHistoryLength: this.responseBodyOfAItemObject.itemHistoryLength,
+            itemHistoryLengthInDay: this.responseBodyOfAItemObject.itemHistoryLengthInDay,
+            created_at: `${this.responseBodyOfAItemObject.created_at}`,
+            updated_at: `${this.responseBodyOfAItemObject.updated_at}`,
+            s2d: this.responseBodyOfAItemObject.s2d,
+            s7d: this.responseBodyOfAItemObject.s7d,
+            s14d: this.responseBodyOfAItemObject.s14d,
+            s30d: this.responseBodyOfAItemObject.s30d,
+            s60d: this.responseBodyOfAItemObject.s60d,
+            s90d: this.responseBodyOfAItemObject.s90d,
+            s180d: this.responseBodyOfAItemObject.s180d,
+            s365d: this.responseBodyOfAItemObject.s365d,
+            outOfStock2d: this.responseBodyOfAItemObject.outOfStock2d,
+            outOfStock7d: this.responseBodyOfAItemObject.outOfStock7d,
+            outOfStock14d: this.responseBodyOfAItemObject.outOfStock14d,
+            outOfStock30d: this.responseBodyOfAItemObject.outOfStock30d,
+            outOfStock60d: this.responseBodyOfAItemObject.outOfStock60d,
+            outOfStock90d: this.responseBodyOfAItemObject.outOfStock90d,
+            outOfStock180d: this.responseBodyOfAItemObject.outOfStock180d,
+            history: this.responseBodyOfAItemObject.history === undefined ? null : this.responseBodyOfAItemObject.history,
+        }
+    }
+
+    logger.log('info', `Payload` + JSON.stringify(this.payLoad, undefined, 4));
+    this.attach(`Payload` + JSON.stringify(this.payLoad, undefined, 4))
 });

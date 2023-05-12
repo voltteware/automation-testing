@@ -1,4 +1,4 @@
-import { Then } from '@cucumber/cucumber';
+import { Then, DataTable } from '@cucumber/cucumber';
 import { expect } from '@playwright/test';
 import * as companyRequest from '../../../../src/api/request/company.service';
 import logger from '../../../../src/Logger/logger';
@@ -19,30 +19,30 @@ Then('{} sets request body with payload as companyName: {string} and companyKey:
     async function (actor, companyName, companyKey, companyType, serviceLevel, leadTime, orderInterval, initialSyncDate, marketplaceId: string) {
 
         const marketplaceIDS = ['NA', 'EU', 'A2EUQ1WTGCTBG2', 'A1PA6795UKMFR9', 'A1RKKUPIHCS9HS', 'A13V1IB3VIYZZH', 'APJ6JRA9NG5V4', 'A1AM78C64UM0Y8', 'A1F83G8C2ARO7P', 'ATVPDKIKX0DER'];
-        if(companyName == 'random'){
+        if (companyName == 'random') {
             payload.companyName = `${faker.company.name()}-AutoTest`;
         }
-        else{
+        else {
             payload.companyName = companyName;
         }
 
         payload.companyKey = companyKey;
 
-        if(companyType == 'random'){
+        if (companyType == 'random') {
             payload.companyType = arrCompanyType[Math.floor(Math.random() * arrCompanyType.length)];
-        }else{
+        } else {
             payload.companyType = companyType;
         }
-        
-        if(payload.companyType == 'ASC'){
-            if(initialSyncDate == 'currentDate'){
+
+        if (payload.companyType == 'ASC') {
+            if (initialSyncDate == 'currentDate') {
                 payload.initialSyncDate = new Date();
             }
-            if(marketplaceId == 'random'){
+            if (marketplaceId == 'random') {
                 payload.marketplaceId = `${marketplaceIDS[Math.floor(Math.random() * 10)]}`;
             }
         }
-        
+
         if (leadTime == 'random') {
             payload.leadTime = Number(faker.datatype.number({
                 'min': 1,
@@ -76,10 +76,77 @@ Then('{} sets request body with payload as companyName: {string} and companyKey:
         this.attach(`Payload: ${JSON.stringify(payload, undefined, 4)}`)
     });
 
+Then('{} sets request body of create company api with payload', async function (actor: string, dataTable: DataTable) {
+    var companyName: string = dataTable.hashes()[0].companyName
+    var companyKey: string = dataTable.hashes()[0].companyKey
+    var companyType: string = dataTable.hashes()[0].companyType
+    var serviceLevel: string = dataTable.hashes()[0].serviceLevel
+    var leadTime: string = dataTable.hashes()[0].leadTime
+    var orderInterval: string = dataTable.hashes()[0].orderInterval
+    var initialSyncDate: string = dataTable.hashes()[0].initialSyncDate
+    var marketplaceId: string = dataTable.hashes()[0].marketplaceId
+    const marketplaceIDS = ['NA', 'EU', 'A2EUQ1WTGCTBG2', 'A1PA6795UKMFR9', 'A1RKKUPIHCS9HS', 'A13V1IB3VIYZZH', 'APJ6JRA9NG5V4', 'A1AM78C64UM0Y8', 'A1F83G8C2ARO7P', 'ATVPDKIKX0DER'];
+    if (companyName == 'random') {
+        payload.companyName = `${faker.company.name()}-AutoTest`;
+    }
+    else {
+        payload.companyName = companyName;
+    }
+
+    payload.companyKey = companyKey;
+
+    if (companyType == 'random') {
+        payload.companyType = arrCompanyType[Math.floor(Math.random() * arrCompanyType.length)];
+    } else {
+        payload.companyType = companyType;
+    }
+
+    if (payload.companyType == 'ASC') {
+        if (initialSyncDate == 'currentDate') {
+            payload.initialSyncDate = new Date();
+        }
+        if (marketplaceId == 'random') {
+            payload.marketplaceId = `${marketplaceIDS[Math.floor(Math.random() * 10)]}`;
+        }
+    }
+
+    if (leadTime == 'random') {
+        payload.leadTime = Number(faker.datatype.number({
+            'min': 1,
+            'max': 365
+        }));
+    }
+    else {
+        payload.leadTime = Number(leadTime);
+    }
+
+    if (orderInterval == 'random') {
+        payload.orderInterval = Number(faker.datatype.number({
+            'min': 1,
+            'max': 365
+        }));
+    }
+    else {
+        payload.orderInterval = Number(orderInterval);
+    }
+
+    if (serviceLevel == 'random') {
+        payload.serviceLevel = Number(faker.datatype.number({
+            'min': 1,
+            'max': 99
+        }));
+    }
+    else {
+        payload.serviceLevel = Number(serviceLevel);
+    }
+
+    this.attach(`Payload: ${JSON.stringify(payload, undefined, 4)}`)
+});
+
 Then('{} sends a POST method to create company', async function (actor: string) {
     this.response = this.createCompanyResponse = await companyRequest.createCompany(this.request, link, payload, this.headers);
     const responseBodyText = await this.createCompanyResponse.text();
-    
+
     if (this.createCompanyResponse.status() == 201 && !responseBodyText.includes('<!doctype html>')) {
         this.responseBodyOfACompanyObject = JSON.parse(responseBodyText)
         this.createCompanyResponseBody = JSON.parse(await this.createCompanyResponse.text());
@@ -106,17 +173,17 @@ Then('Check that the company just created exists in the current companies list o
 })
 
 Then('{} checks values in response of create company are correct', async function (actor: string) {
-    
+
     expect(arrCompanyType, `Company Type should be one of ${arrCompanyType}`).toContain(this.responseBodyOfACompanyObject.companyType);
     expect(this.responseBodyOfACompanyObject.companyKey).not.toBeNull();
-    
-    if(payload.companyKey){
+
+    if (payload.companyKey) {
         expect(this.responseBodyOfACompanyObject.companyKey, `In response body, parentKey should be matched with the data request: ${payload.companyKey}`).toBe(payload.companyKey);
     }
-    if(payload.companyName){
+    if (payload.companyName) {
         expect(this.responseBodyOfACompanyObject.companyName, `In response body, companyName should be matched with the data request: ${payload.companyName}`).toBe(payload.companyName);
     }
-    if(payload.marketplaceId){
+    if (payload.marketplaceId) {
         expect(this.responseBodyOfACompanyObject.marketplaceId, `In response body, marketplaceId should be matched with the data request: ${payload.marketplaceId}`).toBe(payload.marketplaceId);
     }
     if (payload.serviceLevel) {

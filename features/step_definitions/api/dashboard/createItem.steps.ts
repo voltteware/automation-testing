@@ -1,4 +1,4 @@
-import { When, Then, Given } from '@cucumber/cucumber';
+import { When, Then, Given, DataTable } from '@cucumber/cucumber';
 import { expect } from '@playwright/test';
 import * as itemRequest from '../../../../src/api/request/item.service';
 import logger from '../../../../src/Logger/logger';
@@ -33,7 +33,7 @@ let payload: {
     reshippingCost?: Number,
     repackagingMaterialCost?: Number,
     repackingLaborCost?: Number,
-    rank?: Number,
+    rank?: any,
     inventorySourcePreference?: string,
     average7DayPrice?: Number,
     isFbm?: Boolean,
@@ -382,3 +382,240 @@ Then('{} checks values in response of create item are correct', async function (
     }
 })
 
+Then('{} sets request body of create item api with payload',
+    async function (actor: string, dataTable: DataTable) {
+        var name: string = dataTable.hashes()[0].name;
+        var description: string = dataTable.hashes()[0].description;
+        var vendorName: string = dataTable.hashes()[0].vendorName;
+        var vendorPrice: string = dataTable.hashes()[0].vendorPrice;
+        var moq: string = dataTable.hashes()[0].moq;
+        var leadTime: string = dataTable.hashes()[0].leadTime;
+        var orderInterval: string = dataTable.hashes()[0].orderInterval;
+        var serviceLevel: string = dataTable.hashes()[0].serviceLevel;
+        var onHand: string = dataTable.hashes()[0].onHand;
+        var onHandMin: string = dataTable.hashes()[0].onHandMin;
+        var onHandThirdParty: string = dataTable.hashes()[0].onHandThirdParty;
+        var onHandThirdPartyMin: string = dataTable.hashes()[0].onHandThirdPartyMin;
+        var lotMultipleQty: string = dataTable.hashes()[0].lotMultipleQty;
+        var lotMultipleItemName: string = dataTable.hashes()[0].lotMultipleItemName;
+        var asin: string = dataTable.hashes()[0].asin;
+        var fnsku: string = dataTable.hashes()[0].fnsku;
+        var skuNotes: string = dataTable.hashes()[0].skuNotes;
+        var prepNotes: string = dataTable.hashes()[0].prepNotes;
+        var supplierRebate: string = dataTable.hashes()[0].supplierRebate;
+        var inboundShippingCost: string = dataTable.hashes()[0].inboundShippingCost;
+        var reshippingCost: string = dataTable.hashes()[0].reshippingCost;
+        var repackagingMaterialCost: string = dataTable.hashes()[0].repackagingMaterialCost;
+        var repackingLaborCost: string = dataTable.hashes()[0].repackingLaborCost;
+        var rank: string = dataTable.hashes()[0].rank;
+        var inventorySourcePreference: string = dataTable.hashes()[0].inventorySourcePreference;
+        var average7DayPrice: string = dataTable.hashes()[0].average7DayPrice;
+        var isFbm: string = dataTable.hashes()[0].isFbm;
+        var key: string = dataTable.hashes()[0].key;
+        var vendorKey: string = dataTable.hashes()[0].vendorKey;
+        var lotMultipleItemKey: string = dataTable.hashes()[0].lotMultipleItemKey;
+
+        if (name.includes('New Item Auto')) {
+            payload.name = `${faker.random.alphaNumeric(10).toUpperCase()}-${faker.datatype.number(500)}-Auto`;
+        }
+
+        payload.description = description;
+
+        if (vendorName == 'random' && vendorKey == 'random') {
+            randomSupplier = this.getSupplierResponseBody[Math.floor(Math.random() * this.getSupplierResponseBody.length)];
+            payload.vendorKey = randomSupplier.key;
+            payload.vendorName = randomSupplier.name;
+        }
+
+        if (vendorName == null && vendorKey == null) {
+            payload.vendorName = null;
+            payload.vendorKey = null;
+        }
+
+        if (vendorPrice == 'random') {
+            payload.vendorPrice = Number(faker.random.numeric());
+        }
+        else {
+            payload.vendorPrice = Number(vendorPrice);
+        }
+
+        if (moq == 'random') {
+            payload.moq = Number(faker.random.numeric());
+        }
+        else {
+            payload.moq = Number(moq);
+        }
+
+        if (leadTime == 'random') {
+            payload.leadTime = Number(faker.datatype.number({
+                'min': 1,
+                'max': 365
+            }));
+        }
+        else {
+            payload.leadTime = Number(leadTime);
+        }
+
+        if (orderInterval == 'random') {
+            payload.orderInterval = Number(faker.datatype.number({
+                'min': 1,
+                'max': 365
+            }));
+        }
+        else {
+            payload.orderInterval = Number(orderInterval);
+        }
+
+        if (serviceLevel == 'random') {
+            payload.serviceLevel = Number(faker.datatype.number({
+                'min': 1,
+                'max': 99
+            }));
+        }
+        else {
+            payload.serviceLevel = Number(serviceLevel);
+        }
+
+        if (onHand == 'random') {
+            payload.onHand = Number(faker.random.numeric(3));
+        }
+        else {
+            payload.onHand = Number(onHand);
+        }
+
+        if (onHandMin == 'random') {
+            payload.onHandMin = Number(faker.random.numeric(3));
+        }
+        else {
+            payload.onHandMin = Number(onHandMin);
+        }
+
+        if (onHandThirdParty == 'random') {
+            payload.onHandThirdParty = Number(faker.random.numeric(3));
+        }
+        else {
+            payload.onHandThirdParty = Number(onHandThirdParty);
+        }
+
+        if (onHandThirdPartyMin == 'random') {
+            payload.onHandThirdPartyMin = Number(faker.random.numeric(3));
+        }
+        else {
+            payload.onHandThirdPartyMin = Number(onHandThirdPartyMin);
+        }
+
+        if (lotMultipleQty == 'random') {
+            payload.lotMultipleQty = Number(faker.random.numeric(3));
+        }
+        else {
+            payload.lotMultipleQty = Number(lotMultipleQty);
+        }
+
+        if (lotMultipleItemName && lotMultipleItemKey == 'random') {
+            randomItem = this.getItemsResponseBody[Math.floor(Math.random() * this.getItemsResponseBody.length)];
+        }
+
+        if (lotMultipleItemName == 'random') {
+            payload.lotMultipleItemName = randomItem.name;
+        } else {
+            payload.lotMultipleItemName = lotMultipleItemName;
+        }
+
+        if (lotMultipleItemKey == 'random') {
+            if (this.companyType == 'CSV') {
+                payload.lotMultipleItemKey = randomItem.key;
+            } else {
+                payload.lotMultipleItemKey = `${randomItem.asin}-${randomItem.name}`;
+            }
+        } else {
+            payload.lotMultipleItemKey = lotMultipleItemKey;
+        }
+
+        if (asin == 'random') {
+            payload.asin = `${faker.random.alphaNumeric(10).toUpperCase()}`;
+        }
+        else {
+            payload.asin = asin;
+        }
+
+        if (fnsku == 'random') {
+            payload.fnsku = `${faker.random.alphaNumeric(10).toUpperCase()}`;
+        }
+        else {
+            payload.fnsku = fnsku;
+        }
+
+        if (skuNotes == 'random') {
+            payload.skuNotes = `SkuNotes ${faker.lorem.word(2)}`;
+        }
+        else {
+            payload.skuNotes = skuNotes;
+        }
+
+        if (prepNotes == 'random') {
+            payload.prepNotes = `PrepNotes ${faker.lorem.word(2)}`;
+        }
+        else {
+            payload.prepNotes = prepNotes;
+        }
+
+        if (supplierRebate == 'random') {
+            payload.supplierRebate = Number(faker.random.numeric(3));
+        }
+        else {
+            payload.supplierRebate = Number(supplierRebate);
+        }
+
+        if (inboundShippingCost == 'random') {
+            payload.inboundShippingCost = Number(faker.random.numeric(3));
+        }
+        else {
+            payload.inboundShippingCost = Number(inboundShippingCost);
+        }
+
+        if (reshippingCost == 'random') {
+            payload.reshippingCost = Number(faker.random.numeric(3));
+        }
+        else {
+            payload.reshippingCost = Number(reshippingCost);
+        }
+
+        if (repackagingMaterialCost == 'random') {
+            payload.repackagingMaterialCost = Number(faker.random.numeric(3));
+        }
+        else {
+            payload.repackagingMaterialCost = Number(repackagingMaterialCost);
+        }
+
+        if (repackingLaborCost == 'random') {
+            payload.repackingLaborCost = Number(faker.random.numeric(3));
+        }
+        else {
+            payload.repackingLaborCost = Number(repackingLaborCost);
+        }
+
+        if (rank == 'random') {
+            payload.rank = Number(faker.random.numeric(4));
+        }
+        else {
+            payload.rank = rank;
+        }
+
+        payload.inventorySourcePreference = inventorySourcePreference;
+        payload.key = key;
+
+        if (average7DayPrice == 'random') {
+            payload.average7DayPrice = Number(faker.random.numeric(3));
+        }
+        else {
+            payload.average7DayPrice = Number(average7DayPrice);
+        }
+
+        if (isFbm == 'random') {
+            payload.isFbm = Boolean(faker.datatype.boolean);
+        }
+        else {
+            payload.isFbm = Boolean(isFbm);
+        }
+        this.attach(`Payload: ${JSON.stringify(payload, undefined, 4)}`)
+    });

@@ -19,7 +19,7 @@ export let options: Options = {
         'Get Login': ['p(95)<400'],
         'Post Login': ['p(95)<400'],
         'Get Realm': ['p(95)<400'],
-        'Get Comany By Company Key': ['p(95)<400'],
+        'Get Company By Company Key': ['p(95)<400'],
         'Get Subscription By Company Key': ['p(95)<400'],
     },
 };
