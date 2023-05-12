@@ -76,7 +76,7 @@ Then('{} checks value after editing history override values of item must be disp
     const historyOverrideModels = this.getHistoryOverrideResponseBody.model
     this.editedHistoryData.forEach((value: number, key: string) => {
         const model =  historyOverrideModels.find((model: any) => model.grid == key);
-        expect(model, 'The edited grid must be finded in models').not.toBe(undefined);
+        expect(model, 'The edited grid must be found in models').not.toBe(undefined);
         expect(model.orderQty, `The orderQty of grid-${key} must be ${value}`).toEqual(value);
     })
 });
@@ -129,7 +129,7 @@ Then('User calculates the order qty of other years after turning on backfill fea
     //         "start": "1668470400000"
     //     }
     // After creating grids, i find order qty of this grid in historyOverrideModels then save those value in historyOverrideValues
-    // If cannot find grid in historyOverrideModels, means it has no orderqty in the datatable on UI, then i set it = 0
+    // If cannot find grid in historyOverrideModels, means it has no orderQty in the dataTable on UI, then I set it = 0
     let historyOverrideValues: Number[] = []
     for(let index = 0; index < grids.length; index ++){
         const value = await historyOverrideModels.find((model: any) => model.grid == grids[index])
@@ -391,9 +391,9 @@ Then('User checks override history values must be displayed exactly in Purchasin
     const historyValuesOfYears = dataTable.raw();
     const historyValuesOfFirstYear = historyValuesOfYears[1];
     const historyValuesOfSecondYear = historyValuesOfYears[2];
-    const historyValuesOfThirthYear = historyValuesOfYears[3];
+    const historyValuesOfThirdYear = historyValuesOfYears[3];
     const historyValuesOfFourthYear = historyValuesOfYears[4];
-    const historySnapShotExpected = [...historyValuesOfFourthYear, ...historyValuesOfThirthYear, ...historyValuesOfSecondYear, ...historyValuesOfFirstYear];  
+    const historySnapShotExpected = [...historyValuesOfFourthYear, ...historyValuesOfThirdYear, ...historyValuesOfSecondYear, ...historyValuesOfFirstYear];  
     // Any empty values at the beginning of the historySnapShotExpected array are removed
     const firstNonEmptyIndex = historySnapShotExpected.findIndex((el) => el !== '');
     if (firstNonEmptyIndex !== -1) {

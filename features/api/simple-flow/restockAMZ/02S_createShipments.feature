@@ -8,7 +8,7 @@ Feature: API_Regression User can create shipments from Supplier
         And In Header of the request, she sets param Cookie as valid connect.sid
         When User sends a GET request to get companies
 
-    @TC_ASC_CS001 @smoke-test-api
+    @TC_ASC_CS001 @smoke-test-api @retry
     Scenario Outline: <TC_ID> - Verify user <email> could call APIs to create shipments from Supplier without Case packs
         Given User picks company which has onboarded before with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
