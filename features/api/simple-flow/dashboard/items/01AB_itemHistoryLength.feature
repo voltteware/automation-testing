@@ -6,7 +6,7 @@ Feature: API_Dashboard Cannot update item history length
             | admin | testuserforecastrx@gmail.com | Test1111# |
 
     @TC_IHL001_CSV @smoke-test-api @bug1969
-    Scenario Outline: <TC_ID> - Verify user <email> cannot update item history length in item
+    Scenario Outline: <TC_ID> - Verify user <email> cannot update item history length in Items section when company is Onboarding
         Given In Header of the request, User sets param Cookie as valid connect.sid
         And User sets request body of create company api with payload
             | companyName   | companyKey | companyType   | serviceLevel   | leadTime   | orderInterval   | initialSyncDate | marketplaceId |
@@ -66,7 +66,7 @@ Feature: API_Dashboard Cannot update item history length
             | TC_IHL001_CSV | leadTime   | testuserforecastrx@gmail.com | random      | CSV         | random | random       | random   | random        | 200            | OK                 | New Supplier Auto | New description | newemail@gmail.com | random | New Item Auto | New description | random     | random      | random | random    | random           | random              | random         | random              | random    | 20       | random  | hard       | itemHistoryLength |
 
     @TC_IHL002_ASC @smoke-test-api @bug1969
-    Scenario Outline: <TC_ID> - Verify user <email> cannnot update item history length in item
+    Scenario Outline: <TC_ID> - Verify user <email> cannnot update item history length in in Items section when company is Onboarding
         Given In Header of the request, user sets param Cookie as valid connect.sid
         And User sends a GET request to get all company
         And User selects onboarding company with type <companyType>
