@@ -1,4 +1,4 @@
-import { When, Then, Given } from '@cucumber/cucumber';
+import { When, Then, Given, DataTable } from '@cucumber/cucumber';
 import { expect } from '@playwright/test';
 import * as supplierRequest from '../../../../src/api/request/vendor.service';
 import logger from '../../../../src/Logger/logger';
@@ -27,6 +27,28 @@ Then('{} sets request body with payload as name: {string} and description: {stri
         payload.serviceLevel = serviceLevel;
         this.attach(`Payload: ${JSON.stringify(payload, undefined, 4)}`)
     });
+
+Then('{} sets request body of create suppliers api with payload', async function (actor: string, dataTable: DataTable) {
+    var name: string = dataTable.hashes()[0].name;
+    var description: string = dataTable.hashes()[0].description;
+    var email: string = dataTable.hashes()[0].email;
+    var moq: number = dataTable.hashes()[0].moq;
+    var leadTime: number = dataTable.hashes()[0].leadTime;
+    var orderInterval: number = dataTable.hashes()[0].orderInterval;
+    var serviceLevel: number = dataTable.hashes()[0].serviceLevel;
+
+    if (name == 'New Supplier Auto') {
+        payload.name = `supplier auto ${faker.lorem.words(2)}`;
+    }
+
+    payload.description = description;
+    payload.email = email;
+    payload.moq = moq;
+    payload.leadTime = leadTime;
+    payload.orderInterval = orderInterval;
+    payload.serviceLevel = serviceLevel;
+    this.attach(`Payload: ${JSON.stringify(payload, undefined, 4)}`)
+});
 
 Then('{} sets request body with payload as name: {string} and description: {string} and email: {string} and moq: {string} and leadTime: {string} and orderInterval: {string} and serviceLevel: {string} and targetOrderValue: {string} and freeFreightMinimum: {string} and restockModel: {string}',
     async function (actor, name, description, email, moq, leadTime, orderInterval, serviceLevel, targetOrderValue, freeFreightMinimum, restockModel: string) {
