@@ -92,6 +92,13 @@ Then('The status text is {string}', function (message: string) {
     expect(this.response.statusText(), `In response, status text should be: ${message}`).toBe(message);
 });
 
+Then('{} checks status code and status text of api', function (actor: string, dataTable: DataTable) {
+    var expectedStatus: number = dataTable.hashes()[0].expectedStatus;
+    var expectedStatusText: string = dataTable.hashes()[0].expectedStatusText;
+    expect(this.response.status()).toBe(Number(expectedStatus));
+    expect(this.response.statusText(), `In response, status text should be: ${expectedStatusText}`).toBe(expectedStatusText);
+});
+
 Then('Response of Login and Register API must match with API contract', async function () {
     expect(this.responseBody).toHaveProperty('userId')
     expect(this.responseBody).toHaveProperty('isAdmin')

@@ -297,6 +297,10 @@ Then('{} sets POST api endpoint to complete shipment', async function (actor: st
 
     logger.log('info', `Payload: ` + JSON.stringify(this.payLoad, undefined, 4));
     this.attach(`Payload: ` + JSON.stringify(this.payLoad, undefined, 4));
+    const sleep = (milliseconds: number) => {
+        return new Promise(resolve => setTimeout(resolve, milliseconds))
+    }
+    await sleep(5000);
 });
 
 Then('{} sends a POST request to complete shipment', async function (actor: string) {
@@ -418,7 +422,7 @@ Then('{} sends a GET request to export file', async function (actor: string) {
 });
 
 Then('{} sets GET api endpoint to find the new created shipment', async function (actor: string) {
-    linkListShipments = encodeURI(`${Links.API_SHIPMENT}?offset=0&limit=100&sort=[{"field":"createdAt","direction":"desc"}]&where={"logic":"and","filters":[{"logic":"or","filters":[{"field":"shipmentName","operator":"contains","value":"${this.shipmentName}"},{"field":"shipmentSource","operator":"contains","value":"${this.shipmentName}"},{"field":"destinationFulfillmentCenterId","operator":"contains","value":"${this.shipmentName}"},{"field":"status","operator":"contains","value":"${this.shipmentName}"}]}]}`);
+    linkListShipments = encodeURI(`${Links.API_SHIPMENT}?offset=0&limit=10&sort=[{"field":"createdAt","direction":"desc"}]&where={"logic":"and","filters":[{"logic":"or","filters":[{"field":"shipmentName","operator":"contains","value":"${this.shipmentName}"},{"field":"shipmentSource","operator":"contains","value":"${this.shipmentName}"},{"field":"destinationFulfillmentCenterId","operator":"contains","value":"${this.shipmentName}"},{"field":"status","operator":"contains","value":"${this.shipmentName}"}]}]}`);
 });
 
 Then(`{} sends a GET request to find the new created shipment`, async function (actor: string) {
@@ -439,7 +443,7 @@ Then(`{} sends a GET request to find the new created shipment`, async function (
     }
 });
 
-Then (`User picks a just created shipment`, async function () {
+Then(`User picks a just created shipment`, async function () {
     expect(this.getListShipmentsResponseBody.length).toBeGreaterThan(0)
     const justCreatedShipment = this.getListShipmentsResponseBody[Math.floor(Math.random() * this.getListShipmentsResponseBody.length)];
     logger.log('info', `Just created shipment >>>>> ` + JSON.stringify(justCreatedShipment, undefined, 4));
@@ -453,6 +457,18 @@ Then('{} checks the new created shipment: {}', async function (actor, shipmentSt
     this.name = this.getListShipmentsResponseBody[0].shipmentName;
     expect(this.shipmentStatus, `In response body, the expected shipmentStatus should be: ${shipmentStatus}`).toBe(shipmentStatus);
     expect(this.name.includes(this.shipmentName), `In response body, the expected shipmentName should be: ${this.shipmentName}`).toBeTruthy();
+});
+
+Then('{} checks results in the search shipments api', async function (actor: string) {
+    if (!this.getListShipmentsResponseBody.length) {
+        logger.log('info', 'The result does not match with conditions, please find on the UI:: ' + this.getListShipmentsResponseBody.length);
+        this.attach('Cannot find the result, please find on the UI:: ' + this.getListShipmentsResponseBody.length);
+        // If do not have any results will stop the progress
+        expect(this.getListShipmentsResponseBody.length, 'Have the result in Search shipment API').toBeGreaterThan(0);
+    }
+    else {
+        expect(this.getListShipmentsResponseBody.length, 'Have the result in Search shipment API').toBeGreaterThan(0);
+    }
 });
 
 Then('{} checks API contract of create shipment api', async function (actor: string) {
