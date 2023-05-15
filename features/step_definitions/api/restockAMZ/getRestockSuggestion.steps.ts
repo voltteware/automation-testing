@@ -1,4 +1,4 @@
-import { Then } from '@cucumber/cucumber';
+import { Then, DataTable } from '@cucumber/cucumber';
 import { expect } from '@playwright/test';
 import logger from '../../../../src/Logger/logger';
 import { Links } from '../../../../src/utils/links';
@@ -9,6 +9,25 @@ import { itemRestockAMZInfoResponseSchema } from '../assertion/dashboard/itemAss
 
 let link: any;
 let linkRestockAMZ: any;
+
+Then(`{} sends GET api endpoint to get items in RestockAMZ without filtered options`, async function (actor: string) {
+    let linkItemRestockAMZ = encodeURI(`${Links.API_GET_RESTOCK_SUGGESTION}?offset=0&limit=100&where={"logic":"and","filters":[{"logic":"or","filters":[{"filters":[],"logic":"or"},{"filters":[],"logic":"or"}],"currentSupplierFilters":[]},{"logic":"or","filters":[{"field":"sku","operator":"contains","value":"${this.itemName}"},{"field":"productName","operator":"contains","value":"${this.itemName}"},{"field":"category","operator":"contains","value":"${this.itemName}"},{"field":"supplier","operator":"contains","value":"${this.itemName}"},{"field":"supplierSku","operator":"contains","value":"${this.itemName}"},{"field":"asin","operator":"contains","value":"${this.itemName}"}]},{"logic":"and","filters":[]},{"logic":"and","filters":[{"field":"status","operator":"neq","value":"IGNORE"}]},{"logic":"and","filters":[{"field":"status","operator":"neq","value":"INACTIVE"}]}]}`);
+    const options = {
+        headers: this.headers
+    }
+    this.restockSuggestionResponse = this.response = await restockSuggestion.getRestockSuggestion(this.request, linkItemRestockAMZ, options);
+    const responseBodyText = await this.restockSuggestionResponse.text();
+    if (this.restockSuggestionResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
+        this.restockSuggestionResponseBody = JSON.parse(await this.restockSuggestionResponse.text());
+        logger.log('info', `Response GET ${linkItemRestockAMZ}: ` + JSON.stringify(this.restockSuggestionResponseBody, undefined, 4));
+        this.attach(`Response GET ${linkItemRestockAMZ}: ` + JSON.stringify(this.restockSuggestionResponseBody, undefined, 4))
+    }
+    else {
+        const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
+        logger.log('info', `Response ${linkItemRestockAMZ} has status code ${this.restockSuggestionResponse.status()} ${this.restockSuggestionResponse.statusText()} and response body ${responseBodyText}`);
+        this.attach(`Response ${linkItemRestockAMZ} has status code ${this.restockSuggestionResponse.status()} ${this.restockSuggestionResponse.statusText()} and response body ${actualResponseText}`)
+    }
+});
 
 Then(`{} sends a GET api method to count all Items have alerts in {}`, async function (actor, optionListSupplier: string) {
     const options = {
@@ -280,4 +299,13 @@ Then(`{} checks value Adj Daily Sales Rate in Restock Model`, async function (ac
 
 Then('{} checks API contract of get restock calculation api', async function (actor: string) {
     itemRestockAMZInfoResponseSchema.parse(this.restockCalculationResponseBody);
+});
+
+Then('{} checks isHidden is true or false', async function (actor: string) {
+    if (this.getItemByItemKeyResponseBody.isHidden == false) {
+        logger.log('info', `isHidden: ${this.getItemByItemKeyResponseBody.isHidden} => Please check on the UI`);
+        this.attach(`isHidden: ${this.getItemByItemKeyResponseBody.isHidden} => Please check on the UI`);
+        expect(this.getItemByItemKeyResponseBody.isHidden).toBe(true);
+    }
+    expect(this.getItemByItemKeyResponseBody.isHidden).toBe(true);
 });

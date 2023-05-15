@@ -50,12 +50,70 @@ Then(`{} set GET api endpoint to get item that is hidden`, async function (actor
     linkGetItems = `${Links.API_ITEMS}?offset=0&limit=1&where={"filters":[{"filters":[{"field":"name","operator":"eq","value":"${this.nameOfHiddenItem}"}],"logic":"and"}],"logic":"and"}`
 });
 
+Then(`{} checks doNotOrder function: {}`, async function (actor: string, option: boolean) {
+    switch (option) {
+        case true:
+            // when find HB-02-PC1-825-BLK-K in Purchasing maybe will get two results: HB-02-PC1-825-BLK-K and HB-02-PC1-825-BLK-K-2PACK
+            if (this.getItemsInPurchasingCustomResponseBody.length > 0) {
+                const result = this.getItemsInPurchasingCustomResponseBody.itemName === `${this.itemName}`;
+                expect(result).toBe(false);
+                break;
+            }
+            expect(this.getItemsInPurchasingCustomResponseBody.length).toEqual(0);
+            break;
+        case false:
+            if (this.getItemsInPurchasingCustomResponseBody.length > 0) {
+                expect(this.getItemsInPurchasingCustomResponseBody.length).toBeGreaterThanOrEqual(1);
+                break;
+            }
+            logger.log('info', "getItemsInPurchasingCustomResponseBody:: " + this.getItemsInPurchasingCustomResponseBody.length + " => Please check on the UI");
+            this.attach("getItemsInPurchasingCustomResponseBody:: " + this.getItemsInPurchasingCustomResponseBody.length + " => Please check on the UI");
+            expect(this.getItemsInPurchasingCustomResponseBody.length).toBeGreaterThan(0);
+            break;
+    }
+});
+
+Then(`{} checks doNotRestock function: {}`, async function (actor: string, option: boolean) {
+    switch (option) {
+        case true:
+            // when find HB-02-PC1-825-BLK-K in RestockAMZ maybe will get two results: HB-02-PC1-825-BLK-K and HB-02-PC1-825-BLK-K-2PACK
+            if (this.restockSuggestionResponseBody.length > 0) {
+                const result = this.restockSuggestionResponseBody.forecastconstant.itemName === `${this.itemName}`;
+                expect(result).toBe(false);
+                break;
+            }
+            expect(this.restockSuggestionResponseBody.length).toEqual(0);
+            break;
+        case false:
+            if (this.restockSuggestionResponseBody.length > 0) {
+                expect(this.restockSuggestionResponseBody.length).toBeGreaterThanOrEqual(1);
+                break;
+            }
+            logger.log('info', "restockSuggestionResponseBody:: " + this.restockSuggestionResponseBody.length + " => Please check on the UI");
+            this.attach("restockSuggestionResponseBody:: " + this.restockSuggestionResponseBody.length + " => Please check on the UI");
+            expect(this.restockSuggestionResponseBody.length).toBeGreaterThan(0);
+            break;
+    }
+});
+
 Then(`{} set GET api endpoint to count item that is hidden`, async function (actor) {
     linkCountItemsThatIsHidden = encodeURI(`${Links.API_ITEM_COUNT}?where={"filters":[{"filters":[{"field":"isHidden","operator":"eq","value":"true"}],"logic":"and"}],"logic":"and"}`);
 });
 
 Then(`{} sets GET api endpoint to count items that is active and have lotMultipleItemKey is NULL`, async function (actor: string) {
     linkCountItems = linkGetActiveAndHasLotMultipleItemKeyNullItem = encodeURI(`${Links.API_ITEM_COUNT}?where={"filters":[{"filters":[{"field":"isHidden","operator":"eq","value":false},{"field":"isHidden","operator":"eq","value":null},{"field":"isHidden","operator":"eq","value":null}],"logic":"or"},{"filters":[{"field":"lotMultipleItemName","operator":"isnull","value":null}],"logic":"and"}],"logic":"and"}`);
+});
+
+Then('{} sets GET api endpoint to get items with filtered', async function (actor: string, dataTable: DataTable) {
+    var limitRow: string = dataTable.hashes()[0].limitRow;
+    var field1: string = dataTable.hashes()[0].field1;
+    var value1: string = dataTable.hashes()[0].value1;
+    var field2: string = dataTable.hashes()[0].field2;
+    var value2: string = dataTable.hashes()[0].value2;
+    linkGetItems = linkGetFilterItem = `${Links.API_ITEMS}?offset=0&limit=${limitRow}&where={"filters":[{"filters":[{"field":"${field1}","operator":"eq","value":${value1}},{"field":"${field1}","operator":"eq","value":null},{"field":"${field1}","operator":"eq","value":null},{"field":"${field1}","operator":"eq","value":null}],"logic":"or"},{"filters":[{"field":"${field2}","operator":"eq","value":${value2}},{"field":"${field2}","operator":"eq","value":null}],"logic":"or"}],"logic":"and"}`
+    
+    logger.log('info', `linkGetItems:: ` + linkGetItems);
+    this.attach(`linkGetItems:: ` + linkGetItems);
 });
 
 Then(`{} sets GET api endpoint to get items with limit row: {} and filter field: {} equals {}`, async function (actor, limitRow, filterField, filterValue: string) {
@@ -1558,6 +1616,22 @@ Given('{} sets request body of edit item api with payload', async function (acto
     var companyType: string = dataTable.hashes()[0].companyType;
     var value: string = dataTable.hashes()[0].value;
     switch (editColumn) {
+        case 'doNotRestock':
+            if (value == 'random') {
+                this.responseBodyOfAItemObject.doNotRestock = this.doNotRestock = !(Boolean(this.responseBodyOfAItemObject.doNotRestock));
+            }
+
+            logger.log('info', `New ${editColumn}: ${this.doNotRestock}`);
+            this.attach(`New ${editColumn}: ${this.doNotRestock}`);
+            break;
+        case 'doNotOrder':
+            if (value == 'random') {
+                this.responseBodyOfAItemObject.doNotOrder = this.doNotOrder = !(Boolean(this.responseBodyOfAItemObject.doNotOrder));
+            }
+
+            logger.log('info', `New ${editColumn}: ${this.doNotOrder}`);
+            this.attach(`New ${editColumn}: ${this.doNotOrder}`);
+            break;
         case 'itemName':
             if (value == 'random') {
                 this.name = `${faker.random.alphaNumeric(10).toUpperCase()}-${faker.datatype.number(500)}-Auto`;
@@ -1584,7 +1658,7 @@ Given('{} sets request body of edit item api with payload', async function (acto
             break;
         case 'itemHistoryLength':
             if (value == 'random') {
-                this.responseBodyOfAItemObject.itemHistoryLength = this.itemHistoryLength =  Number(faker.random.numeric());
+                this.responseBodyOfAItemObject.itemHistoryLength = this.itemHistoryLength = Number(faker.random.numeric());
             }
 
             logger.log('info', `New ${editColumn}: ${this.itemHistoryLength}`);
@@ -1977,6 +2051,8 @@ Given('{} sets request body of edit item api with payload', async function (acto
             oversized: this.responseBodyOfAItemObject.oversized,
             category: this.responseBodyOfAItemObject.category,
             rank: this.responseBodyOfAItemObject.rank,
+            doNotOrder: this.responseBodyOfAItemObject.doNotOrder,
+            doNotRestock: this.responseBodyOfAItemObject.doNotRestock,
             growthTrend: this.responseBodyOfAItemObject.growthTrend,
             isHidden: this.isHidden === undefined ? this.responseBodyOfAItemObject.isHidden : this.isHidden,
             useHistoryOverride: this.useHistoryOverride === undefined ? this.responseBodyOfAItemObject.useHistoryOverride : this.useHistoryOverride,
@@ -2093,6 +2169,8 @@ Given('{} sets request body of edit item api with payload', async function (acto
             useBackfill: this.useBackfill === undefined ? this.responseBodyOfAItemObject.useHistoryOverride : this.useBackfill,
             createdAt: `${this.responseBodyOfAItemObject.created_at}`,
             inbound: this.responseBodyOfAItemObject.inbound,
+            doNotRestock: this.responseBodyOfAItemObject.doNotRestock,
+            doNotOrder: this.responseBodyOfAItemObject.doNotOrder,
             inboundPrice: this.responseBodyOfAItemObject.inboundPrice,
             inboundSalesLast30Days: this.responseBodyOfAItemObject.inboundSalesLast30Days,
             inboundAvailable: this.responseBodyOfAItemObject.inboundAvailable,
