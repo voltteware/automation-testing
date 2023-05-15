@@ -679,6 +679,11 @@ Feature: APIs Advanced Edit Item History, PUT /api/history-override, Purchase As
         Then User checks API contract of get results of item
         And The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
+        # Rule: Just fill in the months have no data
+        # Example for this case:
+        # 1st year: same user edit
+        # 2nd year: empty month will be filled same data of 1st year, months with data (thirthMonth, sixthMonth, eighthMonth) are not filled.
+        # 3rd year: same user edit
         And User checks override history values must be displayed exactly in Purchasing as the following data:
             | firstMonth | secondMonth | thirthMonth | fourthMonth | fifthMonth | sixthMonth | seventhMonth | eighthMonth | ninthMonth | tenthMonth | eleventhMonth | twelfthMonth |
             | 4          | 9           | 14          | 2           | 16         | 8          | 23           | 1           | 5          | 10         | 21            | 12           |
@@ -746,6 +751,11 @@ Feature: APIs Advanced Edit Item History, PUT /api/history-override, Purchase As
         Then User checks API contract of get results of item
         And The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
+        # Rule: Just fill in the months have no data
+        # Example for this case:
+        # 1st year: same user edit
+        # 2nd year: same user edit
+        # 3rd year: empty month will be filled same data of 1st year, months with data (thirthMonth, sixthMonth, eighthMonth) are not filled.
         And User checks override history values must be displayed exactly in Purchasing as the following data:
             | firstMonth | secondMonth | thirthMonth | fourthMonth | fifthMonth | sixthMonth | seventhMonth | eighthMonth | ninthMonth | tenthMonth | eleventhMonth | twelfthMonth |
             | 4          | 9           | 14          | 2           | 16         | 8          | 23           | 1           | 5          | 10         | 21            | 12           |
