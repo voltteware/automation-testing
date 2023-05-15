@@ -520,7 +520,7 @@ Given('{} sets request body of edit supplier api with payload', async function (
     switch (editColumn) {
         case 'averageHistoryLength':
             if (value == 'random') {
-                this.responseBodyOfASupplierObject.averageHistoryLength = this.averageHistoryLength =  Number(faker.random.numeric());
+                this.responseBodyOfASupplierObject.averageHistoryLength = this.averageHistoryLength = Number(faker.random.numeric());
             }
 
             logger.log('info', `New ${editColumn}: ${this.averageHistoryLength}`);
@@ -708,4 +708,253 @@ Given('{} sets request body of edit supplier api with payload', async function (
 
     logger.log('info', `Payload` + JSON.stringify(this.payLoad, undefined, 4));
     this.attach(`Payload` + JSON.stringify(this.payLoad, undefined, 4))
+});
+
+Then(`User sets POST api to add new address book with following informations:`, async function (dataTable: DataTable) {
+    this.linkApiAddNewAddressBook = Links.API_SUPPLIER
+    const { country, supplierName, streetLine1, streetLine2, city, state, zipCode, phoneNumber } = dataTable.hashes()[0]
+    if (country == 'random') {
+        this.country = faker.address.countryCode();
+    } else {
+        this.country = country
+    }
+
+    if (supplierName == 'random') {
+        this.supplierKey = this.responseBodyOfASupplierObject.key
+        this.supplierName = this.responseBodyOfASupplierObject.name
+    }
+
+    if (streetLine1 == 'random') {
+        this.streetLine1 = faker.address.streetAddress()
+    } else {
+        this.streetLine1 = streetLine1
+    }
+
+    if (streetLine2 == 'random') {
+        this.streetLine2 = faker.address.secondaryAddress()
+    } else {
+        this.streetLine2 = streetLine2
+    }
+
+    if (city == 'random') {
+        this.city = faker.address.cityName()
+    } else {
+        this.city = city
+    }
+
+    if (state == 'random') {
+        this.state = faker.address.state()
+    } else {
+        this.state = state
+    }
+
+    if (zipCode == 'random') {
+        this.zipCode = faker.address.zipCode()
+    } else {
+        this.zipCode = zipCode
+    }
+
+    if (phoneNumber == 'random') {
+        this.phoneNumber = faker.phone.number('0#########')
+    } else {
+        this.phoneNumber = phoneNumber
+    }
+
+    this.payloadAddNewAddressBook = {
+        "key": "",
+        "vendorKey": `${this.supplierKey}`,
+        "countryCode": `${this.country}`,
+        "fullName": `${this.supplierName}`,
+        "addressLine1": `${this.streetLine1}`,
+        "addressLine2": `${this.streetLine2}`,
+        "city": `${this.city}`,
+        "stateOrProvinceCode": `${this.state}`,
+        "postalCode": `${this.zipCode}`,
+        "phoneNumber": `${this.phoneNumber}`
+    }
+
+    logger.log('info', `Payload add new address book` + JSON.stringify(this.payloadAddNewAddressBook, undefined, 4));
+    this.attach(`Payload add new address book` + JSON.stringify(this.payloadAddNewAddressBook, undefined, 4))
+})
+
+Then(`User sends a POST request to add new address book`, async function () {
+    this.response = this.addNewAddressBookResponse = await supplierRequest.createSupplier(this.request, this.linkApiAddNewAddressBook, this.payloadAddNewAddressBook, this.headers);
+    const responseBodyText = await this.addNewAddressBookResponse.text();
+    console.log(responseBodyText);
+    if (this.addNewAddressBookResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
+        this.addNewAddressBookResponseBody = JSON.parse(responseBodyText)
+        logger.log('info', `Response POST ${this.linkApiAddNewAddressBook}` + JSON.stringify(this.addNewAddressBookResponseBody, undefined, 4));
+        this.attach(`Response POST ${this.linkApiAddNewAddressBook}` + JSON.stringify(this.addNewAddressBookResponseBody, undefined, 4))
+    }
+    else {
+        const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
+        logger.log('info', `Response ${this.linkApiAddNewAddressBook} has status code ${this.response.status()} ${this.response.statusText()} and response body ${responseBodyText}`);
+        this.attach(`Response ${this.linkApiAddNewAddressBook} has status code ${this.response.status()} ${this.response.statusText()} and response body ${actualResponseText}`)
+    }
+})
+
+Then('{} checks API contract of add new address book response', async function (actor: string) {
+    supplierAddressResponseSchema.parse(this.addNewAddressBookResponseBody);
+});
+
+Then(`User checks values in response of add new address book are correct`, async function () {
+    expect(this.addNewAddressBookResponseBody.vendorKey).toBe(this.supplierKey)
+    expect(this.addNewAddressBookResponseBody.fullName).toBe(this.supplierName)
+    expect(this.addNewAddressBookResponseBody.countryCode).toBe(this.country)
+    expect(this.addNewAddressBookResponseBody.addressLine1).toBe(this.streetLine1)
+    expect(this.addNewAddressBookResponseBody.addressLine2).toBe(this.streetLine2)
+    expect(this.addNewAddressBookResponseBody.city).toBe(this.city)
+    expect(this.addNewAddressBookResponseBody.stateOrProvinceCode).toBe(this.state)
+    expect(this.addNewAddressBookResponseBody.postalCode).toBe(this.zipCode)
+    expect(this.addNewAddressBookResponseBody.phoneNumber).toBe(this.phoneNumber)
+})
+
+Then(`User sets DELETE api to delete address book`, async function () {
+    this.linkApiDeleteAddressBook = Links.API_SUPPLIER
+    this.payloadDeleteAddressBook = {
+        ids: [`${this.addNewAddressBookResponseBody.key}`]
+    }
+})
+
+Then(`User send a DELETE method to delete address book`, async function () {
+    this.response = await supplierRequest.deleteSupplier(this.request, this.linkApiDeleteAddressBook, this.payloadDeleteAddressBook, this.headers);
+    logger.log('info', `Response DELETE ${Links.API_SUPPLIERS} has status code ${this.response.status()} ${this.response.statusText()} and response body ${await this.response.text()}`);
+    this.attach(`Response DELETE ${Links.API_SUPPLIERS} has status code ${this.response.status()} ${this.response.statusText()} and response body ${await this.response.text()}`)
+})
+
+Then(`User sets GET api to get list address books by full name`, async function () {
+    this.linkGetListAddressBooks = `${Links.API_SUPPLIER}?offset=0&limit=50&where={"filters":[{"filters":[{"field":"fullName","operator":"contains","value":"${this.addNewAddressBookResponseBody.fullName}"}],"logic":"and"}],"logic":"and"}`;
+})
+
+Then(`User sends a GET request to get list address books`, async function () {
+    const options = {
+        headers: this.headers
+    }
+    this.getListAddressBooksResponse = this.response = await supplierRequest.getSuppliers(this.request, this.linkGetListAddressBooks, options);
+    const responseBodyText = await this.getListAddressBooksResponse.text();
+    if (this.getListAddressBooksResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
+        this.getListAddressBooksResponseBody = JSON.parse(await this.getListAddressBooksResponse.text());
+        logger.log('info', `Response list address books  ${this.linkGetListAddressBooks}: ` + JSON.stringify(this.getListAddressBooksResponseBody, undefined, 4));
+        this.attach(`Response list address books ${this.linkGetListAddressBooks}: ` + JSON.stringify(this.getListAddressBooksResponseBody, undefined, 4));
+    }
+    else {
+        const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
+        logger.log('info', `Response ${this.linkGetListAddressBooks} has status code ${this.getListAddressBooksResponse.status()} ${this.getListAddressBooksResponse.statusText()} and response body ${responseBodyText}`);
+        this.attach(`Response ${this.linkGetListAddressBooks} has status code ${this.getListAddressBooksResponse.status()} ${this.getListAddressBooksResponse.statusText()} and response body ${actualResponseText}`);
+    }
+})
+
+Then(`User checks just added address book must be found and display the correct informations`, async function () {
+    expect(this.getListAddressBooksResponseBody.length).toBeGreaterThanOrEqual(1)
+    const justAddedAddressBook = this.getListAddressBooksResponseBody.find((addressBook: any) => addressBook.key == this.addNewAddressBookResponseBody.key)
+    expect(justAddedAddressBook).not.toBe(undefined)
+    expect(justAddedAddressBook.vendorKey).toBe(this.addNewAddressBookResponseBody.vendorKey)
+    expect(justAddedAddressBook.fullName).toBe(this.addNewAddressBookResponseBody.fullName)
+    expect(justAddedAddressBook.countryCode).toBe(this.addNewAddressBookResponseBody.countryCode)
+    expect(justAddedAddressBook.addressLine1).toBe(this.addNewAddressBookResponseBody.addressLine1)
+    expect(justAddedAddressBook.addressLine2).toBe(this.addNewAddressBookResponseBody.addressLine2)
+    expect(justAddedAddressBook.city).toBe(this.addNewAddressBookResponseBody.city)
+    expect(justAddedAddressBook.stateOrProvinceCode).toBe(this.addNewAddressBookResponseBody.stateOrProvinceCode)
+    expect(justAddedAddressBook.postalCode).toBe(this.addNewAddressBookResponseBody.postalCode)
+    expect(justAddedAddressBook.phoneNumber).toBe(this.addNewAddressBookResponseBody.phoneNumber)
+})
+
+Then(`User sets PUT api to update address book with following informations:`, async function (dataTable: DataTable) {
+    this.linkApiUpdateAddressBook = `${Links.API_SUPPLIER}/${this.addNewAddressBookResponseBody.key}`
+    const { country, supplierName, streetLine1, streetLine2, city, state, zipCode, phoneNumber } = dataTable.hashes()[0]
+    if (country == 'random') {
+        this.country = faker.address.countryCode();
+    } else {
+        this.country = country
+    }
+
+    if (supplierName == 'random') {
+        this.supplierKey = this.responseBodyOfASupplierObject.key
+        this.supplierName = this.responseBodyOfASupplierObject.name
+    }
+
+    if (streetLine1 == 'random') {
+        this.streetLine1 = faker.address.streetAddress()
+    } else {
+        this.streetLine1 = streetLine1
+    }
+
+    if (streetLine2 == 'random') {
+        this.streetLine2 = faker.address.secondaryAddress()
+    } else {
+        this.streetLine2 = streetLine2
+    }
+
+    if (city == 'random') {
+        this.city = faker.address.cityName()
+    } else {
+        this.city = city
+    }
+
+    if (state == 'random') {
+        this.state = faker.address.state()
+    } else {
+        this.state = state
+    }
+
+    if (zipCode == 'random') {
+        this.zipCode = faker.address.zipCode()
+    } else {
+        this.zipCode = zipCode
+    }
+
+    if (phoneNumber == 'random') {
+        this.phoneNumber = faker.phone.number('0#########')
+    } else {
+        this.phoneNumber = phoneNumber
+    }
+
+    this.payloadUpdateAddressBook = {
+        "key": `${this.addNewAddressBookResponseBody.key}`,
+        "vendorKey": `${this.supplierKey}`,
+        "countryCode": `${this.country}`,
+        "fullName": `${this.supplierName}`,
+        "addressLine1": `${this.streetLine1}`,
+        "addressLine2": `${this.streetLine2}`,
+        "city": `${this.city}`,
+        "stateOrProvinceCode": `${this.state}`,
+        "postalCode": `${this.zipCode}`,
+        "phoneNumber": `${this.phoneNumber}`
+    }
+
+    logger.log('info', `Payload update address book` + JSON.stringify(this.payloadAddNewAddressBook, undefined, 4));
+    this.attach(`Payload update address book` + JSON.stringify(this.payloadAddNewAddressBook, undefined, 4))
+})
+
+Then(`User sends a PUT request to update address book`, async function () {
+    this.response = this.updateAddressBookResponse = await supplierRequest.editSupplier(this.request, this.linkApiUpdateAddressBook, this.payloadUpdateAddressBook, this.headers);
+    const responseBodyText = await this.updateAddressBookResponse.text();
+    console.log(responseBodyText);
+    if (this.updateAddressBookResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
+        this.updateAddressBookResponseBody = JSON.parse(responseBodyText)
+        logger.log('info', `Response update address book ${this.linkApiUpdateAddressBook}` + JSON.stringify(this.updateAddressBookResponseBody, undefined, 4));
+        this.attach(`Response update address book ${this.linkApiUpdateAddressBook}` + JSON.stringify(this.updateAddressBookResponseBody, undefined, 4))
+    }
+    else {
+        const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
+        logger.log('info', `Response ${this.linkApiUpdateAddressBook} has status code ${this.response.status()} ${this.response.statusText()} and response body ${responseBodyText}`);
+        this.attach(`Response ${this.linkApiUpdateAddressBook} has status code ${this.response.status()} ${this.response.statusText()} and response body ${actualResponseText}`)
+    }
+})
+
+Then(`User checks values in response of update address book are correct`, async function () {
+    expect(this.updateAddressBookResponseBody.key).toBe(this.addNewAddressBookResponseBody.key)
+    expect(this.updateAddressBookResponseBody.vendorKey).toBe(this.supplierKey)
+    expect(this.updateAddressBookResponseBody.fullName).toBe(this.supplierName)
+    expect(this.updateAddressBookResponseBody.countryCode).toBe(this.country)
+    expect(this.updateAddressBookResponseBody.addressLine1).toBe(this.streetLine1)
+    expect(this.updateAddressBookResponseBody.addressLine2).toBe(this.streetLine2)
+    expect(this.updateAddressBookResponseBody.city).toBe(this.city)
+    expect(this.updateAddressBookResponseBody.stateOrProvinceCode).toBe(this.state)
+    expect(this.updateAddressBookResponseBody.postalCode).toBe(this.zipCode)
+    expect(this.updateAddressBookResponseBody.phoneNumber).toBe(this.phoneNumber)
+})
+
+Then('{} checks API contract of update address book response', async function (actor: string) {
+    supplierAddressResponseSchema.parse(this.updateAddressBookResponseBody);
 });
