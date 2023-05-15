@@ -624,6 +624,280 @@ Feature: APIs Advanced Edit Item History, PUT /api/history-override, Purchase As
             | TC_BFV002_2 | ASC         | testautoforecast@gmail.com | 20       | 200            | OK                 | useBackfill | true  |
             | TC_BFV002_3 | QBFS        | testautoforecast@gmail.com | 20       | 200            | OK                 | useBackfill | true  |
 
-            # TODO: Verify that the system can backfill for 37 months( 12 months of 1st year, 12 months of 2nd year, 12 months of 3rd year, the last month of 4th year). If the 1st year has full values and the 2nd year has some values
-            # TODO: Verify that the system can backfill for 37 months( 12 months of 1st year, 12 months of 2nd year, 12 months of 3rd year, the last month of 4th year). If the 1st year has full values and the 3th year has some values
-            # TODO: Verify that the system will fill "0" for other months. if the 1st year has no value and the 2nd year has full values
+    @TC_BFV003 @smoke-test-api @regression-api @api-backfill-value @bug-1954
+    Scenario Outline: <TC_ID> - Verify that the system can backfill for 37 months( 12 months of 1st year, 12 months of 2nd year, 12 months of 3rd year, the last month of 4th year) with the 1st year has full values and the 2nd year has some values for <companyType> company
+        Given User picks company which has onboarded before with type <companyType> in above response
+        And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
+        And User sets GET api endpoint to get item with limit row: <limitRow>
+        And User sends a GET request to get list items
+        And The expected status code should be <expectedStatus>
+        And The status text is "<expectedStatusText>"
+        And User picks a random item which does not have Purchase As
+        And User saves the item key
+        # Turn ON Override history
+        And User sets PUT api endpoint to edit useHistoryOverride of the above item for company type <companyType> with new value: <value>
+        And User sends a PUT request to edit the item
+        And The expected status code should be <expectedStatus>
+        # Delete all history-override values of item
+        And User sets DELETE api to delete history override
+        And User sends a DELETE request to delete history override
+        # Edit history override values
+        And User sets PUT api to update history override with the following data:
+            | firstMonth | secondMonth | thirdMonth | fourthMonth | fifthMonth | sixthMonth | seventhMonth | eighthMonth | ninthMonth | tenthMonth | eleventhMonth | twelfthMonth |
+            | 4          | 9           | 14         | 2           | 16         | 8          | 23           | 1           | 5          | 10         | 21            | 12           |
+            |            |             | 23         |             |            | 19         |              | 15          |            |            |               |              |
+            |            |             |            |             |            |            |              |             |            |            |               |              |
+            |            |             |            |             |            |            |              |             |            |            |               |              |
+        And User sends a PUT request to update history override values
+        And The expected status code should be <expectedStatus>
+        And The status text is "<expectedStatusText>"
+        And User checks API contract of update history override api
+        # Turn ON Backfill feature
+        And User sets PUT api endpoint to edit <editColumn> of the above item for company type <companyType> with new value: <value>
+        And User sends a PUT request to edit the item
+        And The new <editColumn> of item must be updated successfully
+        # Get history override
+        And User sets GET api endpoint to get history override of item
+        And User sends a GET request to get history override of item
+        And User checks API contract of get history override of item api
+        And The expected status code should be <expectedStatus>
+        And The status text is "<expectedStatusText>"
+        # Get Company info before run forecast
+        And User sets GET api endpoint to get company information by company key
+        And User sends a GET request to get company information by company key
+        And The expected status code should be <expectedStatus>
+        And The status text is "<expectedStatusText>"
+        # Run forecast
+        And User sets POST api to run forecast
+        And User sends a POST request to run forecast
+        And The expected status code should be <expectedStatus>
+        And The status text is "<expectedStatusText>"
+        And User checks that the lastForecastDate field was updated and jobInitiator is null in company detail information after running forecast
+        # Get item result to check history override values
+        And User sets GET api endpoint to get results of item
+        When User sends a GET request to get results of item
+        Then User checks API contract of get results of item
+        And The expected status code should be <expectedStatus>
+        And The status text is "<expectedStatusText>"
+        # Rule: Just fill in the months have no data
+        # Example for this case:
+        # 1st year: same user edit
+        # 2nd year: empty month will be filled same data of 1st year, months with data (thirthMonth, sixthMonth, eighthMonth) are not filled.
+        # 3rd year: same user edit
+        And User checks override history values must be displayed exactly in Purchasing as the following data:
+            | firstMonth | secondMonth | thirthMonth | fourthMonth | fifthMonth | sixthMonth | seventhMonth | eighthMonth | ninthMonth | tenthMonth | eleventhMonth | twelfthMonth |
+            | 4          | 9           | 14          | 2           | 16         | 8          | 23           | 1           | 5          | 10         | 21            | 12           |
+            | 4          | 9           | 23          | 2           | 16         | 19         | 23           | 15          | 5          | 10         | 21            | 12           |
+            | 4          | 9           | 14          | 2           | 16         | 8          | 23           | 1           | 5          | 10         | 21            | 12           |
+            |            |             |             |             |            |            |              |             |            |            |               | 12           |
+        Examples:
+            | TC_ID       | companyType | email                      | limitRow | expectedStatus | expectedStatusText | editColumn  | value |
+            | TC_BFV003_1 | CSV         | testautoforecast@gmail.com | 20       | 200            | OK                 | useBackfill | true  |
+            | TC_BFV003_2 | ASC         | testautoforecast@gmail.com | 20       | 200            | OK                 | useBackfill | true  |
+            | TC_BFV003_3 | QBFS        | testautoforecast@gmail.com | 20       | 200            | OK                 | useBackfill | true  |
+
+    @TC_BFV004 @smoke-test-api @regression-api @api-backfill-value @bug-1954
+    Scenario Outline: <TC_ID> - Verify that the system can backfill for 37 months( 12 months of 1st year, 12 months of 2nd year, 12 months of 3rd year, the last month of 4th year) with the 1st year has full values and the 3rd year has some values for <companyType> company
+        Given User picks company which has onboarded before with type <companyType> in above response
+        And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
+        And User sets GET api endpoint to get item with limit row: <limitRow>
+        And User sends a GET request to get list items
+        And The expected status code should be <expectedStatus>
+        And The status text is "<expectedStatusText>"
+        And User picks a random item which does not have Purchase As
+        And User saves the item key
+        # Turn ON Override history
+        And User sets PUT api endpoint to edit useHistoryOverride of the above item for company type <companyType> with new value: <value>
+        And User sends a PUT request to edit the item
+        And The expected status code should be <expectedStatus>
+        # Delete all history-override values of item
+        And User sets DELETE api to delete history override
+        And User sends a DELETE request to delete history override
+        # Edit history override values
+        And User sets PUT api to update history override with the following data:
+            | firstMonth | secondMonth | thirdMonth | fourthMonth | fifthMonth | sixthMonth | seventhMonth | eighthMonth | ninthMonth | tenthMonth | eleventhMonth | twelfthMonth |
+            | 4          | 9           | 14         | 2           | 16         | 8          | 23           | 1           | 5          | 10         | 21            | 12           |
+            |            |             |            |             |            |            |              |             |            |            |               |              |
+            |            |             | 23         |             |            | 19         |              | 15          |            |            |               |              |
+            |            |             |            |             |            |            |              |             |            |            |               |              |
+        And User sends a PUT request to update history override values
+        And The expected status code should be <expectedStatus>
+        And The status text is "<expectedStatusText>"
+        And User checks API contract of update history override api
+        # Turn ON Backfill feature
+        And User sets PUT api endpoint to edit <editColumn> of the above item for company type <companyType> with new value: <value>
+        And User sends a PUT request to edit the item
+        And The new <editColumn> of item must be updated successfully
+        # Get history override
+        And User sets GET api endpoint to get history override of item
+        And User sends a GET request to get history override of item
+        And User checks API contract of get history override of item api
+        And The expected status code should be <expectedStatus>
+        And The status text is "<expectedStatusText>"
+        # Get Company info before run forecast
+        And User sets GET api endpoint to get company information by company key
+        And User sends a GET request to get company information by company key
+        And The expected status code should be <expectedStatus>
+        And The status text is "<expectedStatusText>"
+        # Run forecast
+        And User sets POST api to run forecast
+        And User sends a POST request to run forecast
+        And The expected status code should be <expectedStatus>
+        And The status text is "<expectedStatusText>"
+        And User checks that the lastForecastDate field was updated and jobInitiator is null in company detail information after running forecast
+        # Get item result to check history override values
+        And User sets GET api endpoint to get results of item
+        When User sends a GET request to get results of item
+        Then User checks API contract of get results of item
+        And The expected status code should be <expectedStatus>
+        And The status text is "<expectedStatusText>"
+        # Rule: Just fill in the months have no data
+        # Example for this case:
+        # 1st year: same user edit
+        # 2nd year: same user edit
+        # 3rd year: empty month will be filled same data of 1st year, months with data (thirthMonth, sixthMonth, eighthMonth) are not filled.
+        And User checks override history values must be displayed exactly in Purchasing as the following data:
+            | firstMonth | secondMonth | thirthMonth | fourthMonth | fifthMonth | sixthMonth | seventhMonth | eighthMonth | ninthMonth | tenthMonth | eleventhMonth | twelfthMonth |
+            | 4          | 9           | 14          | 2           | 16         | 8          | 23           | 1           | 5          | 10         | 21            | 12           |
+            | 4          | 9           | 14          | 2           | 16         | 8          | 23           | 1           | 5          | 10         | 21            | 12           |
+            | 4          | 9           | 23          | 2           | 16         | 19         | 23           | 15          | 5          | 10         | 21            | 12           |
+            |            |             |             |             |            |            |              |             |            |            |               | 12           |
+        Examples:
+            | TC_ID       | companyType | email                      | limitRow | expectedStatus | expectedStatusText | editColumn  | value |
+            | TC_BFV004_1 | CSV         | testautoforecast@gmail.com | 20       | 200            | OK                 | useBackfill | true  |
+            | TC_BFV004_2 | ASC         | testautoforecast@gmail.com | 20       | 200            | OK                 | useBackfill | true  |
+            | TC_BFV004_3 | QBFS        | testautoforecast@gmail.com | 20       | 200            | OK                 | useBackfill | true  |
+
+    @TC_BFV005 @smoke-test-api @regression-api @api-backfill-value
+    Scenario Outline: <TC_ID> - Verify that the system will fill "0" for orther months. if the 1st year has no value and the 2nd year has full values
+        Given User picks company which has onboarded before with type <companyType> in above response
+        And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
+        And User sets GET api endpoint to get item with limit row: <limitRow>
+        And User sends a GET request to get list items
+        And The expected status code should be <expectedStatus>
+        And The status text is "<expectedStatusText>"
+        And User picks a random item which does not have Purchase As
+        And User saves the item key
+        # Turn ON Override history
+        And User sets PUT api endpoint to edit useHistoryOverride of the above item for company type <companyType> with new value: <value>
+        And User sends a PUT request to edit the item
+        And The expected status code should be <expectedStatus>
+        # Delete all history-override values of item
+        And User sets DELETE api to delete history override
+        And User sends a DELETE request to delete history override
+        # Edit history override values
+        And User sets PUT api to update history override with the following data:
+            | firstMonth | secondMonth | thirdMonth | fourthMonth | fifthMonth | sixthMonth | seventhMonth | eighthMonth | ninthMonth | tenthMonth | eleventhMonth | twelfthMonth |
+            |            |             |            |             |            |            |              |             |            |            |               |              |
+            | 4          | 9           | 14         | 2           | 16         | 8          | 23           | 1           | 5          | 10         | 21            | 12           |
+            |            |             |            |             |            |            |              |             |            |            |               |              |
+            |            |             |            |             |            |            |              |             |            |            |               |              |
+        And User sends a PUT request to update history override values
+        And The expected status code should be <expectedStatus>
+        And The status text is "<expectedStatusText>"
+        And User checks API contract of update history override api
+        # Turn ON Backfill feature
+        And User sets PUT api endpoint to edit <editColumn> of the above item for company type <companyType> with new value: <value>
+        And User sends a PUT request to edit the item
+        And The new <editColumn> of item must be updated successfully
+        # Get history override
+        And User sets GET api endpoint to get history override of item
+        And User sends a GET request to get history override of item
+        And User checks API contract of get history override of item api
+        And The expected status code should be <expectedStatus>
+        And The status text is "<expectedStatusText>"
+        # Get Company info before run forecast
+        And User sets GET api endpoint to get company information by company key
+        And User sends a GET request to get company information by company key
+        And The expected status code should be <expectedStatus>
+        And The status text is "<expectedStatusText>"
+        # Run forecast
+        And User sets POST api to run forecast
+        And User sends a POST request to run forecast
+        And The expected status code should be <expectedStatus>
+        And The status text is "<expectedStatusText>"
+        And User checks that the lastForecastDate field was updated and jobInitiator is null in company detail information after running forecast
+        # Get item result to check history override values
+        And User sets GET api endpoint to get results of item
+        When User sends a GET request to get results of item
+        Then User checks API contract of get results of item
+        And The expected status code should be <expectedStatus>
+        And The status text is "<expectedStatusText>"
+        And User checks override history values must be displayed exactly in Purchasing as the following data:
+            | firstMonth | secondMonth | thirthMonth | fourthMonth | fifthMonth | sixthMonth | seventhMonth | eighthMonth | ninthMonth | tenthMonth | eleventhMonth | twelfthMonth |
+            | 0          | 0           | 0           | 0           | 0          | 0          | 0            | 0           | 0          | 0          | 0             | 0            |
+            | 4          | 9           | 14          | 2           | 16         | 8          | 23           | 1           | 5          | 10         | 21            | 12           |
+            |            |             |             |             |            |            |              |             |            |            |               |              |
+            |            |             |             |             |            |            |              |             |            |            |               |              |
+        Examples:
+            | TC_ID       | companyType | email                      | limitRow | expectedStatus | expectedStatusText | editColumn  | value |
+            | TC_BFV005_1 | CSV         | testautoforecast@gmail.com | 20       | 200            | OK                 | useBackfill | true  |
+            | TC_BFV005_2 | ASC         | testautoforecast@gmail.com | 20       | 200            | OK                 | useBackfill | true  |
+            | TC_BFV005_3 | QBFS        | testautoforecast@gmail.com | 20       | 200            | OK                 | useBackfill | true  |
+
+    @TC_BFV006 @smoke-test-api @regression-api @api-backfill-value
+    Scenario Outline: <TC_ID> - Verify that the system will fill "0" for orther months. if the 1st year, 2nd year has no value and the 3rd year has full values
+        Given User picks company which has onboarded before with type <companyType> in above response
+        And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
+        And User sets GET api endpoint to get item with limit row: <limitRow>
+        And User sends a GET request to get list items
+        And The expected status code should be <expectedStatus>
+        And The status text is "<expectedStatusText>"
+        And User picks a random item which does not have Purchase As
+        And User saves the item key
+        # Turn ON Override history
+        And User sets PUT api endpoint to edit useHistoryOverride of the above item for company type <companyType> with new value: <value>
+        And User sends a PUT request to edit the item
+        And The expected status code should be <expectedStatus>
+        # Delete all history-override values of item
+        And User sets DELETE api to delete history override
+        And User sends a DELETE request to delete history override
+        # Edit history override values
+        And User sets PUT api to update history override with the following data:
+            | firstMonth | secondMonth | thirdMonth | fourthMonth | fifthMonth | sixthMonth | seventhMonth | eighthMonth | ninthMonth | tenthMonth | eleventhMonth | twelfthMonth |
+            |            |             |            |             |            |            |              |             |            |            |               |              |
+            |            |             |            |             |            |            |              |             |            |            |               |              |
+            | 4          | 9           | 14         | 2           | 16         | 8          | 23           | 1           | 5          | 10         | 21            | 12           |
+            |            |             |            |             |            |            |              |             |            |            |               |              |
+        And User sends a PUT request to update history override values
+        And The expected status code should be <expectedStatus>
+        And The status text is "<expectedStatusText>"
+        And User checks API contract of update history override api
+        # Turn ON Backfill feature
+        And User sets PUT api endpoint to edit <editColumn> of the above item for company type <companyType> with new value: <value>
+        And User sends a PUT request to edit the item
+        And The new <editColumn> of item must be updated successfully
+        # Get history override
+        And User sets GET api endpoint to get history override of item
+        And User sends a GET request to get history override of item
+        And User checks API contract of get history override of item api
+        And The expected status code should be <expectedStatus>
+        And The status text is "<expectedStatusText>"
+        # Get Company info before run forecast
+        And User sets GET api endpoint to get company information by company key
+        And User sends a GET request to get company information by company key
+        And The expected status code should be <expectedStatus>
+        And The status text is "<expectedStatusText>"
+        # Run forecast
+        And User sets POST api to run forecast
+        And User sends a POST request to run forecast
+        And The expected status code should be <expectedStatus>
+        And The status text is "<expectedStatusText>"
+        And User checks that the lastForecastDate field was updated and jobInitiator is null in company detail information after running forecast
+        # Get item result to check history override values
+        And User sets GET api endpoint to get results of item
+        When User sends a GET request to get results of item
+        Then User checks API contract of get results of item
+        And The expected status code should be <expectedStatus>
+        And The status text is "<expectedStatusText>"
+        And User checks override history values must be displayed exactly in Purchasing as the following data:
+            | firstMonth | secondMonth | thirthMonth | fourthMonth | fifthMonth | sixthMonth | seventhMonth | eighthMonth | ninthMonth | tenthMonth | eleventhMonth | twelfthMonth |
+            | 0          | 0           | 0           | 0           | 0          | 0          | 0            | 0           | 0          | 0          | 0             | 0            |
+            | 0          | 0           | 0           | 0           | 0          | 0          | 0            | 0           | 0          | 0          | 0             | 0            |
+            | 4          | 9           | 14          | 2           | 16         | 8          | 23           | 1           | 5          | 10         | 21            | 12           |
+            |            |             |             |             |            |            |              |             |            |            |               |              |
+        Examples:
+            | TC_ID       | companyType | email                      | limitRow | expectedStatus | expectedStatusText | editColumn  | value |
+            | TC_BFV006_1 | CSV         | testautoforecast@gmail.com | 20       | 200            | OK                 | useBackfill | true  |
+            | TC_BFV006_2 | ASC         | testautoforecast@gmail.com | 20       | 200            | OK                 | useBackfill | true  |
+            | TC_BFV006_3 | QBFS        | testautoforecast@gmail.com | 20       | 200            | OK                 | useBackfill | true  |
