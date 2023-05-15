@@ -10,7 +10,7 @@ export const supplierAddressResponseSchema = z.object({
     countryCode: z.string(),
     fullName: z.string(),
     key: z.string(),
-    phoneNumber: z.number().nullable(),
+    phoneNumber: z.string().nullable(),
     postalCode: z.string(),
     vendorKey: z.string(),
     stateOrProvinceCode: z.string()
