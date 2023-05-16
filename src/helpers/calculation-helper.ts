@@ -140,7 +140,7 @@ function averageDailySalesRateFormulaRestockAMZ(input: Input, attach: ICreateAtt
 
     // Weighted (units/day) = Daily Sales Rate * Weight (Settings)
     let weighted2d = roundFloatNumber((adjSv2d || 0) * (percent2Day || 0) / 100);
-    let weighted7d = roundFloatNumber((adjSv7d || 0) * (percent7Day || 0) / 100);
+    let weighted7d = roundFloatNumber((adjSv7d || 0) * (percent7Day || 0) / 100)
     let weighted14d = roundFloatNumber((adjSv14d || 0) * (percent14Day || 0) / 100);
     let weighted30d = roundFloatNumber((adjSv30d || 0) * (percent30Day || 0) / 100);
     let weighted60d = roundFloatNumber((adjSv60d || 0) * (percent60Day || 0) / 100);
@@ -157,37 +157,37 @@ function adjDailySalesRateFormulaRestockAMZ(input: Input, attach: ICreateAttachm
     const { adjSv2d, adjSv7d, adjSv14d, adjSv30d, adjSv60d, adjSv90d, adjSv180d, outOfStock2d, outOfStock7d, outOfStock14d, outOfStock30d, outOfStock60d, outOfStock90d, outOfStock180d, s2d, s7d, s14d, s30d, s60d, s90d, s180d } = input;
 
     // AdjV = Total Sale / in-stock days
-    let expectedAdj2d = roundFloatNumber((s2d || 0) / (2 - (outOfStock2d || 0)));
+    let expectedAdj2d = (2 - (outOfStock2d || 0)) === 0 ? 0 : roundFloatNumber((s2d || 0) / (2 - (outOfStock2d || 0)));
     expect(adjSv2d, `In response body, the expected Adjusted Daily Sales Rate for 2-day should be: ${expectedAdj2d}`).toBe(expectedAdj2d);
     logger.log('info', `Adj2d: Actual: ${adjSv2d} and Expected: ${expectedAdj2d}`);
     attach(`Adj2d: Actual: ${adjSv2d} and Expected: ${expectedAdj2d}`);
 
-    let expectedAdj7d = roundFloatNumber((s7d || 0) / (7 - (outOfStock7d || 0)));
+    let expectedAdj7d = (7 - (outOfStock7d || 0)) === 0 ? 0 : roundFloatNumber((s7d || 0) / (7 - (outOfStock7d || 0)));
     expect(adjSv7d, `In response body, the expected Adjusted Daily Sales Rate for 7-day should be: ${expectedAdj7d}`).toBe(expectedAdj7d);
     logger.log('info', `Adj7d: Actual: ${adjSv7d} and Expected: ${expectedAdj7d}`);
     attach(`Adj7d: Actual: ${adjSv7d} and Expected: ${expectedAdj7d}`);
 
-    let expectedAdj14d = roundFloatNumber((s14d || 0) / (14 - (outOfStock14d || 0)));
+    let expectedAdj14d = (14 - (outOfStock14d || 0)) === 0 ? 0 : roundFloatNumber((s14d || 0) / (14 - (outOfStock14d || 0)));
     expect(adjSv14d, `In response body, the expected Adjusted Daily Sales Rate for 14-day should be: ${expectedAdj14d}`).toBe(expectedAdj14d);
     logger.log('info', `Adj14d: Actual: ${adjSv14d} and Expected: ${expectedAdj14d}`);
     attach(`Adj14d: Actual: ${adjSv14d} and Expected: ${expectedAdj14d}`);
 
-    let expectedAdj30d = roundFloatNumber((s30d || 0) / (30 - (outOfStock30d || 0)));
+    let expectedAdj30d = (30 - (outOfStock30d || 0)) === 0 ? 0 : roundFloatNumber((s30d || 0) / (30 - (outOfStock30d || 0)));
     expect(adjSv30d, `In response body, the expected Adjusted Daily Sales Rate for 30-day should be: ${expectedAdj30d}`).toBe(expectedAdj30d);
     logger.log('info', `Adj30d: Actual: ${adjSv30d} and Expected: ${expectedAdj30d}`);
     attach(`Adj30d: Actual: ${adjSv30d} and Expected: ${expectedAdj30d}`);
 
-    let expectedAdj60d = roundFloatNumber((s60d || 0) / (60 - (outOfStock60d || 0)));
+    let expectedAdj60d = (60 - (outOfStock60d || 0)) === 0 ? 0 : roundFloatNumber((s60d || 0) / (60 - (outOfStock60d || 0)));
     expect(adjSv60d, `In response body, the expected Adjusted Daily Sales Rate for 60-day should be: ${expectedAdj60d}`).toBe(expectedAdj60d);
     logger.log('info', `Adj60d: Actual: ${adjSv60d} and Expected: ${expectedAdj60d}`);
     attach(`Adj60d: Actual: ${adjSv60d} and Expected: ${expectedAdj60d}`);
 
-    let expectedAdj90d = roundFloatNumber((s90d || 0) / (90 - (outOfStock90d || 0)));
+    let expectedAdj90d = (90 - (outOfStock90d || 0)) === 0 ? 0 : roundFloatNumber((s90d || 0) / (90 - (outOfStock90d || 0)));
     expect(adjSv90d, `In response body, the expected Adjusted Daily Sales Rate for 90-day should be: ${expectedAdj90d}`).toBe(expectedAdj90d);
     logger.log('info', `Adj90d: Actual: ${adjSv90d} and Expected: ${expectedAdj90d}`);
     attach(`Adj90d: Actual: ${adjSv90d} and Expected: ${expectedAdj90d}`);
 
-    let expectedAdj180d = roundFloatNumber((s180d || 0) / (180 - (outOfStock180d || 0)));
+    let expectedAdj180d = (180 - (outOfStock180d || 0)) === 0 ? 0 : roundFloatNumber((s180d || 0) / (180 - (outOfStock180d || 0)));
     expect(adjSv180d, `In response body, the expected Adjusted Daily Sales Rate for 180-day should be: ${expectedAdj180d}`).toBe(expectedAdj180d);
     logger.log('info', `Adj180d: Actual: ${adjSv180d} and Expected: ${expectedAdj180d}`);
     attach(`Adj180d: Actual: ${adjSv180d} and Expected: ${expectedAdj180d}`);
@@ -313,7 +313,7 @@ function inventoryAvailableFormulaRestockAMZ(input: Input, attach: ICreateAttach
         logger.log('info', `Remaining Days at Amazon: Actual: ${remaining} and Expected: ${expectedRemaining}`);
         attach(`Remaining Days at Amazon: Actual: ${remaining} and Expected: ${expectedRemaining}`);
     }
-    else {
+    if (demand !== 0 && currentAmazonInventory !== 0) {
         let expectedRemaining = Math.round((currentAmazonInventory || 0) / (demand || 0));
         expect(remaining, `In response body, the expected Remaining Days at Amazon should be: ${expectedRemaining}`).toBe(expectedRemaining);
         logger.log('info', `Remaining Days at Amazon: Actual: ${remaining} and Expected: ${expectedRemaining}`);
