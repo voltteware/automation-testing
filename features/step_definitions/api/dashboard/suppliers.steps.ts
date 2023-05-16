@@ -798,15 +798,15 @@ Then('{} checks API contract of add new address book response', async function (
 });
 
 Then(`User checks values in response of add new address book are correct`, async function () {
-    expect(this.addNewAddressBookResponseBody.vendorKey).toBe(this.supplierKey)
-    expect(this.addNewAddressBookResponseBody.fullName).toBe(this.supplierName)
-    expect(this.addNewAddressBookResponseBody.countryCode).toBe(this.country)
-    expect(this.addNewAddressBookResponseBody.addressLine1).toBe(this.streetLine1)
-    expect(this.addNewAddressBookResponseBody.addressLine2).toBe(this.streetLine2)
-    expect(this.addNewAddressBookResponseBody.city).toBe(this.city)
-    expect(this.addNewAddressBookResponseBody.stateOrProvinceCode).toBe(this.state)
-    expect(this.addNewAddressBookResponseBody.postalCode).toBe(this.zipCode)
-    expect(this.addNewAddressBookResponseBody.phoneNumber).toBe(this.phoneNumber)
+    expect(this.addNewAddressBookResponseBody.vendorKey).toBe(this.supplierKey == "" ? null : this.supplierKey)
+    expect(this.addNewAddressBookResponseBody.fullName).toBe(this.supplierName == "" ? null : this.supplierName)
+    expect(this.addNewAddressBookResponseBody.countryCode).toBe(this.country == "" ? null : this.country)
+    expect(this.addNewAddressBookResponseBody.addressLine1).toBe(this.streetLine1 == "" ? null : this.streetLine1)
+    expect(this.addNewAddressBookResponseBody.addressLine2).toBe(this.streetLine2 == "" ? null : this.streetLine2)
+    expect(this.addNewAddressBookResponseBody.city).toBe(this.city == "" ? null : this.city)
+    expect(this.addNewAddressBookResponseBody.stateOrProvinceCode).toBe(this.state == "" ? null : this.state)
+    expect(this.addNewAddressBookResponseBody.postalCode).toBe(this.zipCode == "" ? null : this.zipCode)
+    expect(this.addNewAddressBookResponseBody.phoneNumber).toBe(this.phoneNumber == "" ? null : this.phoneNumber)
 })
 
 Then(`User sets DELETE api to delete address book`, async function () {
