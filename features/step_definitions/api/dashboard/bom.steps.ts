@@ -1,6 +1,7 @@
 import { Given, Then, When } from '@cucumber/cucumber';
 import { expect } from '@playwright/test';
 import * as bomRequest from '../../../../src/api/request/bom.service';
+import * as itemRequest from '../../../../src/api/request/item.service';
 import logger from '../../../../src/Logger/logger';
 import { Links } from '../../../../src/utils/links';
 import _ from "lodash";
@@ -142,6 +143,7 @@ Then(`{} sends a GET request to get total of boms`, async function (actor: strin
     }
     this.getTotalBomResponse = this.response = await bomRequest.getBom(this.request, link, options);
     this.totalBom = await this.getTotalBomResponse.text();
+    this.countItem = this.totalBom
     logger.log('info', `Response GET ${link} has status code ${this.response.status()} ${this.response.statusText()} and response body ${this.totalBom}`);
     this.attach(`Response GET ${link} has status code ${this.response.status()} ${this.response.statusText()} and response body ${this.totalBom}`)
 })
@@ -356,3 +358,9 @@ Then('The new {} of bom must be updated successfully', function (editColumn: str
             break;
     }
 });
+
+Then('{} picks {} random boms in above list boms', async function (actor: string, quantity) {
+    this.itemsPickedRandomArray =  itemRequest.getMultipleRandom(this.getBomResponseBody, quantity);
+    console.log("bomsPickedRandomArray: ", this.itemsPickedRandomArray);
+    return this.itemsPickedRandomArray;
+})
