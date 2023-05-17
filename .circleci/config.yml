@@ -12,14 +12,24 @@ jobs:
       - image: node:14.19.3
     # Add steps to the job
     # See: https://circleci.com/docs/configuration-reference/#steps
+    parallelism: 5
     environment:
       BASE_URL: "https://preprod-my.forecastrx.com"
       DISABLE_UPLOAD: false
     steps:
       - checkout
+      - run: mkdir ~/junit
       - run:
           name: "Test Api"
-          command: npm run test-api
+          command: |
+                    TEST=$(circleci tests glob "src/features/*.feature" | circleci tests split --split-by=timings)
+                    npm i
+                    npx cucumber-js circleci tests glob "src/features/*.feature"
+      - run:
+          command: cp junit.xml ~/junit/
+          when: always
+      - store_test_results:
+          path: ~/junit
 
 trigger:
   branch:
