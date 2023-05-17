@@ -1,6 +1,7 @@
 import { Then, Given, DataTable } from '@cucumber/cucumber';
 import { expect } from '@playwright/test';
 import * as supplierRequest from '../../../../src/api/request/vendor.service';
+import * as itemRequest from '../../../../src/api/request/item.service';
 import logger from '../../../../src/Logger/logger';
 import { Links } from '../../../../src/utils/links';
 import { faker } from '@faker-js/faker';
@@ -49,6 +50,7 @@ Then(`{} sends a GET request to get total of suppliers`, async function (actor: 
     }
     this.getTotalSupplierResponse = this.response = await supplierRequest.getSuppliers(this.request, link, options);
     this.totalSupplier = await this.getTotalSupplierResponse.text();
+    this.countItem = this.totalSupplier;
     logger.log('info', `Response GET ${link} has status code ${this.response.status()} ${this.response.statusText()} and response body ${this.totalSupplier}`);
     this.attach(`Response GET ${link} has status code ${this.response.status()} ${this.response.statusText()} and response body ${this.totalSupplier}`)
 })
@@ -60,6 +62,12 @@ Then('{} picks random supplier in above response', async function (actor: string
 
     this.supplierName = this.responseBodyOfASupplierObject.name
     this.supplierKey = this.responseBodyOfASupplierObject.key
+})
+
+Then('{} picks {} random suppliers in above list suppliers', async function (actor: string, quantity) {
+    this.itemsPickedRandomArray =  itemRequest.getMultipleRandom(this.getSupplierResponseBody, quantity);
+    console.log("itemsPickedRandomArray: ", this.itemsPickedRandomArray);
+    return this.itemsPickedRandomArray;
 })
 
 Then('{} checks values in response of random supplier are correct', async function (actor: string) {
@@ -86,7 +94,7 @@ Then('{} checks {} supplier exist in the system, if it does not exist will creat
         const createResponse = await supplierRequest.createSupplier(this.request, Links.API_SUPPLIERS, payload, this.headers);
         const responseBodyText = await createResponse.text();
         if (createResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
-            await this.getSupplierResponseBody.push(JSON.parse(responseBodyText));
+            this.selectedSuppliers = await this.getSupplierResponseBody.push(JSON.parse(responseBodyText));
             logger.log('info', `Response POST ${Links.API_SUPPLIERS}` + JSON.stringify(responseBodyText, undefined, 4));
             this.attach(`Response POST ${Links.API_SUPPLIERS}` + JSON.stringify(responseBodyText, undefined, 4))
         }
