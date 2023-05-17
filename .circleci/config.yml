@@ -23,6 +23,7 @@ jobs:
           name: "Test Api"
           command: |
                     TEST=$(circleci tests glob "src/features/*.feature" | circleci tests split --split-by=timings)
+                    npm i
                     npx cucumber-js circleci tests glob "src/features/*.feature"
       - run:
           command: cp junit.xml ~/junit/
