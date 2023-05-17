@@ -1,6 +1,7 @@
 import { Then, When } from '@cucumber/cucumber';
 import { expect } from '@playwright/test';
 import * as supplyRequest from '../../../../src/api/request/supply.service';
+import * as itemRequest from '../../../../src/api/request/item.service';
 import logger from '../../../../src/Logger/logger';
 import { Links } from '../../../../src/utils/links';
 import { faker } from '@faker-js/faker';
@@ -170,6 +171,7 @@ Then(`{} sends a GET request to get total of supplies`, async function (actor: s
     }
     this.getTotalSupplyResponse = this.response = await supplyRequest.getSupply(this.request, link, options);
     this.totalSupply = await this.getTotalSupplyResponse.text();
+    this.countItem = this.totalSupply;
     logger.log('info', `Response GET ${link} has status code ${this.response.status()} ${this.response.statusText()} and response body ${this.totalSupply}`);
     this.attach(`Response GET ${link} has status code ${this.response.status()} ${this.response.statusText()} and response body ${this.totalSupply}`)
 });
@@ -414,3 +416,9 @@ Then('The new {} of supply must be updated successfully', function (editColumn: 
             break;
     }
 });
+
+Then('{} picks {} random supplies in above list supplies', async function (actor: string, quantity) {
+    this.itemsPickedRandomArray =  itemRequest.getMultipleRandom(this.getSupplyResponseBody, quantity);
+    console.log("itemsPickedRandomArray: ", this.itemsPickedRandomArray);
+    return this.itemsPickedRandomArray;
+})

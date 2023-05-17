@@ -99,6 +99,13 @@ async function updateVendorSalesVelocitySettings(request: APIRequestContext, lin
     return editResponse;
 }
 
+// Count all suppliers 
+async function countAllSuppliers(request: APIRequestContext, linkApi: string, headers: string, option?: any) {
+    const url = `${linkApi}`;
+    logger.log('info', `Send GET request ${url}`);
+    return await request.get(url, option);
+}
+
 export {
     getSuppliers,
     createSupplier,
@@ -110,5 +117,6 @@ export {
     getCountItemsInPO,
     getItemsInPO,
     getVendorSalesVelocitySettings,
-    updateVendorSalesVelocitySettings
+    updateVendorSalesVelocitySettings,
+    countAllSuppliers
 }

@@ -97,6 +97,14 @@ async function getConsolidatedQty(request: APIRequestContext, linkApi: string, o
     return await request.get(url, options);
 }
 
+// Get multiple random items from an array
+function getMultipleRandom(responseBody: string, num: number) {
+    const shuffled = [...responseBody].sort(() => 0.5 - Math.random());
+  
+    return shuffled.slice(0, num);
+  }
+  
+
 export {
     getItemSummary,
     getItemCount,
@@ -109,5 +117,6 @@ export {
     getCountItemsInPurchasingCustom,
     getItemsInPurchasingCustom,
     getConsolidatedQty,
-    getCountItemsThatIsHidden
+    getCountItemsThatIsHidden,
+    getMultipleRandom
 }

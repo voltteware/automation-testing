@@ -247,6 +247,10 @@ Given('User picks a random item in above list items', async function () {
     logger.log('info', `Random Item: ${JSON.stringify(this.responseBodyOfAItemObject, undefined, 4)}`);
     this.attach(`Random Item: ${JSON.stringify(this.responseBodyOfAItemObject, undefined, 4)}`);
 });
+When('{} picks {} random items in above list items', async function (actor, quantity: number) {
+    this.itemsPickedRandomArray =  itemRequest.getMultipleRandom(this.getItemsResponseBody, quantity);
+    return this.itemsPickedRandomArray;
+});
 
 Given('User saves list items that have already set as purchas as of orther items', async function () {
     // expect(this.getItemsResponseBody.length, 'There is at least 1 item to pick random').toBeGreaterThanOrEqual(1);

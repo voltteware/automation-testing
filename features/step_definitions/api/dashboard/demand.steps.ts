@@ -1,6 +1,7 @@
 import { Then, When } from '@cucumber/cucumber';
 import { expect } from '@playwright/test';
 import * as demandRequest from '../../../../src/api/request/demand.service';
+import * as itemRequest from '../../../../src/api/request/item.service';
 import logger from '../../../../src/Logger/logger';
 import { Links } from '../../../../src/utils/links';
 import { format, sub } from 'date-fns'
@@ -40,6 +41,7 @@ Then(`{} sends a GET request to get list demands`, async function (actor: string
     const responseBodyText = await this.getDemandResponse.text();
     if (this.getDemandResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
         this.responseBody = this.getDemandResponseBody = JSON.parse(await this.getDemandResponse.text());
+        this.attach(`Response GET ${linkLimitRow} has status code ${this.getDemandResponse.status()} ${this.response.statusText()} and response body ${JSON.stringify(this.getDemandResponseBody)}`)
     }
     else {
         //if response include <!doctype html> => 'html', else => response
@@ -64,7 +66,7 @@ Then('{} checks values in response of random demand are correct', async function
 
 Then('{} checks {} demand exist in the system, if it does not exist will create new demand', async function (actor, demandQtyKeyword: string) {
     var numberofDemand;
-    randomItem = this.getItemsResponseBody[Math.floor(Math.random() * this.getItemsResponseBody.length)];
+    randomItem = this.getDemandResponseBody[Math.floor(Math.random() * this.getDemandResponseBody.length)];
     if (demandQtyKeyword != 'any') {
         numberofDemand = await this.getDemandResponseBody.filter((qty: any) => qty.orderQty.includes(demandQtyKeyword)).length;
     }
@@ -312,3 +314,21 @@ Then(`{} sends a GET request to get specific demand of item`, async function (ac
         this.attach(`Response GET ${linkFiltered} has status code ${this.response.status()} ${this.response.statusText()} and response body ${actualResponseText}`)
     }
 });
+
+Then(`{} sends a GET request to get total of demands`, async function (actor: string) {
+    const link = `${Links.API_DEMAND}/count?where=%7B%22logic%22:%22and%22,%22filters%22:%5B%5D%7D`
+    const options = {
+        headers: this.headers
+    }
+    this.getTotalDemandResponse = this.response = await demandRequest.getDemand(this.request, link, options);
+    this.totalDemand = await this.getTotalDemandResponse.text();
+    this.countItem = this.totalDemand;
+    logger.log('info', `Response GET ${link} has status code ${this.response.status()} ${this.response.statusText()} and response body ${this.totalDemand}`);
+    this.attach(`Response GET ${link} has status code ${this.response.status()} ${this.response.statusText()} and response body ${this.totalDemand}`)
+})
+
+Then('{} picks {} random demands in above list demands', async function (actor: string, quantity) {
+    this.itemsPickedRandomArray =  itemRequest.getMultipleRandom(this.getDemandResponseBody, quantity);
+    console.log("itemsPickedRandomArray: ", this.itemsPickedRandomArray);
+    return this.itemsPickedRandomArray;
+})

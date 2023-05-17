@@ -9,6 +9,7 @@ import { payLoadSupplier } from '../../../../src/utils/supplierPayLoad';
 
 let link: any;
 let payload: payLoadSupplier = {}
+let countAllSuppliersLink: any;
 
 Then(`{} sets POST api endpoint to create suppliers`, async function (actor: string) {
     link = Links.API_SUPPLIERS;
@@ -193,6 +194,29 @@ Then('{} checks values in response of create supplier are correct', async functi
 
     if (payload.restockModel) {
         expect(this.responseBodyOfASupplierObject.restockModel, `In response body, restockModel should be matched with the data request: ${payload.restockModel}`).toBe(payload.restockModel);
+    }
+})
+
+When(`{} sets GET api endpoint to count all suppliers`, async function (actor: string) {
+    countAllSuppliersLink = encodeURI(`${Links.API_VENDOR_COUNT}?where={"logic":"and","filters":[]}`);
+});
+
+When('{} sends GET api endpoint to count all suppliers', async function (actor: string) {
+    const options = {
+        headers: this.headers
+    }
+    this.countSuppliersResponse = await supplierRequest.countAllSuppliers(this.request, countAllSuppliersLink, this.headers, options);
+    const countSuppliersResponseBodyText = await this.countSuppliersResponse.text();
+    if (this.countSuppliersResponse.status() == 200 && !countSuppliersResponseBodyText.includes('<!doctype html>')) {
+        this.countSuppliersResponseBody = JSON.parse(await this.countSuppliersResponse.text());
+        this.countItem = this.countSuppliersResponseBody;
+        logger.log('info', `Response GET ${Links.API_VENDOR_COUNT}>>>>>` + JSON.stringify(this.countSuppliersResponseBody, undefined, 4));
+        this.attach(`Response GET ${Links.API_VENDOR_COUNT}>>>>>` + JSON.stringify(this.countSuppliersResponseBody, undefined, 4))
+    }
+    else {
+        const actualResponseText = countSuppliersResponseBodyText.includes('<!doctype html>') ? 'html' : countSuppliersResponseBodyText;
+        logger.log('info', `Response GET ${Links.API_VENDOR_COUNT} has status code ${this.countSuppliersResponse.status()} ${this.countSuppliersResponse.statusText()} and response body ${countSuppliersResponseBodyText}`);
+        this.attach(`Response GET ${Links.API_VENDOR_COUNT} has status code ${this.countSuppliersResponse.status()} ${this.countSuppliersResponse.statusText()} and response body ${actualResponseText}`)
     }
 })
 
