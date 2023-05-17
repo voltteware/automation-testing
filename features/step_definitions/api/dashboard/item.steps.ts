@@ -469,6 +469,8 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
     // Prepare endpoint for request to edit item
     link = `${Links.API_ITEMS}/${this.itemKey === undefined ? this.responseBodyOfAItemObject.key : this.itemKey}`
 
+    this.payLoad = this.responseBodyOfAItemObject
+
     switch (editColumn) {
         case 'itemName':
             if (value == 'random') {
@@ -477,6 +479,8 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
 
             logger.log('info', `New ${editColumn}: ${this.name}`);
             this.attach(`New ${editColumn}: ${this.name}`);
+
+            this.payLoad.name = this.name 
             break;
         case 'asin':
             if (value == 'random') {
@@ -485,6 +489,8 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
 
             logger.log('info', `New ${editColumn}: ${this.asin}`);
             this.attach(`New ${editColumn}: ${this.asin}`);
+
+            this.payLoad.asin = this.asin
             break;
         case 'fnsku':
             if (value == 'random') {
@@ -493,6 +499,8 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
 
             logger.log('info', `New ${editColumn}: ${this.fnsku}`);
             this.attach(`New ${editColumn}: ${this.fnsku}`);
+
+            this.payLoad.fnsku = this.fnsku
             break;
         case 'description':
             if (value == 'random') {
@@ -501,6 +509,8 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
 
             logger.log('info', `New ${editColumn}: ${this.description}`);
             this.attach(`New ${editColumn}: ${this.description}`);
+
+            this.payLoad.description = this.description
             break;
         case 'supplierName':
             if (value == 'random') {
@@ -512,8 +522,13 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
                 logger.log('info', `Random supplier` + JSON.stringify(randomSupplier, undefined, 4));
                 this.attach(`Random supplier` + JSON.stringify(randomSupplier, undefined, 4))
 
-                this.vendorKey = randomSupplier.key;
-                this.vendorName = randomSupplier.name;
+                if (randomSupplier === undefined) {
+                    this.vendorKey = null
+                    this.vendorName = null
+                } else {
+                    this.vendorKey = randomSupplier.key;
+                    this.vendorName = randomSupplier.name;
+                }                
             } else if (value == 'supplierUpdatedSalesVelocity') {
                 this.vendorKey = this.supplierKey;
                 this.vendorName = this.supplierName;
@@ -524,6 +539,9 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
 
             logger.log('info', `New ${editColumn}: ${this.vendorName} - ${this.supplierKey}`);
             this.attach(`New ${editColumn}: ${this.vendorName} - ${this.supplierKey}`);
+
+            this.payLoad.vendorKey = this.vendorKey
+            this.payLoad.vendorName = this.vendorName
             break;
         case 'supplierPrice':
             if (value == 'random') {
@@ -532,6 +550,8 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
 
             logger.log('info', `New ${editColumn}: ${this.vendorPrice}`);
             this.attach(`New ${editColumn}: ${this.vendorPrice}`);
+
+            this.payLoad.vendorPrice =  this.vendorPrice
             break;
         case 'moq':
             if (value == 'random') {
@@ -540,6 +560,8 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
 
             logger.log('info', `New ${editColumn}: ${this.moq}`);
             this.attach(`New ${editColumn}: ${this.moq}`);
+
+            this.payLoad.moq =  this.moq
             break;
         case 'leadTime':
             if (value == 'random') {
@@ -551,6 +573,8 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
 
             logger.log('info', `New ${editColumn}: ${this.leadTime}`);
             this.attach(`New ${editColumn}: ${this.leadTime}`);
+
+            this.payLoad.leadTime =  this.leadTime
             break;
         case 'orderInterval':
             if (value == 'random') {
@@ -559,6 +583,8 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
 
             logger.log('info', `New ${editColumn}: ${this.orderInterval}`);
             this.attach(`New ${editColumn}: ${this.orderInterval}`);
+
+            this.payLoad.orderInterval =  this.orderInterval
             break;
         case 'serviceLevel':
             if (value == 'random') {
@@ -567,6 +593,8 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
 
             logger.log('info', `New ${editColumn}: ${this.serviceLevel}`);
             this.attach(`New ${editColumn}: ${this.serviceLevel}`);
+
+            this.payLoad.serviceLevel =  this.serviceLevel
             break;
         case 'onHanFBAQty':
             if (value == 'random') {
@@ -575,6 +603,8 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
 
             logger.log('info', `New ${editColumn}: ${this.onHand}`);
             this.attach(`New ${editColumn}: ${this.onHand}`);
+
+            this.payLoad.onHand =  this.onHand
             break;
         case 'onHanQty':
             if (value == 'random') {
@@ -583,6 +613,8 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
 
             logger.log('info', `New ${editColumn}: ${this.onHand}`);
             this.attach(`New ${editColumn}: ${this.onHand}`);
+
+            this.payLoad.onHand =  this.onHand
             break;
         case 'onHandQtyMin':
             if (value == 'random') {
@@ -591,6 +623,8 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
 
             logger.log('info', `New ${editColumn}: ${this.onHandMin}`);
             this.attach(`New ${editColumn}: ${this.onHandMin}`);
+
+            this.payLoad.onHandMin =  this.onHandMin
             break;
         case 'warehouseQty':
             if (value == 'random') {
@@ -599,6 +633,8 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
 
             logger.log('info', `New ${editColumn}: ${this.onHandThirdParty}`);
             this.attach(`New ${editColumn}: ${this.onHandThirdParty}`);
+
+            this.payLoad.onHandThirdParty =  this.onHandThirdParty
             break;
         case 'warehouseQtyMin':
             if (value == 'random') {
@@ -607,6 +643,8 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
 
             logger.log('info', `New ${editColumn}: ${this.onHandThirdPartyMin}`);
             this.attach(`New ${editColumn}: ${this.onHandThirdPartyMin}`);
+
+            this.payLoad.onHandThirdPartyMin =  this.onHandThirdPartyMin
             break;
         case 'onHandFBMQty':
             if (value == 'random') {
@@ -615,6 +653,8 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
 
             logger.log('info', `New ${editColumn}: ${this.onHandFbm}`);
             this.attach(`New ${editColumn}: ${this.onHandFbm}`);
+
+            this.payLoad.onHandFbm =  this.onHandFbm
             break;
         case 'skuNotes':
             if (value == 'random') {
@@ -623,6 +663,8 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
 
             logger.log('info', `New ${editColumn}: ${this.skuNotes}`);
             this.attach(`New ${editColumn}: ${this.skuNotes}`);
+
+            this.payLoad.skuNotes =  this.skuNotes
             break;
         case 'prepNotes':
             if (value == 'random') {
@@ -631,6 +673,8 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
 
             logger.log('info', `New ${editColumn}: ${this.prepNotes}`);
             this.attach(`New ${editColumn}: ${this.prepNotes}`);
+
+            this.payLoad.prepNotes =  this.prepNotes
             break;
         case 'supplierRebate':
             if (value == 'random') {
@@ -639,6 +683,8 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
 
             logger.log('info', `New ${editColumn}: ${this.supplierRebate}`);
             this.attach(`New ${editColumn}: ${this.supplierRebate}`);
+
+            this.payLoad.supplierRebate =  this.supplierRebate
             break;
         case 'inboundShippingCost':
             if (value == 'random') {
@@ -647,6 +693,8 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
 
             logger.log('info', `New ${editColumn}: ${this.supplierRebate}`);
             this.attach(`New ${editColumn}: ${this.supplierRebate}`);
+
+            this.payLoad.inboundShippingCost =  this.inboundShippingCost
             break;
         case 'reshippingCost':
             if (value == 'random') {
@@ -655,6 +703,8 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
 
             logger.log('info', `New ${editColumn}: ${this.reshippingCost}`);
             this.attach(`New ${editColumn}: ${this.reshippingCost}`);
+
+            this.payLoad.reshippingCost =  this.reshippingCost
             break;
         case 'repackagingMaterialCost':
             if (value == 'random') {
@@ -663,6 +713,8 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
 
             logger.log('info', `New ${editColumn}: ${this.repackagingMaterialCost}`);
             this.attach(`New ${editColumn}: ${this.repackagingMaterialCost}`);
+
+            this.payLoad.repackagingMaterialCost =  this.repackagingMaterialCost
             break;
         case 'repackingLaborCost':
             if (value == 'random') {
@@ -671,6 +723,8 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
 
             logger.log('info', `New ${editColumn}: ${this.repackingLaborCost}`);
             this.attach(`New ${editColumn}: ${this.repackingLaborCost}`);
+
+            this.payLoad.repackingLaborCost =  this.repackingLaborCost
             break;
         case 'isHidden':
             if (value == 'random') {
@@ -681,6 +735,8 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
 
             logger.log('info', `New ${editColumn}: ${this.isHidden}`);
             this.attach(`New ${editColumn}: ${this.isHidden}`);
+
+            this.payLoad.isHidden =  this.isHidden
             break;
         case 'useHistoryOverride':
             if (value == 'random') {
@@ -691,6 +747,8 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
             }
             logger.log('info', `New ${editColumn}: ${this.useHistoryOverride}`);
             this.attach(`New ${editColumn}: ${this.useHistoryOverride}`);
+
+            this.payLoad.useHistoryOverride =  this.useHistoryOverride
             break;
         case 'casePackQty':
             if (value == 'random') {
@@ -699,6 +757,8 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
 
             logger.log('info', `New ${editColumn}: ${this.lotMultipleQty}`);
             this.attach(`New ${editColumn}: ${this.lotMultipleQty}`);
+
+            this.payLoad.lotMultipleQty =  this.lotMultipleQty
             break;
         case 'inventorySourcePreference':
             if (value == 'random') {
@@ -712,6 +772,8 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
 
             logger.log('info', `New ${editColumn}: ${this.inventorySourcePreference}`);
             this.attach(`New ${editColumn}: ${this.inventorySourcePreference}`);
+
+            this.payLoad.inventorySourcePreference =  this.inventorySourcePreference
             break;
         case 'purchaseAs':
             if (value == 'random') {
@@ -830,6 +892,9 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
 
             logger.log('info', `New ${editColumn}: ${this.lotMultipleItemName}`);
             this.attach(`New ${editColumn}: ${this.lotMultipleItemName}`);
+
+            this.payLoad.lotMultipleItemName =  this.lotMultipleItemName
+            this.payLoad.lotMultipleItemKey =  this.lotMultipleItemKey
             break;
         case 'useBackfill':
             if (value == 'random') {
@@ -840,214 +905,12 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
             }
             logger.log('info', `New ${editColumn}: ${this.useBackfill}`);
             this.attach(`New ${editColumn}: ${this.useBackfill}`);
+
+            this.payLoad.useBackfill =  this.useBackfill
             break;
         default:
             break;
-    }
-
-    // Prepare payload for request to edit item
-    if (companyType === 'ASC') {
-        this.payLoad = {
-            companyType: `${this.responseBodyOfAItemObject.companyType}`,
-            companyKey: `${this.responseBodyOfAItemObject.companyKey}`,
-            key: `${this.responseBodyOfAItemObject.key === undefined ? this.responseBodyOfAItemObject.itemKey : this.responseBodyOfAItemObject.key}`,
-            name: this.name === undefined ? this.responseBodyOfAItemObject.name : `${this.name}`,
-            asin: this.asin === undefined ? this.responseBodyOfAItemObject.asin : `${this.asin}`,
-            fnsku: this.fnsku === undefined ? this.responseBodyOfAItemObject.fnsku : `${this.fnsku}`,
-            description: this.description === undefined ? this.responseBodyOfAItemObject.description : `${this.description}`,
-            packageWeight: this.responseBodyOfAItemObject.packageWeight,
-            vendorKey: this.vendorKey === undefined ? this.responseBodyOfAItemObject.vendorKey : this.vendorKey === null ? null : `${this.vendorKey}`,
-            vendorName: this.vendorName === undefined ? this.responseBodyOfAItemObject.vendorName : this.vendorName === null ? null : `${this.vendorName}`,
-            vendorPrice: this.vendorPrice === undefined ? this.responseBodyOfAItemObject.vendorPrice : this.vendorPrice,
-            moq: this.moq === undefined ? this.responseBodyOfAItemObject.moq : this.moq,
-            leadTime: this.leadTime === undefined ? this.responseBodyOfAItemObject.leadTime : this.leadTime,
-            orderInterval: this.orderInterval === undefined ? this.responseBodyOfAItemObject.orderInterval : this.orderInterval,
-            serviceLevel: this.serviceLevel === undefined ? this.responseBodyOfAItemObject.serviceLevel : this.serviceLevel,
-            onHand: this.onHand === undefined ? this.responseBodyOfAItemObject.onHand : this.onHand,
-            onHandMin: this.onHandMin === undefined ? this.responseBodyOfAItemObject.onHandMin : this.onHandMin,
-            onHandThirdParty: this.onHandThirdParty === undefined ? this.responseBodyOfAItemObject.onHandThirdParty : this.onHandThirdParty,
-            onHandThirdPartyMin: this.onHandThirdPartyMin === undefined ? this.responseBodyOfAItemObject.onHandThirdPartyMin : this.onHandThirdPartyMin,
-            onHandFbm: this.onHandFbm === undefined ? this.responseBodyOfAItemObject.onHandFbm : this.onHandFbm,
-            skuNotes: this.skuNotes === undefined ? this.responseBodyOfAItemObject.skuNotes : `${this.skuNotes}`,
-            prepGuide: this.responseBodyOfAItemObject.prepGuide,
-            prepNotes: this.prepNotes === undefined ? this.responseBodyOfAItemObject.prepNotes : `${this.prepNotes}`,
-            supplierRebate: this.supplierRebate === undefined ? this.responseBodyOfAItemObject.supplierRebate : this.supplierRebate,
-            inboundShippingCost: this.inboundShippingCost === undefined ? this.responseBodyOfAItemObject.inboundShippingCost : this.inboundShippingCost,
-            reshippingCost: this.reshippingCost === undefined ? this.responseBodyOfAItemObject.reshippingCost : this.reshippingCost,
-            repackagingMaterialCost: this.repackagingMaterialCost === undefined ? this.responseBodyOfAItemObject.repackagingMaterialCost : this.repackagingMaterialCost,
-            repackingLaborCost: this.repackingLaborCost === undefined ? this.responseBodyOfAItemObject.repackingLaborCost : this.repackingLaborCost,
-            dimensionalWeight: this.responseBodyOfAItemObject.dimensionalWeight,
-            hazmat: this.responseBodyOfAItemObject.hazmat,
-            oversized: this.responseBodyOfAItemObject.oversized,
-            category: this.responseBodyOfAItemObject.category,
-            rank: this.responseBodyOfAItemObject.rank,
-            growthTrend: this.responseBodyOfAItemObject.growthTrend,
-            isHidden: this.isHidden === undefined ? this.responseBodyOfAItemObject.isHidden : this.isHidden,
-            useHistoryOverride: this.useHistoryOverride === undefined ? this.responseBodyOfAItemObject.useHistoryOverride : this.useHistoryOverride,
-            useLostSalesOverride: this.responseBodyOfAItemObject.useLostSalesOverride,
-            lotMultipleQty: this.lotMultipleQty === undefined ? this.responseBodyOfAItemObject.lotMultipleQty : this.lotMultipleQty,
-            lotMultipleItemKey: this.lotMultipleItemKey === undefined ? this.responseBodyOfAItemObject.lotMultipleItemKey : this.lotMultipleItemKey === null ? null : `${this.lotMultipleItemKey}`,
-            lotMultipleItemName: this.lotMultipleItemName === undefined ? this.responseBodyOfAItemObject.lotMultipleItemName : this.lotMultipleItemName === null ? null : `${this.lotMultipleItemName}`,
-            // forecastDirty is true => Run forecast for this item
-            forecastDirty: true,
-            forecastTags: this.responseBodyOfAItemObject.forecastTags,
-            tag: this.responseBodyOfAItemObject.tag,
-            tags: this.responseBodyOfAItemObject.tags,
-            useBackfill: this.useBackfill === undefined ? this.responseBodyOfAItemObject.useHistoryOverride : this.useBackfill,
-            createdAt: `${this.responseBodyOfAItemObject.created_at}`,
-            inbound: this.responseBodyOfAItemObject.inbound,
-            inboundPrice: this.responseBodyOfAItemObject.inboundPrice,
-            inboundSalesLast30Days: this.responseBodyOfAItemObject.inboundSalesLast30Days,
-            inboundAvailable: this.responseBodyOfAItemObject.inboundAvailable,
-            inboundFcTransfer: this.responseBodyOfAItemObject.inboundFcTransfer,
-            inboundFcProcessing: this.responseBodyOfAItemObject.inboundFcProcessing,
-            inboundCustomerOrder: this.responseBodyOfAItemObject.inboundCustomerOrder,
-            inboundUnfulfillable: this.responseBodyOfAItemObject.inboundUnfulfillable,
-            inboundAlert: this.responseBodyOfAItemObject.inboundAlert,
-            inboundWorking: this.responseBodyOfAItemObject.inboundWorking,
-            mwsFulfillmentFee: this.responseBodyOfAItemObject.mwsFulfillmentFee,
-            inventorySourcePreference: this.inventorySourcePreference === undefined ? this.responseBodyOfAItemObject.inventorySourcePreference : `${this.inventorySourcePreference}`,
-            reserved: this.responseBodyOfAItemObject.reserved,
-            imageUrl: this.responseBodyOfAItemObject.imageUrl,
-            fba: this.responseBodyOfAItemObject.fba,
-            lowestFba: this.responseBodyOfAItemObject.lowestFba,
-            nonFba: this.responseBodyOfAItemObject.nonFba,
-            lowestNonFba: this.responseBodyOfAItemObject.lowestNonFba,
-            soldBy: this.responseBodyOfAItemObject.soldBy,
-            fbaFee: this.responseBodyOfAItemObject.fbaFee,
-            variableClosingFee: this.responseBodyOfAItemObject.variableClosingFee,
-            newBuyBox: this.responseBodyOfAItemObject.newBuyBox,
-            inboundShipped: this.responseBodyOfAItemObject.inboundShipped,
-            inboundReceiving: this.responseBodyOfAItemObject.inboundReceiving,
-            referralFee: this.responseBodyOfAItemObject.referralFee,
-            listPrice: this.responseBodyOfAItemObject.listPrice,
-            average7DayPrice: this.responseBodyOfAItemObject.average7DayPrice,
-            condition: this.responseBodyOfAItemObject.condition,
-            syncedFields: this.responseBodyOfAItemObject.syncedFields,
-            isFbm: this.responseBodyOfAItemObject.isFbm,
-            itemHistoryLength: this.responseBodyOfAItemObject.itemHistoryLength,
-            itemHistoryLengthInDay: this.responseBodyOfAItemObject.itemHistoryLengthInDay,
-            created_at: `${this.responseBodyOfAItemObject.created_at}`,
-            updated_at: `${this.responseBodyOfAItemObject.updated_at}`,
-            s2d: this.responseBodyOfAItemObject.s2d,
-            s7d: this.responseBodyOfAItemObject.s7d,
-            s14d: this.responseBodyOfAItemObject.s14d,
-            s30d: this.responseBodyOfAItemObject.s30d,
-            s60d: this.responseBodyOfAItemObject.s60d,
-            s90d: this.responseBodyOfAItemObject.s90d,
-            s180d: this.responseBodyOfAItemObject.s180d,
-            s365d: this.responseBodyOfAItemObject.s365d,
-            outOfStock2d: this.responseBodyOfAItemObject.outOfStock2d,
-            outOfStock7d: this.responseBodyOfAItemObject.outOfStock7d,
-            outOfStock14d: this.responseBodyOfAItemObject.outOfStock14d,
-            outOfStock30d: this.responseBodyOfAItemObject.outOfStock30d,
-            outOfStock60d: this.responseBodyOfAItemObject.outOfStock60d,
-            outOfStock90d: this.responseBodyOfAItemObject.outOfStock90d,
-            outOfStock180d: this.responseBodyOfAItemObject.outOfStock180d,
-            history: this.responseBodyOfAItemObject.history === undefined ? null : this.responseBodyOfAItemObject.history,
-            links: this.responseBodyOfAItemObject.links === undefined ? null : this.responseBodyOfAItemObject.links
-        }
-    } else if (companyType === 'CSV' || companyType === 'QBFS') {
-        this.payLoad = {
-            companyType: `${this.responseBodyOfAItemObject.companyType}`,
-            companyKey: `${this.responseBodyOfAItemObject.companyKey}`,
-            key: `${this.responseBodyOfAItemObject.key}`,
-            name: this.name === undefined ? this.responseBodyOfAItemObject.name : `${this.name}`,
-            asin: this.asin === undefined ? this.responseBodyOfAItemObject.asin : `${this.asin}`,
-            fnsku: this.fnsku === undefined ? this.responseBodyOfAItemObject.fnsku : `${this.fnsku}`,
-            description: this.description === undefined ? this.responseBodyOfAItemObject.description : `${this.description}`,
-            packageWeight: this.responseBodyOfAItemObject.packageWeight,
-            vendorKey: this.vendorKey === undefined ? this.responseBodyOfAItemObject.vendorKey : `${this.vendorKey}`,
-            vendorName: this.vendorName === undefined ? this.responseBodyOfAItemObject.vendorName : `${this.vendorName}`,
-            vendorPrice: this.vendorPrice === undefined ? this.responseBodyOfAItemObject.vendorPrice : this.vendorPrice,
-            moq: this.moq === undefined ? this.responseBodyOfAItemObject.moq : this.moq,
-            leadTime: this.leadTime === undefined ? this.responseBodyOfAItemObject.leadTime : this.leadTime,
-            orderInterval: this.orderInterval === undefined ? this.responseBodyOfAItemObject.orderInterval : this.orderInterval,
-            serviceLevel: this.serviceLevel === undefined ? this.responseBodyOfAItemObject.serviceLevel : this.serviceLevel,
-            onHand: this.onHand === undefined ? this.responseBodyOfAItemObject.onHand : this.onHand,
-            onHandMin: this.onHandMin === undefined ? this.responseBodyOfAItemObject.onHandMin : this.onHandMin,
-            onHandThirdParty: this.onHandThirdParty === undefined ? this.responseBodyOfAItemObject.onHandThirdParty : this.onHandThirdParty,
-            onHandThirdPartyMin: this.onHandThirdPartyMin === undefined ? this.responseBodyOfAItemObject.onHandThirdPartyMin : this.onHandThirdPartyMin,
-            onHandFbm: this.onHandFbm === undefined ? this.responseBodyOfAItemObject.onHandFbm : this.onHandFbm,
-            skuNotes: this.skuNotes === undefined ? this.responseBodyOfAItemObject.skuNotes : `${this.skuNotes}`,
-            prepGuide: this.responseBodyOfAItemObject.prepGuide,
-            prepNotes: this.prepNotes === undefined ? this.responseBodyOfAItemObject.prepNotes : `${this.prepNotes}`,
-            supplierRebate: this.supplierRebate === undefined ? this.responseBodyOfAItemObject.supplierRebate : this.supplierRebate,
-            inboundShippingCost: this.inboundShippingCost === undefined ? this.responseBodyOfAItemObject.inboundShippingCost : this.inboundShippingCost,
-            reshippingCost: this.reshippingCost === undefined ? this.responseBodyOfAItemObject.reshippingCost : this.reshippingCost,
-            repackagingMaterialCost: this.repackagingMaterialCost === undefined ? this.responseBodyOfAItemObject.repackagingMaterialCost : this.repackagingMaterialCost,
-            repackingLaborCost: this.repackingLaborCost === undefined ? this.responseBodyOfAItemObject.repackingLaborCost : this.repackingLaborCost,
-            dimensionalWeight: this.responseBodyOfAItemObject.dimensionalWeight,
-            hazmat: this.responseBodyOfAItemObject.hazmat,
-            oversized: this.responseBodyOfAItemObject.oversized,
-            category: this.responseBodyOfAItemObject.category,
-            rank: this.responseBodyOfAItemObject.rank,
-            growthTrend: this.responseBodyOfAItemObject.growthTrend,
-            isHidden: this.isHidden === undefined ? this.responseBodyOfAItemObject.isHidden : this.isHidden,
-            useHistoryOverride: this.useHistoryOverride === undefined ? this.responseBodyOfAItemObject.useHistoryOverride : this.useHistoryOverride,
-            useLostSalesOverride: this.responseBodyOfAItemObject.useLostSalesOverride,
-            lotMultipleQty: this.lotMultipleQty === undefined ? this.responseBodyOfAItemObject.lotMultipleQty : this.lotMultipleQty,
-            lotMultipleItemKey: this.lotMultipleItemKey === undefined ? this.responseBodyOfAItemObject.lotMultipleItemKey : this.lotMultipleItemKey === null ? null : `${this.lotMultipleItemKey}`,
-            lotMultipleItemName: this.lotMultipleItemName === undefined ? this.responseBodyOfAItemObject.lotMultipleItemName : this.lotMultipleItemName === null ? null : `${this.lotMultipleItemName}`,
-            // forecastDirty is true => Run forecast for this item
-            forecastDirty: true,
-            forecastTags: this.responseBodyOfAItemObject.forecastTags,
-            tag: this.responseBodyOfAItemObject.tag,
-            tags: this.responseBodyOfAItemObject.tags,
-            useBackfill: this.useBackfill === undefined ? this.responseBodyOfAItemObject.useHistoryOverride : this.useBackfill,
-            createdAt: `${this.responseBodyOfAItemObject.created_at}`,
-            inbound: this.responseBodyOfAItemObject.inbound,
-            inboundPrice: this.responseBodyOfAItemObject.inboundPrice,
-            inboundSalesLast30Days: this.responseBodyOfAItemObject.inboundSalesLast30Days,
-            inboundAvailable: this.responseBodyOfAItemObject.inboundAvailable,
-            inboundFcTransfer: this.responseBodyOfAItemObject.inboundFcTransfer,
-            inboundFcProcessing: this.responseBodyOfAItemObject.inboundFcProcessing,
-            inboundCustomerOrder: this.responseBodyOfAItemObject.inboundCustomerOrder,
-            inboundUnfulfillable: this.responseBodyOfAItemObject.inboundUnfulfillable,
-            inboundAlert: this.responseBodyOfAItemObject.inboundAlert,
-            inboundWorking: this.responseBodyOfAItemObject.inboundWorking,
-            mwsFulfillmentFee: this.responseBodyOfAItemObject.mwsFulfillmentFee,
-            inventorySourcePreference: this.inventorySourcePreference === undefined ? this.responseBodyOfAItemObject.inventorySourcePreference : `${this.inventorySourcePreference}`,
-            reserved: this.responseBodyOfAItemObject.reserved,
-            imageUrl: this.responseBodyOfAItemObject.imageUrl,
-            fba: this.responseBodyOfAItemObject.fba,
-            lowestFba: this.responseBodyOfAItemObject.lowestFba,
-            nonFba: this.responseBodyOfAItemObject.nonFba,
-            lowestNonFba: this.responseBodyOfAItemObject.lowestNonFba,
-            soldBy: this.responseBodyOfAItemObject.soldBy,
-            fbaFee: this.responseBodyOfAItemObject.fbaFee,
-            variableClosingFee: this.responseBodyOfAItemObject.variableClosingFee,
-            newBuyBox: this.responseBodyOfAItemObject.newBuyBox,
-            inboundShipped: this.responseBodyOfAItemObject.inboundShipped,
-            inboundReceiving: this.responseBodyOfAItemObject.inboundReceiving,
-            referralFee: this.responseBodyOfAItemObject.referralFee,
-            listPrice: this.responseBodyOfAItemObject.listPrice,
-            average7DayPrice: this.responseBodyOfAItemObject.average7DayPrice,
-            condition: this.responseBodyOfAItemObject.condition,
-            syncedFields: this.responseBodyOfAItemObject.syncedFields,
-            isFbm: this.responseBodyOfAItemObject.isFbm,
-            itemHistoryLength: this.responseBodyOfAItemObject.itemHistoryLength,
-            itemHistoryLengthInDay: this.responseBodyOfAItemObject.itemHistoryLengthInDay,
-            created_at: `${this.responseBodyOfAItemObject.created_at}`,
-            updated_at: `${this.responseBodyOfAItemObject.updated_at}`,
-            s2d: this.responseBodyOfAItemObject.s2d,
-            s7d: this.responseBodyOfAItemObject.s7d,
-            s14d: this.responseBodyOfAItemObject.s14d,
-            s30d: this.responseBodyOfAItemObject.s30d,
-            s60d: this.responseBodyOfAItemObject.s60d,
-            s90d: this.responseBodyOfAItemObject.s90d,
-            s180d: this.responseBodyOfAItemObject.s180d,
-            s365d: this.responseBodyOfAItemObject.s365d,
-            outOfStock2d: this.responseBodyOfAItemObject.outOfStock2d,
-            outOfStock7d: this.responseBodyOfAItemObject.outOfStock7d,
-            outOfStock14d: this.responseBodyOfAItemObject.outOfStock14d,
-            outOfStock30d: this.responseBodyOfAItemObject.outOfStock30d,
-            outOfStock60d: this.responseBodyOfAItemObject.outOfStock60d,
-            outOfStock90d: this.responseBodyOfAItemObject.outOfStock90d,
-            outOfStock180d: this.responseBodyOfAItemObject.outOfStock180d,
-            history: this.responseBodyOfAItemObject.history === undefined ? null : this.responseBodyOfAItemObject.history,
-        }
-    }
+    }    
 
     logger.log('info', `Payload` + JSON.stringify(this.payLoad, undefined, 4));
     this.attach(`Payload` + JSON.stringify(this.payLoad, undefined, 4))
@@ -1098,6 +961,9 @@ Then('The new {} of item must be updated successfully', function (editColumn: st
             break;
         case 'serviceLevel':
             expect(this.serviceLevel).toEqual(this.editItemResponseBody.serviceLevel)
+            break;
+        case 'onHanQty':
+            expect(this.onHand).toEqual(this.editItemResponseBody.onHand)
             break;
         case 'onHanFBAQty':
             expect(this.onHand).toEqual(this.editItemResponseBody.onHand)
@@ -1745,15 +1611,7 @@ Given('{} sets request body of edit item api with payload', async function (acto
 
             logger.log('info', `New ${editColumn}: ${this.onHand}`);
             this.attach(`New ${editColumn}: ${this.onHand}`);
-            break;
-        case 'onHanQty':
-            if (value == 'random') {
-                this.onHand = Number(faker.random.numeric(3));
-            }
-
-            logger.log('info', `New ${editColumn}: ${this.onHand}`);
-            this.attach(`New ${editColumn}: ${this.onHand}`);
-            break;
+            break;        
         case 'onHandQtyMin':
             if (value == 'random') {
                 this.onHandMin = Number(faker.random.numeric(3));

@@ -1,4 +1,4 @@
-@test-api @api-dashboard @api-items @api-edit-some-value-on-grid @api-edit-item-value-on-grid
+@test-api @api-dashboard @api-items @api-edit-some-value-on-grid @api-edit-item-value-on-grid 
 Feature: API_Dashboard PUT /api/item
 
   Background: Send GET /realm request to get all company keys of current logged in user before each test
@@ -9,7 +9,7 @@ Feature: API_Dashboard PUT /api/item
     And In Header of the request, she sets param Cookie as valid connect.sid
     When User sends a GET request to get companies
 
-  @TC_UI001 @smoke-test-api
+  @TC_UI001 @smoke-test-api @retry
   Scenario Outline: <TC_ID> - Verify user <email> could call this API to update "<editColumn>" of a items for company type (<companyType>)
     Given User picks company which has onboarded before with type <companyType> in above response
     And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
@@ -30,7 +30,7 @@ Feature: API_Dashboard PUT /api/item
       | TC_UI001_29 | CSV         | testautoforecast@gmail.com | 10       | description   | random | 200            |
       | TC_UI001_46 | QBFS        | testautoforecast@gmail.com | 10       | supplierPrice | random | 200            |
 
-  @TC_UI002 @regression-api
+  @TC_UI002 @regression-api @retry
   Scenario Outline: <TC_ID> - Verify user <email> could call this API to update "<editColumn>" of a items for company type (<companyType>)
     Given User picks company which has onboarded before with type <companyType> in above response
     And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
@@ -100,7 +100,7 @@ Feature: API_Dashboard PUT /api/item
       | TC_UI001_56 | QBFS        | testautoforecast@gmail.com | 10       | useHistoryOverride        | random | 200            |
       | TC_UI001_57 | QBFS        | testautoforecast@gmail.com | 10       | casePackQty               | random | 200            |
 
-  @TC_UI002 @regression-api
+  @TC_UI002 @regression-api @retry
   Scenario Outline: <TC_ID> - Verify user <email> could call this API to update "<editColumn>" of a items for company type (<companyType>)
     Given User picks company which has onboarded before with type <companyType> in above response
     And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
@@ -121,7 +121,7 @@ Feature: API_Dashboard PUT /api/item
       | TC_ID       | companyType | email                      | limitRow | editColumn | value  | expectedStatus |
       | TC_UI001_27 | ASC         | testautoforecast@gmail.com | 10       | purchaseAs | random | 200            |
 
-  @TC_UI002 @regression-api
+  @TC_UI002 @regression-api @retry
   Scenario Outline: <TC_ID> - Verify user <email> could call this API to update "<editColumn>" of a items for company type (<companyType>)
     Given User picks company which has onboarded before with type <companyType> in above response
     And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
@@ -142,7 +142,7 @@ Feature: API_Dashboard PUT /api/item
       | TC_ID       | companyType | email                      | limitRow | editColumn | value  | expectedStatus |
       | TC_UI001_43 | CSV         | testautoforecast@gmail.com | 10       | purchaseAs | random | 200            |
 
-  @TC_UI002 @regression-api
+  @TC_UI002 @regression-api @retry
   Scenario Outline: <TC_ID> - Verify user <email> could call this API to update "<editColumn>" of a items for company type (<companyType>)
     Given User picks company which has onboarded before with type <companyType> in above response
     And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
@@ -165,7 +165,7 @@ Feature: API_Dashboard PUT /api/item
       | TC_UI001_58 | QBFS        | testautoforecast@gmail.com | purchaseAs | random | 200            |
 
   # Do not Order
-  @TC_DNO001 @regression-api @do-not-order
+  @TC_DNO001 @regression-api @do-not-order 
   Scenario Outline: <TC_ID> - Verify user <email> could call this API to update "<editColumn>" of a items for company type (<companyType>)
     Given User picks company which has onboarded before with type <companyType> in above response
     And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
