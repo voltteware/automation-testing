@@ -1,4 +1,4 @@
-import { Then } from '@cucumber/cucumber';
+import { DataTable, Then } from '@cucumber/cucumber';
 import * as shipmentRequest from '../../../../src/api/request/shipment.service';
 import * as syncRequest from '../../../../src/api/request/sync.service';
 import logger from '../../../../src/Logger/logger';
@@ -6,7 +6,7 @@ import { Links } from '../../../../src/utils/links';
 import { faker } from '@faker-js/faker';
 import _ from "lodash";
 import { expect } from '@playwright/test';
-import { simpleShipmentResponseSchema, updateItemInfoWithLastStepResponseSchema, getListShipmentsResponseSchema } from '../assertion/restockAMZ/shipmentAssertionSchema';
+import { simpleShipmentResponseSchema, updateItemInfoWithLastStepResponseSchema, getListShipmentsResponseSchema, addSKUsResponseSchema } from '../assertion/restockAMZ/shipmentAssertionSchema';
 import { itemInfoInShipmentResponseSchema } from '../assertion/dashboard/itemAssertionSchema';
 
 let link: any;
@@ -500,3 +500,48 @@ Then('{} checks API contract of get list shipments api', async function (actor: 
 Then('{} checks API contract of update item shipment key', async function (actor: string) {
     itemInfoInShipmentResponseSchema.parse(this.updateShipmentItemKeyResponseBody);
 });
+
+Then(`User sets POST api to add SKU as the following data:`, async function (dataTable: DataTable) {
+    this.linkAddSKUs = `${Links.API_SHIPMENT}-detail`
+    const { sku, warehouseQty, casePackQty, QtySent } = dataTable.hashes()[0]
+    if (sku == 'random') {
+        const filteredArray = this.restockSuggestionResponseBody.filter((item: any) => item.itemKey !== this.itemKey)
+        const responseOfAItem = await filteredArray[Math.floor(Math.random() * filteredArray.length)];
+        this.itemKey = responseOfAItem.forecastconstant.itemKey;
+        this.itemName = responseOfAItem.forecastconstant.itemName;
+    }
+    this.payloadAddSKUs = {
+        "shipmentItemKey": "",
+        "itemKey": `${this.itemKey}`,
+        "itemName": `${this.itemName}`,
+        "restockKey": `${this.shipmentKey}`,
+        "shipmentId": "",
+        "caseQty": Number(casePackQty),
+        "localQty": Number(warehouseQty),
+        "shipmentQty": Number(QtySent)
+    }
+})
+
+Then(`User sends a POST request to add SKU`, async function () {
+    this.addSKUsResponse = this.response = await shipmentRequest.postShipment(this.request, this.linkAddSKUs, this.payloadAddSKUs, this.headers);
+    const responseBodyText = await this.addSKUsResponse.text();
+    if (this.addSKUsResponse.status() == 200) {
+        this.addSKUsResponseBody = JSON.parse(await this.addSKUsResponse.text());
+        logger.log('info', `Response add SKUs ${link}` + JSON.stringify(this.addSKUsResponseBody, undefined, 4));
+        this.attach(`Response add SKUs ${link} ` + JSON.stringify(this.addSKUsResponseBody, undefined, 4))
+    } else {
+        const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
+        logger.log('info', `Response ${link} has status code ${this.runSyncResponse.status()} ${this.runSyncResponse.statusText()} and response body ${responseBodyText}`);
+        this.attach(`Response ${link} has status code ${this.runSyncResponse.status()} ${this.runSyncResponse.statusText()} and response body ${actualResponseText}`)
+    }
+})
+
+Then(`User checks API contract of add SKU response are correct`, async function () {
+    addSKUsResponseSchema.parse(this.addSKUsResponseBody)
+})
+
+Then(`User checks the new SKU must be found in the above list items`, async function () {
+    expect(this.getShipmentItemsResponseBody.length).toBeGreaterThan(0)
+    const sku = this.getShipmentItemsResponseBody.find((sku: any) => sku.itemName == this.payloadAddSKUs.itemName)
+    expect(sku).not.toBe(undefined)
+})
