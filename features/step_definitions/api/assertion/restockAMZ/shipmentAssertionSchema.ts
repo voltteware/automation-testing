@@ -133,3 +133,32 @@ export const shipmentDetailSchema = z.object({
   totalSKUs: z.number(),
   totalWeight: z.number(),
 });
+
+export const addSKUsResponseSchema = z.object({
+  companyType: z.string(),
+  companyKey: z.string(),
+  restockKey: z.string(),
+  itemKey: z.string(),
+  localQty: z.number(),
+  shipmentQty: z.number(),
+  caseQty: z.number(),
+  isShipByCase: z.boolean(),
+  updated_at: z.string(),
+  created_at: z.string(),
+  key: z.string(),
+  shipmentId: z.null(),
+  destinationFulfillmentCenterId: z.null(),
+  labelType: z.null(),
+  orderQty: z.number(),
+  notes: z.null(),
+  receivedQty: z.number(),
+  hasSticker: z.boolean(),
+  stickerQty: z.number(),
+  prepDetailsList: z.array(z.unknown()),
+  whoPreps: z.null(),
+  boxLength: z.null(),
+  boxWidth: z.null(),
+  boxHeight: z.null(),
+  boxWeight: z.null(),
+  shipmentItemKey: z.string()
+})
