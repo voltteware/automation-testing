@@ -72,7 +72,7 @@ Feature: APIs Advanced Edit Item History, PUT /api/history-override, Purchase As
         And User sends GET request to get items in "Edit Item History"
         And The expected status code should be <expectedStatus>
         And User checks API contract essential types in item object are correct
-        And User picks max 10 random items in above list items
+        And User picks max 10 random items in the above list items
         And User checks random items has status is Active
         # Find a hidden item and search on Item History. Expect return empty result
         And User sets GET api endpoint to get items with limit row: 10 and filter field: isHidden equals true

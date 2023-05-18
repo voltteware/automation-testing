@@ -268,7 +268,7 @@ Given('{} picks a random item which does not have Purchase As', async function (
     this.attach(`Random Item: ${JSON.stringify(this.responseBodyOfAItemObject, undefined, 4)}`);
 });
 
-Given('User picks max 10 random items in above list items', async function () {
+Given('User picks max 10 random items in the above list items', async function () {
     // Add this if else condition to skip test in Purchasing My Suggested if system only show Items without Suppliers, there is no item has Supplier Name not null. 
     if (this.getItemsResponseBody != undefined || null) {
         const shuffledArr = this.getItemsResponseBody.sort(() => Math.random() - 0.5);
