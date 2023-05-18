@@ -173,7 +173,7 @@ Feature: APIs: GET /api/item?summary=true&companyKey=<companyKey>&companyType=<c
         And User checks Total Cost of all Items in PO is matched with Total Cost in suggested PO of Items Without Supplier
 
         And User checks Forecast Recommended Qty of all items in PO of suggested PO of Items Without Supplier > 0
-        And User picks max 10 random items in above list items
+        And User picks max 10 random items in the above list items
         And User checks random items has status is Active
         And User checks supplier name of above random items in Manage Company Items
 
@@ -192,7 +192,7 @@ Feature: APIs: GET /api/item?summary=true&companyKey=<companyKey>&companyType=<c
         And User checks Total Cost of all Items in PO is matched with Total Cost in suggested PO of random supplier
 
         And User checks Forecast Recommended Qty of all items in PO of suggested PO of random supplier > 0
-        And User picks max 10 random items in above list items
+        And User picks max 10 random items in the above list items
         And User checks random items has status is Active
         And User checks supplier name of above random items in Manage Company Items
 
@@ -226,7 +226,7 @@ Feature: APIs: GET /api/item?summary=true&companyKey=<companyKey>&companyType=<c
         And User sends a GET request to get items in Purchasing Custom
         And The expected status code should be <expectedStatus>
         And User checks API contract of item object is purchasing is correct
-        And User picks max 10 random items in above list items
+        And User picks max 10 random items in the above list items
         And User checks random items has status is Active
 
         Examples:
