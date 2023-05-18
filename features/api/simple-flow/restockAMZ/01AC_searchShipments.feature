@@ -106,7 +106,7 @@ Feature: API_Regression User can search shipments
             | TC_ID        | companyType | casePackOption | restockType | editColumn   | value  | email                      | direction | expectedStatus | expectedStatusText | limitRow | shipmentStatus |
             | TC_ASC_SS001 | ASC         | No             | SUPPLIER    | supplierName | random | testautoforecast@gmail.com | desc      | 200            | OK                 | 10       | PENDING        |
 
-    @TC_ASC_SS002 @smoke-test-api @retry
+    @TC_ASC_SS002 @smoke-test-api @retry @run-this
     Scenario Outline: <TC_ID> - Verify user <email> could call APIs could call APIs to search shipments - Working
         Given User picks company which has onboarded before with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
@@ -193,8 +193,6 @@ Feature: API_Regression User can search shipments
         And User checks status code and status text of api
             | expectedStatus   | expectedStatusText   |
             | <expectedStatus> | <expectedStatusText> |
-        # And User checks Items in Shipment Review
-        # If failed here => Amazon returns the error for Items in Shipment. Please run again
         And User sets POST api endpoint to create shipment on Amazon
         And User sends a POST request to create shipment on Amazon
         And User checks status code and status text of api
@@ -207,6 +205,9 @@ Feature: API_Regression User can search shipments
             | <expectedStatus> | <expectedStatusText> |
         And User sets POST api endpoint to complete shipment
         And User sends a POST request to complete shipment
+        And User sets GET api endpoint to get items in shipments by restockType: <restockType>
+        And User sends a GET request to get items in shipments by restockType: <restockType>
+        And User checks and waits for Items can be updated in Shipment Review by restockType: <restockType>
         And User checks status code and status text of api
             | expectedStatus   | expectedStatusText   |
             | <expectedStatus> | <expectedStatusText> |

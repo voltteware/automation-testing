@@ -23,7 +23,7 @@ jobs:
 
 trigger:
   branch:
-    - feature/configCI
+    - master
 
 # Orchestrate jobs using workflows
 # See: https://circleci.com/docs/configuration-reference/#workflows
@@ -34,4 +34,4 @@ workflows:
           filters:
             branches:
               only:
-                - feature/configCI
+                - master

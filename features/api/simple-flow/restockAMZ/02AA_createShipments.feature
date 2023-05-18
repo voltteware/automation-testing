@@ -8,7 +8,7 @@ Feature: API_Regression User can create shipments from Supplier
         And In Header of the request, she sets param Cookie as valid connect.sid
         When User sends a GET request to get companies
 
-    @TC_ASC_CS001 @smoke-test-api @retry
+    @TC_ASC_CS001 @smoke-test-api @retry @run-this
     Scenario Outline: <TC_ID> - Verify user <email> could call APIs to create shipments from Supplier without Case packs
         Given User picks company which has onboarded before with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
@@ -82,8 +82,6 @@ Feature: API_Regression User can create shipments from Supplier
         And User sends a GET request to count items in Shipment Review
         And The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
-        # And User checks Items in Shipment Review
-        # If failed here => Amazon returns the error for Items in Shipment. Please run again
         And User sets POST api endpoint to create shipment on Amazon
         And User sends a POST request to create shipment on Amazon
         And The expected status code should be <expectedStatus>
@@ -92,6 +90,9 @@ Feature: API_Regression User can create shipments from Supplier
         And User sends a GET request to get company information by company key
         And The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
+        And User sets GET api endpoint to get items in shipments by restockType: <restockType>
+        And User sends a GET request to get items in shipments by restockType: <restockType>
+        And User checks and waits for Items can be updated in Shipment Review by restockType: <restockType>
         And User sets POST api endpoint to complete shipment
         And User sends a POST request to complete shipment
         And The expected status code should be <expectedStatus>
