@@ -9,7 +9,7 @@ Feature: API_Admin
         When User sends a GET request to get companies
 
     @TC_LU001-3 @smoke-test-api
-    Scenario Outline: <TC_ID> - Verify admin can lock by running forecast and unlock company
+    Scenario Outline: <TC_ID> - Verify admin can lock by running forecast and unlock company <companyType>
         Given User picks company which has onboarded before with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         # Get Company info before run forecast
@@ -51,7 +51,7 @@ Feature: API_Admin
             | TC_LU003 | admin | testuserforecastrx@gmail.com | Test1111# | QBFS        | 200            | OK                 |
 
     @TC_LU004 @smoke-test-api
-    Scenario Outline: <TC_ID> - Verify admin can lock by running sync and unlock company
+    Scenario Outline: <TC_ID> - Verify admin can lock by running sync and unlock company for <companyType>
         Given User picks company which has onboarded before with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         # Get Company info before run sync
