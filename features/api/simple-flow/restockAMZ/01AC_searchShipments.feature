@@ -106,7 +106,7 @@ Feature: API_Regression User can search shipments
             | TC_ID        | companyType | casePackOption | restockType | editColumn   | value  | email                      | direction | expectedStatus | expectedStatusText | limitRow | shipmentStatus |
             | TC_ASC_SS001 | ASC         | No             | SUPPLIER    | supplierName | random | testautoforecast@gmail.com | desc      | 200            | OK                 | 10       | PENDING        |
 
-    @TC_ASC_SS002 @smoke-test-api @retry @run-this
+    @TC_ASC_SS002 @smoke-test-api @retry
     Scenario Outline: <TC_ID> - Verify user <email> could call APIs could call APIs to search shipments - Working
         Given User picks company which has onboarded before with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
