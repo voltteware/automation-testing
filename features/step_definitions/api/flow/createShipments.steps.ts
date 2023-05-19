@@ -84,6 +84,10 @@ Then(`{} sends a GET request to get Shipment info`, async function (actor: strin
 
 Then('{} sets GET api endpoint to get items in shipments by restockType: {}', async function (actor, restockType: string) {
     link = encodeURI(`${Links.API_SHIPMENT}-detail?offset=0&limit=20&where={"logic":"and","filters":[]}&key=${this.shipmentKey}&type=forecast-chosen&restockType=${restockType}`);
+    const sleep = (milliseconds: number) => {
+        return new Promise(resolve => setTimeout(resolve, milliseconds))
+    }
+    await sleep(5000);
 });
 
 Then(`{} sends a GET request to get items in shipments by restockType: {}`, async function (actor, restockType: string) {
@@ -346,8 +350,32 @@ Then(`{} sets GET api endpoint to count items in Shipment Review`, async functio
     linkCount = `${Links.API_SHIPMENT}-detail/count?where=%7B%22logic%22:%22and%22,%22filters%22:%5B%5D%7D&key=${this.shipmentKey}&type=amazon&restockType=SUPPLIER`;
 });
 
-Then(`{} checks Items in Shipment Review`, async function (actor: string) {
-    expect(this.getAmountItemsResponseBody, `The amount of items would be greater than 0`).toBeGreaterThan(0);
+Then(`{} checks and waits for Items can be updated in Shipment Review by restockType: {}`, async function (actor, restockType: string) {
+    if (this.getAmountItemsResponseBody == 0) {
+        const linkCount = `${Links.API_SHIPMENT}-detail/count?where=%7B%22logic%22:%22and%22,%22filters%22:%5B%5D%7D&key=${this.shipmentKey}&type=amazon&restockType=${restockType}`;
+        const options = {
+            headers: this.headers
+        }
+
+        // Check complete until count > 0
+        await expect.poll(async () => {
+            const getAmountItemsResponse = await shipmentRequest.getShipmentDetail(this.request, linkCount, options);
+            const getAmountItemsResponseBody = JSON.parse(await getAmountItemsResponse.text());
+            console.log(`getAmountItemsResponseBody is: >>>>>> `, getAmountItemsResponseBody);
+            logger.log('info', `getAmountItemsResponseBody is: >>>>>> ` + getAmountItemsResponseBody);
+            this.attach(`getAmountItemsResponseBody is: >>>>>> ` + getAmountItemsResponseBody);
+            return getAmountItemsResponseBody;
+        }, {
+            // Custom error message, optional.
+            message: `make sure count > 0 to pass this step`, // custom error message
+            // Probe, wait 1s, probe, wait 5s, probe, wait 10s, probe, wait 10s, probe, .... Defaults to [100, 250, 500, 1000].
+            intervals: [1_000, 2_000, 5_000],
+            timeout: 8 * 60 * 1000,
+        }).toBeGreaterThan(0);
+    }
+    else {
+        expect(this.getAmountItemsResponseBody, `The amount of items would be greater than 0`).toBeGreaterThan(0);
+    }
 });
 
 Then(`{} sends a GET request to count items in Shipment Review`, async function (actor: string) {
@@ -423,6 +451,10 @@ Then('{} sends a GET request to export file', async function (actor: string) {
 
 Then('{} sets GET api endpoint to find the new created shipment', async function (actor: string) {
     linkListShipments = encodeURI(`${Links.API_SHIPMENT}?offset=0&limit=10&sort=[{"field":"createdAt","direction":"desc"}]&where={"logic":"and","filters":[{"logic":"or","filters":[{"field":"shipmentName","operator":"contains","value":"${this.shipmentName}"},{"field":"shipmentSource","operator":"contains","value":"${this.shipmentName}"},{"field":"destinationFulfillmentCenterId","operator":"contains","value":"${this.shipmentName}"},{"field":"status","operator":"contains","value":"${this.shipmentName}"}]}]}`);
+});
+
+Then('{} sets GET api endpoint to find itc auto shipments', async function (actor: string) {
+    linkListShipments = `${Links.API_SHIPMENT}?offset=0&limit=200&where={"logic":"and","filters":[{"filters":[{"field":"status","operator":"contains","value":"working"}],"logic":"and"},{"logic":"or","filters":[{"field":"shipmentName","operator":"contains","value":"ITC_shipment_auto"},{"field":"shipmentSource","operator":"contains","value":"ITC_shipment_auto"},{"field":"destinationFulfillmentCenterId","operator":"contains","value":"ITC_shipment_auto"},{"field":"status","operator":"contains","value":"ITC_shipment_auto"}]}]}`;
 });
 
 Then(`{} sends a GET request to find the new created shipment`, async function (actor: string) {
