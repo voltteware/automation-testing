@@ -82,8 +82,6 @@ Feature: API_Regression User can create shipments from Supplier
         And User sends a GET request to count items in Shipment Review
         And The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
-        # And User checks Items in Shipment Review
-        # If failed here => Amazon returns the error for Items in Shipment. Please run again
         And User sets POST api endpoint to create shipment on Amazon
         And User sends a POST request to create shipment on Amazon
         And The expected status code should be <expectedStatus>
@@ -92,6 +90,9 @@ Feature: API_Regression User can create shipments from Supplier
         And User sends a GET request to get company information by company key
         And The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
+        And User sets GET api endpoint to get items in shipments by restockType: <restockType>
+        And User sends a GET request to get items in shipments by restockType: <restockType>
+        And User checks and waits for Items can be updated in Shipment Review by restockType: <restockType>
         And User sets POST api endpoint to complete shipment
         And User sends a POST request to complete shipment
         And The expected status code should be <expectedStatus>
