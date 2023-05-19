@@ -10,7 +10,7 @@ Feature: APIs: GET /api/item?summary=true&companyKey=<companyKey>&companyType=<c
 
     #getItemSummary
     @TC_GIS001 @api-dashboard @api-item @api-get-item-summary
-    Scenario Outline: TC_GIS001 - Verify user <email> could call this API to get item summary by using company key and company type
+    Scenario Outline: TC_GIS001 - Verify user <email> could call this API to get item summary by using company key and company type <companyType>
         Given User picks company which has onboarded before with type <companyType> in above response
         And User sets GET api endpoint to get information of a company belongs to <email> using company key <companyKey>
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
@@ -70,7 +70,7 @@ Feature: APIs: GET /api/item?summary=true&companyKey=<companyKey>&companyType=<c
 
     #restockCalculation
     @TC_ASC_RC001 @smoke-test-api @regression-api @restock-calculation
-    Scenario Outline: <TC_ID> - Verify user <email> could call APIs to compare and check the formulas
+    Scenario Outline: <TC_ID> - Verify user <email> could call APIs to compare and check the formulas when sorting Items <direction>
         Given User picks company which has onboarded before with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         # # Get Company info before run forecast

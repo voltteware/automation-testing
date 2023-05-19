@@ -9,7 +9,7 @@ Feature: API_Dashboard PUT /api/company
         When User sends a GET request to get companies
 
     @TC_UC001 @regression-api @csv @smoke-test-api
-    Scenario Outline: TC_UC001 - Verify user <email> could call this API to update <properties> for any company type
+    Scenario Outline: TC_UC001 - Verify user <email> could call this API to update <properties> for <companyType>
         Given User picks company which has onboarded before with type <companyType> in above response
         # And User sets GET api endpoint to get information of a company belongs to <email> using company key <companyKey>
         And User sets PUT api endpoint to update company keys
@@ -24,7 +24,7 @@ Feature: API_Dashboard PUT /api/company
             | CSV         | leadTime   | testautoforecast@gmail.com | 30       | of any company type CSV | 200            |
 
     @TC_UC002 @regression-api @qbfs @smoke-test-api
-    Scenario Outline: TC_UC002 - Verify user <email> could call this API to update <properties> for any company type
+    Scenario Outline: TC_UC002 - Verify user <email> could call this API to update <properties> for <companyType>
         Given User picks company which has onboarded before with type <companyType> in above response
         # And User sets GET api endpoint to get information of a company belongs to <email> using company key <companyKey>
         And User sets PUT api endpoint to update company keys
