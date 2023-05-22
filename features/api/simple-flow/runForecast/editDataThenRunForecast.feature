@@ -504,6 +504,14 @@ Feature: APIs Advanced Edit Item History, PUT /api/history-override, Purchase As
         And The status text is "<expectedStatusText>"
         And User picks a random item which does not have Purchase As
         And User saves the item key
+        # Update doNotOrder = flase => show in Purchasing
+        And User sets PUT api endpoint to edit doNotOrder of the above item for company type <companyType> with new value: false
+        And User sends a PUT request to edit the item
+        And The expected status code should be <expectedStatus>
+        # Update forecastDirty = true => will run forecast
+        And User sets PUT api endpoint to edit forecastDirty of the above item for company type <companyType> with new value: true
+        And User sends a PUT request to edit the item
+        And The expected status code should be <expectedStatus>
         # Turn ON Override history
         And User sets PUT api endpoint to edit useHistoryOverride of the above item for company type <companyType> with new value: <value>
         And User sends a PUT request to edit the item
@@ -567,6 +575,14 @@ Feature: APIs Advanced Edit Item History, PUT /api/history-override, Purchase As
         And The status text is "<expectedStatusText>"
         And User picks a random item which does not have Purchase As
         And User saves the item key
+        # Update doNotOrder = flase => show in Purchasing
+        And User sets PUT api endpoint to edit doNotOrder of the above item for company type <companyType> with new value: false
+        And User sends a PUT request to edit the item
+        And The expected status code should be <expectedStatus>
+        # Update forecastDirty = true => will run forecast
+        And User sets PUT api endpoint to edit forecastDirty of the above item for company type <companyType> with new value: true
+        And User sends a PUT request to edit the item
+        And The expected status code should be <expectedStatus>
         # Turn ON Override history
         And User sets PUT api endpoint to edit useHistoryOverride of the above item for company type <companyType> with new value: <value>
         And User sends a PUT request to edit the item
@@ -634,6 +650,14 @@ Feature: APIs Advanced Edit Item History, PUT /api/history-override, Purchase As
         And The status text is "<expectedStatusText>"
         And User picks a random item which does not have Purchase As
         And User saves the item key
+        # Update doNotOrder = flase => show in Purchasing
+        And User sets PUT api endpoint to edit doNotOrder of the above item for company type <companyType> with new value: false
+        And User sends a PUT request to edit the item
+        And The expected status code should be <expectedStatus>
+        # Update forecastDirty = true => will run forecast
+        And User sets PUT api endpoint to edit forecastDirty of the above item for company type <companyType> with new value: true
+        And User sends a PUT request to edit the item
+        And The expected status code should be <expectedStatus>
         # Turn ON Override history
         And User sets PUT api endpoint to edit useHistoryOverride of the above item for company type <companyType> with new value: <value>
         And User sends a PUT request to edit the item
@@ -706,6 +730,18 @@ Feature: APIs Advanced Edit Item History, PUT /api/history-override, Purchase As
         And The status text is "<expectedStatusText>"
         And User picks a random item which does not have Purchase As
         And User saves the item key
+        # Update doNotOrder = flase => show in Purchasing
+        And User sets PUT api endpoint to edit doNotOrder of the above item for company type <companyType> with new value: false
+        And User sends a PUT request to edit the item
+        And The expected status code should be <expectedStatus>
+        # Update forecastDirty = true => will run forecast
+        And User sets PUT api endpoint to edit forecastDirty of the above item for company type <companyType> with new value: true
+        And User sends a PUT request to edit the item
+        And The expected status code should be <expectedStatus>
+        # Update forecastDirty = true => will run forecast
+        And User sets PUT api endpoint to edit forecastDirty of the above item for company type <companyType> with new value: true
+        And User sends a PUT request to edit the item
+        And The expected status code should be <expectedStatus>
         # Turn ON Override history
         And User sets PUT api endpoint to edit useHistoryOverride of the above item for company type <companyType> with new value: <value>
         And User sends a PUT request to edit the item
@@ -778,6 +814,14 @@ Feature: APIs Advanced Edit Item History, PUT /api/history-override, Purchase As
         And The status text is "<expectedStatusText>"
         And User picks a random item which does not have Purchase As
         And User saves the item key
+        # Update doNotOrder = flase => show in Purchasing
+        And User sets PUT api endpoint to edit doNotOrder of the above item for company type <companyType> with new value: false
+        And User sends a PUT request to edit the item
+        And The expected status code should be <expectedStatus>
+        # Update forecastDirty = true => will run forecast
+        And User sets PUT api endpoint to edit forecastDirty of the above item for company type <companyType> with new value: true
+        And User sends a PUT request to edit the item
+        And The expected status code should be <expectedStatus>
         # Turn ON Override history
         And User sets PUT api endpoint to edit useHistoryOverride of the above item for company type <companyType> with new value: <value>
         And User sends a PUT request to edit the item
@@ -835,7 +879,7 @@ Feature: APIs Advanced Edit Item History, PUT /api/history-override, Purchase As
             | TC_BFV005_2 | ASC         | testautoforecast@gmail.com | 20       | 200            | OK                 | useBackfill | true  |
             | TC_BFV005_3 | QBFS        | testautoforecast@gmail.com | 20       | 200            | OK                 | useBackfill | true  |
 
-    @TC_BFV006 @smoke-test-api @regression-api @api-backfill-value
+    @TC_BFV006 @smoke-test-api @regression-api @api-backfill-value 
     Scenario Outline: <TC_ID> - Verify that the system will fill "0" for orther months. if the 1st year, 2nd year has no value and the 3rd year has full values for <companyType>
         Given User picks company which has onboarded before with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
@@ -845,6 +889,14 @@ Feature: APIs Advanced Edit Item History, PUT /api/history-override, Purchase As
         And The status text is "<expectedStatusText>"
         And User picks a random item which does not have Purchase As
         And User saves the item key
+        # Update doNotOrder = flase => show in Purchasing
+        And User sets PUT api endpoint to edit doNotOrder of the above item for company type <companyType> with new value: false
+        And User sends a PUT request to edit the item
+        And The expected status code should be <expectedStatus>
+        # Update forecastDirty = true => will run forecast
+        And User sets PUT api endpoint to edit forecastDirty of the above item for company type <companyType> with new value: true
+        And User sends a PUT request to edit the item
+        And The expected status code should be <expectedStatus>
         # Turn ON Override history
         And User sets PUT api endpoint to edit useHistoryOverride of the above item for company type <companyType> with new value: <value>
         And User sends a PUT request to edit the item

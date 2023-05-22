@@ -912,6 +912,30 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
 
             this.payLoad.useBackfill =  this.useBackfill
             break;
+        case 'doNotOrder':                      
+            if (value == 'random') {
+                this.doNotOrder = !(Boolean(this.responseBodyOfAItemObject.doNotOrder));
+            }
+            else {
+                this.doNotOrder = value;                
+            }
+            logger.log('info', `New ${editColumn}: ${this.doNotOrder}`);
+            this.attach(`New ${editColumn}: ${this.doNotOrder}`);
+    
+            this.payLoad.doNotOrder =  this.doNotOrder            
+            break;
+        case 'forecastDirty':                      
+            if (value == 'random') {
+                this.forecastDirty = !(Boolean(this.responseBodyOfAItemObject.forecastDirty));
+            }
+            else {
+                this.forecastDirty = value;                
+            }
+            logger.log('info', `New ${editColumn}: ${this.forecastDirty}`);
+            this.attach(`New ${editColumn}: ${this.forecastDirty}`);
+    
+            this.payLoad.forecastDirty =  this.forecastDirty            
+            break;
         default:
             break;
     }    
