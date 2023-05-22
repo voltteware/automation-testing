@@ -10,7 +10,7 @@ Feature: APIs Advanced Edit Item History, PUT /api/history-override, Purchase As
 
     #editItemHistory
     @TC_EI001-3 @smoke-test-api @regression-api @api-edit-item-history @api-dashboard @api-dashboard-advanced @api-editItemHistory
-    Scenario Outline: <TC_ID> - Verify user can edit items history and go to Purchasing to view changes after run forecast
+    Scenario Outline: <TC_ID> - Verify user can edit items history of company <companyType> and go to Purchasing to view changes after run forecast
         Given User picks company which has onboarded before with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get items with limit row: 10 and filter field: isHidden equals false
@@ -91,7 +91,7 @@ Feature: APIs Advanced Edit Item History, PUT /api/history-override, Purchase As
 
     # overrideValue
     @TC_OV001 @smoke-test-api @regression-api @api-overrideValue @api-dashboard
-    Scenario Outline: <TC_ID> - Verify user <email> override history value and go to Purchasing to check data
+    Scenario Outline: <TC_ID> - Verify user <email> override history value of company <companyType> and go to Purchasing to check data
         Given User picks company which has onboarded before with type <companyType> in above response
         But User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get item with limit row: <limitRow>
@@ -139,7 +139,7 @@ Feature: APIs Advanced Edit Item History, PUT /api/history-override, Purchase As
 
     # purchaseAs
     @TC_PA001 @api-dashboard @api-items @api-purchaseAs @regression-api
-    Scenario Outline: <TC_ID> - Verify user <email> could call APIs to assign Purchase As and check formula
+    Scenario Outline: <TC_ID> - Verify user <email> could call APIs to assign Purchase As and check formula of company <companyType>
         Given User picks company which has onboarded before with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get items that have purchase as
@@ -197,7 +197,7 @@ Feature: APIs Advanced Edit Item History, PUT /api/history-override, Purchase As
             | TC_PA001_03 | QBFS        | testautoforecast@gmail.com | purchaseAs | random  | 200            | OK                 |
 
     @TC_PA002a @api-dashboard @api-items @api-purchaseAs @regression-api
-    Scenario Outline: <TC_ID> - Verify user <email> checks Purchase As validation
+    Scenario Outline: <TC_ID> - Verify user <email> checks Purchase As validation item cannot assign Purchase As for itself of company <companyType>
         # Item cannot assign Purchase As for itself
         Given User picks company which has onboarded before with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
@@ -218,7 +218,7 @@ Feature: APIs Advanced Edit Item History, PUT /api/history-override, Purchase As
             | TC_PA002a_03 | QBFS        | testautoforecast@gmail.com | 10       | purchaseAs | itself | 400            | Cannot save Purchase As the same as current Item Name |
 
     @TC_PA002b @api-dashboard @api-items @api-purchaseAs @regression-api
-    Scenario Outline: <TC_ID> - Verify user <email> checks Purchase As validation
+    Scenario Outline: <TC_ID> - Verify user <email> checks Purchase As validation item cannot assign Purchase As when it is being set Purchase As of company <companyType>
         # Item cannot assign Purchase As when it is being set Purchase As
         Given User picks company which has onboarded before with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
@@ -769,7 +769,7 @@ Feature: APIs Advanced Edit Item History, PUT /api/history-override, Purchase As
             | TC_BFV004_3 | QBFS        | testautoforecast@gmail.com | 20       | 200            | OK                 | useBackfill | true  |
 
     @TC_BFV005 @smoke-test-api @regression-api @api-backfill-value
-    Scenario Outline: <TC_ID> - Verify that the system will fill "0" for orther months. if the 1st year has no value and the 2nd year has full values
+    Scenario Outline: <TC_ID> - Verify that the system will fill "0" for orther months. if the 1st year has no value and the 2nd year has full values for <companyType>
         Given User picks company which has onboarded before with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get item with limit row: <limitRow>
@@ -836,7 +836,7 @@ Feature: APIs Advanced Edit Item History, PUT /api/history-override, Purchase As
             | TC_BFV005_3 | QBFS        | testautoforecast@gmail.com | 20       | 200            | OK                 | useBackfill | true  |
 
     @TC_BFV006 @smoke-test-api @regression-api @api-backfill-value
-    Scenario Outline: <TC_ID> - Verify that the system will fill "0" for orther months. if the 1st year, 2nd year has no value and the 3rd year has full values
+    Scenario Outline: <TC_ID> - Verify that the system will fill "0" for orther months. if the 1st year, 2nd year has no value and the 3rd year has full values for <companyType>
         Given User picks company which has onboarded before with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get item with limit row: <limitRow>
