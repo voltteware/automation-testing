@@ -3,7 +3,7 @@ Feature: API_Dashboard PUT /api/bom
     Background: Send GET /realm request to get all company keys of current logged in user before each test
         Given user sends a POST login request to get valid cookie with role
             | role  | username                   | password  |
-            | admin | testautoforecast@gmail.com | Test1111# |
+            | admin | testgetbom@gmail.com | Test1111# |
         And User sets GET api endpoint to get companies information of current user
         And In Header of the request, she sets param Cookie as valid connect.sid
         When User sends a GET request to get companies
@@ -26,8 +26,8 @@ Feature: API_Dashboard PUT /api/bom
 
         Examples:
             | TC_ID      | companyType | email                      | limitRow | editColumn | value  | expectedStatus |
-            | TC_UB001_1 | ASC         | testautoforecast@gmail.com | 100      | parentName | random | 200            |
-            | TC_UB001_6 | CSV         | testautoforecast@gmail.com | 100      | kitQty     | random | 200            |
+            | TC_UB001_1 | ASC         | testgetbom@gmail.com | 100      | parentName | random | 200            |
+            | TC_UB001_6 | CSV         | testgetbom@gmail.com | 100      | kitQty     | random | 200            |
 
     @TC_UB001 @regression-api
     Scenario Outline: <TC_ID> - Verify user <email> could call this API to update "<editColumn>" of a kit for company type (<companyType>)
@@ -46,7 +46,7 @@ Feature: API_Dashboard PUT /api/bom
 
         Examples:
             | TC_ID      | companyType | email                      | limitRow | editColumn    | value  | expectedStatus |
-            | TC_UB001_2 | ASC         | testautoforecast@gmail.com | 100      | componentName | random | 200            |
-            | TC_UB001_3 | ASC         | testautoforecast@gmail.com | 100      | kitQty        | random | 200            |
-            | TC_UB001_4 | CSV         | testautoforecast@gmail.com | 100      | parentName    | random | 200            |
-            | TC_UB001_5 | CSV         | testautoforecast@gmail.com | 100      | componentName | random | 200            |
+            | TC_UB001_2 | ASC         | testgetbom@gmail.com | 100      | componentName | random | 200            |
+            | TC_UB001_3 | ASC         | testgetbom@gmail.com | 100      | kitQty        | random | 200            |
+            | TC_UB001_4 | CSV         | testgetbom@gmail.com | 100      | parentName    | random | 200            |
+            | TC_UB001_5 | CSV         | testgetbom@gmail.com | 100      | componentName | random | 200            |

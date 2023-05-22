@@ -2,8 +2,8 @@
 Feature: API_Dashboard GET /api/grid-view/item
     Background: Send GET /realm request to get all company keys of current logged in user before each test
         Given user sends a POST login request to get valid cookie with role
-            | role  | username                   | password  |
-            | admin | testautoforecast@gmail.com | Test1111# |
+            | role  | username                 | password  |
+            | admin | testhiddenitem@gmail.com | Test1111# |
         And User sets GET api endpoint to get companies information of current user
         And In Header of the request, she sets param Cookie as valid connect.sid
         When User sends a GET request to get companies
@@ -21,8 +21,8 @@ Feature: API_Dashboard GET /api/grid-view/item
         And User checks API contract essential types in grid view object are correct
         And User checks values in response of get grid view item are correct
         Examples:
-            | user  | email                      | password  | companyKey | expectedStatus |
-            | admin | testautoforecast@gmail.com | Test1111# | random     | 200            |
+            | user  | email                    | password  | companyKey | expectedStatus |
+            | admin | testhiddenitem@gmail.com | Test1111# | random     | 200            |
 
     #Bug TC_GVI002_1 and TC_GVI002_2, return status code 200 when cookie invalid.
     @TC_GVI002 @bug-permission @low-bug-skip
@@ -33,11 +33,11 @@ Feature: API_Dashboard GET /api/grid-view/item
         Then The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
         Examples:
-            | scenario    | email                      | companyKey | cookie  | companyKeyHeader | companyTypeHeader | expectedStatus | expectedStatusText    |
-            | TC_GVI002_1 | testautoforecast@gmail.com | random     | invalid | invalid          | invalid           | 401            | Unauthorized          |
-            | TC_GVI002_2 | testautoforecast@gmail.com | random     | invalid | valid            | valid             | 401            | Unauthorized          |
-            | TC_GVI002_3 | testautoforecast@gmail.com | random     | valid   | invalid          | invalid           | 400            | Company not found.    |
-            | TC_GVI002_4 | testautoforecast@gmail.com | random     | valid   |                  |                   | 500            | Internal Server Error |
+            | scenario    | email                    | companyKey | cookie  | companyKeyHeader | companyTypeHeader | expectedStatus | expectedStatusText    |
+            | TC_GVI002_1 | testhiddenitem@gmail.com | random     | invalid | invalid          | invalid           | 401            | Unauthorized          |
+            | TC_GVI002_2 | testhiddenitem@gmail.com | random     | invalid | valid            | valid             | 401            | Unauthorized          |
+            | TC_GVI002_3 | testhiddenitem@gmail.com | random     | valid   | invalid          | invalid           | 400            | Company not found.    |
+            | TC_GVI002_4 | testhiddenitem@gmail.com | random     | valid   |                  |                   | 500            | Internal Server Error |
 
     @TC_GVI003
     Scenario Outline: TC_GVI003 - Verify user <userA> could not call this API to get grid view in the item of company which does not belongs to her
@@ -49,5 +49,5 @@ Feature: API_Dashboard GET /api/grid-view/item
         Then The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
         Examples:
-            | userA               | userB                      | password  | companyKey | expectedStatus | expectedStatusText |
-            | may27user@gmail.com | testautoforecast@gmail.com | Test1111# | random     | 400            | Company not found. |
+            | userA               | userB                    | password  | companyKey | expectedStatus | expectedStatusText |
+            | may27user@gmail.com | testhiddenitem@gmail.com | Test1111# | random     | 400            | Company not found. |

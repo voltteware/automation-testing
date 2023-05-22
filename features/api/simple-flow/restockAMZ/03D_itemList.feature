@@ -1,14 +1,14 @@
-@test-api @regression-api @add-sku-shipments
+@test-api @regression-api
 Feature: API_Regression User can search, filter item in Item List
     Background: Send POST /login request to login before each test
         Given user sends a POST login request to get valid cookie with role
-            | role  | username                   | password  |
-            | admin | testautoforecast@gmail.com | Test1111# |
+            | role  | username                     | password  |
+            | admin | testsearchitemlist@gmail.com | Test1111# |
         And User sets GET api endpoint to get companies information of current user
         And In Header of the request, she sets param Cookie as valid connect.sid
         When User sends a GET request to get companies
 
-    @TC_ASC_SIL001 @smoke-test-api
+    @TC_ASC_SIL001 @smoke-test-api @search-item-list
     Scenario Outline: <TC_ID> - Verify user <email> could call APIs to search Item List
         Given User picks company which has onboarded before with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
@@ -22,10 +22,10 @@ Feature: API_Regression User can search, filter item in Item List
         And User checks the system display the correct item list with keyword
 
         Examples:
-            | TC_ID         | companyType | keyword | email                      | expectedStatus | expectedStatusText |
-            | TC_ASC_SIL001 | ASC         | B       | testautoforecast@gmail.com | 200            | OK                 |
+            | TC_ID         | companyType | keyword | email                        | expectedStatus | expectedStatusText |
+            | TC_ASC_SIL001 | ASC         | B       | testsearchitemlist@gmail.com | 200            | OK                 |
         
-    @TC_ASC_FIL002 @smoke-test-api
+    @TC_ASC_FIL002 @smoke-test-api @filter-item-list
     Scenario Outline: <TC_ID> - Verify user <email> could call APIs to filter Item List with flag <logic> status
         Given User picks company which has onboarded before with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
@@ -39,6 +39,6 @@ Feature: API_Regression User can search, filter item in Item List
         And User checks the system display the correct item list by filter function with flag <logic> status
 
         Examples:
-            | TC_ID           | companyType | flag   | logic | status | email                      | expectedStatus | expectedStatusText |
-            | TC_ASC_FIL002_1 | ASC         | RED    | and   | WATCH  | testautoforecast@gmail.com | 200            | OK                 |
-            | TC_ASC_FIL002_2 | ASC         | YELLOW | or    | ACTIVE | testautoforecast@gmail.com | 200            | OK                 |
+            | TC_ID           | companyType | flag   | logic | status | email                        | expectedStatus | expectedStatusText |
+            | TC_ASC_FIL002_1 | ASC         | RED    | and   | WATCH  | testsearchitemlist@gmail.com | 200            | OK                 |
+            | TC_ASC_FIL002_2 | ASC         | YELLOW | or    | ACTIVE | testsearchitemlist@gmail.com | 200            | OK                 |

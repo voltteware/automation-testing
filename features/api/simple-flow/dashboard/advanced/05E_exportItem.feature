@@ -76,11 +76,13 @@ Feature: API_Dashboard PUT /api/sync/item/download?<fields>
             | TC_EI002 | CSV         | nov9@gmail.com | supplier  | Auto                | 1                 | 3        | 10       | Auto        | 200            | OK                 |                 | New Supplier Auto | New description | emailtest@gmail.com | random | random   | random        | random       | name,leadTime,orderInterval,averageHistoryLength |
 
     # Manage Company > Demand
-    @TC_EI003 @smoke-test-api @regression-api 
+    @TC_EI003 @smoke-test-api @regression-api
     Scenario Outline: <TC_ID> - Verify user <email> could call API export <section>
         # Create new supplier with contain text "Auto"
         Given User picks company which has onboarded before with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
+        And User sets GET api endpoint to get item with limit row: <limitRow>
+        And User sends a GET request to get list items
         And User sets GET api endpoint to get demands with limit row: <limitRow>
         And User sends a GET request to get list demands
         And User checks any demand exist in the system, if it does not exist will create new demand

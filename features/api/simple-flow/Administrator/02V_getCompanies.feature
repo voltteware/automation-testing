@@ -12,8 +12,8 @@ Feature: API_Admin GET/Companies
         And User checks API contract essential types in company object are correct
         And User checks values in response of company are correct
         Examples:
-            | user  | email              | password  | expectedStatus |
-            | admin | may27pre@gmail.com | Test1111# | 200            |
+            | user  | email                      | password  | expectedStatus |
+            | admin | testgetcompanies@gmail.com | Test1111# | 200            |
 
     #BUG API
     @COMPANIES002 @bug-permission @low-bug-skip
@@ -25,8 +25,8 @@ Feature: API_Admin GET/Companies
         Then The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
         Examples:
-            | user | email               | password  | expectedStatus | expectedStatusText |
-            | user | may27user@gmail.com | Test1111# | 401            | Unauthorized       |
+            | user | email                      | password  | expectedStatus | expectedStatusText |
+            | user | testgetcompanies@gmail.com | Test1111# | 401            | Unauthorized       |
 
     #BUG API
     @COMPANIES003 @bug-permission @low-bug-skip

@@ -3,8 +3,8 @@ Feature: API_Admin PUT api/company/<companyKey>
 
   Background: Send GET request to get companies keys of current logged in user before each test
     Given user sends a POST login request to get valid cookie with role
-      | role  | username                   | password  |
-      | admin | testautoforecast@gmail.com | Test1111# |
+      | role  | username                        | password  |
+      | admin | testchangecompanyinfo@gmail.com | Test1111# |
     And In Header of the request, user sets param Cookie as valid connect.sid
 
   @TC_CCI001
@@ -22,9 +22,9 @@ Feature: API_Admin PUT api/company/<companyKey>
     And Information of company must be change successfully
     And User checks API contract essential types in company object are correct
 
-    Examples: 
+    Examples:
       | user  | companyType | containText | expectedStatus |
-      | admin | ASC         | Auto        |            200 |
+      | admin | ASC         | Auto        | 200            |
 
   @TC_CCI002
   Scenario Outline: TC_CCI002 - Verify admin could call this API to change information of a "<companyType>" company
@@ -41,9 +41,9 @@ Feature: API_Admin PUT api/company/<companyKey>
     And Information of company must be change successfully
     And User checks API contract essential types in company object are correct
 
-    Examples: 
+    Examples:
       | user  | companyType | containText | expectedStatus |
-      | admin | CSV         | Auto        |            200 |
+      | admin | CSV         | Auto        | 200            |
 
   @TC_CCI003
   Scenario Outline: TC_CCI003 - Verify admin could call this API to change information of a "<companyType>" company
@@ -60,6 +60,6 @@ Feature: API_Admin PUT api/company/<companyKey>
     And Information of company must be change successfully
     And User checks API contract essential types in company object are correct
 
-    Examples: 
+    Examples:
       | user  | companyType | containText | expectedStatus |
-      | admin | QBFS        | Auto        |            200 |
+      | admin | QBFS        | Auto        | 200            |

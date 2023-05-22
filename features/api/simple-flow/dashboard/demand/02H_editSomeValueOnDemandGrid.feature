@@ -3,7 +3,7 @@ Feature: API_Dashboard PUT /api/demand/manual
     Background: Send GET /realm request to get all company keys of current logged in user before each test
         Given user sends a POST login request to get valid cookie with role
             | role  | username                   | password  |
-            | admin | testautoforecast@gmail.com | Test1111# |
+            | admin | testcreatedemand@gmail.com | Test1111# |
         And User sets GET api endpoint to get companies information of current user
         And In Header of the request, she sets param Cookie as valid connect.sid
         When User sends a GET request to get companies
@@ -29,7 +29,7 @@ Feature: API_Dashboard PUT /api/demand/manual
 
         Examples:
             | TC_ID      | companyType | email                      | limitRow | editColumn | value  | expectedStatus |
-            | TC_UD001_1 | CSV         | testautoforecast@gmail.com | 10       | itemName   | random | 200            |
+            | TC_UD001_1 | CSV         | testcreatedemand@gmail.com | 10       | itemName   | random | 200            |
 
     @TC_UD001 @regression-api
     Scenario Outline: <TC_ID> - Verify user <email> could call this API to update "<editColumn>" of a demand for company type (<companyType>)
@@ -49,7 +49,7 @@ Feature: API_Dashboard PUT /api/demand/manual
 
         Examples:
             | TC_ID      | companyType | email                      | limitRow | editColumn        | value  | expectedStatus |
-            | TC_UD001_2 | CSV         | testautoforecast@gmail.com | 10       | dateOfSale        | random | 200            |
-            | TC_UD001_3 | CSV         | testautoforecast@gmail.com | 10       | salesOrderQty     | random | 200            |
-            | TC_UD001_4 | CSV         | testautoforecast@gmail.com | 10       | openSalesOrderQty | random | 200            |
-            | TC_UD001_5 | CSV         | testautoforecast@gmail.com | 10       | referenceNumber   | random | 200            |
+            | TC_UD001_2 | CSV         | testcreatedemand@gmail.com | 10       | dateOfSale        | random | 200            |
+            | TC_UD001_3 | CSV         | testcreatedemand@gmail.com | 10       | salesOrderQty     | random | 200            |
+            | TC_UD001_4 | CSV         | testcreatedemand@gmail.com | 10       | openSalesOrderQty | random | 200            |
+            | TC_UD001_5 | CSV         | testcreatedemand@gmail.com | 10       | referenceNumber   | random | 200            |
