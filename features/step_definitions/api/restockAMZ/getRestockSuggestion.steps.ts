@@ -311,9 +311,16 @@ Then('{} checks isHidden is true or false', async function (actor: string) {
 });
 
 Then(`User sets GET api method to get all items in Item List with search function:`, async function (dataTable: DataTable) {
-    const {supplierFilter, keyword} = dataTable.hashes()[0];
+    const { supplierFilter, keyword } = dataTable.hashes()[0];
     this.keyword = keyword
     link = encodeURI(`${Links.API_GET_RESTOCK_SUGGESTION}?offset=0&limit=50&where={"logic":"and","filters":[{"logic":"or","filters":[{"filters":[],"logic":"or"},{"filters":[],"logic":"or"}],"currentSupplierFilters":[{"text":"${supplierFilter}","value":"${supplierFilter}"}]},{"logic":"or","filters":[{"field":"sku","operator":"contains","value":"${keyword}"},{"field":"productName","operator":"contains","value":"${keyword}"},{"field":"category","operator":"contains","value":"${keyword}"},{"field":"supplier","operator":"contains","value":"${keyword}"},{"field":"supplierSku","operator":"contains","value":"${keyword}"},{"field":"asin","operator":"contains","value":"${keyword}"}]},{"logic":"and","filters":[]},{"logic":"and","filters":[{"field":"status","operator":"neq","value":"IGNORE"}]},{"logic":"and","filters":[{"field":"status","operator":"neq","value":"INACTIVE"}]}]}`);
+});
+
+Then(`User sets GET api method to get all items in Item List by filter function with flag, status:`, async function (dataTable: DataTable) {
+    const { supplierFilter, flag, status, logic } = dataTable.hashes()[0];
+    this.flag = flag
+    this.status = status
+    link = encodeURI(`${Links.API_GET_RESTOCK_SUGGESTION}?offset=0&limit=50&where={"logic":"and","filters":[{"logic":"${logic}","filters":[{"filters":[{"field":"flag", "operator":"eq", "value":"${flag}"}],"logic":"or"},{"filters":[{"field":"status", "operator":"eq", "value":"${status}"}],"logic":"or"}],"currentSupplierFilters":[{"text":"${supplierFilter}","value":"${supplierFilter}"}]},{"logic":"and","filters":[]}]}`);
 });
 
 Then(`User sends a GET api method to get all items in Item List`, async function () {
@@ -335,7 +342,7 @@ Then(`User sends a GET api method to get all items in Item List`, async function
     }
 });
 
-Then(`User checks the system display the correct item list with keyword`, async function(){
+Then(`User checks the system display the correct item list with keyword`, async function () {
     this.restockSuggestionResponseBody.forEach((item: any) => {
         this.attach(`keyword:` + this.keyword)
         this.attach(`sku:` + item.sku)
@@ -346,5 +353,19 @@ Then(`User checks the system display the correct item list with keyword`, async 
         this.attach(`asin:` + item.asin)
         this.attach(`---------`)
         expect(item.sku?.toLowerCase().includes(this.keyword.toLowerCase()) || item.productName?.toLowerCase().includes(this.keyword.toLowerCase()) || item.category?.toLowerCase().includes(this.keyword.toLowerCase()) || item.supplier?.toLowerCase().includes(this.keyword.toLowerCase()) || item.supplierSku?.toLowerCase().includes(this.keyword.toLowerCase()) || item.asin?.toLowerCase().includes(this.keyword.toLowerCase())).toBeTruthy()
+    });
+})
+
+Then(`User checks the system display the correct item list by filter function with flag {} status`, async function (logic: string) {
+    this.restockSuggestionResponseBody.forEach((item: any) => {
+        this.attach(`Item name:` + item.forecastconstant.itemName)
+        this.attach(`flag:` + item.flag)
+        this.attach(`status:` + item.status)
+        this.attach(`---------`)
+        if (logic == 'and') {
+            expect(item.flag === this.flag && item.status === this.status).toBeTruthy()
+        } else if (logic == 'or') {
+            expect(item.flag === this.flag || item.status === this.status).toBeTruthy()
+        }
     });
 })
