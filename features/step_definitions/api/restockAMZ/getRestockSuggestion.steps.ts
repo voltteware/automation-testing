@@ -309,3 +309,42 @@ Then('{} checks isHidden is true or false', async function (actor: string) {
     }
     expect(this.getItemByItemKeyResponseBody.isHidden).toBe(true);
 });
+
+Then(`User sets GET api method to get all items in Item List with search function:`, async function (dataTable: DataTable) {
+    const {supplierFilter, keyword} = dataTable.hashes()[0];
+    this.keyword = keyword
+    link = encodeURI(`${Links.API_GET_RESTOCK_SUGGESTION}?offset=0&limit=50&where={"logic":"and","filters":[{"logic":"or","filters":[{"filters":[],"logic":"or"},{"filters":[],"logic":"or"}],"currentSupplierFilters":[{"text":"${supplierFilter}","value":"${supplierFilter}"}]},{"logic":"or","filters":[{"field":"sku","operator":"contains","value":"${keyword}"},{"field":"productName","operator":"contains","value":"${keyword}"},{"field":"category","operator":"contains","value":"${keyword}"},{"field":"supplier","operator":"contains","value":"${keyword}"},{"field":"supplierSku","operator":"contains","value":"${keyword}"},{"field":"asin","operator":"contains","value":"${keyword}"}]},{"logic":"and","filters":[]},{"logic":"and","filters":[{"field":"status","operator":"neq","value":"IGNORE"}]},{"logic":"and","filters":[{"field":"status","operator":"neq","value":"INACTIVE"}]}]}`);
+});
+
+Then(`User sends a GET api method to get all items in Item List`, async function () {
+    const options = {
+        headers: this.headers
+    }
+    this.restockSuggestionResponse = this.response = await restockSuggestion.getRestockSuggestion(this.request, link, options);
+    const responseBodyText = await this.restockSuggestionResponse.text();
+    if (this.restockSuggestionResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
+        this.restockSuggestionResponseBody = JSON.parse(await this.restockSuggestionResponse.text());
+        this.responseOfAItem = await this.restockSuggestionResponseBody[Math.floor(Math.random() * this.restockSuggestionResponseBody.length)];
+        logger.log('info', `Response GET ${link}: ` + JSON.stringify(this.restockSuggestionResponseBody, undefined, 4));
+        this.attach(`Response GET ${link}: ` + JSON.stringify(this.restockSuggestionResponseBody, undefined, 4))
+    }
+    else {
+        const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
+        logger.log('info', `Response ${link} has status code ${this.restockSuggestionResponse.status()} ${this.restockSuggestionResponse.statusText()} and response body ${responseBodyText}`);
+        this.attach(`Response ${link} has status code ${this.restockSuggestionResponse.status()} ${this.restockSuggestionResponse.statusText()} and response body ${actualResponseText}`)
+    }
+});
+
+Then(`User checks the system display the correct item list with keyword`, async function(){
+    this.restockSuggestionResponseBody.forEach((item: any) => {
+        this.attach(`keyword:` + this.keyword)
+        this.attach(`sku:` + item.sku)
+        this.attach(`productName:` + item.productName)
+        this.attach(`category:` + item.category)
+        this.attach(`supplier:` + item.supplier)
+        this.attach(`supplierSku:` + item.supplierSku)
+        this.attach(`asin:` + item.asin)
+        this.attach(`---------`)
+        expect(item.sku?.toLowerCase().includes(this.keyword.toLowerCase()) || item.productName?.toLowerCase().includes(this.keyword.toLowerCase()) || item.category?.toLowerCase().includes(this.keyword.toLowerCase()) || item.supplier?.toLowerCase().includes(this.keyword.toLowerCase()) || item.supplierSku?.toLowerCase().includes(this.keyword.toLowerCase()) || item.asin?.toLowerCase().includes(this.keyword.toLowerCase())).toBeTruthy()
+    });
+})
