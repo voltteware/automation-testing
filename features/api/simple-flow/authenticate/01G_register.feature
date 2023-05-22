@@ -10,8 +10,8 @@ Feature: API /register
 		And Response of Login and Register API must match with API contract
 		And UserId <email> in the response of API is correct
 		Given user sends a POST login request to get valid cookie with role
-			| role  | username           | password  |
-			| admin | may27pre@gmail.com | Test1111# |
+			| role  | username               | password  |
+			| admin | testregister@gmail.com | Test1111# |
 		And In Header of the request, she sets param Cookie as valid connect.sid
 		When User sends a DELETE method to delete user <email>
 		Then The expected status code should be 200

@@ -2,8 +2,8 @@
 Feature: API_Dashboard GET /api/grid-view/bom
     Background: Send GET /realm request to get all company keys of current logged in user before each test
         Given user sends a POST login request to get valid cookie with role
-            | role  | username                   | password  |
-            | admin | testautoforecast@gmail.com | Test1111# |
+            | role  | username             | password  |
+            | admin | testgetbom@gmail.com | Test1111# |
         And User sets GET api endpoint to get companies information of current user
         And In Header of the request, she sets param Cookie as valid connect.sid
         When User sends a GET request to get companies
@@ -20,8 +20,8 @@ Feature: API_Dashboard GET /api/grid-view/bom
         And User checks API contract essential types in grid view object are correct
         And User checks values in response of get grid view bom are correct
         Examples:
-            | user  | email                      | password  | expectedStatus |
-            | admin | testautoforecast@gmail.com | Test1111# | 200            |
+            | user  | email                | password  | expectedStatus |
+            | admin | testgetbom@gmail.com | Test1111# | 200            |
 
     @TC_GVB002
     Scenario Outline: TC_GVB002 - Verify user <email> could call this API to get grid view bom by using company key and ASC company type
@@ -35,8 +35,8 @@ Feature: API_Dashboard GET /api/grid-view/bom
         And User checks API contract essential types in grid view object are correct
         And User checks values in response of get grid view bom are correct
         Examples:
-            | user  | email                      | password  | expectedStatus |
-            | admin | testautoforecast@gmail.com | Test1111# | 200            |
+            | user  | email                | password  | expectedStatus |
+            | admin | testgetbom@gmail.com | Test1111# | 200            |
 
     # Bug TC_GVB003_1 and TC_GVB003_2, return status code 200 when cookie invalid.
     @TC_GVB003 @bug-permission @low-bug-skip
@@ -48,11 +48,11 @@ Feature: API_Dashboard GET /api/grid-view/bom
         Then The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
         Examples:
-            | scenario    | email                      | companyKey | cookie  | companyKeyHeader | companyTypeHeader | expectedStatus | expectedStatusText    |
-            | TC_GVB003_1 | testautoforecast@gmail.com | random     | invalid | invalid          | invalid           | 401            | Unauthorized          |
-            | TC_GVB003_2 | testautoforecast@gmail.com | random     | invalid | valid            | valid             | 401            | Unauthorized          |
-            | TC_GVB003_3 | testautoforecast@gmail.com | random     | valid   | invalid          | invalid           | 400            | Company not found.    |
-            | TC_GVB003_4 | testautoforecast@gmail.com | random     | valid   |                  |                   | 500            | Internal Server Error |
+            | scenario    | email                | companyKey | cookie  | companyKeyHeader | companyTypeHeader | expectedStatus | expectedStatusText    |
+            | TC_GVB003_1 | testgetbom@gmail.com | random     | invalid | invalid          | invalid           | 401            | Unauthorized          |
+            | TC_GVB003_2 | testgetbom@gmail.com | random     | invalid | valid            | valid             | 401            | Unauthorized          |
+            | TC_GVB003_3 | testgetbom@gmail.com | random     | valid   | invalid          | invalid           | 400            | Company not found.    |
+            | TC_GVB003_4 | testgetbom@gmail.com | random     | valid   |                  |                   | 500            | Internal Server Error |
 
     @TC_GVB004
     Scenario Outline: TC_GVB004 - Verify user <userA> could not call this API to get grid view in the bom of company which does not belongs to her
@@ -65,8 +65,8 @@ Feature: API_Dashboard GET /api/grid-view/bom
         Then The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
         Examples:
-            | userA               | userB                      | password  | companyKey | expectedStatus | expectedStatusText |
-            | may27user@gmail.com | testautoforecast@gmail.com | Test1111# | random     | 400            | Company not found. |
+            | userA               | userB                | password  | companyKey | expectedStatus | expectedStatusText |
+            | may27user@gmail.com | testgetbom@gmail.com | Test1111# | random     | 400            | Company not found. |
 
     #Bug @TC_GVB005, return status code 200 when call this API for company QBFS.
     @TC_GVB005 @bug1684 @low-bug-skip
@@ -76,5 +76,5 @@ Feature: API_Dashboard GET /api/grid-view/bom
         Then The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
         Examples:
-            | user  | email                      | password  | expectedStatus | expectedStatusText |
-            | admin | testautoforecast@gmail.com | Test1111# | 400            | Bad request        |
+            | user  | email                | password  | expectedStatus | expectedStatusText |
+            | admin | testgetbom@gmail.com | Test1111# | 400            | Bad request        |

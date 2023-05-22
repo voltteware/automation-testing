@@ -66,7 +66,7 @@ Then('{} checks values in response of random demand are correct', async function
 
 Then('{} checks {} demand exist in the system, if it does not exist will create new demand', async function (actor, demandQtyKeyword: string) {
     var numberofDemand;
-    randomItem = this.getDemandResponseBody[Math.floor(Math.random() * this.getDemandResponseBody.length)];
+    randomItem = this.getItemsResponseBody[Math.floor(Math.random() * this.getItemsResponseBody.length)];
     if (demandQtyKeyword != 'any') {
         numberofDemand = await this.getDemandResponseBody.filter((qty: any) => qty.orderQty.includes(demandQtyKeyword)).length;
     }

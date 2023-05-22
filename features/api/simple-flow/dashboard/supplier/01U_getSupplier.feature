@@ -2,8 +2,8 @@
 Feature: API_Dashboard GET /api/vendor
     Background: Send GET /realm request to get all company keys of current logged in user before each test
         Given user sends a POST login request to get valid cookie with role
-            | role  | username                   | password  |
-            | admin | testautoforecast@gmail.com | Test1111# |
+            | role  | username                     | password  |
+            | admin | testcreatesupplier@gmail.com | Test1111# |
         And User sets GET api endpoint to get companies information of current user
         And In Header of the request, she sets param Cookie as valid connect.sid
         When User sends a GET request to get companies
@@ -21,8 +21,8 @@ Feature: API_Dashboard GET /api/vendor
         And User checks API contract essential types in supplier object are correct
         And User checks values in response of random supplier are correct
         Examples:
-            | user  | email                      | password  | companyKey | expectedStatus | limitRow |
-            | admin | testautoforecast@gmail.com | Test1111# | random     | 200            | 10       |
+            | user  | email                        | password  | companyKey | expectedStatus | limitRow |
+            | admin | testcreatesupplier@gmail.com | Test1111# | random     | 200            | 10       |
 
     #Bug TC_GV002_1 and TC_GV002_2, return status code 200 when cookie invalid.
     @TC_GV002 @bug-permission @low-bug-skip
@@ -34,11 +34,11 @@ Feature: API_Dashboard GET /api/vendor
         Then The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
         Examples:
-            | scenario   | email                      | companyKey | cookie  | companyKeyHeader | companyTypeHeader | expectedStatus | expectedStatusText    |
-            | TC_GV002_1 | testautoforecast@gmail.com | random     | invalid | invalid          | invalid           | 401            | Unauthorized          |
-            | TC_GV002_2 | testautoforecast@gmail.com | random     | invalid | valid            | valid             | 401            | Unauthorized          |
-            | TC_GV002_3 | testautoforecast@gmail.com | random     | valid   | invalid          | invalid           | 400            | Company not found.    |
-            | TC_GV002_4 | testautoforecast@gmail.com | random     | valid   |                  |                   | 500            | Internal Server Error |
+            | scenario   | email                        | companyKey | cookie  | companyKeyHeader | companyTypeHeader | expectedStatus | expectedStatusText    |
+            | TC_GV002_1 | testcreatesupplier@gmail.com | random     | invalid | invalid          | invalid           | 401            | Unauthorized          |
+            | TC_GV002_2 | testcreatesupplier@gmail.com | random     | invalid | valid            | valid             | 401            | Unauthorized          |
+            | TC_GV002_3 | testcreatesupplier@gmail.com | random     | valid   | invalid          | invalid           | 400            | Company not found.    |
+            | TC_GV002_4 | testcreatesupplier@gmail.com | random     | valid   |                  |                   | 500            | Internal Server Error |
 
     @TC_GV003
     Scenario Outline: TC_GV003 - Verify user <userA> could not call this API to get Supplier of company which does not belongs to her
@@ -63,8 +63,8 @@ Feature: API_Dashboard GET /api/vendor
         And Check total items in the response should be less than or equal <limitRow>
         And Check items in the response should be sort by field <sortField> with direction <direction>
         Examples:
-            | TC_ID      | user  | email                      | password  | limitRow | sortField | direction | companyKey | expectedStatus |
-            | TC_GV004_1 | admin | testautoforecast@gmail.com | Test1111# | 10       | name      | asc       | random     | 200            |
-            | TC_GV004_2 | admin | testautoforecast@gmail.com | Test1111# | 10       | name      | desc      | random     | 200            |
-            | TC_GV004_3 | admin | testautoforecast@gmail.com | Test1111# | 10       | leadTime  | asc       | random     | 200            |
-            | TC_GV004_4 | admin | testautoforecast@gmail.com | Test1111# | 10       | leadTime  | desc      | random     | 200            |
+            | TC_ID      | user  | email                        | password  | limitRow | sortField | direction | companyKey | expectedStatus |
+            | TC_GV004_1 | admin | testcreatesupplier@gmail.com | Test1111# | 10       | name      | asc       | random     | 200            |
+            | TC_GV004_2 | admin | testcreatesupplier@gmail.com | Test1111# | 10       | name      | desc      | random     | 200            |
+            | TC_GV004_3 | admin | testcreatesupplier@gmail.com | Test1111# | 10       | leadTime  | asc       | random     | 200            |
+            | TC_GV004_4 | admin | testcreatesupplier@gmail.com | Test1111# | 10       | leadTime  | desc      | random     | 200            |
