@@ -2,8 +2,8 @@
 Feature: API_Dashboard POST /api/bom
     Background: Send GET /realm request to get all company keys of current logged in user before each test
         Given user sends a POST login request to get valid cookie with role
-            | role  | username                   | password  |
-            | admin | testautoforecast@gmail.com | Test1111# |
+            | role  | username                | password  |
+            | admin | testcreatebom@gmail.com | Test1111# |
         And User sets GET api endpoint to get companies information of current user
         And In Header of the request, she sets param Cookie as valid connect.sid
         When User sends a GET request to get companies
@@ -24,9 +24,9 @@ Feature: API_Dashboard POST /api/bom
         And User checks values in response of create bom are correct
 
         Examples:
-            | TC_ID    | companyType | email                      | limitRow | parentName | parentKey | childName | childKey | qty    | expectedStatus |
-            | TC_CB001 | CSV         | testautoforecast@gmail.com | 50       | random     | random    | random    | random   | random | 200            |
-            | TC_CB002 | ASC         | testautoforecast@gmail.com | 50       | random     | random    | random    | random   | random | 200            |
+            | TC_ID    | companyType | email                   | limitRow | parentName | parentKey | childName | childKey | qty    | expectedStatus |
+            | TC_CB001 | CSV         | testcreatebom@gmail.com | 50       | random     | random    | random    | random   | random | 200            |
+            | TC_CB002 | ASC         | testcreatebom@gmail.com | 50       | random     | random    | random    | random   | random | 200            |
 
     #TC_CB003_1, TC_CB003_2 fail due to bug api
     @TC_CB003 @low-bug-skip
@@ -44,11 +44,11 @@ Feature: API_Dashboard POST /api/bom
         Then The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
         Examples:
-            | TC_ID      | companyType | email                      | limitRow | cookie  | companyKeyHeader | companyTypeHeader | parentName | parentKey | childName | childKey | qty    | expectedStatus | expectedStatusText    |
-            | TC_CB003_1 | CSV         | testautoforecast@gmail.com | 30       | invalid | invalid          | invalid           | random     | random    | random    | random   | random | 401            | Unauthorized          |
-            | TC_CB003_2 | ASC         | testautoforecast@gmail.com | 30       | invalid | valid            | valid             | random     | random    | random    | random   | random | 401            | Unauthorized          |
-            | TC_CB003_3 | CSV         | testautoforecast@gmail.com | 30       | valid   | invalid          | invalid           | random     | random    | random    | random   | random | 400            | Company not found.    |
-            | TC_CB003_4 | ASC         | testautoforecast@gmail.com | 30       | valid   |                  |                   | random     | random    | random    | random   | random | 500            | Internal Server Error |
+            | TC_ID      | companyType | email                   | limitRow | cookie  | companyKeyHeader | companyTypeHeader | parentName | parentKey | childName | childKey | qty    | expectedStatus | expectedStatusText    |
+            | TC_CB003_1 | CSV         | testcreatebom@gmail.com | 30       | invalid | invalid          | invalid           | random     | random    | random    | random   | random | 401            | Unauthorized          |
+            | TC_CB003_2 | ASC         | testcreatebom@gmail.com | 30       | invalid | valid            | valid             | random     | random    | random    | random   | random | 401            | Unauthorized          |
+            | TC_CB003_3 | CSV         | testcreatebom@gmail.com | 30       | valid   | invalid          | invalid           | random     | random    | random    | random   | random | 400            | Company not found.    |
+            | TC_CB003_4 | ASC         | testcreatebom@gmail.com | 30       | valid   |                  |                   | random     | random    | random    | random   | random | 500            | Internal Server Error |
 
     @TC_CB004
     Scenario Outline: TC_CB004 - Verify error when the item is a parent can't is a child
@@ -65,8 +65,8 @@ Feature: API_Dashboard POST /api/bom
         And The status text is "<expectedStatusText>"
 
         Examples:
-            | email                      | limitRow | parentName | parentKey | childName | childKey | qty    | expectedStatus | expectedStatusText                        |
-            | testautoforecast@gmail.com | 50       | childName  | childKey  | random    | random   | random | 400            | Inserting would create a multi-level Kit. |
+            | email                   | limitRow | parentName | parentKey | childName | childKey | qty    | expectedStatus | expectedStatusText                        |
+            | testcreatebom@gmail.com | 50       | childName  | childKey  | random    | random   | random | 400            | Inserting would create a multi-level Kit. |
 
     @TC_CB005
     Scenario Outline: TC_CB005 - Verify error when the item is a child can't is a parent
@@ -83,8 +83,8 @@ Feature: API_Dashboard POST /api/bom
         And The status text is "<expectedStatusText>"
 
         Examples:
-            | email                      | limitRow | parentName | parentKey | childName  | childKey  | qty    | expectedStatus | expectedStatusText                        |
-            | testautoforecast@gmail.com | 50       | random     | random    | parentName | parentKey | random | 400            | Inserting would create a multi-level Kit. |
+            | email                   | limitRow | parentName | parentKey | childName  | childKey  | qty    | expectedStatus | expectedStatusText                        |
+            | testcreatebom@gmail.com | 50       | random     | random    | parentName | parentKey | random | 400            | Inserting would create a multi-level Kit. |
 
     @TC_CB006
     Scenario Outline: TC_CB006 - Verify user <userA> could not call this API to create bom of company which does not belongs to her
@@ -102,8 +102,8 @@ Feature: API_Dashboard POST /api/bom
         Then The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
         Examples:
-            | userA               | userB                      | password  | limitRow | parentName | parentKey | childName | childKey | qty    | expectedStatus | expectedStatusText |
-            | may27user@gmail.com | testautoforecast@gmail.com | Test1111# | 50       | random     | random    | random    | random   | random | 400            | Company not found. |
+            | userA               | userB                   | password  | limitRow | parentName | parentKey | childName | childKey | qty    | expectedStatus | expectedStatusText |
+            | may27user@gmail.com | testcreatebom@gmail.com | Test1111# | 50       | random     | random    | random    | random   | random | 400            | Company not found. |
 
     @TC_CB007
     Scenario Outline: TC_CB007 - Verify error bom already exists
@@ -121,8 +121,8 @@ Feature: API_Dashboard POST /api/bom
         And The status text is "<expectedStatusText>"
 
         Examples:
-            | email                      | limitRow | parentName | parentKey | childName | childKey | qty    | expectedStatus | expectedStatusText     |
-            | testautoforecast@gmail.com | 20       | random     | random    | random    | random   | random | 400            | Record already exists. |
+            | email                   | limitRow | parentName | parentKey | childName | childKey | qty    | expectedStatus | expectedStatusText     |
+            | testcreatebom@gmail.com | 20       | random     | random    | random    | random   | random | 400            | Record already exists. |
 
     @TC_CB008
     Scenario Outline: TC_CB008 - Verify error when user input is missing one required field
@@ -139,8 +139,8 @@ Feature: API_Dashboard POST /api/bom
         And The status text is "<expectedStatusText>"
 
         Examples:
-            | email                      | limitRow | parentName | parentKey | childName | childKey | qty    | expectedStatus | expectedStatusText         |
-            | testautoforecast@gmail.com | 20       |            |           | random    | random   | random | 400            | Missing required property. |
+            | email                   | limitRow | parentName | parentKey | childName | childKey | qty    | expectedStatus | expectedStatusText         |
+            | testcreatebom@gmail.com | 20       |            |           | random    | random   | random | 400            | Missing required property. |
 
     #Bug TC_CB009,TC_CB010 return status code 200 when call this API for company has type QBFS and QBO. Bug ID: 1710
     @TC_CB009 @TC_CB010 @low-bug-skip
@@ -157,6 +157,6 @@ Feature: API_Dashboard POST /api/bom
         Then The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
         Examples:
-            | TC_ID    | companyType | email                      | limitRow | parentName | parentKey | childName | childKey | qty    | expectedStatus | expectedStatusText |
-            | TC_CB009 | QBFS        | testautoforecast@gmail.com | 30       | random     | random    | random    | random   | random | 400            | Bad Request        |
-            | TC_CB010 | QBO         | testautoforecast@gmail.com | 30       | random     | random    | random    | random   | random | 400            | Bad Request        |
+            | TC_ID    | companyType | email                   | limitRow | parentName | parentKey | childName | childKey | qty    | expectedStatus | expectedStatusText |
+            | TC_CB009 | QBFS        | testcreatebom@gmail.com | 30       | random     | random    | random    | random   | random | 400            | Bad Request        |
+            # | TC_CB010 | QBO         | testcreatebom@gmail.com | 30       | random     | random    | random    | random   | random | 400            | Bad Request        |

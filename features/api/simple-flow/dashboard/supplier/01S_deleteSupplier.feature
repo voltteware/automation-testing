@@ -2,14 +2,14 @@
 Feature: API_SUPPLIER DELETE /api/vendor
     Background: Send GET request to get suppliers of random company
         Given user sends a POST login request to get valid cookie with role
-            | role  | username                   | password  |
-            | admin | testautoforecast@gmail.com | Test1111# |
+            | role  | username                     | password  |
+            | admin | testdeletesupplier@gmail.com | Test1111# |
         And User sets GET api endpoint to get companies information of current user
         And In Header of the request, she sets param Cookie as valid connect.sid
         When User sends a GET request to get companies
         Then User picks random company which has onboarded in above response
-        And User sets GET api endpoint to get information of a company belongs to testautoforecast@gmail.com using company key random
-        And User sets valid cookie of testautoforecast@gmail.com and valid companyKey and valid companyType in the header
+        And User sets GET api endpoint to get information of a company belongs to testdeletesupplier@gmail.com using company key random
+        And User sets valid cookie of testdeletesupplier@gmail.com and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get suppliers keys
         When User sends a GET request to get list suppliers
         Then user checks Auto supplier exist in the system, if it does not exist will create new supplier
@@ -28,8 +28,8 @@ Feature: API_SUPPLIER DELETE /api/vendor
         And User search the deleted suppliers and checks that there is no supplier found
 
         Examples:
-            | numberOfSuppliers | supplierNameKeyword | expectedStatus | expectedStatusText | email                      |
-            | 3                 | Auto                | 200            | OK                 | testautoforecast@gmail.com |
+            | numberOfSuppliers | supplierNameKeyword | expectedStatus | expectedStatusText | email                        |
+            | 3                 | Auto                | 200            | OK                 | testdeletesupplier@gmail.com |
 
     #Bug API in case TC_DV002_1, TC_DV002_2
     @TC_DV002 @bug-permission @low-bug-skip
@@ -41,11 +41,11 @@ Feature: API_SUPPLIER DELETE /api/vendor
         And The status text is "<expectedStatusText>"
 
         Examples:
-            | TC_ID      | email                      | numberOfSuppliers | supplierNameKeyword | cookie  | companyKeyHeader | companyTypeHeader | expectedStatus | expectedStatusText    |
-            | TC_DV002_1 | testautoforecast@gmail.com | 1                 | Auto                | invalid | invalid          | invalid           | 401            | Unauthorized          |
-            | TC_DV002_2 | testautoforecast@gmail.com | 1                 | Auto                | invalid | valid            | valid             | 401            | Unauthorized          |
-            | TC_DV002_3 | testautoforecast@gmail.com | 1                 | Auto                | valid   | invalid          | invalid           | 400            | Company not found.    |
-            | TC_DV002_4 | testautoforecast@gmail.com | 1                 | Auto                | valid   |                  |                   | 500            | Internal Server Error |
+            | TC_ID      | email                        | numberOfSuppliers | supplierNameKeyword | cookie  | companyKeyHeader | companyTypeHeader | expectedStatus | expectedStatusText    |
+            | TC_DV002_1 | testdeletesupplier@gmail.com | 1                 | Auto                | invalid | invalid          | invalid           | 401            | Unauthorized          |
+            | TC_DV002_2 | testdeletesupplier@gmail.com | 1                 | Auto                | invalid | valid            | valid             | 401            | Unauthorized          |
+            | TC_DV002_3 | testdeletesupplier@gmail.com | 1                 | Auto                | valid   | invalid          | invalid           | 400            | Company not found.    |
+            | TC_DV002_4 | testdeletesupplier@gmail.com | 1                 | Auto                | valid   |                  |                   | 500            | Internal Server Error |
 
     @TC_DV003
     Scenario Outline: TC_DV003 - Verify <userA> can't call this API to delete supplier not belongs to her company

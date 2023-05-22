@@ -2,8 +2,8 @@
 Feature: API_Dashboard GET /api/grid-view/supply
     Background: Send GET /realm request to get all company keys of current logged in user before each test
         Given user sends a POST login request to get valid cookie with role
-            | role  | username                   | password  |
-            | admin | testautoforecast@gmail.com | Test1111# |
+            | role  | username                | password  |
+            | admin | testgetsupply@gmail.com | Test1111# |
         And User sets GET api endpoint to get companies information of current user
         And In Header of the request, she sets param Cookie as valid connect.sid
         When User sends a GET request to get companies
@@ -21,8 +21,8 @@ Feature: API_Dashboard GET /api/grid-view/supply
         And User checks API contract essential types in grid view object are correct
         And User checks values in response of get grid view supply are correct
         Examples:
-            | user  | email                      | password  | companyKey | expectedStatus |
-            | admin | testautoforecast@gmail.com | Test1111# | random     | 200            |
+            | user  | email                   | password  | companyKey | expectedStatus |
+            | admin | testgetsupply@gmail.com | Test1111# | random     | 200            |
 
     # Bug TC_GVSL002_1 and TC_GVSL002_2, return status code 200 when cookie invalid.
     @TC_GVSL002 @bug-permission @low-bug-skip
@@ -33,11 +33,11 @@ Feature: API_Dashboard GET /api/grid-view/supply
         Then The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
         Examples:
-            | scenario     | email                      | companyKey | cookie  | companyKeyHeader | companyTypeHeader | expectedStatus | expectedStatusText    |
-            | TC_GVSL002_1 | testautoforecast@gmail.com | random     | invalid | invalid          | invalid           | 401            | Unauthorized          |
-            | TC_GVSL002_2 | testautoforecast@gmail.com | random     | invalid | valid            | valid             | 401            | Unauthorized          |
-            | TC_GVSL002_3 | testautoforecast@gmail.com | random     | valid   | invalid          | invalid           | 400            | Company not found.    |
-            | TC_GVSL002_4 | testautoforecast@gmail.com | random     | valid   |                  |                   | 500            | Internal Server Error |
+            | scenario     | email                   | companyKey | cookie  | companyKeyHeader | companyTypeHeader | expectedStatus | expectedStatusText    |
+            | TC_GVSL002_1 | testgetsupply@gmail.com | random     | invalid | invalid          | invalid           | 401            | Unauthorized          |
+            | TC_GVSL002_2 | testgetsupply@gmail.com | random     | invalid | valid            | valid             | 401            | Unauthorized          |
+            | TC_GVSL002_3 | testgetsupply@gmail.com | random     | valid   | invalid          | invalid           | 400            | Company not found.    |
+            | TC_GVSL002_4 | testgetsupply@gmail.com | random     | valid   |                  |                   | 500            | Internal Server Error |
 
     @TC_GVSL003
     Scenario Outline: TC_GVSL003 - Verify user <userA> could not call this API to get grid view in the supply of company which does not belongs to her
@@ -49,5 +49,5 @@ Feature: API_Dashboard GET /api/grid-view/supply
         Then The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
         Examples:
-            | userA               | userB                      | password  | companyKey | expectedStatus | expectedStatusText |
-            | may27user@gmail.com | testautoforecast@gmail.com | Test1111# | random     | 400            | Company not found. |
+            | userA               | userB                   | password  | companyKey | expectedStatus | expectedStatusText |
+            | may27user@gmail.com | testgetsupply@gmail.com | Test1111# | random     | 400            | Company not found. |

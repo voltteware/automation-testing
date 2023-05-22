@@ -2,8 +2,8 @@
 Feature: API_Dashboard POST /api/item
     Background: Send GET /realm request to get all company keys of current logged in user before each test
         Given user sends a POST login request to get valid cookie with role
-            | role  | username                   | password  |
-            | admin | testautoforecast@gmail.com | Test1111# |
+            | role  | username                 | password  |
+            | admin | testcreateitem@gmail.com | Test1111# |
         And User sets GET api endpoint to get companies information of current user
         And In Header of the request, she sets param Cookie as valid connect.sid
         When User sends a GET request to get companies
@@ -26,10 +26,10 @@ Feature: API_Dashboard POST /api/item
         # Hide item after created
         And User sets PUT api endpoint to edit isHidden of the above item for company type <companyType> with new value: true
         When User sends a PUT request to edit the item
-        
+
         Examples:
-            | companyType | email                      | limitRow | itemName      | description     | vendorName | vendorPrice | moq    | leadTime | orderInterval | serviceLevel | onHand | onHandMin | onHandThirdParty | onHandThirdPartyMin | lotMultipleQty | lotMultipleItemName | vendorKey | lotMultipleItemKey | expectedStatus |
-            | CSV         | testautoforecast@gmail.com | 10       | New Item Auto | New description | random     | random      | random | random   | random        | random       | random | random    | random           | random              | random         | random              | random    | random             | 200            |
+            | companyType | email                    | limitRow | itemName      | description     | vendorName | vendorPrice | moq    | leadTime | orderInterval | serviceLevel | onHand | onHandMin | onHandThirdParty | onHandThirdPartyMin | lotMultipleQty | lotMultipleItemName | vendorKey | lotMultipleItemKey | expectedStatus |
+            | CSV         | testcreateitem@gmail.com | 10       | New Item Auto | New description | random     | random      | random | random   | random        | random       | random | random    | random           | random              | random         | random              | random    | random             | 200            |
 
     @TC_CI002
     Scenario Outline: TC_CI002 - Verify user <email> could call this API to create item for company has type <companyType> with only input required field
@@ -45,8 +45,8 @@ Feature: API_Dashboard POST /api/item
         And User sets PUT api endpoint to edit isHidden of the above item for company type <companyType> with new value: true
         When User sends a PUT request to edit the item
         Examples:
-            | companyType | email                      | itemName      | asin   | fnsku  | expectedStatus |
-            | CSV         | testautoforecast@gmail.com | New Item Auto | random | random | 200            |
+            | companyType | email                    | itemName      | asin   | fnsku  | expectedStatus |
+            | CSV         | testcreateitem@gmail.com | New Item Auto | random | random | 200            |
 
     @TC_CI003 @smoke-test-api @asc
     Scenario Outline: TC_CI003 - Verify user <email> could call this API to create item for company has type <companyType> with input all data valid
@@ -67,8 +67,8 @@ Feature: API_Dashboard POST /api/item
         And User sets PUT api endpoint to edit isHidden of the above item for company type <companyType> with new value: true
         When User sends a PUT request to edit the item
         Examples:
-            | companyType | email                      | limitRow | itemName      | description     | vendorName | vendorPrice | moq    | leadTime | orderInterval | serviceLevel | onHand | onHandMin | onHandThirdParty | onHandThirdPartyMin | lotMultipleQty | lotMultipleItemName | asin   | fnsku  | skuNotes | prepNotes | supplierRebate | inboundShippingCost | reshippingCost | repackagingMaterialCost | repackingLaborCost | rank   | inventorySourcePreference | average7DayPrice | isFbm  | vendorKey | lotMultipleItemKey | expectedStatus |
-            | ASC         | testautoforecast@gmail.com | 10       | New Item Auto | New description | random     | random      | random | random   | random        | random       | random | random    | random           | random              | random         | random              | random | random | random   | random    | random         | random              | random         | random                  | random             | random | FBA + FBM                 | random           | random | random    | random             | 200            |
+            | companyType | email                    | limitRow | itemName      | description     | vendorName | vendorPrice | moq    | leadTime | orderInterval | serviceLevel | onHand | onHandMin | onHandThirdParty | onHandThirdPartyMin | lotMultipleQty | lotMultipleItemName | asin   | fnsku  | skuNotes | prepNotes | supplierRebate | inboundShippingCost | reshippingCost | repackagingMaterialCost | repackingLaborCost | rank   | inventorySourcePreference | average7DayPrice | isFbm  | vendorKey | lotMultipleItemKey | expectedStatus |
+            | ASC         | testcreateitem@gmail.com | 10       | New Item Auto | New description | random     | random      | random | random   | random        | random       | random | random    | random           | random              | random         | random              | random | random | random   | random    | random         | random              | random         | random                  | random             | random | FBA + FBM                 | random           | random | random    | random             | 200            |
 
     @TC_CI004
     Scenario Outline: TC_CI004 - Verify user <email> could call this API to create item for company has type <companyType> with only input required field
@@ -84,8 +84,8 @@ Feature: API_Dashboard POST /api/item
         And User sets PUT api endpoint to edit isHidden of the above item for company type <companyType> with new value: true
         When User sends a PUT request to edit the item
         Examples:
-            | companyType | email                      | itemName      | asin   | fnsku  | expectedStatus |
-            | ASC         | testautoforecast@gmail.com | New Item Auto | random | random | 200            |
+            | companyType | email                    | itemName      | asin   | fnsku  | expectedStatus |
+            | ASC         | testcreateitem@gmail.com | New Item Auto | random | random | 200            |
 
     #TC_CI005_1, TC_CI005_2 fail due to bug api
     @TC_CI005 @bug-permission @low-bug-skip
@@ -99,11 +99,11 @@ Feature: API_Dashboard POST /api/item
         Then The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
         Examples:
-            | scenario   | email                      | cookie  | companyKeyHeader | companyTypeHeader | itemName      | description     | vendorPrice | moq    | leadTime | orderInterval | serviceLevel | onHand | onHandMin | onHandThirdParty | onHandThirdPartyMin | lotMultipleQty | lotMultipleItemName | lotMultipleItemKey | expectedStatus | expectedStatusText    |
-            | TC_CI005_1 | testautoforecast@gmail.com | invalid | invalid          | invalid           | New Item Auto | New description | random      | random | random   | random        | random       | random | random    | random           | random              | random         | random              | random             | 401            | Unauthorized          |
-            | TC_CI005_2 | testautoforecast@gmail.com | invalid | valid            | valid             | New Item Auto | New description | random      | random | random   | random        | random       | random | random    | random           | random              | random         | random              | random             | 401            | Unauthorized          |
-            | TC_CI005_3 | testautoforecast@gmail.com | valid   | invalid          | invalid           | New Item Auto | New description | random      | random | random   | random        | random       | random | random    | random           | random              | random         | random              | random             | 400            | Company not found.    |
-            | TC_CI005_4 | testautoforecast@gmail.com | valid   |                  |                   | New Item Auto | New description | random      | random | random   | random        | random       | random | random    | random           | random              | random         | random              | random             | 500            | Internal Server Error |
+            | scenario   | email                    | cookie  | companyKeyHeader | companyTypeHeader | itemName      | description     | vendorPrice | moq    | leadTime | orderInterval | serviceLevel | onHand | onHandMin | onHandThirdParty | onHandThirdPartyMin | lotMultipleQty | lotMultipleItemName | lotMultipleItemKey | expectedStatus | expectedStatusText    |
+            | TC_CI005_1 | testcreateitem@gmail.com | invalid | invalid          | invalid           | New Item Auto | New description | random      | random | random   | random        | random       | random | random    | random           | random              | random         | random              | random             | 401            | Unauthorized          |
+            | TC_CI005_2 | testcreateitem@gmail.com | invalid | valid            | valid             | New Item Auto | New description | random      | random | random   | random        | random       | random | random    | random           | random              | random         | random              | random             | 401            | Unauthorized          |
+            | TC_CI005_3 | testcreateitem@gmail.com | valid   | invalid          | invalid           | New Item Auto | New description | random      | random | random   | random        | random       | random | random    | random           | random              | random         | random              | random             | 400            | Company not found.    |
+            | TC_CI005_4 | testcreateitem@gmail.com | valid   |                  |                   | New Item Auto | New description | random      | random | random   | random        | random       | random | random    | random           | random              | random         | random              | random             | 500            | Internal Server Error |
 
     @TC_CI006
     Scenario Outline: TC_CI006 - Verify user <userA> could not call this API to create item of company which does not belongs to her
@@ -117,8 +117,8 @@ Feature: API_Dashboard POST /api/item
         Then The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
         Examples:
-            | userA               | userB                      | password  | itemName      | description     | vendorPrice | moq    | leadTime | orderInterval | serviceLevel | onHand | onHandMin | onHandThirdParty | onHandThirdPartyMin | lotMultipleQty | expectedStatus | expectedStatusText |
-            | may27user@gmail.com | testautoforecast@gmail.com | Test1111# | New Item Auto | New description | random      | random | random   | random        | random       | random | random    | random           | random              | random         | 400            | Company not found. |
+            | userA               | userB                    | password  | itemName      | description     | vendorPrice | moq    | leadTime | orderInterval | serviceLevel | onHand | onHandMin | onHandThirdParty | onHandThirdPartyMin | lotMultipleQty | expectedStatus | expectedStatusText |
+            | may27user@gmail.com | testcreateitem@gmail.com | Test1111# | New Item Auto | New description | random      | random | random   | random        | random       | random | random    | random           | random              | random         | 400            | Company not found. |
 
     @TC_CI007
     Scenario Outline: TC_CI007 - Verify error FNSKU already exists
@@ -133,8 +133,8 @@ Feature: API_Dashboard POST /api/item
         Then The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
         Examples:
-            | email                      | itemName      | description     | vendorPrice | moq    | leadTime | orderInterval | serviceLevel | onHand | onHandMin | onHandThirdParty | onHandThirdPartyMin | lotMultipleQty | asin   | fnsku  | skuNotes | prepNotes | supplierRebate | inboundShippingCost | reshippingCost | repackagingMaterialCost | repackingLaborCost | rank   | inventorySourcePreference | average7DayPrice | isFbm  | vendorName | vendorKey | expectedStatus | expectedStatusText                      |
-            | testautoforecast@gmail.com | New Item Auto | New description | random      | random | random   | random        | random       | random | random    | random           | random              | random         | random | random | random   | random    | random         | random              | random         | random                  | random             | random | FBA + FBM                 | random           | random | random     | random    | 400            | Item with the same FNSKU already exists |
+            | email                    | itemName      | description     | vendorPrice | moq    | leadTime | orderInterval | serviceLevel | onHand | onHandMin | onHandThirdParty | onHandThirdPartyMin | lotMultipleQty | asin   | fnsku  | skuNotes | prepNotes | supplierRebate | inboundShippingCost | reshippingCost | repackagingMaterialCost | repackingLaborCost | rank   | inventorySourcePreference | average7DayPrice | isFbm  | vendorName | vendorKey | expectedStatus | expectedStatusText                      |
+            | testcreateitem@gmail.com | New Item Auto | New description | random      | random | random   | random        | random       | random | random    | random           | random              | random         | random | random | random   | random    | random         | random              | random         | random                  | random             | random | FBA + FBM                 | random           | random | random     | random    | 400            | Item with the same FNSKU already exists |
 
     @TC_CI008
     Scenario Outline: TC_CI008 - Verify error Item Name and Supplier Name already exists
@@ -151,8 +151,8 @@ Feature: API_Dashboard POST /api/item
         Then The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
         Examples:
-            | email                      | itemName      | description     | vendorPrice | moq    | leadTime | orderInterval | serviceLevel | onHand | onHandMin | onHandThirdParty | onHandThirdPartyMin | lotMultipleQty | lotMultipleItemName | lotMultipleItemKey | vendorName | vendorKey | expectedStatus | expectedStatusText                                                 |
-            | testautoforecast@gmail.com | New Item Auto | New description | random      | random | random   | random        | random       | random | random    | random           | random              | random         | random              | random             | random     | random    | 400            | Item with the same Item Name and same Supplier Name already exists |
+            | email                    | itemName      | description     | vendorPrice | moq    | leadTime | orderInterval | serviceLevel | onHand | onHandMin | onHandThirdParty | onHandThirdPartyMin | lotMultipleQty | lotMultipleItemName | lotMultipleItemKey | vendorName | vendorKey | expectedStatus | expectedStatusText                                                 |
+            | testcreateitem@gmail.com | New Item Auto | New description | random      | random | random   | random        | random       | random | random    | random           | random              | random         | random              | random             | random     | random    | 400            | Item with the same Item Name and same Supplier Name already exists |
 
     #Bug TC_CI009,TC_CI010 return status code 200 when call this API for company has type QBFS and QBO.
     @TC_CI009 @TC_CI010 @low-bug-skip @bug1688
@@ -165,6 +165,6 @@ Feature: API_Dashboard POST /api/item
         Then The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
         Examples:
-            | scenario | companyType | email                      | itemName      | description     | vendorPrice | moq    | leadTime | orderInterval | serviceLevel | onHand | onHandMin | onHandThirdParty | onHandThirdPartyMin | lotMultipleQty | expectedStatus | expectedStatusText |
-            | TC_CI009 | QBFS        | testautoforecast@gmail.com | New Item Auto | New description | random      | random | random   | random        | random       | random | random    | random           | random              | random         | 400            | Bad Request        |
-            | TC_CI010 | QBO         | testautoforecast@gmail.com | New Item Auto | New description | random      | random | random   | random        | random       | random | random    | random           | random              | random         | 400            | Bad Request        |
+            | scenario | companyType | email                    | itemName      | description     | vendorPrice | moq    | leadTime | orderInterval | serviceLevel | onHand | onHandMin | onHandThirdParty | onHandThirdPartyMin | lotMultipleQty | expectedStatus | expectedStatusText |
+            | TC_CI009 | QBFS        | testcreateitem@gmail.com | New Item Auto | New description | random      | random | random   | random        | random       | random | random    | random           | random              | random         | 400            | Bad Request        |
+            # | TC_CI010 | QBO         | testcreateitem@gmail.com | New Item Auto | New description | random      | random | random   | random        | random       | random | random    | random           | random              | random         | 400            | Bad Request        |

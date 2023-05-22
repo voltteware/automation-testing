@@ -2,8 +2,8 @@
 Feature: API_Admin DELETE/User
     Background: Send GET request to get users keys of current logged in user before each test
         Given user sends a POST login request to get valid cookie with role
-            | role  | username           | password  |
-            | admin | may27pre@gmail.com | Test1111# |
+            | role  | username                 | password  |
+            | admin | testdeleteuser@gmail.com | Test1111# |
         And User sets GET api endpoint to get 20 users has just created
         And In Header of the request, user sets param Cookie as valid connect.sid
         When User sends a GET request to get 20 latest users

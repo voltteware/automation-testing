@@ -9,6 +9,6 @@ module.exports = {
     "--publish",
     "--retry 2", // The number of running again when run failed
     "--retry-tag-filter \"@retry\"", // Just run again when scenarios have tag @retry
-    "--parallel 4"
+    "--parallel 6"
   ].join(" "),
 };
