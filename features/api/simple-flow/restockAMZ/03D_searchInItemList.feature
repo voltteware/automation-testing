@@ -13,8 +13,8 @@ Feature: API_Regression User can add SKUs in shipments which have Pending status
         Given User picks company which has onboarded before with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets GET api method to get all items in Item List with search function:
-            | supplierFilter | keyword |
-            | [All Supplier] | B       |
+            | supplierFilter | keyword   |
+            | [All Supplier] | <keyword> |
         And User sends a GET api method to get all items in Item List
         And The status text is "<expectedStatusText>"
         And The expected status code should be <expectedStatus>
@@ -22,5 +22,5 @@ Feature: API_Regression User can add SKUs in shipments which have Pending status
         And User checks the system display the correct item list with keyword
 
         Examples:
-            | TC_ID         | companyType | casePackOption | restockType | editColumn   | value  | email                      | direction | expectedStatus | expectedStatusText | limitRow | shipmentStatus |
-            | TC_ASC_SIL001 | ASC         | No             | SUPPLIER    | supplierName | random | testautoforecast@gmail.com | desc      | 200            | OK                 | 10       | PENDING        |
+            | TC_ID         | companyType | keyword | email                      | expectedStatus | expectedStatusText |
+            | TC_ASC_SIL001 | ASC         | B       | testautoforecast@gmail.com | 200            | OK                 |
