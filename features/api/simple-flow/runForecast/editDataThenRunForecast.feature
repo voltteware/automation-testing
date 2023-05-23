@@ -737,11 +737,7 @@ Feature: APIs Advanced Edit Item History, PUT /api/history-override, Purchase As
         # Update forecastDirty = true => will run forecast
         And User sets PUT api endpoint to edit forecastDirty of the above item for company type <companyType> with new value: true
         And User sends a PUT request to edit the item
-        And The expected status code should be <expectedStatus>
-        # Update forecastDirty = true => will run forecast
-        And User sets PUT api endpoint to edit forecastDirty of the above item for company type <companyType> with new value: true
-        And User sends a PUT request to edit the item
-        And The expected status code should be <expectedStatus>
+        And The expected status code should be <expectedStatus>        
         # Turn ON Override history
         And User sets PUT api endpoint to edit useHistoryOverride of the above item for company type <companyType> with new value: <value>
         And User sends a PUT request to edit the item
