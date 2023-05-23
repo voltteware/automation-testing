@@ -369,8 +369,13 @@ Then(`{} sets api endpoint to edit some values of a item`, async function (actor
     this.attach(`Link edit item: ${link}`);
 
     const rows = dataTable.hashes();
-    const { purchaseAs, isHidden, supplierName, supplierPrice, moq, onHandFbaQty, onHandFbmQty, serviceLevel, warehouseQty, description, leadTime, orderInterval, casePackQty, tags, onHandQtyMin, wareHouseQtyMin, inventorySourcePreference } = rows[0]
+    const { purchaseAs, isHidden, supplierName, supplierPrice, moq, onHandFbaQty, onHandFbmQty, serviceLevel, warehouseQty, description, leadTime, orderInterval, casePackQty, tags, onHandQtyMin, wareHouseQtyMin, inventorySourcePreference, doNotOrder } = rows[0]
     this.payLoad = this.responseBodyOfAItemObject
+    
+    if (doNotOrder === 'false') {
+        this.payLoad.doNotOrder = false
+    }
+
     if (supplierName === 'random') {
         const excludedSupplierKey = this.responseBodyOfAItemObject.vendorKey
 
@@ -868,7 +873,7 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
                     }
                 } else {
                     const excludedItemKey = this.itemKey
-                    // Filter out the excluded item have already set as purchas as of orther items the list items
+                    // Filter out the excluded item have already set as purchase as of other items in the list items
                     const filteredArray = this.getItemsResponseBody.filter((item: any) => ((item.key !== excludedItemKey) && (!this.listItemsAlreadySetAsPurchaseAsOfOrtherItem.includes(item.key))));
                     const randomItem = filteredArray[Math.floor(Math.random() * filteredArray.length)];
 
