@@ -33,7 +33,7 @@ Then(`{} sends a GET api method to count all Items have alerts in {}`, async fun
     const options = {
         headers: this.headers
     }
-    let link = encodeURI(`${Links.API_GET_RESTOCK_SUGGESTION}/count?where={"logic":"and","filters":[{"logic":"or","filters":[{"filters":[{"field":"flag","operator":"eq","value":"RED"},{"field":"flag","operator":"eq","value":"YELLOW"},{"field":"flag","operator":"eq","value":"ORANGE"},{"field":"flag","operator":"eq","value":"TEAL"},{"field":"flag","operator":"eq","value":"GREEN"}],"logic":"or"},{"filters":[],"logic":"or"}],"currentSupplierFilters":[{"text":"[${optionListSupplier}]","value":"[${optionListSupplier}]"}]},{"logic":"and","filters":[]},{"logic":"and","filters":[{"field":"status","operator":"neq","value":"IGNORE"}]},{"logic":"and","filters":[{"field":"status","operator":"neq","value":"INACTIVE"}]}]}`);
+    let link = encodeURI(`${Links.API_GET_RESTOCK_SUGGESTION}/count?where={"logic":"and","filters":[{"logic":"or","filters":[{"filters":[{"field":"flag","operator":"eq","value":"RED"},{"field":"flag","operator":"eq","value":"YELLOW"},{"field":"flag","operator":"eq","value":"ORANGE"},{"field":"flag","operator":"eq","value":"TEAL"},{"field":"flag","operator":"eq","value":"GREEN"}],"logic":"or"},{"filters":[],"logic":"or"}],"currentSupplierFilters":[{"text":"[${optionListSupplier}]","value":"[${optionListSupplier}]"}]},{"logic":"and","filters":[]}]}`);
     this.restockSuggestionResponse = this.response = await restockSuggestion.getRestockSuggestion(this.request, link, options);
     const responseBodyText = await this.restockSuggestionResponse.text();
     if (this.restockSuggestionResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {

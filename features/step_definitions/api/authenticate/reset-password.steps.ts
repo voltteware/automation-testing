@@ -26,7 +26,7 @@ Then('{} sends a GET request to reset password keys with email {}', async functi
     }
 })
 
-Then('{} checks values in response body return are correct', async function (actor: string) {
-    const textExpect = 'An e-mail has been sent to may27user@gmail.com with further instructions.'
+Then('{} checks values in response body return are correct: {}', async function (actor, email: string) {
+    const textExpect = `An e-mail has been sent to ${email} with further instructions.`
     expect(this.responseBody).toBe(textExpect);
 })

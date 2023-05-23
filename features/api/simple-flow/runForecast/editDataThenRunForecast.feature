@@ -17,12 +17,17 @@ Feature: APIs Advanced Edit Item History, PUT /api/history-override, Purchase As
         And User sends a GET request to get list items
         And User  picks a random item which does not have Purchase As
         And User saves the item key
+        # Delete all history-override values of item
+        And User sets DELETE api to delete history override
+        And User sends a DELETE request to delete history override
         And User sets PUT api endpoint to update history override
         And User sends a PUT request to update history override
+        And User sets PUT api endpoint to edit <editColumn> of the above item for company type <companyType> with new value: <value>
+        And User sends a PUT request to edit the item
         And User checks API contract of update history override api
         And The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
-        And User sets PUT api endpoint to edit <editColumn> of the above item for company type <companyType> with new value: <value>
+        And User sets PUT api endpoint to edit <editColumnA> of the above item for company type <companyType> with new value: <value>
         And User sends a PUT request to edit the item
         And The expected status code should be <expectedStatus>
         And User sets GET api endpoint to get history override of item
@@ -48,10 +53,10 @@ Feature: APIs Advanced Edit Item History, PUT /api/history-override, Purchase As
         And The status text is "<expectedStatusText>"
         And User checks override history values in Purchasing
         Examples:
-            | TC_ID     | user  | email                      | password  | companyType | expectedStatus | expectedStatusText | editColumn         | value |
-            | TC_EIH001 | admin | testautoforecast@gmail.com | Test1111# | CSV         | 200            | OK                 | useHistoryOverride | true  |
-            | TC_EIH002 | admin | testautoforecast@gmail.com | Test1111# | ASC         | 200            | OK                 | useHistoryOverride | true  |
-            | TC_EIH003 | admin | testautoforecast@gmail.com | Test1111# | QBFS        | 200            | OK                 | useHistoryOverride | true  |
+            | TC_ID     | user  | email                      | password  | companyType | expectedStatus | expectedStatusText | editColumn         | value | editColumnA   |
+            | TC_EIH001 | admin | testautoforecast@gmail.com | Test1111# | CSV         | 200            | OK                 | useHistoryOverride | true  | forecastDirty |
+            | TC_EIH002 | admin | testautoforecast@gmail.com | Test1111# | ASC         | 200            | OK                 | useHistoryOverride | true  | forecastDirty |
+            | TC_EIH003 | admin | testautoforecast@gmail.com | Test1111# | QBFS        | 200            | OK                 | useHistoryOverride | true  | forecastDirty |
 
     @TC_EIH004-7 @smoke-test-api
     Scenario Outline: <TC_ID> - Verify items showed on Edit Item History of company <companyType> should be active items
@@ -100,6 +105,9 @@ Feature: APIs Advanced Edit Item History, PUT /api/history-override, Purchase As
         And The status text is "<expectedStatusText>"
         And User picks a random item which does not have Purchase As
         And User saves the item key
+        # Delete all history-override values of item
+        And User sets DELETE api to delete history override
+        And User sends a DELETE request to delete history override
         And User sets PUT api endpoint to update history override
         And User sends a PUT request to update history override
         And User checks API contract of update history override api
@@ -108,6 +116,8 @@ Feature: APIs Advanced Edit Item History, PUT /api/history-override, Purchase As
         And User sets PUT api endpoint to edit <editColumn> of the above item for company type <companyType> with new value: <value>
         And User sends a PUT request to edit the item
         And The expected status code should be <expectedStatus>
+        And User sets PUT api endpoint to edit <editColumnA> of the above item for company type <companyType> with new value: <value>
+        And User sends a PUT request to edit the item
         And User sets GET api endpoint to get history override of item
         And User sends a GET request to get history override of item
         And User checks API contract of get history override of item api
@@ -132,10 +142,10 @@ Feature: APIs Advanced Edit Item History, PUT /api/history-override, Purchase As
         And User checks override history values in Purchasing
 
         Examples:
-            | TC_ID      | companyType | email                      | limitRow | expectedStatus | expectedStatusText | editColumn         | value |
-            | TC_OV001_1 | CSV         | testautoforecast@gmail.com | 20       | 200            | OK                 | useHistoryOverride | true  |
-            | TC_OV001_2 | ASC         | testautoforecast@gmail.com | 20       | 200            | OK                 | useHistoryOverride | true  |
-            | TC_OV001_3 | QBFS        | testautoforecast@gmail.com | 20       | 200            | OK                 | useHistoryOverride | true  |
+            | TC_ID      | companyType | email                      | limitRow | expectedStatus | expectedStatusText | editColumn         | value | editColumnA   |
+            | TC_OV001_1 | CSV         | testautoforecast@gmail.com | 20       | 200            | OK                 | useHistoryOverride | true  | forecastDirty |
+            | TC_OV001_2 | ASC         | testautoforecast@gmail.com | 20       | 200            | OK                 | useHistoryOverride | true  | forecastDirty |
+            | TC_OV001_3 | QBFS        | testautoforecast@gmail.com | 20       | 200            | OK                 | useHistoryOverride | true  | forecastDirty |
 
     # purchaseAs
     @TC_PA001 @api-dashboard @api-items @api-purchaseAs @regression-api
@@ -182,19 +192,22 @@ Feature: APIs Advanced Edit Item History, PUT /api/history-override, Purchase As
         And User checks that the lastForecastDate field was updated and jobInitiator is null in company detail information after running forecast
         # This is information of Item which is appeared in Purchasing Custom after run forecast
         And User sets api endpoint to get a Purchase As item in Custom
-        And User sends a GET request to get a Purchase As item in Custom
-        And The expected status code should be <expectedStatus>
+        When User sends a GET request to get a Purchase As item in Custom
+        Then The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
+        # Remove Purchase As setting
+        And User sets PUT api endpoint to edit <editColumn> of the above item for company type <companyType> with new value: <valueA>
+        And User sends a PUT request to edit the item
         # Save value after run forecast
         And User saves needed information to calculate actual purchase as item
         And User calculates Purchase As item
         And User checks value in Item card
 
         Examples:
-            | TC_ID       | companyType | email                      | editColumn | value   | expectedStatus | expectedStatusText |
-            | TC_PA001_01 | ASC         | testautoforecast@gmail.com | purchaseAs | dynamic | 200            | OK                 |
-            | TC_PA001_02 | CSV         | testautoforecast@gmail.com | purchaseAs | dynamic | 200            | OK                 |
-            | TC_PA001_03 | QBFS        | testautoforecast@gmail.com | purchaseAs | random  | 200            | OK                 |
+            | TC_ID       | companyType | email                      | editColumn | value   | expectedStatus | expectedStatusText | valueA |
+            | TC_PA001_01 | ASC         | testautoforecast@gmail.com | purchaseAs | dynamic | 200            | OK                 | null   |
+            | TC_PA001_02 | CSV         | testautoforecast@gmail.com | purchaseAs | dynamic | 200            | OK                 | null   |
+            | TC_PA001_03 | QBFS        | testautoforecast@gmail.com | purchaseAs | random  | 200            | OK                 | null   |
 
     @TC_PA002a @api-dashboard @api-items @api-purchaseAs @regression-api
     Scenario Outline: <TC_ID> - Verify user <email> checks Purchase As validation item cannot assign Purchase As for itself of company <companyType>
@@ -396,8 +409,8 @@ Feature: APIs Advanced Edit Item History, PUT /api/history-override, Purchase As
         And User picks a random item in above list items
         And User saves the item key
         And User sets api endpoint to edit some values of a item
-            | supplierName | purchaseAs | isHidden |
-            | random       | null       | false    |
+            | supplierName | purchaseAs | isHidden | doNotOrder |
+            | random       | null       | false    | false      |
         And User sends a PUT request to edit the item
         And The expected status code should be <expectedStatus>
 
@@ -461,8 +474,8 @@ Feature: APIs Advanced Edit Item History, PUT /api/history-override, Purchase As
         And User picks a random item in above list items
         And User saves the item key
         And User sets api endpoint to edit some values of a item
-            | supplierName | purchaseAs | isHidden |
-            | random       | null       | false    |
+            | supplierName | purchaseAs | isHidden | doNotOrder |
+            | random       | null       | false    | false      |
         And User sends a PUT request to edit the item
         And The expected status code should be <expectedStatus>
 

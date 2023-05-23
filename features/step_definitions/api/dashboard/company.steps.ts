@@ -176,17 +176,18 @@ Then('{} checks that the lastForecastDate field was updated and jobInitiator is 
     const options = {
         headers: this.headers
     }
+
     const beforeForecastDate = Date.parse(this.lastForecastDate);
-    logger.log('info', `Before Last Forecast Date: >>>>>>` + beforeForecastDate);
-    this.attach(`Before Last Forecast Date: >>>>>>` + beforeForecastDate);
+    logger.log('info', `Before Last Forecast Date: >>>>>> ` + beforeForecastDate);
+    this.attach(`Before Last Forecast Date: >>>>>> ` + beforeForecastDate);
 
     await expect.poll(async () => {
         const getCompanyInfoResponse = await companyRequest.getCompanyInfo(this.request, linkGetCompanyInfo, options);
         const getCompanyInfoResponseBody = JSON.parse(await getCompanyInfoResponse.text());
         const lastForecastDateAfterRunningForecast = Date.parse(getCompanyInfoResponseBody.lastForecastDate);
-        console.log(`last Forecast Date After Running Forecast is: >>>>>>`, lastForecastDateAfterRunningForecast);
-        logger.log('info', `last Forecast Date After Running Forecast is is: >>>>>>` + lastForecastDateAfterRunningForecast);
-        this.attach(`last Forecast Date After Running Forecast is: >>>>>>` + lastForecastDateAfterRunningForecast);
+        console.log(`last Forecast Date After Running Forecast is: >>>>>> `, lastForecastDateAfterRunningForecast);
+        logger.log('info', `last Forecast Date After Running Forecast is: >>>>>> ` + lastForecastDateAfterRunningForecast);
+        this.attach(`last Forecast Date After Running Forecast is: >>>>>> ` + lastForecastDateAfterRunningForecast);
         return lastForecastDateAfterRunningForecast;
     }, {
         // Custom error message, optional.
@@ -216,6 +217,65 @@ Then('{} checks that the lastForecastDate field was updated and jobInitiator is 
         return new Promise(resolve => setTimeout(resolve, milliseconds))
     }
     await sleep(5000);
+    
+    // Add willRemindToRunForecast into condition to run forecast
+    // const getCompanyInfoResponse = await companyRequest.getCompanyInfo(this.request, linkGetCompanyInfo, options);
+    // const getCompanyInfoResponseBody = JSON.parse(await getCompanyInfoResponse.text());
+    // const willRemindToRunForecast = getCompanyInfoResponseBody.willRemindToRunForecast;
+    // const jobInitiator = getCompanyInfoResponseBody.jobInitiator;
+    // logger.log('info', `willRemindToRunForecast is: >>>>>> ` + willRemindToRunForecast);
+    // this.attach(`willRemindToRunForecast is: >>>>>> ` + willRemindToRunForecast);
+    // logger.log('info', `jobInitiator is: >>>>>> ` + jobInitiator);
+    // this.attach(`jobInitiator is: >>>>>> ` + jobInitiator);
+
+    // if (willRemindToRunForecast == true && jobInitiator == null) {
+    //     const beforeForecastDate = Date.parse(this.lastForecastDate);
+    //     logger.log('info', `Before Last Forecast Date: >>>>>> ` + beforeForecastDate);
+    //     this.attach(`Before Last Forecast Date: >>>>>> ` + beforeForecastDate);
+
+    //     await expect.poll(async () => {
+    //         const getCompanyInfoResponse = await companyRequest.getCompanyInfo(this.request, linkGetCompanyInfo, options);
+    //         const getCompanyInfoResponseBody = JSON.parse(await getCompanyInfoResponse.text());
+    //         const lastForecastDateAfterRunningForecast = Date.parse(getCompanyInfoResponseBody.lastForecastDate);
+    //         console.log(`last Forecast Date After Running Forecast is: >>>>>> `, lastForecastDateAfterRunningForecast);
+    //         logger.log('info', `last Forecast Date After Running Forecast is: >>>>>> ` + lastForecastDateAfterRunningForecast);
+    //         this.attach(`last Forecast Date After Running Forecast is: >>>>>> ` + lastForecastDateAfterRunningForecast);
+    //         return lastForecastDateAfterRunningForecast;
+    //     }, {
+    //         // Custom error message, optional.
+    //         message: `make sure Last Forecast Date is after the moment user clicks Run Forecast`, // custom error message
+    //         // Probe, wait 1s, probe, wait 5s, probe, wait 10s, probe, wait 10s, probe, .... Defaults to [100, 250, 500, 1000].
+    //         intervals: [1_000, 5_000, 10_000],
+    //         timeout: 2 * 60 * 1000,
+    //     }).toBeGreaterThan(beforeForecastDate);
+
+    //     // jobInitiator is a value to check completing forecast
+    //     await expect.poll(async () => {
+    //         const getCompanyInfoResponse = await companyRequest.getCompanyInfo(this.request, linkGetCompanyInfo, options);
+    //         const getCompanyInfoResponseBody = JSON.parse(await getCompanyInfoResponse.text());
+    //         const jobInitiator = getCompanyInfoResponseBody.jobInitiator;
+    //         console.log(`jobInitiator is: >>>>>> `, jobInitiator);
+    //         logger.log('info', `jobInitiator is: >>>>>> ` + jobInitiator);
+    //         this.attach(`jobInitiator is: >>>>>> ` + jobInitiator);
+    //         return jobInitiator;
+    //     }, {
+    //         // Custom error message, optional.
+    //         message: `make sure Last Forecast Date is after the moment user clicks Run Forecast`, // custom error message
+    //         // Probe, wait 1s, probe, wait 5s, probe, wait 10s, probe, wait 10s, probe, .... Defaults to [100, 250, 500, 1000].
+    //         intervals: [1_000, 2_000, 5_000],
+    //         timeout: 8 * 60 * 1000,
+    //     }).toBeNull();
+    //     const sleep = (milliseconds: number) => {
+    //         return new Promise(resolve => setTimeout(resolve, milliseconds))
+    //     }
+    //     await sleep(5000);
+    // }
+    // else {
+    //     logger.log('info', "No need effort to run forecast for this company");
+    //     this.attach("No need effort to run forecast for this company");
+    // }
+
+    // Example for expect.poll
     // await expect.poll(async () => {
     //     const getCompanyInfoResponse = await companyRequest.getCompanyInfo(this.request, linkGetCompanyInfo, options);
     //     const getCompanyInfoResponseBody = JSON.parse(await getCompanyInfoResponse.text());
@@ -260,27 +320,27 @@ Given('User sets PUT api to change information of {string} company', function (c
     this.linkApiChangeInformationCompany = `${Links.API_UPDATE_COMPANY}${this.companyKey}`
 
     const rows = dataTable.hashes();
-    const {companyName, leadTime, orderInterval, serviceLevel, isNotifyingAfterForecast, isNotifyingAfterSync, isLostSaleTracking, displayRestockAMZ, lastSyncDate, phone} = rows[0]
+    const { companyName, leadTime, orderInterval, serviceLevel, isNotifyingAfterForecast, isNotifyingAfterSync, isLostSaleTracking, displayRestockAMZ, lastSyncDate, phone } = rows[0]
     this.changeInformationCompanyPayload = this.getInformationCompanyResponseBody
     switch (companyType) {
         case "ASC":
             // const {companyName, leadTime, orderInterval, serviceLevel, isNotifyingAfterForecast, isNotifyingAfterSync, isLostSaleTracking, displayRestockAMZ, lastSyncDate} = rows[0]
             companyName === "random" ? this.changeInformationCompanyPayload.companyName = `${faker.company.name()}-AutoTest` : this.changeInformationCompanyPayload.companyName = companyName
-            leadTime === "random" ? this.changeInformationCompanyPayload.leadTime = Number(faker.datatype.number({'min': 1,'max': 365})) : this.changeInformationCompanyPayload.leadTime = leadTime
-            orderInterval === "random" ? this.changeInformationCompanyPayload.orderInterval = Number(faker.datatype.number({'min': 1,'max': 365})) : this.changeInformationCompanyPayload.orderInterval = orderInterval
-            serviceLevel === "random" ? this.changeInformationCompanyPayload.serviceLevel = Number(faker.datatype.number({'min': 1,'max': 99})) : this.changeInformationCompanyPayload.serviceLevel = serviceLevel
+            leadTime === "random" ? this.changeInformationCompanyPayload.leadTime = Number(faker.datatype.number({ 'min': 1, 'max': 365 })) : this.changeInformationCompanyPayload.leadTime = leadTime
+            orderInterval === "random" ? this.changeInformationCompanyPayload.orderInterval = Number(faker.datatype.number({ 'min': 1, 'max': 365 })) : this.changeInformationCompanyPayload.orderInterval = orderInterval
+            serviceLevel === "random" ? this.changeInformationCompanyPayload.serviceLevel = Number(faker.datatype.number({ 'min': 1, 'max': 99 })) : this.changeInformationCompanyPayload.serviceLevel = serviceLevel
             isNotifyingAfterForecast === "random" ? this.changeInformationCompanyPayload.isNotifyingAfterForecast = !Boolean(this.changeInformationCompanyPayload.isNotifyingAfterForecast) : this.changeInformationCompanyPayload.isNotifyingAfterForecast = isNotifyingAfterForecast
             isNotifyingAfterSync === "random" ? this.changeInformationCompanyPayload.isNotifyingAfterSync = !Boolean(this.changeInformationCompanyPayload.isNotifyingAfterSync) : this.changeInformationCompanyPayload.isNotifyingAfterSync = isNotifyingAfterSync
             isLostSaleTracking === "random" ? this.changeInformationCompanyPayload.isLostSaleTracking = !Boolean(this.changeInformationCompanyPayload.isLostSaleTracking) : this.changeInformationCompanyPayload.isLostSaleTracking = isLostSaleTracking
             displayRestockAMZ === "random" ? this.changeInformationCompanyPayload.displayRestockAMZ = !Boolean(this.changeInformationCompanyPayload.displayRestockAMZ) : this.changeInformationCompanyPayload.displayRestockAMZ = displayRestockAMZ
-            if (lastSyncDate === "random"){
+            if (lastSyncDate === "random") {
                 // Generate a random between 1 year ago and today
                 const today = new Date();
-                const oneYearAgo = new Date(today.getTime() - (365 * 24 * 60 * 60 * 100))                
+                const oneYearAgo = new Date(today.getTime() - (365 * 24 * 60 * 60 * 100))
                 const randomTime = oneYearAgo.getTime() + Math.random() * (today.getTime() - oneYearAgo.getTime())
                 const randomDate = new Date(randomTime)
 
-                this.changeInformationCompanyPayload.lastSyncDate = randomDate.toISOString()                                
+                this.changeInformationCompanyPayload.lastSyncDate = randomDate.toISOString()
             } else {
                 this.changeInformationCompanyPayload.lastSyncDate = lastSyncDate
             }
@@ -288,31 +348,31 @@ Given('User sets PUT api to change information of {string} company', function (c
         case "CSV":
             // const {companyName, leadTime, orderInterval, serviceLevel, isNotifyingAfterForecast, isNotifyingAfterSync, isLostSaleTracking} = rows[0]
             companyName === "random" ? this.changeInformationCompanyPayload.companyName = `${faker.company.name()}-AutoTest` : this.changeInformationCompanyPayload.companyName = companyName
-            leadTime === "random" ? this.changeInformationCompanyPayload.leadTime = Number(faker.datatype.number({'min': 1,'max': 365})) : this.changeInformationCompanyPayload.leadTime = leadTime
-            orderInterval === "random" ? this.changeInformationCompanyPayload.orderInterval = Number(faker.datatype.number({'min': 1,'max': 365})) : this.changeInformationCompanyPayload.orderInterval = orderInterval
-            serviceLevel === "random" ? this.changeInformationCompanyPayload.serviceLevel = Number(faker.datatype.number({'min': 1,'max': 99})) : this.changeInformationCompanyPayload.serviceLevel = serviceLevel
+            leadTime === "random" ? this.changeInformationCompanyPayload.leadTime = Number(faker.datatype.number({ 'min': 1, 'max': 365 })) : this.changeInformationCompanyPayload.leadTime = leadTime
+            orderInterval === "random" ? this.changeInformationCompanyPayload.orderInterval = Number(faker.datatype.number({ 'min': 1, 'max': 365 })) : this.changeInformationCompanyPayload.orderInterval = orderInterval
+            serviceLevel === "random" ? this.changeInformationCompanyPayload.serviceLevel = Number(faker.datatype.number({ 'min': 1, 'max': 99 })) : this.changeInformationCompanyPayload.serviceLevel = serviceLevel
             isNotifyingAfterForecast === "random" ? this.changeInformationCompanyPayload.isNotifyingAfterForecast = !Boolean(this.changeInformationCompanyPayload.isNotifyingAfterForecast) : this.changeInformationCompanyPayload.isNotifyingAfterForecast = isNotifyingAfterForecast
             isNotifyingAfterSync === "random" ? this.changeInformationCompanyPayload.isNotifyingAfterSync = !Boolean(this.changeInformationCompanyPayload.isNotifyingAfterSync) : this.changeInformationCompanyPayload.isNotifyingAfterSync = isNotifyingAfterSync
             isLostSaleTracking === "random" ? this.changeInformationCompanyPayload.isLostSaleTracking = !Boolean(this.changeInformationCompanyPayload.isLostSaleTracking) : this.changeInformationCompanyPayload.isLostSaleTracking = isLostSaleTracking
             break;
         case "QBFS":
             phone === "random" ? this.changeInformationCompanyPayload.phone = `${faker.phone.phoneNumber('091#######')}` : this.changeInformationCompanyPayload.phone = phone
-            leadTime === "random" ? this.changeInformationCompanyPayload.leadTime = Number(faker.datatype.number({'min': 1,'max': 365})) : this.changeInformationCompanyPayload.leadTime = leadTime
-            orderInterval === "random" ? this.changeInformationCompanyPayload.orderInterval = Number(faker.datatype.number({'min': 1,'max': 365})) : this.changeInformationCompanyPayload.orderInterval = orderInterval
-            serviceLevel === "random" ? this.changeInformationCompanyPayload.serviceLevel = Number(faker.datatype.number({'min': 1,'max': 99})) : this.changeInformationCompanyPayload.serviceLevel = serviceLevel
+            leadTime === "random" ? this.changeInformationCompanyPayload.leadTime = Number(faker.datatype.number({ 'min': 1, 'max': 365 })) : this.changeInformationCompanyPayload.leadTime = leadTime
+            orderInterval === "random" ? this.changeInformationCompanyPayload.orderInterval = Number(faker.datatype.number({ 'min': 1, 'max': 365 })) : this.changeInformationCompanyPayload.orderInterval = orderInterval
+            serviceLevel === "random" ? this.changeInformationCompanyPayload.serviceLevel = Number(faker.datatype.number({ 'min': 1, 'max': 99 })) : this.changeInformationCompanyPayload.serviceLevel = serviceLevel
             isNotifyingAfterForecast === "random" ? this.changeInformationCompanyPayload.isNotifyingAfterForecast = !Boolean(this.changeInformationCompanyPayload.isNotifyingAfterForecast) : this.changeInformationCompanyPayload.isNotifyingAfterForecast = isNotifyingAfterForecast
             isNotifyingAfterSync === "random" ? this.changeInformationCompanyPayload.isNotifyingAfterSync = !Boolean(this.changeInformationCompanyPayload.isNotifyingAfterSync) : this.changeInformationCompanyPayload.isNotifyingAfterSync = isNotifyingAfterSync
             isLostSaleTracking === "random" ? this.changeInformationCompanyPayload.isLostSaleTracking = !Boolean(this.changeInformationCompanyPayload.isLostSaleTracking) : this.changeInformationCompanyPayload.isLostSaleTracking = isLostSaleTracking
             break;
         default:
             break;
-    }    
+    }
 
     logger.log('info', `Change information company Payload >>>>>>>` + JSON.stringify(this.changeInformationCompanyPayload, undefined, 4));
-        this.attach(`Change information company Payload >>>>>>>` + JSON.stringify(this.changeInformationCompanyPayload, undefined, 4))
+    this.attach(`Change information company Payload >>>>>>>` + JSON.stringify(this.changeInformationCompanyPayload, undefined, 4))
 });
 
-Given('User sends PUT request to change information of company', async function (){
+Given('User sends PUT request to change information of company', async function () {
     this.response = this.changeInformationCompanyResponse = await companyRequest.updateCompany(this.request, this.linkApiChangeInformationCompany, this.companyKey, this.changeInformationCompanyPayload, this.headers);
     const responseBodyText = await this.changeInformationCompanyResponse.text();
     if (this.changeInformationCompanyResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
@@ -327,7 +387,7 @@ Given('User sends PUT request to change information of company', async function 
     }
 });
 
-Given('Information of company must be change successfully', async function(){
+Given('Information of company must be change successfully', async function () {
     expect(this.changeInformationCompanyResponseBody.companyName).toBe(this.changeInformationCompanyPayload.companyName)
     expect(this.changeInformationCompanyResponseBody.leadTime).toBe(this.changeInformationCompanyPayload.leadTime)
     expect(this.changeInformationCompanyResponseBody.orderInterval).toBe(this.changeInformationCompanyPayload.orderInterval)
@@ -345,7 +405,7 @@ Then('User sets GET api to get associated users of company', function () {
 Then('User sends a GET request to get associated user of company', async function () {
     const options = {
         headers: this.headers
-    } 
+    }
 
     this.getAssociatedUsersResponse = this.response = await companyRequest.getAssociatedUsers(this.request, this.linkApiGetAssociatedUser, options);
     const responseBodyText = await this.getAssociatedUsersResponse.text();
@@ -359,7 +419,7 @@ Then('User sends a GET request to get associated user of company', async functio
         logger.log('info', `Response ${this.linkApiGetAssociatedUser} has status code ${this.getAssociatedUsersResponse.status()} ${this.getAssociatedUsersResponse.statusText()} and response body ${responseBodyText}`);
         this.attach(`Response ${this.linkApiGetAssociatedUser} has status code ${this.getAssociatedUsersResponse.status()} ${this.getAssociatedUsersResponse.statusText()} and response body ${actualResponseText}`)
     }
-}); 
+});
 
 Given('User selects a user in associated users list', function () {
     const associatedUsers = this.getAssociatedUsersResponseBody
@@ -371,7 +431,7 @@ Given('User selects a user in associated users list', function () {
 
 Then('User verify that the user successfully added', function () {
     const associatedUsers = this.getAssociatedUsersResponseBody
-    const hasUserWithUserId = associatedUsers.some( (user: any) => user.userId === this.userId)
+    const hasUserWithUserId = associatedUsers.some((user: any) => user.userId === this.userId)
 
     expect(hasUserWithUserId, "User just created must be display in associated users").toBeTruthy()
 });

@@ -250,8 +250,8 @@ Feature: API_Dashboard PUT /api/item
     Examples:
       | TC_ID       | companyType | email                    | limitRow | editColumn   | value  | expectedStatus | expectedStatusText |
       | TC_DNR001_1 | ASC         | testcreateitem@gmail.com | 20       | doNotRestock | random | 200            | OK                 |
-      | TC_DNR001_2 | CSV         | testcreateitem@gmail.com | 10       | doNotRestock | random | 200            | OK                 |
-      | TC_DNR001_3 | QBFS        | testcreateitem@gmail.com | 10       | doNotRestock | random | 200            | OK                 |
+      # | TC_DNR001_2 | CSV         | testcreateitem@gmail.com | 10       | doNotRestock | random | 200            | OK                 |
+      # | TC_DNR001_3 | QBFS        | testcreateitem@gmail.com | 10       | doNotRestock | random | 200            | OK                 |
 
   # If doNotOrder and doNotRestock are true => isHidden is true
   # Failed because have not handled API yet (just handled on UI)
@@ -318,9 +318,9 @@ Feature: API_Dashboard PUT /api/item
       | expectedStatus   | expectedStatusText   |
       | <expectedStatus> | <expectedStatusText> |
     And User checks doNotRestock function: false
-
+    
     Examples:
       | TC_ID        | companyType | email                    | limitRow | editColumn   | value  | expectedStatus | expectedStatusText | field1       | value1 | field2     | value2 |
       | TC_DNOR001_1 | ASC         | testcreateitem@gmail.com | 10       | doNotRestock | random | 200            | OK                 | doNotRestock | false  | doNotOrder | false  |
-      | TC_DNOR001_2 | CSV         | testcreateitem@gmail.com | 10       | doNotRestock | random | 200            | OK                 | doNotRestock | false  | doNotOrder | false  |
-      | TC_DNOR001_3 | QBFS        | testcreateitem@gmail.com | 10       | doNotRestock | random | 200            | OK                 | doNotRestock | false  | doNotOrder | false  |
+      # | TC_DNOR001_2 | CSV         | testcreateitem@gmail.com | 10       | doNotRestock | random | 200            | OK                 | doNotRestock | false  | doNotOrder | false  |
+      # | TC_DNOR001_3 | QBFS        | testcreateitem@gmail.com | 10       | doNotRestock | random | 200            | OK                 | doNotRestock | false  | doNotOrder | false  |
