@@ -5,7 +5,7 @@ Feature: API /resetPassword
 	Scenario Outline: <id> - Verify send GET /resetPassword with <scenario>
 		Given User sets GET reset password service api endpoint
 		When User sends a GET request to reset password keys with email <email>
-		Then User checks values in response body return are correct
+		Then User checks values in response body return are correct: <email>
 		And The expected status code should be <expectedStatus>
 		And The status text is "<expectedStatusText>"
 		Examples:
@@ -19,5 +19,5 @@ Feature: API /resetPassword
 		Then The expected status code should be <expectedStatus>
 		And The status text is "<expectedStatusText>"
 		Examples:
-			| id       | scenario        | email                       | expectedStatus | expectedStatusText |
-			| TC_RP002 | email not exist | testresetpassword@gmail.com | 400            | User not found     |
+			| id       | scenario        | email                              | expectedStatus | expectedStatusText |
+			| TC_RP002 | email not exist | testresetpasswordinvalid@gmail.com | 400            | User not found     |
