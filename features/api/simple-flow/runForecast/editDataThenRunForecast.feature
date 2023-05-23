@@ -504,11 +504,11 @@ Feature: APIs Advanced Edit Item History, PUT /api/history-override, Purchase As
         And The status text is "<expectedStatusText>"
         And User picks a random item which does not have Purchase As
         And User saves the item key
-        # Update doNotOrder = flase => show in Purchasing
+        # Update doNotOrder = flase => show in Purchasing to check historySnapshot
         And User sets PUT api endpoint to edit doNotOrder of the above item for company type <companyType> with new value: false
         And User sends a PUT request to edit the item
         And The expected status code should be <expectedStatus>
-        # Update forecastDirty = true => will run forecast
+        # This step was captured when user takes action on browser. Update forecastDirty = true => will run forecast
         And User sets PUT api endpoint to edit forecastDirty of the above item for company type <companyType> with new value: true
         And User sends a PUT request to edit the item
         And The expected status code should be <expectedStatus>
@@ -575,11 +575,11 @@ Feature: APIs Advanced Edit Item History, PUT /api/history-override, Purchase As
         And The status text is "<expectedStatusText>"
         And User picks a random item which does not have Purchase As
         And User saves the item key
-        # Update doNotOrder = flase => show in Purchasing
+        # Update doNotOrder = flase => show in Purchasing to check historySnapshot
         And User sets PUT api endpoint to edit doNotOrder of the above item for company type <companyType> with new value: false
         And User sends a PUT request to edit the item
         And The expected status code should be <expectedStatus>
-        # Update forecastDirty = true => will run forecast
+        # This step was captured when user takes action on browser. Update forecastDirty = true => will run forecast
         And User sets PUT api endpoint to edit forecastDirty of the above item for company type <companyType> with new value: true
         And User sends a PUT request to edit the item
         And The expected status code should be <expectedStatus>
@@ -650,11 +650,11 @@ Feature: APIs Advanced Edit Item History, PUT /api/history-override, Purchase As
         And The status text is "<expectedStatusText>"
         And User picks a random item which does not have Purchase As
         And User saves the item key
-        # Update doNotOrder = flase => show in Purchasing
+        # Update doNotOrder = flase => show in Purchasing to check historySnapshot
         And User sets PUT api endpoint to edit doNotOrder of the above item for company type <companyType> with new value: false
         And User sends a PUT request to edit the item
         And The expected status code should be <expectedStatus>
-        # Update forecastDirty = true => will run forecast
+        # This step was captured when user takes action on browser. Update forecastDirty = true => will run forecast
         And User sets PUT api endpoint to edit forecastDirty of the above item for company type <companyType> with new value: true
         And User sends a PUT request to edit the item
         And The expected status code should be <expectedStatus>
@@ -730,11 +730,11 @@ Feature: APIs Advanced Edit Item History, PUT /api/history-override, Purchase As
         And The status text is "<expectedStatusText>"
         And User picks a random item which does not have Purchase As
         And User saves the item key
-        # Update doNotOrder = flase => show in Purchasing
+        # Update doNotOrder = flase => show in Purchasing to check historySnapshot
         And User sets PUT api endpoint to edit doNotOrder of the above item for company type <companyType> with new value: false
         And User sends a PUT request to edit the item
         And The expected status code should be <expectedStatus>
-        # Update forecastDirty = true => will run forecast
+        # This step was captured when user takes action on browser. Update forecastDirty = true => will run forecast
         And User sets PUT api endpoint to edit forecastDirty of the above item for company type <companyType> with new value: true
         And User sends a PUT request to edit the item
         And The expected status code should be <expectedStatus>        
@@ -810,11 +810,11 @@ Feature: APIs Advanced Edit Item History, PUT /api/history-override, Purchase As
         And The status text is "<expectedStatusText>"
         And User picks a random item which does not have Purchase As
         And User saves the item key
-        # Update doNotOrder = flase => show in Purchasing
+        # Update doNotOrder = flase => show in Purchasing to check historySnapshot 
         And User sets PUT api endpoint to edit doNotOrder of the above item for company type <companyType> with new value: false
         And User sends a PUT request to edit the item
         And The expected status code should be <expectedStatus>
-        # Update forecastDirty = true => will run forecast
+        # This step was captured when user takes action on browser. Update forecastDirty = true => will run forecast
         And User sets PUT api endpoint to edit forecastDirty of the above item for company type <companyType> with new value: true
         And User sends a PUT request to edit the item
         And The expected status code should be <expectedStatus>
@@ -885,11 +885,11 @@ Feature: APIs Advanced Edit Item History, PUT /api/history-override, Purchase As
         And The status text is "<expectedStatusText>"
         And User picks a random item which does not have Purchase As
         And User saves the item key
-        # Update doNotOrder = flase => show in Purchasing
+        # Update doNotOrder = flase => show in Purchasing to check historySnapshot
         And User sets PUT api endpoint to edit doNotOrder of the above item for company type <companyType> with new value: false
         And User sends a PUT request to edit the item
         And The expected status code should be <expectedStatus>
-        # Update forecastDirty = true => will run forecast
+        # This step was captured when user takes action on browser. Update forecastDirty = true => will run forecast
         And User sets PUT api endpoint to edit forecastDirty of the above item for company type <companyType> with new value: true
         And User sends a PUT request to edit the item
         And The expected status code should be <expectedStatus>
