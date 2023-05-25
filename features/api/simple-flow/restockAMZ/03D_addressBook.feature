@@ -1,4 +1,4 @@
-@test-api @regression-api @api-address-book
+@test-api @regression-api @api-address-book @api-restockAMZ
 Feature: API_Regression Address Book
     Background: Send GET /realm request to get all company keys of current logged in user before each test
         Given user sends a POST login request to get valid cookie with role

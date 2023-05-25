@@ -1,4 +1,4 @@
-@test-api @api-admin @api-deleteGridView
+@test-api @api-deleteGridView @api-dashboard
 Feature: API_DashBoard DELETE/deleteGridView
     Background: Send GET request to get grid view keys of current logged in user before each test
         Given user sends a POST login request to get valid cookie with role

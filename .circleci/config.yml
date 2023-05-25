@@ -5,7 +5,8 @@ version: 2.1
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/configuration-reference/#jobs
 jobs:
-  start-testing:
+  # API Dashboard
+  start-testing-dashboard:
     # Specify the execution environment. You can specify an image from Docker Hub or use one of our convenience images from CircleCI's Developer Hub.
     # See: https://circleci.com/docs/configuration-reference/#executor-job
     docker:
@@ -18,8 +19,32 @@ jobs:
     steps:
       - checkout
       - run:
-          name: "Test Api"
-          command: npm run test-api
+          name: "Test API Dashboard"
+          command: npm run test-api-dashboard
+  # API Purchasing & RestockAMZ       
+  start-testing-purchasing-restockAMZ:
+    docker:
+      - image: node:14.19.3
+    environment:
+      BASE_URL: "https://preprod-my.forecastrx.com"
+      DISABLE_UPLOAD: false
+    steps:
+      - checkout
+      - run:
+          name: "Test API Purchasing & RestockAMZ"
+          command: npm run test-api-purchasing-restockAMZ
+  # API Administrator & Authenticate
+  start-testing-administrator-authenticate:
+    docker:
+      - image: node:14.19.3
+    environment:
+      BASE_URL: "https://preprod-my.forecastrx.com"
+      DISABLE_UPLOAD: false
+    steps:
+      - checkout
+      - run:
+          name: "Test API Administrator & Authenticate"
+          command: npm run test-api-admin-authenticate
 
 trigger:
   branch:
@@ -30,7 +55,17 @@ trigger:
 workflows:
   automation-workflow:
     jobs:
-      - start-testing:
+      - start-testing-dashboard:
+          filters:
+            branches:
+              only:
+                - master
+      - start-testing-purchasing-restockAMZ:
+          filters:
+            branches:
+              only:
+                - master
+      - start-testing-administrator-authenticate:
           filters:
             branches:
               only:

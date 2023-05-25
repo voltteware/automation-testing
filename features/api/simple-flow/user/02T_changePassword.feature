@@ -1,4 +1,4 @@
-@test-api @api-user @api-change-password
+@test-api @api-user @api-change-password @api-authenticate
 Feature: API_User PUT/user/password
     Background:
         Given Check testchangepass@gmail.com exist in the system, if it does not exist will create user with same email
