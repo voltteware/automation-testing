@@ -5,7 +5,7 @@ import { Links } from '../../../../src/utils/links';
 import _ from "lodash";
 import * as restockSuggestion from '../../../../src/api/request/restockSuggestion.service';
 import { sumFormulaRestockAMZ, totalInboundFormulaRestockAMZ, estimatedMarginFormulaRestockAMZ, dailySalesRateFormulaRestockAMZ, adjDailySalesRateFormulaRestockAMZ, averageDailySalesRateFormulaRestockAMZ, requiredInventoryFormulaRestockAMZ, inventoryAvailableFormulaRestockAMZ, recommendationsFormulaRestockAMZ, suggestionsFormulaRestockAMZ } from '../../../../src/helpers/calculation-helper';
-import { itemRestockAMZInfoResponseSchema } from '../assertion/dashboard/itemAssertionSchema';
+import { itemRestockAMZInfoResponseSchema, editItemInItemListSchema } from '../assertion/dashboard/itemAssertionSchema';
 
 let link: any;
 let linkRestockAMZ: any;
@@ -369,3 +369,37 @@ Then(`User checks the system display the correct item list by filter function wi
         }
     });
 })
+
+Then(`User sets PUT api method to edit item in Item List as following data:`, function(dataTable: DataTable) {
+    this.linkEditItemInItemList = `${Links.API_GET_RESTOCK_SUGGESTION}/${this.itemKey}/restockAMZ`
+
+    const {status} = dataTable.hashes()[0]
+    this.status = status
+    this.payloadEditItemInItemList = this.responseOfAItem
+    this.payloadEditItemInItemList.status = status
+})
+
+Then('User sends a PUT request to edit item in Item List', async function () {
+    // Send PUT request
+    this.response = await restockSuggestion.editItemInItemList(this.request, this.linkEditItemInItemList, this.payloadEditItemInItemList, this.headers)
+    if (this.response.status() == 200) {
+        this.responseOfAItem = this.editItemInItemListResponseBody = JSON.parse(await this.response.text());
+        logger.log('info', `Edit Item Response edit ${this.linkEditItemInItemList} has status code ${this.response.status()} ${this.response.statusText()} and editItemResponse body ${JSON.stringify(this.editItemInItemListResponseBody, undefined, 4)}`)
+        this.attach(`Edit Item Response edit ${this.linkEditItemInItemList} has status code ${this.response.status()} ${this.response.statusText()} and editItemResponse body ${JSON.stringify(this.editItemInItemListResponseBody, undefined, 4)}`)
+    } else {
+        logger.log('info', `Edit Item Response edit ${this.linkEditItemInItemList} has status code ${this.response.status()} ${this.response.statusText()}`)
+        this.attach(`Edit Item Response edit ${this.linkEditItemInItemList} has status code ${this.response.status()} ${this.response.statusText()}`)
+    }
+});
+
+Then(`User checks just edited item must be found in item list`, function () {
+    expect(this.restockSuggestionResponseBody.length).toBeGreaterThan(0)
+    this.itemKey = this.responseOfAItem.forecastconstant.itemKey;
+    const item = this.restockSuggestionResponseBody.find((item: any) => item.forecastconstant.itemKey = this.itemKey)
+    expect(item).not.toBe(undefined)
+    expect(item.status).toEqual(this.status)
+})
+
+Then('{} checks API contract of edit item in Item list', async function (actor: string) {
+    editItemInItemListSchema.parse(this.responseOfAItem);
+});
