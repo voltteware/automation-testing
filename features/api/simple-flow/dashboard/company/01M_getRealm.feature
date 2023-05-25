@@ -1,4 +1,4 @@
-@test-api @api-realm 
+@test-api @api-realm @api-dashboard
 Feature: API_User GET/realm
     @REALM001
     Scenario Outline: TC_REALM001 - Verify <email> could call this API to get company of him/her

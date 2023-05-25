@@ -1,4 +1,4 @@
-@test-api @regression-api
+@test-api @regression-api @api-restockAMZ
 Feature: API_Regression User can search, filter item in Item List
     Background: Send POST /login request to login before each test
         Given user sends a POST login request to get valid cookie with role
