@@ -1,15 +1,176 @@
-@test-api @run-forecast
-Feature: APIs Advanced Edit Item History, PUT /api/history-override, Purchase As
+@test-api @run-forecast @run-forecast-csv
+Feature: APIs: All features need to run forecast for CSV companies
     Background: Send GET /realm request to get all company keys of current logged in user before each test
         Given user sends a POST login request to get valid cookie with role
-            | role  | username                   | password  |
-            | admin | testautoforecast@gmail.com | Test1111# |
+            | role  | username                  | password  |
+            | admin | testforecastcsv@gmail.com | Test1111# |
         And User sets GET api endpoint to get companies information of current user
         And In Header of the request, she sets param Cookie as valid connect.sid
-        When User sends a GET request to get companies
+        And User sends a GET request to get companies
 
+    #checkDataAfterRunForecast
+    #getItemSummary
+    @TC_GIS001 @api-item @api-get-item-summary
+    Scenario Outline: TC_GIS001 - Verify user <email> could call this API to get item summary by using company key and company type <companyType>
+        Given User picks company which has onboarded before with type <companyType> in above response
+        And User sets GET api endpoint to get information of a company belongs to <email> using company key <companyKey>
+        And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
+        # Get Company info before run forecast
+        And user sets GET api endpoint to get company information by company key
+        And User sends a GET request to get company information by company key
+        # Run Forecast
+        And User sets POST api to run forecast
+        And User sends a POST request to run forecast
+        And User checks that the lastForecastDate field was updated and jobInitiator is null in company detail information after running forecast
+
+        And User sets GET api endpoint to get item summary
+        When User sends a GET request to get item summary
+        Then The expected status code should be <expectedStatus>
+        And User checks API contract in item summary object are correct
+        And User sends GET api request to get all items
+        And User checks number Items Out of Stock in response of item summary is correct
+        And User checks number Items Out of Stock - Warehouse in response of item summary is correct
+        And User checks number New Items last 30 days in response of item summary is correct
+        And User checks number Items without Vendors Assigned in response of item summary is correct
+
+        Examples:
+            | user  | email                     | password  | companyType | expectedStatus | companyKey |
+            | admin | testforecastcsv@gmail.com | Test1111# | CSV         | 200            | random     |
+
+    #Bug TC_GIS002 and TC_GIS002, return status code 200 when cookie invalid.
+    @TC_GIS002 @bug-permission @low-bug-skip @api-item @api-get-item-summary
+    Scenario Outline: <scenario> - Verify error when user sends this API with <cookie> cookie, <companyKeyHeader> companyKey, <companyTypeHeader> companyType value in header
+        Given User picks random company which has onboarded in above response
+        But User sets <cookie> cookie of <email> and <companyKeyHeader> companyKey and <companyTypeHeader> companyType in the header
+        And User sets GET api endpoint to get item summary
+        When User sends a GET request to get item summary
+        Then The expected status code should be <expectedStatus>
+        And The status text is "<expectedStatusText>"
+        Examples:
+            | scenario    | email                     | companyKey | cookie  | companyKeyHeader | companyTypeHeader | expectedStatus | expectedStatusText    |
+            | TC_GIS002_1 | testforecastcsv@gmail.com | random     | invalid | invalid          | invalid           | 401            | Unauthorized          |
+            | TC_GIS002_2 | testforecastcsv@gmail.com | random     | invalid | valid            | valid             | 401            | Unauthorized          |
+            | TC_GIS002_3 | testforecastcsv@gmail.com | random     | valid   | invalid          | invalid           | 400            | Company not found.    |
+            | TC_GIS002_4 | testforecastcsv@gmail.com | random     | valid   |                  |                   | 500            | Internal Server Error |
+
+    @TC_GIS003 @api-item @api-get-item-summary
+    Scenario Outline: TC_GIS003 - Verify user <userA> could not call this API to get item summary of company which does not belongs to her
+        Given User picks random company which has onboarded in above response
+        And User has valid connect.sid of "<userA>" after send a POST request with payload as email: "<userA>" and password: "<password>"
+        But User sets valid cookie of <userA> and valid companyKey and valid companyType in the header
+        And User sets GET api endpoint to get item summary
+        When User sends a GET request to get item summary
+        Then The expected status code should be <expectedStatus>
+        And The status text is "<expectedStatusText>"
+        Examples:
+            | userA               | userB                     | password  | companyKey | expectedStatus | expectedStatusText |
+            | may27user@gmail.com | testforecastcsv@gmail.com | Test1111# | random     | 400            | Company not found. |
+
+    #viewPurchasingMySuggested
+    @TC_PMS001-4 @smoke-test-api @api-purchasing-mySuggested
+    Scenario Outline: <TC_ID> - Verify Purchasing My Suggested POs and Items in PO on <companyType>
+        Given User picks company which has onboarded before with type <companyType> in above response
+        And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
+        # # Get Company info before run forecast
+        # And user sets GET api endpoint to get company information by company key
+        # And User sends a GET request to get company information by company key
+        # # Run Forecast
+        # And User sets POST api to run forecast
+        # And User sends a POST request to run forecast
+        # And User checks that the lastForecastDate field was updated and jobInitiator is null in company detail information after running forecast
+
+        And User sets GET api endpoint to get count summary by vendor
+        When User sends a GET request to get count summary by vendor
+        Then The expected status code should be <expectedStatus>
+        And User checks API contract get count summary by vendor are correct
+        And User sets GET api endpoint to get summary by vendor
+        And User sends a GET request to get summary by vendor
+        And The expected status code should be <expectedStatus>
+        And User checks API contract get summary by vendor are correct
+        And User sets GET api endpoint to get Summary Suggested Purchase Orders: Total Price, Total Qty, Unique Items
+        And User sends a GET request to get total price, total qty and unique items on Purchasing My Suggest
+        And The expected status code should be <expectedStatus>
+        And User checks API contract get total price, total qty and unique items on Purchasing My Suggest are correct
+        And User checks number Suggested Purchase Orders is correct
+        And User checks Total Cost of Suggested Purchase Orders is correct
+        And User checks Total Items on Suggested Purchase Orders is correct
+        And User checks Total Units on Suggested Purchase Orders is correct
+
+        # Check Items in PO of "Item Without Supplier"
+        And User selects suggested PO of Items Without Supplier
+        And User sets GET api endpoint to get count items in PO by vendor key null
+        And User sends request to get count items on Items in PO by vendor key
+        And User checks API contract get count items by vendor key are correct
+        And User sets api endpoint to get list items in PO of vendor key
+        And User sends a POST request to get list items in PO by vendor key
+        And User checks API contract get items in po by vendor key are correct
+        And User checks API contract of item object is purchasing is correct
+
+        And User checks total items in PO is matched with total products in suggested PO of Items Without Supplier
+        And User checks Total Qty of all Items in PO is matched with Total Qty in suggested PO of Items Without Supplier
+        And User checks Total Cost of all Items in PO is matched with Total Cost in suggested PO of Items Without Supplier
+
+        And User checks Forecast Recommended Qty of all items in PO of suggested PO of Items Without Supplier > 0
+        And User picks max 10 random items in the above list items
+        And User checks random items has status is Active
+        And User checks supplier name of above random items in Manage Company Items
+
+        # Check Items in PO of a random supplier
+        And User selects suggested PO of random supplier
+        And User sets GET api endpoint to get count items in PO by vendor key random
+        And User sends request to get count items on Items in PO by vendor key
+        And User checks API contract get count items by vendor key are correct
+        And User sets api endpoint to get list items in PO of vendor key
+        And User sends a POST request to get list items in PO by vendor key
+        And User checks API contract get items in po by vendor key are correct
+        And User checks API contract of item object is purchasing is correct
+
+        And User checks total items in PO is matched with total products in suggested PO of random supplier
+        And User checks Total Qty of all Items in PO is matched with Total Qty in suggested PO of random supplier
+        And User checks Total Cost of all Items in PO is matched with Total Cost in suggested PO of random supplier
+
+        And User checks Forecast Recommended Qty of all items in PO of suggested PO of random supplier > 0
+        And User picks max 10 random items in the above list items
+        And User checks random items has status is Active
+        And User checks supplier name of above random items in Manage Company Items
+
+        Examples:
+            | TC_ID     | user  | email                     | password  | companyType | expectedStatus |
+            | TC_PMS001 | admin | testforecastcsv@gmail.com | Test1111# | CSV         | 200            |
+
+    # viewPurchasingCustom
+    @TC_PC001-4 @smoke-test-api @api-purchasing-custom
+    Scenario Outline: <TC_ID> - Verify items on Purchasing Custom of company <companyType>
+        Given User picks company which has onboarded before with type <companyType> in above response
+        And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
+        # # Get Company info before run forecast
+        # And user sets GET api endpoint to get company information by company key
+        # And User sends a GET request to get company information by company key
+        # # Run Forecast
+        # And User sets POST api to run forecast
+        # And User sends a POST request to run forecast
+        # And User checks that the lastForecastDate field was updated and jobInitiator is null in company detail information after running forecast
+        And User sets GET api endpoint to get count items in Purchasing Custom
+        When User sends a GET request to get count items in Purchasing Custom
+        Then The expected status code should be <expectedStatus>
+        And User checks API contract get count items in purchasing custom are correct
+        And User sets GET api endpoint to count items that is active and have lotMultipleItemKey is NULL
+        And User sends a GET request to get count items active and have lotMultipleItemKey is NULL
+        And User checks total items in Custom EQUALS total items active and have lotMultipleItemKey is NULL
+        And User sets GET api endpoint to get items in Purchasing Custom
+        And User sends a GET request to get items in Purchasing Custom
+        And The expected status code should be <expectedStatus>
+        And User checks API contract of item object is purchasing is correct
+        And User picks max 10 random items in the above list items
+        And User checks random items has status is Active
+
+        Examples:
+            | TC_ID    | user  | email                     | password  | companyType | expectedStatus |
+            | TC_PC001 | admin | testforecastcsv@gmail.com | Test1111# | CSV         | 200            |
+
+    #editDataThenRunForecast
     #editItemHistory
-    @TC_EI001-3 @smoke-test-api @regression-api @api-edit-item-history @api-dashboard @api-dashboard-advanced @api-editItemHistory
+    @TC_EI001-3 @smoke-test-api @regression-api @api-edit-item-history @api-dashboard-advanced @api-editItemHistory
     Scenario Outline: <TC_ID> - Verify user can edit items history of company <companyType> and go to Purchasing to view changes after run forecast
         Given User picks company which has onboarded before with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
@@ -53,10 +214,8 @@ Feature: APIs Advanced Edit Item History, PUT /api/history-override, Purchase As
         And The status text is "<expectedStatusText>"
         And User checks override history values in Purchasing
         Examples:
-            | TC_ID     | user  | email                      | password  | companyType | expectedStatus | expectedStatusText | editColumn         | value | editColumnA   |
-            | TC_EIH001 | admin | testautoforecast@gmail.com | Test1111# | CSV         | 200            | OK                 | useHistoryOverride | true  | forecastDirty |
-            | TC_EIH002 | admin | testautoforecast@gmail.com | Test1111# | ASC         | 200            | OK                 | useHistoryOverride | true  | forecastDirty |
-            | TC_EIH003 | admin | testautoforecast@gmail.com | Test1111# | QBFS        | 200            | OK                 | useHistoryOverride | true  | forecastDirty |
+            | TC_ID     | user  | email                     | password  | companyType | expectedStatus | expectedStatusText | editColumn         | value | editColumnA   |
+            | TC_EIH001 | admin | testforecastcsv@gmail.com | Test1111# | CSV         | 200            | OK                 | useHistoryOverride | true  | forecastDirty |
 
     @TC_EIH004-7 @smoke-test-api
     Scenario Outline: <TC_ID> - Verify items showed on Edit Item History of company <companyType> should be active items
@@ -69,8 +228,8 @@ Feature: APIs Advanced Edit Item History, PUT /api/history-override, Purchase As
         And User sends a POST request to run forecast
         And User checks that the lastForecastDate field was updated and jobInitiator is null in company detail information after running forecast
         And User sets GET api endpoint to get count item in Edit Item History
-        When User sends a GET request to get count items
-        Then The expected status code should be <expectedStatus>
+        And User sends a GET request to get count items
+        And The expected status code should be <expectedStatus>
         And User checks API contract get count items are correct
         # TODO: check total numbers on UI matched with UI
         And User sets GET api endpoint to get default 30 items in "Edit Item History"
@@ -84,18 +243,15 @@ Feature: APIs Advanced Edit Item History, PUT /api/history-override, Purchase As
         And User sends a GET request to get list items
         And User picks a random item in above list items
         And User sets GET api endpoint to filter item by name or asin contains nameOfRandomItem
-        And User sends a GET request to get list items
-        And User checks the response of get item list returns empty array
+        When User sends a GET request to get list items
+        Then User checks the response of get item list returns empty array
 
         Examples:
-            | TC_ID     | user  | email                      | password  | companyType | expectedStatus |
-            | TC_EIH004 | admin | testautoforecast@gmail.com | Test1111# | CSV         | 200            |
-            | TC_EIH005 | admin | testautoforecast@gmail.com | Test1111# | ASC         | 200            |
-            | TC_EIH006 | admin | testautoforecast@gmail.com | Test1111# | QBFS        | 200            |
-    # | TC_EIH007 | admin | testautoforecast@gmail.com | Test1111# | QBO         | 200            |
+            | TC_ID     | user  | email                     | password  | companyType | expectedStatus |
+            | TC_EIH004 | admin | testforecastcsv@gmail.com | Test1111# | CSV         | 200            |
 
     # overrideValue
-    @TC_OV001 @smoke-test-api @regression-api @api-overrideValue @api-dashboard
+    @TC_OV001 @smoke-test-api @regression-api @api-overrideValue
     Scenario Outline: <TC_ID> - Verify user <email> override history value of company <companyType> and go to Purchasing to check data
         Given User picks company which has onboarded before with type <companyType> in above response
         But User sets valid cookie of <email> and valid companyKey and valid companyType in the header
@@ -142,13 +298,11 @@ Feature: APIs Advanced Edit Item History, PUT /api/history-override, Purchase As
         And User checks override history values in Purchasing
 
         Examples:
-            | TC_ID      | companyType | email                      | limitRow | expectedStatus | expectedStatusText | editColumn         | value | editColumnA   |
-            | TC_OV001_1 | CSV         | testautoforecast@gmail.com | 20       | 200            | OK                 | useHistoryOverride | true  | forecastDirty |
-            | TC_OV001_2 | ASC         | testautoforecast@gmail.com | 20       | 200            | OK                 | useHistoryOverride | true  | forecastDirty |
-            | TC_OV001_3 | QBFS        | testautoforecast@gmail.com | 20       | 200            | OK                 | useHistoryOverride | true  | forecastDirty |
+            | TC_ID      | companyType | email                     | limitRow | expectedStatus | expectedStatusText | editColumn         | value | editColumnA   |
+            | TC_OV001_1 | CSV         | testforecastcsv@gmail.com | 20       | 200            | OK                 | useHistoryOverride | true  | forecastDirty |
 
     # purchaseAs
-    @TC_PA001 @api-dashboard @api-items @api-purchaseAs @regression-api
+    @TC_PA001 @api-items @api-purchaseAs @regression-api
     Scenario Outline: <TC_ID> - Verify user <email> could call APIs to assign Purchase As and check formula of company <companyType>
         Given User picks company which has onboarded before with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
@@ -204,12 +358,10 @@ Feature: APIs Advanced Edit Item History, PUT /api/history-override, Purchase As
         And User checks value in Item card
 
         Examples:
-            | TC_ID       | companyType | email                      | editColumn | value   | expectedStatus | expectedStatusText | valueA |
-            | TC_PA001_01 | ASC         | testautoforecast@gmail.com | purchaseAs | dynamic | 200            | OK                 | null   |
-            | TC_PA001_02 | CSV         | testautoforecast@gmail.com | purchaseAs | dynamic | 200            | OK                 | null   |
-            | TC_PA001_03 | QBFS        | testautoforecast@gmail.com | purchaseAs | random  | 200            | OK                 | null   |
+            | TC_ID       | companyType | email                     | editColumn | value   | expectedStatus | expectedStatusText | valueA |
+            | TC_PA001_02 | CSV         | testforecastcsv@gmail.com | purchaseAs | dynamic | 200            | OK                 | null   |
 
-    @TC_PA002a @api-dashboard @api-items @api-purchaseAs @regression-api
+    @TC_PA002a @api-items @api-purchaseAs @regression-api
     Scenario Outline: <TC_ID> - Verify user <email> checks Purchase As validation item cannot assign Purchase As for itself of company <companyType>
         # Item cannot assign Purchase As for itself
         Given User picks company which has onboarded before with type <companyType> in above response
@@ -225,12 +377,10 @@ Feature: APIs Advanced Edit Item History, PUT /api/history-override, Purchase As
         And User checks API contract essential types in item object are correct
 
         Examples:
-            | TC_ID        | companyType | email                      | limitRow | editColumn | value  | expectedStatus | expectedStatusText                                    |
-            | TC_PA002a_01 | ASC         | testautoforecast@gmail.com | 10       | purchaseAs | itself | 400            | Cannot save Purchase As the same as current Item Name |
-            | TC_PA002a_02 | CSV         | testautoforecast@gmail.com | 10       | purchaseAs | itself | 400            | Cannot save Purchase As the same as current Item Name |
-            | TC_PA002a_03 | QBFS        | testautoforecast@gmail.com | 10       | purchaseAs | itself | 400            | Cannot save Purchase As the same as current Item Name |
+            | TC_ID        | companyType | email                     | limitRow | editColumn | value  | expectedStatus | expectedStatusText                                    |
+            | TC_PA002a_02 | CSV         | testforecastcsv@gmail.com | 10       | purchaseAs | itself | 400            | Cannot save Purchase As the same as current Item Name |
 
-    @TC_PA002b @api-dashboard @api-items @api-purchaseAs @regression-api
+    @TC_PA002b @api-items @api-purchaseAs @regression-api
     Scenario Outline: <TC_ID> - Verify user <email> checks Purchase As validation item cannot assign Purchase As when it is being set Purchase As of company <companyType>
         # Item cannot assign Purchase As when it is being set Purchase As
         Given User picks company which has onboarded before with type <companyType> in above response
@@ -252,13 +402,11 @@ Feature: APIs Advanced Edit Item History, PUT /api/history-override, Purchase As
         And User checks API contract essential types in item object are correct
 
         Examples:
-            | TC_ID        | companyType | email                      | limitRow | editColumn | value | expectedStatus | expectedStatusText                                 |
-            | TC_PA002b_01 | ASC         | testautoforecast@gmail.com | 10       | purchaseAs | hard  | 400            | Item has already set as Purchase As of other items |
-            | TC_PA002b_02 | CSV         | testautoforecast@gmail.com | 10       | purchaseAs | hard  | 400            | Item has already set as Purchase As of other items |
-            | TC_PA002b_03 | QBFS        | testautoforecast@gmail.com | 10       | purchaseAs | hard  | 400            | Item has already set as Purchase As of other items |
+            | TC_ID        | companyType | email                     | limitRow | editColumn | value | expectedStatus | expectedStatusText                                 |
+            | TC_PA002b_02 | CSV         | testforecastcsv@gmail.com | 10       | purchaseAs | hard  | 400            | Item has already set as Purchase As of other items |
 
     #checkUpdateItemLevel
-    @TC_CUIL001 @api-regression @api-purchasing @check-update-item-level
+    @TC_CUIL001 @api-regression @check-update-item-level
     Scenario Outline: <TC_ID> - Verify that values of item in "Purchasing > My Suggested" must be updated when update values of item in "Manage Company > Items" and run forecast of <companyType> company
         Given User picks company which has onboarded before with type <companyType> in above response
         And User sets GET api endpoint to get information of a company belongs to <email> using company key <companyKey>
@@ -325,12 +473,10 @@ Feature: APIs Advanced Edit Item History, PUT /api/history-override, Purchase As
 
 
         Examples:
-            | TC_ID        | companyType | companyKey | email                      | expectedStatus |
-            | TC_CUIL001_1 | ASC         | random     | testautoforecast@gmail.com | 200            |
-            | TC_CUIL001_2 | CSV         | random     | testautoforecast@gmail.com | 200            |
-            | TC_CUIL001_3 | QBFS        | random     | testautoforecast@gmail.com | 200            |
+            | TC_ID        | companyType | companyKey | email                     | expectedStatus |
+            | TC_CUIL001_2 | CSV         | random     | testforecastcsv@gmail.com | 200            |
 
-    @TC_CUIL002 @api-regression @api-purchasing @check-update-item-level
+    @TC_CUIL002 @api-regression @check-update-item-level
     Scenario Outline: <TC_ID> - Verify that values of item in "Purchasing > Custom" must be updated when update values of item in "Manage Company > Items" and run forecast of <companyType> company
         Given User picks company which has onboarded before with type <companyType> in above response
         And User sets GET api endpoint to get information of a company belongs to <email> using company key <companyKey>
@@ -377,12 +523,10 @@ Feature: APIs Advanced Edit Item History, PUT /api/history-override, Purchase As
         And User verify that values of item in "Purchasing > Custom" must be updated after update values of item in "Manage Company > Items" and run forecast
 
         Examples:
-            | TC_ID        | companyType | companyKey | email                      | expectedStatus |
-            | TC_CUIL002_1 | ASC         | random     | testautoforecast@gmail.com | 200            |
-            | TC_CUIL002_2 | CSV         | random     | testautoforecast@gmail.com | 200            |
-            | TC_CUIL002_3 | QBFS        | random     | testautoforecast@gmail.com | 200            |
+            | TC_ID        | companyType | companyKey | email                     | expectedStatus |
+            | TC_CUIL002_2 | CSV         | random     | testforecastcsv@gmail.com | 200            |
 
-    @TC_CUIL003 @api-regression @api-purchasing @check-update-item-level
+    @TC_CUIL003 @api-regression @check-update-item-level
     Scenario Outline: <TC_ID> - Verify that "Existing PO Qty" in Purchasing > My Suggested/Custom will be updated when update "Open qty" of Supply in "Manage Company > Supply" and run forecast of <companyType> company
         Given User picks company which has onboarded before with type <companyType> in above response
         And User sets GET api endpoint to get information of a company belongs to <email> using company key <companyKey>
@@ -443,11 +587,10 @@ Feature: APIs Advanced Edit Item History, PUT /api/history-override, Purchase As
         And User verify that "Existing PO Qty" of item in "Purchasing > My Suggested" must be updated after update values of item in "Manage Company > Supply" and run forecast
 
         Examples:
-            | TC_ID        | companyType | companyKey | email                      | editColumn | value  | expectedStatus |
-            | TC_CUIL003_1 | ASC         | random     | testautoforecast@gmail.com | openQty    | random | 200            |
-            | TC_CUIL003_2 | CSV         | random     | testautoforecast@gmail.com | openQty    | random | 200            |
+            | TC_ID        | companyType | companyKey | email                     | editColumn | value  | expectedStatus |
+            | TC_CUIL003_2 | CSV         | random     | testforecastcsv@gmail.com | openQty    | random | 200            |
 
-    @TC_CUIL004 @api-regression @api-purchasing @check-update-item-level
+    @TC_CUIL004 @api-regression @check-update-item-level
     Scenario Outline: <TC_ID> - Verify that "Open Sales Orders" in Purchasing > My Suggested/Custom will be updated when update "Open Sales Order Qty" of Demand in "Manage Company > Demand" and run forecast of <companyType> company
         Given User picks company which has onboarded before with type <companyType> in above response
         And User sets GET api endpoint to get information of a company belongs to <email> using company key <companyKey>
@@ -503,8 +646,8 @@ Feature: APIs Advanced Edit Item History, PUT /api/history-override, Purchase As
         And User verify that "Open Sales Orders" of item in "Purchasing > My Suggested" must be updated after update values of item in "Manage Company > Demand" and run forecast
 
         Examples:
-            | TC_ID      | companyType | companyKey | email                      | editColumn        | value  | expectedStatus |
-            | TC_CUIL004 | CSV         | random     | testautoforecast@gmail.com | openSalesOrderQty | random | 200            |
+            | TC_ID      | companyType | companyKey | email                     | editColumn        | value  | expectedStatus |
+            | TC_CUIL004 | CSV         | random     | testforecastcsv@gmail.com | openSalesOrderQty | random | 200            |
 
     # Backfill value feature
     @TC_BFV001 @smoke-test-api @regression-api @api-backfill-value
@@ -573,10 +716,8 @@ Feature: APIs Advanced Edit Item History, PUT /api/history-override, Purchase As
         And The status text is "<expectedStatusText>"
         And User checks override history values must be displayed exactly in Purchasing
         Examples:
-            | TC_ID       | companyType | email                      | limitRow | rowNum | expectedStatus | expectedStatusText | editColumn  | value |
-            | TC_BFV001_1 | CSV         | testautoforecast@gmail.com | 20       | 1      | 200            | OK                 | useBackfill | true  |
-            | TC_BFV001_2 | ASC         | testautoforecast@gmail.com | 20       | 1      | 200            | OK                 | useBackfill | true  |
-            | TC_BFV001_3 | QBFS        | testautoforecast@gmail.com | 20       | 1      | 200            | OK                 | useBackfill | true  |
+            | TC_ID       | companyType | email                     | limitRow | rowNum | expectedStatus | expectedStatusText | editColumn  | value |
+            | TC_BFV001_1 | CSV         | testforecastcsv@gmail.com | 20       | 1      | 200            | OK                 | useBackfill | true  |
 
     @TC_BFV002 @smoke-test-api @regression-api @api-backfill-value
     Scenario Outline: <TC_ID> - Verify the the system can backfill for 37 months (12 months of 1st year, 12 months of 2nd year, 12 months of 3rd year and the last month of 4th year) with the 1st year has full values for <companyType> company
@@ -648,10 +789,8 @@ Feature: APIs Advanced Edit Item History, PUT /api/history-override, Purchase As
             | 4          | 9           | 14          | 2           | 16         | 8          | 23           | 1           | 5          | 10         | 21            | 12           |
             |            |             |             |             |            |            |              |             |            |            |               | 12           |
         Examples:
-            | TC_ID       | companyType | email                      | limitRow | expectedStatus | expectedStatusText | editColumn  | value |
-            | TC_BFV002_1 | CSV         | testautoforecast@gmail.com | 20       | 200            | OK                 | useBackfill | true  |
-            | TC_BFV002_2 | ASC         | testautoforecast@gmail.com | 20       | 200            | OK                 | useBackfill | true  |
-            | TC_BFV002_3 | QBFS        | testautoforecast@gmail.com | 20       | 200            | OK                 | useBackfill | true  |
+            | TC_ID       | companyType | email                     | limitRow | expectedStatus | expectedStatusText | editColumn  | value |
+            | TC_BFV002_1 | CSV         | testforecastcsv@gmail.com | 20       | 200            | OK                 | useBackfill | true  |
 
     @TC_BFV003 @smoke-test-api @regression-api @api-backfill-value @bug-1954
     Scenario Outline: <TC_ID> - Verify that the system can backfill for 37 months( 12 months of 1st year, 12 months of 2nd year, 12 months of 3rd year, the last month of 4th year) with the 1st year has full values and the 2nd year has some values for <companyType> company
@@ -728,10 +867,8 @@ Feature: APIs Advanced Edit Item History, PUT /api/history-override, Purchase As
             | 4          | 9           | 14          | 2           | 16         | 8          | 23           | 1           | 5          | 10         | 21            | 12           |
             |            |             |             |             |            |            |              |             |            |            |               | 12           |
         Examples:
-            | TC_ID       | companyType | email                      | limitRow | expectedStatus | expectedStatusText | editColumn  | value |
-            | TC_BFV003_1 | CSV         | testautoforecast@gmail.com | 20       | 200            | OK                 | useBackfill | true  |
-            | TC_BFV003_2 | ASC         | testautoforecast@gmail.com | 20       | 200            | OK                 | useBackfill | true  |
-            | TC_BFV003_3 | QBFS        | testautoforecast@gmail.com | 20       | 200            | OK                 | useBackfill | true  |
+            | TC_ID       | companyType | email                     | limitRow | expectedStatus | expectedStatusText | editColumn  | value |
+            | TC_BFV003_1 | CSV         | testforecastcsv@gmail.com | 20       | 200            | OK                 | useBackfill | true  |
 
     @TC_BFV004 @smoke-test-api @regression-api @api-backfill-value @bug-1954
     Scenario Outline: <TC_ID> - Verify that the system can backfill for 37 months( 12 months of 1st year, 12 months of 2nd year, 12 months of 3rd year, the last month of 4th year) with the 1st year has full values and the 3rd year has some values for <companyType> company
@@ -750,7 +887,7 @@ Feature: APIs Advanced Edit Item History, PUT /api/history-override, Purchase As
         # This step was captured when user takes action on browser. Update forecastDirty = true => will run forecast
         And User sets PUT api endpoint to edit forecastDirty of the above item for company type <companyType> with new value: true
         And User sends a PUT request to edit the item
-        And The expected status code should be <expectedStatus>        
+        And The expected status code should be <expectedStatus>
         # Turn ON Override history
         And User sets PUT api endpoint to edit useHistoryOverride of the above item for company type <companyType> with new value: <value>
         And User sends a PUT request to edit the item
@@ -808,10 +945,8 @@ Feature: APIs Advanced Edit Item History, PUT /api/history-override, Purchase As
             | 4          | 9           | 23          | 2           | 16         | 19         | 23           | 15          | 5          | 10         | 21            | 12           |
             |            |             |             |             |            |            |              |             |            |            |               | 12           |
         Examples:
-            | TC_ID       | companyType | email                      | limitRow | expectedStatus | expectedStatusText | editColumn  | value |
-            | TC_BFV004_1 | CSV         | testautoforecast@gmail.com | 20       | 200            | OK                 | useBackfill | true  |
-            | TC_BFV004_2 | ASC         | testautoforecast@gmail.com | 20       | 200            | OK                 | useBackfill | true  |
-            | TC_BFV004_3 | QBFS        | testautoforecast@gmail.com | 20       | 200            | OK                 | useBackfill | true  |
+            | TC_ID       | companyType | email                     | limitRow | expectedStatus | expectedStatusText | editColumn  | value |
+            | TC_BFV004_1 | CSV         | testforecastcsv@gmail.com | 20       | 200            | OK                 | useBackfill | true  |
 
     @TC_BFV005 @smoke-test-api @regression-api @api-backfill-value
     Scenario Outline: <TC_ID> - Verify that the system will fill "0" for orther months. if the 1st year has no value and the 2nd year has full values for <companyType>
@@ -823,7 +958,7 @@ Feature: APIs Advanced Edit Item History, PUT /api/history-override, Purchase As
         And The status text is "<expectedStatusText>"
         And User picks a random item which does not have Purchase As
         And User saves the item key
-        # Update doNotOrder = flase => show in Purchasing to check historySnapshot 
+        # Update doNotOrder = flase => show in Purchasing to check historySnapshot
         And User sets PUT api endpoint to edit doNotOrder of the above item for company type <companyType> with new value: false
         And User sends a PUT request to edit the item
         And The expected status code should be <expectedStatus>
@@ -883,12 +1018,10 @@ Feature: APIs Advanced Edit Item History, PUT /api/history-override, Purchase As
             |            |             |             |             |            |            |              |             |            |            |               |              |
             |            |             |             |             |            |            |              |             |            |            |               |              |
         Examples:
-            | TC_ID       | companyType | email                      | limitRow | expectedStatus | expectedStatusText | editColumn  | value |
-            | TC_BFV005_1 | CSV         | testautoforecast@gmail.com | 20       | 200            | OK                 | useBackfill | true  |
-            | TC_BFV005_2 | ASC         | testautoforecast@gmail.com | 20       | 200            | OK                 | useBackfill | true  |
-            | TC_BFV005_3 | QBFS        | testautoforecast@gmail.com | 20       | 200            | OK                 | useBackfill | true  |
+            | TC_ID       | companyType | email                     | limitRow | expectedStatus | expectedStatusText | editColumn  | value |
+            | TC_BFV005_1 | CSV         | testforecastcsv@gmail.com | 20       | 200            | OK                 | useBackfill | true  |
 
-    @TC_BFV006 @smoke-test-api @regression-api @api-backfill-value 
+    @TC_BFV006 @smoke-test-api @regression-api @api-backfill-value
     Scenario Outline: <TC_ID> - Verify that the system will fill "0" for orther months. if the 1st year, 2nd year has no value and the 3rd year has full values for <companyType>
         Given User picks company which has onboarded before with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
@@ -958,7 +1091,5 @@ Feature: APIs Advanced Edit Item History, PUT /api/history-override, Purchase As
             | 4          | 9           | 14          | 2           | 16         | 8          | 23           | 1           | 5          | 10         | 21            | 12           |
             |            |             |             |             |            |            |              |             |            |            |               |              |
         Examples:
-            | TC_ID       | companyType | email                      | limitRow | expectedStatus | expectedStatusText | editColumn  | value |
-            | TC_BFV006_1 | CSV         | testautoforecast@gmail.com | 20       | 200            | OK                 | useBackfill | true  |
-            | TC_BFV006_2 | ASC         | testautoforecast@gmail.com | 20       | 200            | OK                 | useBackfill | true  |
-            | TC_BFV006_3 | QBFS        | testautoforecast@gmail.com | 20       | 200            | OK                 | useBackfill | true  |
+            | TC_ID       | companyType | email                     | limitRow | expectedStatus | expectedStatusText | editColumn  | value |
+            | TC_BFV006_1 | CSV         | testforecastcsv@gmail.com | 20       | 200            | OK                 | useBackfill | true  |
