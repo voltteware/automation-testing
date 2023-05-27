@@ -21,8 +21,8 @@ jobs:
       - run:
           name: "Test APIs without running forecast"
           command: npm run test-api-without-run-forecast
-  # Run forecast for CSV companies
-  start-testing-api-run-forecast-csv:
+  # Run forecast for QBFS & CSV companies
+  start-testing-api-run-forecast-qbfs-csv:
     docker:
       - image: node:14.19.3
     environment:
@@ -31,20 +31,8 @@ jobs:
     steps:
       - checkout
       - run:
-          name: "Test APIs running forecast for CSV"
-          command: npm run test-api-run-forecast-csv
-  # Run forecast for QBFS companies
-  start-testing-api-run-forecast-qbfs:
-    docker:
-      - image: node:14.19.3
-    environment:
-      BASE_URL: "https://preprod-my.forecastrx.com"
-      DISABLE_UPLOAD: false
-    steps:
-      - checkout
-      - run:
-          name: "Test APIs running forecast for QBFS"
-          command: npm run test-api-run-forecast-qbfs
+          name: "Test APIs running forecast for QBFS & CSV"
+          command: npm run test-api-run-forecast-qbfs-csv
   # Run forecast for ASC companies
   start-testing-api-run-forecast-asc:
     docker:
@@ -72,12 +60,7 @@ workflows:
             branches:
               only:
                 - master
-      - start-testing-api-run-forecast-csv:
-          filters:
-            branches:
-              only:
-                - master
-      - start-testing-api-run-forecast-qbfs:
+      - start-testing-api-run-forecast-qbfs-csv:
           filters:
             branches:
               only:
