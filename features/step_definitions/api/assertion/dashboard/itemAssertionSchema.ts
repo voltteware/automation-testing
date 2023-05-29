@@ -294,7 +294,7 @@ export const itemInfoInShipmentResponseSchema = z.object({
     boxLength: z.number().nullable(),
     boxWeight: z.number().nullable(),
     boxWidth: z.number().nullable(),
-    caseQty: z.number(),
+    caseQty: z.number().nullable(),
     category: z.string().nullable(),
     condition: z.string(),
     cost: z.number(),

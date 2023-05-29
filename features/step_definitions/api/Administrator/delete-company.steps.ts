@@ -47,10 +47,10 @@ Then('Check {} company exist in the system, if it does not exist will create com
         payload.companyName = `${faker.company.name()}-${companyNameKeyWord}`;
         payload.companyKey = '';
         payload.companyType = arrCompanyType[Math.floor(Math.random() * arrCompanyType.length)];
-        payload.leadTime = Number(faker.datatype.number({'min': 1,'max': 365}));
-        payload.orderInterval = Number(faker.datatype.number({'min': 1,'max': 365}));
-        payload.serviceLevel = Number(faker.datatype.number({'min': 1,'max': 99}));
-        if (payload.companyType == 'ASC'){
+        payload.leadTime = Number(faker.datatype.number({ 'min': 1, 'max': 365 }));
+        payload.orderInterval = Number(faker.datatype.number({ 'min': 1, 'max': 365 }));
+        payload.serviceLevel = Number(faker.datatype.number({ 'min': 1, 'max': 99 }));
+        if (payload.companyType == 'ASC') {
             payload.initialSyncDate = new Date();
             payload.marketplaceId = `${marketplaceIDS[Math.floor(Math.random() * 10)]}`;
         }
@@ -68,8 +68,8 @@ Then('Check {} company exist in the system, if it does not exist will create com
             logger.log('info', `Response ${Links.API_CREATE_COMPANY} has status code ${this.response.status()} ${this.response.statusText()} and response body ${responseBodyText}`);
             this.attach(`Response ${Links.API_CREATE_COMPANY} has status code ${this.response.status()} ${this.response.statusText()} and response body ${actualResponseText}`)
         }
-    }   
-    
+    }
+
     this.get20LatestCompaniesResponse = await adminRequest.getCompanies(this.request, endPointToGet20LatestCompany, options);
     this.get20LatestCompaniesResponseBody = JSON.parse(await this.get20LatestCompaniesResponse.text());
 })
@@ -94,10 +94,10 @@ Then('{} sends a DELETE method to {} delete the {} company', async function (act
         headers: this.headers
     }
 
-    if (actionCompany == 'created'){
+    if (actionCompany == 'created') {
         this.companyKeyUrl = this.responseBodyOfACompanyObject.companyKey;
         this.companyTypeUrl = this.responseBodyOfACompanyObject.companyType;
-    }else {
+    } else {
         this.companyKeyUrl = randomCompany.companyKey;
         this.companyTypeUrl = randomCompany.companyType;
     }
@@ -111,10 +111,10 @@ Then('{} sends a DELETE method to delete the {} company', async function (actor,
     const options = {
         headers: this.headers
     }
-    if (actionCompany == 'created'){
+    if (actionCompany == 'created') {
         this.companyKeyUrl = this.responseBodyOfACompanyObject.companyKey;
         this.companyTypeUrl = this.responseBodyOfACompanyObject.companyType;
-    }else {
+    } else {
         this.companyKeyUrl = randomCompany.companyKey;
         this.companyTypeUrl = randomCompany.companyType;
     }
@@ -130,7 +130,7 @@ Then('Check that the company just deleted not exists in the current companies li
     }
     this.get20LatestCompaniesResponse = await adminRequest.getCompanies(this.request, endPointToGet20LatestCompany, options);
     this.get20LatestCompaniesResponseBody = JSON.parse(await this.get20LatestCompaniesResponse.text());
-    if(this.actionCompany) {
+    if (this.actionCompany) {
         this.foundCompany = this.get20LatestCompaniesResponseBody.some((element: { companyKey: any; }) => element.companyKey == this.createCompanyResponseBody.companyKey);
     }
     else {
@@ -152,6 +152,14 @@ Then('Check that the company just soft deleted still exists but the subscription
 })
 
 Then('User verify that has no item in item summary', async function () {
-    this.expect = {"err": null, "model": {}};
+    this.expect = {
+        "err": null,
+        "model": {
+            "differentMissingVendorCount": 0,
+            "differentOlderThan30DaysCount": 0,
+            "differentOutStockItemsCount": 0,
+            "differentWarehouseOutStockItemsCount": 0,
+        }
+    };
     expect(this.getItemSummaryResponseBody).toEqual(this.expect);
 })
