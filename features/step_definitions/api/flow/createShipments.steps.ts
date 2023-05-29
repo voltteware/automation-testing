@@ -83,7 +83,7 @@ Then(`{} sends a GET request to get Shipment info`, async function (actor: strin
 });
 
 Then('{} sets GET api endpoint to get items in shipments by restockType: {}', async function (actor, restockType: string) {
-    link = encodeURI(`${Links.API_SHIPMENT}-detail?offset=0&limit=20&where={"logic":"and","filters":[]}&key=${this.shipmentKey}&type=forecast-chosen&restockType=${restockType}`);
+    link = encodeURI(`${Links.API_SHIPMENT}-detail?offset=0&limit=20&where={"logic":"and","filters":[]}&key=${this.shipmentKey}&restockType=${restockType}`);
     const sleep = (milliseconds: number) => {
         return new Promise(resolve => setTimeout(resolve, milliseconds))
     }
