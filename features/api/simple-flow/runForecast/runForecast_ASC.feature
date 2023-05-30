@@ -105,12 +105,12 @@ Feature: APIs: All features need to run forecast of ASC companies
         And User checks value Total Inbound on grid
         And User checks value Estimated Margin on grid
         And User checks value Suggestions on grid
-        And User sets GET api method to get restock calculation of specific Item
-        And User sends a GET api method to get restock calculation of specific Item
+        And User sets GET api endpoint to get restock suggestion restockAMZ of an above item
+        And User sends GET request to get restock suggestion restockAMZ of an above item
         And The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
-        And User sets GET api method to get restock calculation of specific Item
-        And User sends a GET api method to get restock calculation of specific Item
+        And User sets GET api endpoint to get restock suggestion restockAMZ of an above item
+        And User sends GET request to get restock suggestion restockAMZ of an above item
         And User checks API contract of get restock calculation api
         And User sets GET api endpoint to get item by filtered
         And User sends a GET request to get item by by filtered

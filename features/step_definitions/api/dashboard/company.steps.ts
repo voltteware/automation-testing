@@ -96,6 +96,75 @@ Then('{} picks company which has onboarded before with type {} in above response
     this.attach(`COMPANY TYPE: ${this.companyType}`);
 })
 
+Then('{} checks Purchasing settings is Automatically Adjusted or not', async function (actor: string) {
+    if (this.purchasingSalesVelocityType !== "auto" || this.salesVelocityType !== "auto") {
+        let link = Links.API_UPDATE_COMPANY;
+        const payload = {
+            purchasingSalesVelocityType: "auto",
+            salesVelocityType: "auto",
+            isAdjustingDailySalesRateForOutOfStock: false,
+        }
+        this.response = this.updateCompanyResponse = await companyRequest.updateCompany(this.request, link, this.companyKey, payload, this.headers);
+        const responseBodyText = await this.updateCompanyResponse.text();
+        if (this.updateCompanyResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
+            this.responseBodyOfACompanyObject = JSON.parse(responseBodyText)
+            logger.log('info', `Response PUT ${link}` + JSON.stringify(this.responseBodyOfACompanyObject, undefined, 4));
+            this.attach(`Response PUT ${link}` + JSON.stringify(this.responseBodyOfACompanyObject, undefined, 4))
+        }
+        else {
+            const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
+            logger.log('info', `Response PUT ${link} has status code ${this.updateCompanyResponse.status()} ${this.updateCompanyResponse.statusText()} and response body ${responseBodyText}`);
+            this.attach(`Response PUT ${link} has status code ${this.updateCompanyResponse.status()} ${this.updateCompanyResponse.statusText()} and response body ${actualResponseText}`)
+        }
+        // Run Forecast to see new changes
+        const linkGetCompanyInfo = `${Links.API_GET_COMPANY}/${this.companyKey}`;
+        const options = {
+            headers: this.headers
+        }
+
+        const beforeForecastDate = Date.parse(this.lastForecastDate);
+        logger.log('info', `Before Last Forecast Date: >>>>>> ` + beforeForecastDate);
+        this.attach(`Before Last Forecast Date: >>>>>> ` + beforeForecastDate);
+
+        await expect.poll(async () => {
+            const getCompanyInfoResponse = await companyRequest.getCompanyInfo(this.request, linkGetCompanyInfo, options);
+            const getCompanyInfoResponseBody = JSON.parse(await getCompanyInfoResponse.text());
+            const lastForecastDateAfterRunningForecast = Date.parse(getCompanyInfoResponseBody.lastForecastDate);
+            console.log(`last Forecast Date After Running Forecast is: >>>>>> `, lastForecastDateAfterRunningForecast);
+            logger.log('info', `last Forecast Date After Running Forecast is: >>>>>> ` + lastForecastDateAfterRunningForecast);
+            this.attach(`last Forecast Date After Running Forecast is: >>>>>> ` + lastForecastDateAfterRunningForecast);
+            return lastForecastDateAfterRunningForecast;
+        }, {
+            // Custom error message, optional.
+            message: `make sure Last Forecast Date is after the moment user clicks Run Forecast`, // custom error message
+            // Probe, wait 1s, probe, wait 5s, probe, wait 10s, probe, wait 10s, probe, .... Defaults to [100, 250, 500, 1000].
+            intervals: [1_000, 5_000, 10_000],
+            timeout: 2 * 60 * 1000,
+        }).toBeGreaterThan(beforeForecastDate);
+
+        // jobInitiator is a value to check completing forecast
+        await expect.poll(async () => {
+            const getCompanyInfoResponse = await companyRequest.getCompanyInfo(this.request, linkGetCompanyInfo, options);
+            const getCompanyInfoResponseBody = JSON.parse(await getCompanyInfoResponse.text());
+            const jobInitiator = getCompanyInfoResponseBody.jobInitiator;
+            console.log(`jobInitiator is: >>>>>> `, jobInitiator);
+            logger.log('info', `jobInitiator is: >>>>>> ` + jobInitiator);
+            this.attach(`jobInitiator is: >>>>>> ` + jobInitiator);
+            return jobInitiator;
+        }, {
+            // Custom error message, optional.
+            message: `make sure Last Forecast Date is after the moment user clicks Run Forecast`, // custom error message
+            // Probe, wait 1s, probe, wait 5s, probe, wait 10s, probe, wait 10s, probe, .... Defaults to [100, 250, 500, 1000].
+            intervals: [1_000, 2_000, 5_000],
+            timeout: 8 * 60 * 1000,
+        }).toBeNull();
+        const sleep = (milliseconds: number) => {
+            return new Promise(resolve => setTimeout(resolve, milliseconds))
+        }
+        await sleep(5000);
+    }
+})
+
 Then('{} picks a company with type {} and name {} in above response', async function (actor, companyType: string, companyName: string) {
     this.selectedCompany = await this.getCompaniesResponseBody.find((co: any) => ((co.companyType == companyType) && (co.companyName == companyName)))
     this.randomCompany = this.selectedCompany
@@ -217,7 +286,7 @@ Then('{} checks that the lastForecastDate field was updated and jobInitiator is 
         return new Promise(resolve => setTimeout(resolve, milliseconds))
     }
     await sleep(5000);
-    
+
     // Add willRemindToRunForecast into condition to run forecast
     // const getCompanyInfoResponse = await companyRequest.getCompanyInfo(this.request, linkGetCompanyInfo, options);
     // const getCompanyInfoResponseBody = JSON.parse(await getCompanyInfoResponse.text());

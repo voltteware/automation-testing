@@ -158,11 +158,11 @@ Then(`{} checks value Sum on grid`, async function (actor: string) {
     sumFormulaRestockAMZ(this.onHandFBA, this.inbound, this.fcTransfer, this.sum, this.attach);
 });
 
-Then(`{} sets GET api method to get restock calculation of specific Item`, async function (actor: string) {
+Then(`{} sets GET api endpoint to get restock suggestion restockAMZ of an above item`, async function (actor: string) {
     linkRestockAMZ = `${Links.API_GET_RESTOCK_SUGGESTION}/${this.itemKey}/restockAMZ`;
 });
 
-Then(`{} sends a GET api method to get restock calculation of specific Item`, async function (actor: string) {
+Then(`{} sends GET request to get restock suggestion restockAMZ of an above item`, async function (actor: string) {
     const options = {
         headers: this.headers
     }
