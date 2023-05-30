@@ -122,7 +122,7 @@ Feature: API_Dashboard POST /api/bom
 
         Examples:
             | email                   | limitRow | parentName | parentKey | childName | childKey | qty    | expectedStatus | expectedStatusText     |
-            | testcreatebom@gmail.com | 20       | random     | random    | random    | random   | random | 400            | Record already exists. |
+            | testcreatebom@gmail.com | 100      | random     | random    | random    | random   | random | 400            | Record already exists. |
 
     @TC_CB008
     Scenario Outline: TC_CB008 - Verify error when user input is missing one required field
@@ -159,4 +159,4 @@ Feature: API_Dashboard POST /api/bom
         Examples:
             | TC_ID    | companyType | email                   | limitRow | parentName | parentKey | childName | childKey | qty    | expectedStatus | expectedStatusText |
             | TC_CB009 | QBFS        | testcreatebom@gmail.com | 30       | random     | random    | random    | random   | random | 400            | Bad Request        |
-            # | TC_CB010 | QBO         | testcreatebom@gmail.com | 30       | random     | random    | random    | random   | random | 400            | Bad Request        |
+# | TC_CB010 | QBO         | testcreatebom@gmail.com | 30       | random     | random    | random    | random   | random | 400            | Bad Request        |

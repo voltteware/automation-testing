@@ -205,7 +205,8 @@ Then('{} search the deleted child bom by name and check that no bom found', asyn
 
     for await (const bom of this.selectedBoms) {
         const childName = bom.childName;
-        const linkSearchBom = encodeURI(`${Links.API_BOM}?offset=0&limit=100&where={"filters":[{"filters":[{"field":"childName","operator":"contains","value":"${childName}"}],"logic":"and"}],"logic":"and"}`);
+        const parentName = bom.parentName;
+        const linkSearchBom = encodeURI(`${Links.API_BOM}?offset=0&limit=100&where={"filters":[{"filters":[{"field":"parentName","operator":"contains","value":"${parentName}"}],"logic":"and"},{"filters":[{"field":"childName","operator":"contains","value":"${childName}"}],"logic":"and"}],"logic":"and"}`);
         const searchChildBomResponse = await bomRequest.getBom(this.request, linkSearchBom, options);
         const responseBodyText = await searchChildBomResponse.text();
         var searchChildBomResponseBody;
@@ -360,7 +361,8 @@ Then('The new {} of bom must be updated successfully', function (editColumn: str
 });
 
 Then('{} picks {} random boms in above list boms', async function (actor: string, quantity) {
-    this.itemsPickedRandomArray =  itemRequest.getMultipleRandom(this.getBomResponseBody, quantity);
-    console.log("bomsPickedRandomArray: ", this.itemsPickedRandomArray);
+    this.selectedBoms = this.itemsPickedRandomArray =  itemRequest.getMultipleRandom(this.getBomResponseBody, quantity);
+    logger.log('info', `Random Bom:: ` +  this.itemsPickedRandomArray);
+    this.attach(`Random Bom:: ` +  this.itemsPickedRandomArray);
     return this.itemsPickedRandomArray;
 })

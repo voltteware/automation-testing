@@ -89,7 +89,7 @@ Then(`{} sends a GET method to get report by reportID`, { timeout: 5500000 }, as
         refresh_token: "Atzr|IwEBID_BwBV4w9Z5kP3DbCidA-GEa96fOk785pqNtJckf0JubWe-5hK2n_CfrtGUpg5z7sw-vWkuL_dwtVe0NoYugIb65ruGXc8Ohv07Uu4B6gud4l2Kloz08iVb238-iRzN9EF5QCPRlb6ySG5CotqDSPu3_6ZIFsC9gbx7LcpY_wjtIW181FWCCk6vwfQvxp1qo-TORNeZ5UKaXRSz0mIlU9qyb5re5l8xZXDvBMxHFsFmgwGxMZ4s_PbXFakcJo7wroAIa2Z8OWxrZyyoFp9izhty4tLer2wUDN5bEZf6sTqv3r1RLIhH-5a8lUHeZ-QPvDs",
         credentials: {
             SELLING_PARTNER_APP_CLIENT_ID: 'amzn1.application-oa2-client.d2863395cbb3490db7b5c3d980db6951',
-            SELLING_PARTNER_APP_CLIENT_SECRET: '71d6e0c4ad5894aeae2d51908a3bbcdc23a5149613dabb99a2d870470c73f0f1',
+            SELLING_PARTNER_APP_CLIENT_SECRET: 'amzn1.oa2-cs.v1.d1f3214f89a53272943c3bfdd2a960eedddc92f1070844478714021b02e87f5a',
             AWS_ACCESS_KEY_ID: 'AKIAQ6O4VP2SSKVRWQ5P',
             AWS_SECRET_ACCESS_KEY: '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',
             AWS_SELLING_PARTNER_ROLE: 'arn:aws:iam::065424162469:role/sellingpartnerapi_role'
@@ -100,7 +100,7 @@ Then(`{} sends a GET method to get report by reportID`, { timeout: 5500000 }, as
     };
     try {
         let sellingPartner = new SellingPartnerAPI(clientConfig);
-        // Set loop here, because I am not sure when do Amazon complete report!
+        // Set loop here, because I am not sure when Amazon completes report!
         while (true) {
             logger.log('info', 'Get report Demand by Report Id from Amazon')
             await new Promise((resolve) => setTimeout(() => resolve(null), 10000));
