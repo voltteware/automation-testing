@@ -694,6 +694,10 @@ Feature: APIs: All features need to run forecast of ASC companies
         And User checks API contract of get history override of item api
         And The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
+        # Get Demand aggregation
+        # if column in backfill view does not have value, it will get data (orderQty) from Demand
+        And User sets POST api to get demand aggregation of item
+        And User sends a POST request to get demand aggregation of item        
         And User checks value after editing history override values of item must be displayed exactly
         And User calculates the order qty of other years after turning on backfill feature and saves those values
 
@@ -720,7 +724,7 @@ Feature: APIs: All features need to run forecast of ASC companies
             | TC_ID       | companyType | email                      | limitRow | rowNum | expectedStatus | expectedStatusText | editColumn  | value |
             | TC_BFV001_2 | ASC         | testautoforecast@gmail.com | 20       | 1      | 200            | OK                 | useBackfill | true  |
 
-    @TC_BFV002 @smoke-test-api @regression-api @api-backfill-value
+    @TC_BFV002 @smoke-test-api @regression-api @api-backfill-value 
     Scenario Outline: <TC_ID> - Verify the the system can backfill for 37 months (12 months of 1st year, 12 months of 2nd year, 12 months of 3rd year and the last month of 4th year) with the 1st year has full values for <companyType> company
         Given User picks company which has onboarded before with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
@@ -765,7 +769,12 @@ Feature: APIs: All features need to run forecast of ASC companies
         And User sends a GET request to get history override of item
         And User checks API contract of get history override of item api
         And The expected status code should be <expectedStatus>
-        And The status text is "<expectedStatusText>"
+        And The status text is "<expectedStatusText>"   
+        # Get Demand aggregation
+        # if column in backfill view does not have value, it will get data (orderQty) from Demand
+        And User sets POST api to get demand aggregation of item
+        And User sends a POST request to get demand aggregation of item
+        And User calculates the order qty of other years after turning on backfill feature and saves those values     
         # Get Company info before run forecast
         And User sets GET api endpoint to get company information by company key
         And User sends a GET request to get company information by company key
@@ -782,7 +791,7 @@ Feature: APIs: All features need to run forecast of ASC companies
         When User sends a GET request to get results of item
         Then User checks API contract of get results of item
         And The expected status code should be <expectedStatus>
-        And The status text is "<expectedStatusText>"
+        And The status text is "<expectedStatusText>"        
         And User checks override history values must be displayed exactly in Purchasing as the following data:
             | firstMonth | secondMonth | thirthMonth | fourthMonth | fifthMonth | sixthMonth | seventhMonth | eighthMonth | ninthMonth | tenthMonth | eleventhMonth | twelfthMonth |
             | 4          | 9           | 14          | 2           | 16         | 8          | 23           | 1           | 5          | 10         | 21            | 12           |
@@ -839,6 +848,11 @@ Feature: APIs: All features need to run forecast of ASC companies
         And User checks API contract of get history override of item api
         And The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
+        # Get Demand aggregation
+        # if column in backfill view does not have value, it will get data (orderQty) from Demand
+        And User sets POST api to get demand aggregation of item
+        And User sends a POST request to get demand aggregation of item
+        And User calculates the order qty of other years after turning on backfill feature and saves those values
         # Get Company info before run forecast
         And User sets GET api endpoint to get company information by company key
         And User sends a GET request to get company information by company key
@@ -917,6 +931,11 @@ Feature: APIs: All features need to run forecast of ASC companies
         And User checks API contract of get history override of item api
         And The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
+        # Get Demand aggregation
+        # if column in backfill view does not have value, it will get data (orderQty) from Demand
+        And User sets POST api to get demand aggregation of item
+        And User sends a POST request to get demand aggregation of item
+        And User calculates the order qty of other years after turning on backfill feature and saves those values
         # Get Company info before run forecast
         And User sets GET api endpoint to get company information by company key
         And User sends a GET request to get company information by company key
@@ -995,6 +1014,11 @@ Feature: APIs: All features need to run forecast of ASC companies
         And User checks API contract of get history override of item api
         And The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
+        # Get Demand aggregation
+        # if column in backfill view does not have value, it will get data (orderQty) from Demand
+        And User sets POST api to get demand aggregation of item
+        And User sends a POST request to get demand aggregation of item
+        And User calculates the order qty of other years after turning on backfill feature and saves those values
         # Get Company info before run forecast
         And User sets GET api endpoint to get company information by company key
         And User sends a GET request to get company information by company key
@@ -1068,6 +1092,11 @@ Feature: APIs: All features need to run forecast of ASC companies
         And User checks API contract of get history override of item api
         And The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
+        # Get Demand aggregation
+        # if column in backfill view does not have value, it will get data (orderQty) from Demand
+        And User sets POST api to get demand aggregation of item
+        And User sends a POST request to get demand aggregation of item
+        And User calculates the order qty of other years after turning on backfill feature and saves those values
         # Get Company info before run forecast
         And User sets GET api endpoint to get company information by company key
         And User sends a GET request to get company information by company key

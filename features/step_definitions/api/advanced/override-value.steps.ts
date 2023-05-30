@@ -83,8 +83,22 @@ Then('{} checks value after editing history override values of item must be disp
 });
 
 Then('User calculates the order qty of other years after turning on backfill feature and saves those values', async function () {
-    const historyOverrideModels = this.getHistoryOverrideResponseBody.model
     let months: string[] = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    // Map demand into grid history value
+    const map: Map<string, number> = new Map()
+    this.getDemandAggregationResponseBody.model.forEach((demand: any) => {
+        const date = new Date(Date.parse(demand.dueDate))
+        const month = months[date.getMonth()]
+        const year = date.getFullYear()
+        const grid = `${month}_${year}`
+        if (map.has(grid)) {
+            const orderQty = demand.orderQty + map.get(grid)
+            map.set(grid, orderQty)
+        } else {
+            map.set(grid, demand.orderQty)
+        }
+    })
+    const historyOverrideModels = this.getHistoryOverrideResponseBody.model    
 
     // We have 12 months, and I split it in 2 array by the current month, for creating the first part of the grid
     // Example of a grid: May_2022  
@@ -136,6 +150,9 @@ Then('User calculates the order qty of other years after turning on backfill fea
         const value = await historyOverrideModels.find((model: any) => model.grid == grids[index])
         if (value == undefined) {
             historyOverrideValues.push(0)
+            if (map.has(grids[index])) {
+                historyOverrideValues.push(Number(map.get(grids[index])))
+            }
         } else {
             historyOverrideValues.push(value.orderQty)
         }
@@ -385,17 +402,20 @@ Then('User sends a PUT request to update history override values', async functio
     }
 });
 
-Then('User checks override history values must be displayed exactly in Purchasing as the following data:', async function (dataTable: DataTable) {
+Then('User checks override history values must be displayed exactly in Purchasing as the following data:', async function (dataTable: DataTable) {            
     const historyValuesOfYears = dataTable.raw();
     const historyValuesOfFirstYear = historyValuesOfYears[1];
     const historyValuesOfSecondYear = historyValuesOfYears[2];
     const historyValuesOfThirdYear = historyValuesOfYears[3];
     const historyValuesOfFourthYear = historyValuesOfYears[4];
-    const historySnapShotExpected = [...historyValuesOfFourthYear, ...historyValuesOfThirdYear, ...historyValuesOfSecondYear, ...historyValuesOfFirstYear];
+    var historySnapShotExpected = [...historyValuesOfFourthYear, ...historyValuesOfThirdYear, ...historyValuesOfSecondYear, ...historyValuesOfFirstYear];
     // Any empty values at the beginning of the historySnapShotExpected array are removed
     const firstNonEmptyIndex = historySnapShotExpected.findIndex((el) => el !== '');
     if (firstNonEmptyIndex !== -1) {
         historySnapShotExpected.splice(0, firstNonEmptyIndex);
+    }
+    if (this.getDemandAggregationResponseBody.model.length > 0) {
+        historySnapShotExpected = this.expectedHistoryOverrideValues
     }
     const historySnapShotActual = this.getResultsResponseBody.model.historySnapshot;
     logger.log('info', `History Override Values expected >>> ${historySnapShotExpected}`);

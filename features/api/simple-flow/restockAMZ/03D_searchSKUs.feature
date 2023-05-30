@@ -8,7 +8,7 @@ Feature: API_Regression User can search SKUs
         And In Header of the request, she sets param Cookie as valid connect.sid
         When User sends a GET request to get companies
 
-    @TC_ASC_SSKUS001 @smoke-test-api @runthis
+    @TC_ASC_SSKUS001 @smoke-test-api
     Scenario Outline: <TC_ID> - Verify user <email> could call APIs to search SKUs in shipment detail - <shipmentStatus>
         Given User picks company which has onboarded before with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header

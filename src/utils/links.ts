@@ -20,6 +20,7 @@ export class Links {
     static API_ITEM_COUNT: string = '/api/item/count';
     static API_BOM: string = '/api/bom';
     static API_DEMAND: string = '/api/demand';
+    static API_DEMAND_AGGREGATION: string = '/api/demand-aggregation';
     static API_CREATE_GRIDVIEW: string = '/api/grid-view';
     static API_GET_GRIDVIEW_SUPPLIER: string = '/api/grid-view/supplier';
     static API_GET_GRIDVIEW_ITEM: string = '/api/grid-view/item';
