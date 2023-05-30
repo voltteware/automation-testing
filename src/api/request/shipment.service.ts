@@ -87,6 +87,87 @@ async function getListShipments(request: APIRequestContext, linkApi: string, opt
     return await request.get(url, options);
 };
 
+// GET endpoint for export item
+async function getAllShipmentsInManageShipments(request: APIRequestContext, linkApi: string, headers: any, options?: object) {
+    const url = `${linkApi}`;
+    logger.log('info', `Send GET request ${url}`);
+    const exportResponse = await request.get(url, {
+        headers: headers,
+        params: {
+            "where": JSON.stringify({ "logic": "and", "filters": [] })
+        }
+    });
+    console.log("exportResponse: ", exportResponse.url());
+    return exportResponse;
+}
+
+// GET endpoint for export item
+async function countAllSKUsInShipmentDetails(request: APIRequestContext, linkApi: string, headers: any, key: string, restockType: string, options?: object) {
+    const url = `${linkApi}`;
+    logger.log('info', `Send GET request to count sku in Shipment Details ${url}`);
+    const countAllSKUsInShipmentDetailsResponse = await request.get(url, {
+        headers: headers,
+        params: {
+            "key": key,
+            "type": "amazon",
+            "restockType": restockType,
+            "where": JSON.stringify({ "logic": "and", "filters": [] })
+        }
+    });
+    console.log("exportResponse: ", countAllSKUsInShipmentDetailsResponse.url());
+    return countAllSKUsInShipmentDetailsResponse;
+}
+
+// GET endpoint for get list SKUs in Shipment Details
+async function getSKUsInShipmentDetails(request: APIRequestContext, linkApi: string, headers: any, key: string, restockType: string, options?: object) {
+    const url = `${linkApi}`;
+    logger.log('info', `Send GET request to get sku in Shipment Details ${url}`);
+    const countAllSKUsInShipmentDetailsResponse = await request.get(url, {
+        headers: headers,
+        params: {
+            "key": key,
+            "type": "amazon",
+            "restockType": restockType,
+            "where": JSON.stringify({ "logic": "and", "filters": [] })
+        }
+    });
+    console.log("exportResponse: ", countAllSKUsInShipmentDetailsResponse.url());
+    return countAllSKUsInShipmentDetailsResponse;
+}
+
+//Get List Shipments with limit row
+async function getListShipmentsWithLimitRow(request: APIRequestContext, linkApi: string, headers: any, limitRow: number) {
+    const url = `${linkApi}`;
+    logger.log('info', `Send GET request to get list SKUs in Shipment Details with limit row >>> ${url}`);
+    const getListShipmentsWithLimitRowResponse = await request.get(url, {
+        headers: headers,
+        params: {
+            "offset": 0,
+            "limit": limitRow,
+            "key": "01161049-fd6f-4778-924b-9cfe1ed1e543",
+            "type": "amazon",
+            "restockType": "SUPPLIER",
+            "where": JSON.stringify({ "logic": "and", "filters": [] })
+        }
+    });
+    return getListShipmentsWithLimitRowResponse;
+};
+
+//Get List SKUs in Shipment Details with limit row
+async function getListSKUsInShipmentDetails(request: APIRequestContext, linkApi: string, headers: any, limitRow: number) {
+    const url = `${linkApi}`;
+    logger.log('info', `Send GET request to get list Shipments with limit row >>> ${url}`);
+    const getListShipmentsWithLimitRowResponse = await request.get(url, {
+        headers: headers,
+        params: {
+            "offset": 0,
+            "limit": limitRow,
+            "where": JSON.stringify({ "logic": "and", "filters": [] })
+        }
+    });
+    return getListShipmentsWithLimitRowResponse;
+};
+
 export {
     postShipment,
     getShipmentInfo,
@@ -97,5 +178,10 @@ export {
     getShipmentDetail,
     getWorkflowExport,
     deleteShipment,
-    getListShipments
+    getListShipments,
+    getAllShipmentsInManageShipments,
+    getListShipmentsWithLimitRow,
+    countAllSKUsInShipmentDetails,
+    getListSKUsInShipmentDetails,
+    getSKUsInShipmentDetails
 }
