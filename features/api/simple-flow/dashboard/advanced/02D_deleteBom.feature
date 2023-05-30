@@ -27,7 +27,7 @@ Feature: API_Dashboard DELETE /api/bom
         And User sets request body with payload as parentName: "<parentName>" and parentKey: "<parentKey>" and childName: "<childName>" and childKey: "<childKey>" and qty: "<qty>"
         And User sends a POST method to create bom
         And User sends a GET request to get total of boms
-        And User filters <numberOfBoms> boms which has the parentName includes <bomParentNameKeyword>
+        And User picks <quantity> random boms in above list boms
         When User sends a DELETE method to delete bom child
         Then The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
@@ -35,9 +35,9 @@ Feature: API_Dashboard DELETE /api/bom
         And User search the deleted child bom by name and check that no bom found
 
         Examples:
-            | TC_ID    | companyType | parentName | parentKey | childName | childKey | qty    | numberOfBoms | bomParentNameKeyword | expectedStatus | expectedStatusText | email                | limitRow | itemName      | description     | vendorName | vendorPrice | moq    | leadTime | orderInterval | serviceLevel | onHand | onHandMin | onHandThirdParty | onHandThirdPartyMin | lotMultipleQty | lotMultipleItemName | vendorKey | lotMultipleItemKey |
-            | TC_DB001 | CSV         | 2          | random    | random    | random   | random | random       | Auto                 | 200            | OK                 | testgetbom@gmail.com | 10       | New Item Auto | New description | random     | random      | random | random   | random        | random       | random | random    | random           | random              | random         | random              | random    | random             |
-            | TC_DB002 | ASC         | 2          | random    | random    | random   | random | random       | Auto                 | 200            | OK                 | testgetbom@gmail.com | 10       | New Item Auto | New description | random     | random      | random | random   | random        | random       | random | random    | random           | random              | random         | random              | random    | random             |
+            | TC_ID    | companyType | parentName | parentKey | childName | childKey | qty    | quantity | expectedStatus | expectedStatusText | email                | limitRow | itemName      | description     | vendorName | vendorPrice | moq    | leadTime | orderInterval | serviceLevel | onHand | onHandMin | onHandThirdParty | onHandThirdPartyMin | lotMultipleQty | lotMultipleItemName | vendorKey | lotMultipleItemKey |
+            | TC_DB001 | CSV         | 2          | random    | random    | random   | random |  1       | 200            | OK                 | testgetbom@gmail.com | 10       | New Item Auto | New description | random     | random      | random | random   | random        | random       | random | random    | random           | random              | random         | random              | random    | random             |
+            | TC_DB002 | ASC         | 2          | random    | random    | random   | random |  1       | 200            | OK                 | testgetbom@gmail.com | 10       | New Item Auto | New description | random     | random      | random | random   | random        | random       | random | random    | random           | random              | random         | random              | random    | random             |
 
     #Bug API in case TC_DB003_1, TC_DB003_2
     @TC_DB003 @bug-permission @low-bug-skip
@@ -84,24 +84,32 @@ Feature: API_Dashboard DELETE /api/bom
             | numberOfBoms | bomParentNameKeyword | userA               | userB                | password  | expectedStatus | expectedStatusText |
             | 1            | Auto                 | may27user@gmail.com | testgetbom@gmail.com | Test1111# | 400            | Company not found. |
 
-    # TC_DB005, TC_DB006: Fail due to Bug_ID 1870 - Get status 400 Unable to delete some or all the requested items.
-    @TC_DB005 @TC_DB006 @bug1870
+    @TC_DB005 @TC_DB006
     Scenario Outline: <TC_ID> - Verify <user> could call this API to delete bom and his child of a company has type <companyType> belongs to her
         Given User picks company which has onboarded before with type <companyType> in above response
         But User sets valid cookie of <email> and valid companyKey and valid companyType in the header
-        And User sets GET api endpoint to get item with limit row: 20
+        And User sets GET api endpoint to get suppliers with limit row: <limitRow>
+        And User sends a GET request to get list suppliers
+        And user checks Auto supplier exist in the system, if it does not exist will create new supplier
+        And User sets GET api endpoint to get item with limit row: <limitRow>
         And User sends a GET request to get list items
+        And User sets POST api endpoint to create item
+        And User sets request body with payload as name: "<itemName>" and description: "<description>" and vendorName: "<vendorName>" and vendorPrice: "<vendorPrice>" and moq: "<moq>" and leadTime: "<leadTime>" and orderInterval: "<orderInterval>" and serviceLevel: "<serviceLevel>" and onHand: "<onHand>" and onHandMin: "<onHandMin>" and onHandThirdParty: "<onHandThirdParty>" and onHandThirdPartyMin: "<onHandThirdPartyMin>" and lotMultipleQty: "<lotMultipleQty>" and lotMultipleItemName: "<lotMultipleItemName>" and asin: "" and fnsku: "" and skuNotes: "" and prepNotes: "" and supplierRebate: "" and inboundShippingCost: "" and reshippingCost: "" and repackagingMaterialCost: "" and repackingLaborCost: "" and rank: "" and inventorySourcePreference: "" and average7DayPrice: "" and isFbm: "" and key: "" and vendorKey: "<vendorKey>" and lotMultipleItemKey: "<lotMultipleItemKey>"
+        And User sends a POST method to create item
         And User sets GET api endpoint to get bom keys
         And User sends a GET request to get all boms
         And User checks Auto bom exist in the system, if it does not exist will create new bom
+        And User sets POST api endpoint to create bom
+        And User sets request body with payload as parentName: "<parentName>" and parentKey: "<parentKey>" and childName: "<childName>" and childKey: "<childKey>" and qty: "<qty>"
+        And User sends a POST method to create bom
         And User sends a GET request to get total of boms
-        And User filters <numberOfBoms> boms which has the parentName includes <bomParentNameKeyword>
+        And User picks <quantity> random boms in above list boms
         When User sends a DELETE method to delete bom and his child
         Then The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
         And User check that the deleted BOM and its child are not included in the current BOM list
 
         Examples:
-            | TC_ID    | companyType | numberOfBoms | bomParentNameKeyword | expectedStatus | expectedStatusText | email                |
-            | TC_DB005 | CSV         | 1            | Auto                 | 200            | OK                 | testgetbom@gmail.com |
-            | TC_DB006 | ASC         | 1            | Auto                 | 200            | OK                 | testgetbom@gmail.com |
+            | TC_ID    | companyType | quantity | expectedStatus | expectedStatusText | email                | parentName | parentKey | childName | childKey | qty    | limitRow | itemName      | description     | vendorName | vendorPrice | moq    | leadTime | orderInterval | serviceLevel | onHand | onHandMin | onHandThirdParty | onHandThirdPartyMin | lotMultipleQty | lotMultipleItemName | vendorKey | lotMultipleItemKey |
+            | TC_DB005 | CSV         | 1        | 200            | OK                 | testgetbom@gmail.com | 2          | random    | random    | random   | random | 10       | New Item Auto | New description | random     | random      | random | random   | random        | random       | random | random    | random           | random              | random         | random              | random    | random             |
+            | TC_DB006 | ASC         | 1        | 200            | OK                 | testgetbom@gmail.com | 2          | random    | random    | random   | random | 10       | New Item Auto | New description | random     | random      | random | random   | random        | random       | random | random    | random           | random              | random         | random              | random    | random             |

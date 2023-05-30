@@ -11,6 +11,16 @@ export const itemSummaryResponseSchema = z.object({
     })
 });
 
+export const itemSummaryTypeResponseSchema = z.object({
+    err: z.string().nullable(),
+    model: z.object({
+        differentOutStockItemsCount: z.number(),
+        differentWarehouseOutStockItemsCount: z.number(),
+        differentOlderThan30DaysCount: z.number(),
+        differentMissingVendorCount: z.number()
+    })
+});
+
 // Define type of payload
 // export type ItemSummaryRequest = z.infer<typeof ItemSummaryRequestSchema>;
 

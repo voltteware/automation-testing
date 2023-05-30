@@ -7,6 +7,7 @@ import { faker } from '@faker-js/faker';
 import { Links } from '../../../../src/utils/links';
 import _, { endsWith } from "lodash";
 import { payLoadCompany } from '../../../../src/utils/companyPayLoad';
+import { itemSummaryTypeResponseSchema } from '../assertion/dashboard/itemAssertionSchema';
 
 let numberofCompanies: any;
 const arrCompanyType = ['ASC', 'CSV', 'QBFS', 'QBO'];
@@ -152,14 +153,13 @@ Then('Check that the company just soft deleted still exists but the subscription
 })
 
 Then('User verify that has no item in item summary', async function () {
-    this.expect = {
-        "err": null,
-        "model": {
-            "differentMissingVendorCount": 0,
-            "differentOlderThan30DaysCount": 0,
-            "differentOutStockItemsCount": 0,
-            "differentWarehouseOutStockItemsCount": 0,
-        }
-    };
-    expect(this.getItemSummaryResponseBody).toEqual(this.expect);
+    let actualDifferentMissingVendorCount = this.getItemSummaryResponseBody.model.differentMissingVendorCount;
+    let actualDifferentOlderThan30DaysCount = this.getItemSummaryResponseBody.model.differentOlderThan30DaysCount;
+    let actualDifferentOutStockItemsCount = this.getItemSummaryResponseBody.model.differentOutStockItemsCount;
+    let actualDifferentWarehouseOutStockItemsCount = this.getItemSummaryResponseBody.model.differentWarehouseOutStockItemsCount;
+    expect(actualDifferentMissingVendorCount).toEqual(0);
+    expect(actualDifferentOlderThan30DaysCount).toEqual(0);
+    expect(actualDifferentOutStockItemsCount).toEqual(0);
+    expect(actualDifferentWarehouseOutStockItemsCount).toEqual(0);
+    itemSummaryTypeResponseSchema.parse(this.getItemSummaryResponseBody);
 })
