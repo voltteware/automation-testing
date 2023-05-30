@@ -36,6 +36,18 @@ Then(`{} sends a GET api method to get restock suggestion by vendor`, async func
     }
 });
 
+Then('{} saves all supplier name from list above', async function (actor) {
+    console.log('this.@api-exportData: ', this.restockSuggestionResponseBody)
+    const allSuppliersInSupplierListArray = [];
+    for(let i = 0; i < this.restockSuggestionResponseBody.length; i++){
+        allSuppliersInSupplierListArray.push(this.restockSuggestionResponseBody[i].vendorName);
+    }
+    this.allSuppliersInSupplierList = allSuppliersInSupplierListArray;
+    console.log(`All suppliers in SupplierList: `, this.allSuppliersInSupplierList);
+    logger.log(`info`,`All suppliers in SupplierList: ${this.allSuppliersInSupplierList}`);
+    this.attach(`info`,`All suppliers in SupplierList: ${this.allSuppliersInSupplierList}`);
+})
+
 Then('{} selects the {} in Supplier list', async function (actor, optionListSupplier: string){
     this.selectedListSupplier = await this.restockSuggestionResponseBody.find((sgg: any) => sgg.vendorName == `[${optionListSupplier}]`);
     logger.log('info', `Supplier list option which has ${optionListSupplier}: ${JSON.stringify(this.selectedListSupplier, undefined, 4)}`);

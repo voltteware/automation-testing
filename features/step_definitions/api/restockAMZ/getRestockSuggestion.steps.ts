@@ -1,14 +1,17 @@
-import { Then, DataTable } from '@cucumber/cucumber';
+import { Then, DataTable, When } from '@cucumber/cucumber';
 import { expect } from '@playwright/test';
 import logger from '../../../../src/Logger/logger';
 import { Links } from '../../../../src/utils/links';
 import _ from "lodash";
 import * as restockSuggestion from '../../../../src/api/request/restockSuggestion.service';
+import * as itemRequest from '../../../../src/api/request/item.service';
 import { sumFormulaRestockAMZ, totalInboundFormulaRestockAMZ, estimatedMarginFormulaRestockAMZ, dailySalesRateFormulaRestockAMZ, adjDailySalesRateFormulaRestockAMZ, averageDailySalesRateFormulaRestockAMZ, requiredInventoryFormulaRestockAMZ, inventoryAvailableFormulaRestockAMZ, recommendationsFormulaRestockAMZ, suggestionsFormulaRestockAMZ } from '../../../../src/helpers/calculation-helper';
 import { itemRestockAMZInfoResponseSchema, editItemInItemListSchema } from '../assertion/dashboard/itemAssertionSchema';
 
 let link: any;
 let linkRestockAMZ: any;
+let countAllItemInItemListLink: any;
+let getItemListLink: any;
 
 Then(`{} sends GET api endpoint to get items in RestockAMZ without filtered options`, async function (actor: string) {
     let linkItemRestockAMZ = encodeURI(`${Links.API_GET_RESTOCK_SUGGESTION}?offset=0&limit=100&where={"logic":"and","filters":[{"logic":"or","filters":[{"filters":[],"logic":"or"},{"filters":[],"logic":"or"}],"currentSupplierFilters":[]},{"logic":"or","filters":[{"field":"sku","operator":"contains","value":"${this.itemName}"},{"field":"productName","operator":"contains","value":"${this.itemName}"},{"field":"category","operator":"contains","value":"${this.itemName}"},{"field":"supplier","operator":"contains","value":"${this.itemName}"},{"field":"supplierSku","operator":"contains","value":"${this.itemName}"},{"field":"asin","operator":"contains","value":"${this.itemName}"}]},{"logic":"and","filters":[]},{"logic":"and","filters":[{"field":"status","operator":"neq","value":"IGNORE"}]},{"logic":"and","filters":[{"field":"status","operator":"neq","value":"INACTIVE"}]}]}`);
@@ -403,3 +406,57 @@ Then(`User checks just edited item must be found in item list`, function () {
 Then('{} checks API contract of edit item in Item list', async function (actor: string) {
     editItemInItemListSchema.parse(this.responseOfAItem);
 });
+When(`{} sets GET endpoint api to count all item in {}`, async function (actor, section: string) {
+    countAllItemInItemListLink = encodeURI(`${Links.API_RESTOCK_SUGGESTION_COUNT}`)
+})
+
+When(`{} sends GET endpoint api to count all item in {}`, async function (actor, section: string) {
+    // this.supplierNameFilter = this.allSuppliersInSupplierList[Math.floor(Math.random()*this.allSuppliersInSupplierList.length)];
+    this.supplierNameFilter = "[All Suppliers]";
+    console.log("Supplier Name that just picked: ", this.supplierNameFilter);
+    this.countAllItemInItemListResponse = this.response = await restockSuggestion.countAllItemsInItemList(this.request, countAllItemInItemListLink, this.supplierNameFilter, this.headers);
+    const responseBodyText = await this.countAllItemInItemListResponse.text();
+    if (this.countAllItemInItemListResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
+        this.countAllItemInItemListResponseBody = JSON.parse(await this.countAllItemInItemListResponse.text());
+        this.responseOfAItem = await this.countAllItemInItemListResponseBody[Math.floor(Math.random() * this.countAllItemInItemListResponseBody.length)];
+        this.countItem = this.countAllItemInItemListResponseBody;
+        this.attach(`Count Items in Restock from Suggestion > Item List: ${this.countItem}`)
+        logger.log('info', `Response GET count item in Item List: ${countAllItemInItemListLink}: ` + JSON.stringify(this.countAllItemInItemListResponseBody, undefined, 4));
+        this.attach(`Response GET count item in Item List: ${countAllItemInItemListLink}: ` + JSON.stringify(this.countAllItemInItemListResponseBody, undefined, 4))
+    }
+    else {
+        const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
+        logger.log('info', `Response count item in Item List: ${countAllItemInItemListLink} has status code ${this.countAllItemInItemListResponse.status()} ${this.countAllItemInItemListResponse.statusText()} and response body ${responseBodyText}`);
+        this.attach(`Response count item in Item List: ${countAllItemInItemListLink} has status code ${this.countAllItemInItemListResponse.status()} ${this.countAllItemInItemListResponse.statusText()} and response body ${actualResponseText}`)
+    }
+    return this.supplierNameFilter;
+})
+
+When(`{} sets GET endpoint API to get list SKUs with limit row: {}`, async function (actor, limitRow: number) {
+    getItemListLink = encodeURI(`${Links.API_GET_RESTOCK_SUGGESTION}`);
+    this.limitRow = limitRow;
+})
+
+When(`{} sends GET endpoint API to get list SKUs`, async function (actor) {
+    console.log("Supplier Name that just picked to get item list: ", this.supplierNameFilter);
+    this.getItemListResponse = this.response = await restockSuggestion.getItemListInItemList(this.request, getItemListLink, this.supplierNameFilter, this.headers, this.limitRow);
+    const responseBodyText = await this.getItemListResponse.text();
+    if (this.getItemListResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
+        this.getItemListResponseBody = JSON.parse(await this.getItemListResponse.text());
+        this.responseOfAItem = await this.getItemListResponseBody[Math.floor(Math.random() * this.getItemListResponseBody.length)];
+        logger.log('info', `Response GET list items ${getItemListLink}: ` + JSON.stringify(this.getItemListResponseBody, undefined, 4));
+        this.attach(`Response GET list items ${getItemListLink}: ` + JSON.stringify(this.getItemListResponseBody, undefined, 4))
+    }
+    else {
+        const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
+        logger.log('info', `Response list items ${getItemListLink} has status code ${this.getItemListResponse.status()} ${this.getItemListResponse.statusText()} and response body ${responseBodyText}`);
+        this.attach(`Response list items ${getItemListLink} has status code ${this.getItemListResponse.status()} ${this.countAllItemInItemListResponse.statusText()} and response body ${actualResponseText}`)
+    }
+})
+
+Then('{} picks {} random SKU in above list items', async function (actor: string, quantity) {
+    console.log("Here: ", this.getItemListResponseBody);
+    this.itemsPickedRandomArray =  itemRequest.getMultipleRandom(this.getItemListResponseBody, quantity);
+    console.log("IteminItemListPickedRandomArray: ", this.itemsPickedRandomArray);
+    return this.itemsPickedRandomArray;
+})

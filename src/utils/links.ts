@@ -48,6 +48,10 @@ export class Links {
     static API_GET_RESTOCK_SUGGESTION_BY_VENDOR = '/api/restock-suggestion-by-vendor';
     static API_GET_RESTOCK_SUGGESTION = '/api/restock-suggestion';
     static API_SHIPMENT = '/api/shipment';
+    static API_SHIPMENT_COUNT = '/api/shipment/count';
+    static API_RESTOCK_SUGGESTION_COUNT = '/api/restock-suggestion/count';
+    static API_SHIPMENT_DETAILS_COUNT = '/api/shipment-detail/count';
+    static API_SHIPMENT_DETAILS = '/api/shipment-detail';
     //API Admin
     static API_ADMIN_USER: string = '/api/admin/users/';
     static API_ADMIN_GET_COMPANIES: string = '/api/admin/companies';

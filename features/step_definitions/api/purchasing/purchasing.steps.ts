@@ -136,6 +136,7 @@ Then(`{} sends request to get count items on Items in PO by vendor key`, async f
         if (this.getCountItemsinPOResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
             this.responseBody = this.getCountItemsinPOResponseBody = JSON.parse(await this.getCountItemsinPOResponse.body());
             this.totalItems = this.getCountItemsinPOResponseBody;
+            this.countItem = this.getCountItemsinPOResponseBody;
             logger.log('info', `Response GET ${linkCountItemsInPO} >>>>>>` + JSON.stringify(this.getCountItemsinPOResponseBody, undefined, 4));
             this.attach(`Response GET ${linkCountItemsInPO} >>>>>>` + JSON.stringify(this.getCountItemsinPOResponseBody, undefined, 4))
         }
@@ -433,6 +434,7 @@ Then(`{} selects random items in Purchasing My Suggested`, async function (actor
     this.radomFiveItemsInPurchasingSuggestion = shuffledArr.slice(0, 5)
 
     this.listKeysOfRandomItems = this.radomFiveItemsInPurchasingSuggestion.map((item: any) => item.itemKey)
+    this.itemsPickedRandomArray = this.listKeysOfRandomItems;
 
     for (const itemKey of this.listKeysOfRandomItems) {
         logger.log('info', `Item: ${JSON.stringify(itemKey, undefined, 4)}`)
