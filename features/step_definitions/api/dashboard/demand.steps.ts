@@ -332,3 +332,38 @@ Then('{} picks {} random demands in above list demands', async function (actor: 
     console.log("itemsPickedRandomArray: ", this.itemsPickedRandomArray);
     return this.itemsPickedRandomArray;
 })
+
+Then(`User sets POST api to get demand aggregation of item`, async function () {
+    this.linkGetDemandAggregation = `${Links.API_DEMAND_AGGREGATION}`
+
+    const currentDate: Date = new Date();
+    const currentMonth: number = currentDate.getMonth() + 1;
+
+    currentDate.setMonth(currentMonth - 1, 0) // Set the date to the last day of the previous month
+    const lastDayOfPreviousMonth = currentDate.toISOString().substring(0,10)    
+    currentDate.setFullYear(currentDate.getFullYear() - 4)  // Get the date that í 4 years before the start date
+    const fourYearsAgo = currentDate.toISOString().substring(0,10)
+
+    this.payloadGetDemandAggregation = {
+        "key": `${this.itemKey}`,
+        "operation": "range",
+        "start": `${fourYearsAgo}T17:00:00.000Z`,
+        "end": `${lastDayOfPreviousMonth}T16:59:59.000Z`
+    }
+})
+
+Then(`User sends a POST request to get demand aggregation of item`, async function () {
+    this.response = this.getDemandAggregationResponse = await demandRequest.getDemandAggregation(this.request, this.linkGetDemandAggregation, this.payloadGetDemandAggregation, this.headers);
+    const responseBodyText = await this.getDemandAggregationResponse.text();
+    if (this.getDemandAggregationResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
+        this.responseBody = this.getDemandAggregationResponseBody = JSON.parse(responseBodyText);        
+
+        logger.log('info', `Response POST get demand aggregation ${this.linkGetDemandAggregation}` + JSON.stringify(this.responseBody, undefined, 4));
+        this.attach(`Response POST get demand aggregation ${this.linkGetDemandAggregation}` + JSON.stringify(this.responseBody, undefined, 4))
+    }
+    else {
+        const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
+        logger.log('info', `Response POST get demand aggregation ${this.linkGetDemandAggregation} has status code ${this.getDemandAggregationResponse.status()} ${this.getDemandAggregationResponse.statusText()} and response body ${responseBodyText}`);
+        this.attach(`Response POST get demand aggregation ${this.linkGetDemandAggregation} has status code ${this.getDemandAggregationResponse.status()} ${this.getDemandAggregationResponse.statusText()} and response body ${actualResponseText}`)
+    }
+})

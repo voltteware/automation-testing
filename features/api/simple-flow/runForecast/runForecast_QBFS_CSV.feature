@@ -776,6 +776,10 @@ Feature: APIs: All features need to run forecast for CSV & QBFS companies
         And User checks API contract of get history override of item api
         And The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
+        # Get Demand aggregation
+        # if column in backfill view does not have value, it will get data (orderQty) from Demand
+        And User sets POST api to get demand aggregation of item
+        And User sends a POST request to get demand aggregation of item       
         And User checks value after editing history override values of item must be displayed exactly
         And User calculates the order qty of other years after turning on backfill feature and saves those values
 
@@ -854,6 +858,11 @@ Feature: APIs: All features need to run forecast for CSV & QBFS companies
         And User checks API contract of get history override of item api
         And The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
+        # Get Demand aggregation
+        # if column in backfill view does not have value, it will get data (orderQty) from Demand
+        And User sets POST api to get demand aggregation of item
+        And User sends a POST request to get demand aggregation of item
+        And User calculates the order qty of other years after turning on backfill feature and saves those values
         # Get Company info before run forecast
         And User sets GET api endpoint to get company information by company key
         And User sends a GET request to get company information by company key
@@ -933,6 +942,11 @@ Feature: APIs: All features need to run forecast for CSV & QBFS companies
         And User checks API contract of get history override of item api
         And The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
+        # Get Demand aggregation
+        # if column in backfill view does not have value, it will get data (orderQty) from Demand
+        And User sets POST api to get demand aggregation of item
+        And User sends a POST request to get demand aggregation of item
+        And User calculates the order qty of other years after turning on backfill feature and saves those values
         # Get Company info before run forecast
         And User sets GET api endpoint to get company information by company key
         And User sends a GET request to get company information by company key
@@ -1017,6 +1031,11 @@ Feature: APIs: All features need to run forecast for CSV & QBFS companies
         And User checks API contract of get history override of item api
         And The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
+        # Get Demand aggregation
+        # if column in backfill view does not have value, it will get data (orderQty) from Demand
+        And User sets POST api to get demand aggregation of item
+        And User sends a POST request to get demand aggregation of item
+        And User calculates the order qty of other years after turning on backfill feature and saves those values
         # Get Company info before run forecast
         And User sets GET api endpoint to get company information by company key
         And User sends a GET request to get company information by company key
@@ -1101,6 +1120,11 @@ Feature: APIs: All features need to run forecast for CSV & QBFS companies
         And User checks API contract of get history override of item api
         And The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
+        # Get Demand aggregation
+        # if column in backfill view does not have value, it will get data (orderQty) from Demand
+        And User sets POST api to get demand aggregation of item
+        And User sends a POST request to get demand aggregation of item
+        And User calculates the order qty of other years after turning on backfill feature and saves those values
         # Get Company info before run forecast
         And User sets GET api endpoint to get company information by company key
         And User sends a GET request to get company information by company key
@@ -1180,6 +1204,11 @@ Feature: APIs: All features need to run forecast for CSV & QBFS companies
         And User checks API contract of get history override of item api
         And The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
+        # Get Demand aggregation
+        # if column in backfill view does not have value, it will get data (orderQty) from Demand
+        And User sets POST api to get demand aggregation of item
+        And User sends a POST request to get demand aggregation of item
+        And User calculates the order qty of other years after turning on backfill feature and saves those values
         # Get Company info before run forecast
         And User sets GET api endpoint to get company information by company key
         And User sends a GET request to get company information by company key
@@ -1858,6 +1887,10 @@ Feature: APIs: All features need to run forecast for CSV & QBFS companies
         And User checks API contract of get history override of item api
         And The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
+        # Get Demand aggregation
+        # if column in backfill view does not have value, it will get data (orderQty) from Demand
+        And User sets POST api to get demand aggregation of item
+        And User sends a POST request to get demand aggregation of item        
         And User checks value after editing history override values of item must be displayed exactly
         And User calculates the order qty of other years after turning on backfill feature and saves those values
 
@@ -1936,6 +1969,11 @@ Feature: APIs: All features need to run forecast for CSV & QBFS companies
         And User checks API contract of get history override of item api
         And The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
+        # Get Demand aggregation
+        # if column in backfill view does not have value, it will get data (orderQty) from Demand
+        And User sets POST api to get demand aggregation of item
+        And User sends a POST request to get demand aggregation of item
+        And User calculates the order qty of other years after turning on backfill feature and saves those values
         # Get Company info before run forecast
         And User sets GET api endpoint to get company information by company key
         And User sends a GET request to get company information by company key
@@ -2015,6 +2053,11 @@ Feature: APIs: All features need to run forecast for CSV & QBFS companies
         And User checks API contract of get history override of item api
         And The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
+        # Get Demand aggregation
+        # if column in backfill view does not have value, it will get data (orderQty) from Demand
+        And User sets POST api to get demand aggregation of item
+        And User sends a POST request to get demand aggregation of item
+        And User calculates the order qty of other years after turning on backfill feature and saves those values
         # Get Company info before run forecast
         And User sets GET api endpoint to get company information by company key
         And User sends a GET request to get company information by company key
@@ -2099,6 +2142,11 @@ Feature: APIs: All features need to run forecast for CSV & QBFS companies
         And User checks API contract of get history override of item api
         And The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
+        # Get Demand aggregation
+        # if column in backfill view does not have value, it will get data (orderQty) from Demand
+        And User sets POST api to get demand aggregation of item
+        And User sends a POST request to get demand aggregation of item
+        And User calculates the order qty of other years after turning on backfill feature and saves those values
         # Get Company info before run forecast
         And User sets GET api endpoint to get company information by company key
         And User sends a GET request to get company information by company key
@@ -2183,6 +2231,11 @@ Feature: APIs: All features need to run forecast for CSV & QBFS companies
         And User checks API contract of get history override of item api
         And The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
+        # Get Demand aggregation
+        # if column in backfill view does not have value, it will get data (orderQty) from Demand
+        And User sets POST api to get demand aggregation of item
+        And User sends a POST request to get demand aggregation of item
+        And User calculates the order qty of other years after turning on backfill feature and saves those values
         # Get Company info before run forecast
         And User sets GET api endpoint to get company information by company key
         And User sends a GET request to get company information by company key
@@ -2262,6 +2315,11 @@ Feature: APIs: All features need to run forecast for CSV & QBFS companies
         And User checks API contract of get history override of item api
         And The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
+        # Get Demand aggregation
+        # if column in backfill view does not have value, it will get data (orderQty) from Demand
+        And User sets POST api to get demand aggregation of item
+        And User sends a POST request to get demand aggregation of item
+        And User calculates the order qty of other years after turning on backfill feature and saves those values
         # Get Company info before run forecast
         And User sets GET api endpoint to get company information by company key
         And User sends a GET request to get company information by company key

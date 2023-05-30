@@ -552,6 +552,9 @@ Then(`User sets POST api to add SKU as the following data:`, async function (dat
         "localQty": Number(warehouseQty),
         "shipmentQty": Number(QtySent)
     }
+
+    logger.log('info', `Payload add SKUs >>>` + JSON.stringify(this.payloadAddSKUs, undefined, 4));
+    this.attach(`Payload add SKUs >>> ` + JSON.stringify(this.payloadAddSKUs, undefined, 4))
 })
 
 Then(`User sends a POST request to add SKU`, async function () {
@@ -559,12 +562,12 @@ Then(`User sends a POST request to add SKU`, async function () {
     const responseBodyText = await this.addSKUsResponse.text();
     if (this.addSKUsResponse.status() == 200) {
         this.addSKUsResponseBody = JSON.parse(await this.addSKUsResponse.text());
-        logger.log('info', `Response add SKUs ${link}` + JSON.stringify(this.addSKUsResponseBody, undefined, 4));
-        this.attach(`Response add SKUs ${link} ` + JSON.stringify(this.addSKUsResponseBody, undefined, 4))
+        logger.log('info', `Response add SKUs ${this.linkAddSKUs}` + JSON.stringify(this.addSKUsResponseBody, undefined, 4));
+        this.attach(`Response add SKUs ${this.linkAddSKUs} ` + JSON.stringify(this.addSKUsResponseBody, undefined, 4))
     } else {
         const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
-        logger.log('info', `Response ${link} has status code ${this.runSyncResponse.status()} ${this.runSyncResponse.statusText()} and response body ${responseBodyText}`);
-        this.attach(`Response ${link} has status code ${this.runSyncResponse.status()} ${this.runSyncResponse.statusText()} and response body ${actualResponseText}`)
+        logger.log('info', `Response ${this.linkAddSKUs} has status code ${this.addSKUsResponse.status()} ${this.addSKUsResponse.statusText()} and response body ${actualResponseText}`);
+        this.attach(`Response ${this.linkAddSKUs} has status code ${this.addSKUsResponse.status()} ${this.addSKUsResponse.statusText()} and response body ${actualResponseText}`)
     }
 })
 
