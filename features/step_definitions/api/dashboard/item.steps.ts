@@ -41,6 +41,25 @@ Then(`{} sets GET api endpoint to get items that have not purchase as`, async fu
     linkGetItems = `${Links.API_ITEMS}?offset=0&limit=50&where={"filters":[{"filters":[{"field":"lotMultipleItemName","operator":"isnull","value":null}],"logic":"and"}],"logic":"and"}`
 });
 
+Then(`{} finds the list items contain value: {}`, async function (actor, valueContain: string) {
+    let link = `${Links.API_ITEMS}?offset=0&limit=10&where={"filters":[{"filters":[{"field":"name","operator":"contains","value":"${valueContain}"}],"logic":"and"}],"logic":"and"}`;
+    const options = {
+        headers: this.headers
+    }
+    this.getItemsResponse = this.response = await itemRequest.getItems(this.request, link, options);
+    const responseBodyText = await this.getItemsResponse.text();
+    if (this.getItemsResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
+        this.responseBody = this.getItemsResponseBody = JSON.parse(await this.getItemsResponse.text());
+        logger.log('info', `Response GET ${linkGetItems}` + JSON.stringify(this.getItemsResponseBody, undefined, 4));
+        this.attach(`Response GET ${linkGetItems}` + JSON.stringify(this.getItemsResponseBody, undefined, 4))
+    }
+    else {
+        const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
+        logger.log('info', `Response GET ${linkGetItems} has status code ${this.response.status()} ${this.response.statusText()} and response body ${responseBodyText}`);
+        this.attach(`Response GET ${linkGetItems} has status code ${this.response.status()} ${this.response.statusText()} and response body ${actualResponseText}`)
+    }
+});
+
 Then(`{} set GET api endpoint to get items with name contains {string}`, async function (actor, containText: string) {
     containText === 'itemInListItemInPO' ? containText = this.randomAItemObject.itemName : containText === 'itemInEditedSupplyAbove' ? containText = this.editSupplyResponseBody.itemName : containText === 'itemInEditedDemandAbove' ? containText = this.editDemandResponseBody.itemName : undefined
     linkGetItems = `${Links.API_ITEMS}?offset=0&limit=2&where={"filters":[{"filters":[{"field":"name","operator":"contains","value":"${containText}"}],"logic":"and"},{"filters":[{"field":"isHidden","operator":"eq","value":true},{"field":"isHidden","operator":"eq","value":false}],"logic":"or"}],"logic":"and"}`
@@ -111,7 +130,7 @@ Then('{} sets GET api endpoint to get items with filtered', async function (acto
     var field2: string = dataTable.hashes()[0].field2;
     var value2: string = dataTable.hashes()[0].value2;
     linkGetItems = linkGetFilterItem = `${Links.API_ITEMS}?offset=0&limit=${limitRow}&where={"filters":[{"filters":[{"field":"${field1}","operator":"eq","value":${value1}},{"field":"${field1}","operator":"eq","value":null},{"field":"${field1}","operator":"eq","value":null},{"field":"${field1}","operator":"eq","value":null}],"logic":"or"},{"filters":[{"field":"${field2}","operator":"eq","value":${value2}},{"field":"${field2}","operator":"eq","value":null}],"logic":"or"}],"logic":"and"}`
-    
+
     logger.log('info', `linkGetItems:: ` + linkGetItems);
     this.attach(`linkGetItems:: ` + linkGetItems);
 });
@@ -244,11 +263,12 @@ Given('User picks a random item in above list items', async function () {
     // expect(this.getItemsResponseBody.length, 'There is at least 1 item to pick random').toBeGreaterThanOrEqual(1);
     this.responseBodyOfAItemObject = await this.getItemsResponseBody[Math.floor(Math.random() * this.getItemsResponseBody.length)];
     this.randomItem = this.responseBodyOfAItemObject;
+    this.itemHistoryLengthInDay = this.responseBodyOfAItemObject.itemHistoryLengthInDay;
     logger.log('info', `Random Item: ${JSON.stringify(this.responseBodyOfAItemObject, undefined, 4)}`);
     this.attach(`Random Item: ${JSON.stringify(this.responseBodyOfAItemObject, undefined, 4)}`);
 });
 When('{} picks {} random items in above list items', async function (actor, quantity: number) {
-    this.itemsPickedRandomArray =  itemRequest.getMultipleRandom(this.getItemsResponseBody, quantity);
+    this.itemsPickedRandomArray = itemRequest.getMultipleRandom(this.getItemsResponseBody, quantity);
     return this.itemsPickedRandomArray;
 });
 
@@ -371,7 +391,7 @@ Then(`{} sets api endpoint to edit some values of a item`, async function (actor
     const rows = dataTable.hashes();
     const { purchaseAs, isHidden, supplierName, supplierPrice, moq, onHandFbaQty, onHandFbmQty, serviceLevel, warehouseQty, description, leadTime, orderInterval, casePackQty, tags, onHandQtyMin, wareHouseQtyMin, inventorySourcePreference, doNotOrder } = rows[0]
     this.payLoad = this.responseBodyOfAItemObject
-    
+
     if (doNotOrder === 'false') {
         this.payLoad.doNotOrder = false
     }
@@ -489,7 +509,7 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
             logger.log('info', `New ${editColumn}: ${this.name}`);
             this.attach(`New ${editColumn}: ${this.name}`);
 
-            this.payLoad.name = this.name 
+            this.payLoad.name = this.name
             break;
         case 'asin':
             if (value == 'random') {
@@ -537,7 +557,7 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
                 } else {
                     this.vendorKey = randomSupplier.key;
                     this.vendorName = randomSupplier.name;
-                }                
+                }
             } else if (value == 'supplierUpdatedSalesVelocity') {
                 this.vendorKey = this.supplierKey;
                 this.vendorName = this.supplierName;
@@ -560,7 +580,7 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
             logger.log('info', `New ${editColumn}: ${this.vendorPrice}`);
             this.attach(`New ${editColumn}: ${this.vendorPrice}`);
 
-            this.payLoad.vendorPrice =  this.vendorPrice
+            this.payLoad.vendorPrice = this.vendorPrice
             break;
         case 'moq':
             if (value == 'random') {
@@ -570,7 +590,7 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
             logger.log('info', `New ${editColumn}: ${this.moq}`);
             this.attach(`New ${editColumn}: ${this.moq}`);
 
-            this.payLoad.moq =  this.moq
+            this.payLoad.moq = this.moq
             break;
         case 'leadTime':
             if (value == 'random') {
@@ -583,7 +603,7 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
             logger.log('info', `New ${editColumn}: ${this.leadTime}`);
             this.attach(`New ${editColumn}: ${this.leadTime}`);
 
-            this.payLoad.leadTime =  this.leadTime
+            this.payLoad.leadTime = this.leadTime
             break;
         case 'orderInterval':
             if (value == 'random') {
@@ -593,7 +613,7 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
             logger.log('info', `New ${editColumn}: ${this.orderInterval}`);
             this.attach(`New ${editColumn}: ${this.orderInterval}`);
 
-            this.payLoad.orderInterval =  this.orderInterval
+            this.payLoad.orderInterval = this.orderInterval
             break;
         case 'serviceLevel':
             if (value == 'random') {
@@ -603,7 +623,7 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
             logger.log('info', `New ${editColumn}: ${this.serviceLevel}`);
             this.attach(`New ${editColumn}: ${this.serviceLevel}`);
 
-            this.payLoad.serviceLevel =  this.serviceLevel
+            this.payLoad.serviceLevel = this.serviceLevel
             break;
         case 'onHanFBAQty':
             if (value == 'random') {
@@ -613,7 +633,7 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
             logger.log('info', `New ${editColumn}: ${this.onHand}`);
             this.attach(`New ${editColumn}: ${this.onHand}`);
 
-            this.payLoad.onHand =  this.onHand
+            this.payLoad.onHand = this.onHand
             break;
         case 'onHanQty':
             if (value == 'random') {
@@ -623,7 +643,7 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
             logger.log('info', `New ${editColumn}: ${this.onHand}`);
             this.attach(`New ${editColumn}: ${this.onHand}`);
 
-            this.payLoad.onHand =  this.onHand
+            this.payLoad.onHand = this.onHand
             break;
         case 'onHandQtyMin':
             if (value == 'random') {
@@ -633,7 +653,7 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
             logger.log('info', `New ${editColumn}: ${this.onHandMin}`);
             this.attach(`New ${editColumn}: ${this.onHandMin}`);
 
-            this.payLoad.onHandMin =  this.onHandMin
+            this.payLoad.onHandMin = this.onHandMin
             break;
         case 'warehouseQty':
             if (value == 'random') {
@@ -643,7 +663,7 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
             logger.log('info', `New ${editColumn}: ${this.onHandThirdParty}`);
             this.attach(`New ${editColumn}: ${this.onHandThirdParty}`);
 
-            this.payLoad.onHandThirdParty =  this.onHandThirdParty
+            this.payLoad.onHandThirdParty = this.onHandThirdParty
             break;
         case 'warehouseQtyMin':
             if (value == 'random') {
@@ -653,7 +673,7 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
             logger.log('info', `New ${editColumn}: ${this.onHandThirdPartyMin}`);
             this.attach(`New ${editColumn}: ${this.onHandThirdPartyMin}`);
 
-            this.payLoad.onHandThirdPartyMin =  this.onHandThirdPartyMin
+            this.payLoad.onHandThirdPartyMin = this.onHandThirdPartyMin
             break;
         case 'onHandFBMQty':
             if (value == 'random') {
@@ -663,7 +683,7 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
             logger.log('info', `New ${editColumn}: ${this.onHandFbm}`);
             this.attach(`New ${editColumn}: ${this.onHandFbm}`);
 
-            this.payLoad.onHandFbm =  this.onHandFbm
+            this.payLoad.onHandFbm = this.onHandFbm
             break;
         case 'skuNotes':
             if (value == 'random') {
@@ -673,7 +693,7 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
             logger.log('info', `New ${editColumn}: ${this.skuNotes}`);
             this.attach(`New ${editColumn}: ${this.skuNotes}`);
 
-            this.payLoad.skuNotes =  this.skuNotes
+            this.payLoad.skuNotes = this.skuNotes
             break;
         case 'prepNotes':
             if (value == 'random') {
@@ -683,7 +703,7 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
             logger.log('info', `New ${editColumn}: ${this.prepNotes}`);
             this.attach(`New ${editColumn}: ${this.prepNotes}`);
 
-            this.payLoad.prepNotes =  this.prepNotes
+            this.payLoad.prepNotes = this.prepNotes
             break;
         case 'supplierRebate':
             if (value == 'random') {
@@ -693,7 +713,7 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
             logger.log('info', `New ${editColumn}: ${this.supplierRebate}`);
             this.attach(`New ${editColumn}: ${this.supplierRebate}`);
 
-            this.payLoad.supplierRebate =  this.supplierRebate
+            this.payLoad.supplierRebate = this.supplierRebate
             break;
         case 'inboundShippingCost':
             if (value == 'random') {
@@ -703,7 +723,7 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
             logger.log('info', `New ${editColumn}: ${this.supplierRebate}`);
             this.attach(`New ${editColumn}: ${this.supplierRebate}`);
 
-            this.payLoad.inboundShippingCost =  this.inboundShippingCost
+            this.payLoad.inboundShippingCost = this.inboundShippingCost
             break;
         case 'reshippingCost':
             if (value == 'random') {
@@ -713,7 +733,7 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
             logger.log('info', `New ${editColumn}: ${this.reshippingCost}`);
             this.attach(`New ${editColumn}: ${this.reshippingCost}`);
 
-            this.payLoad.reshippingCost =  this.reshippingCost
+            this.payLoad.reshippingCost = this.reshippingCost
             break;
         case 'repackagingMaterialCost':
             if (value == 'random') {
@@ -723,7 +743,7 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
             logger.log('info', `New ${editColumn}: ${this.repackagingMaterialCost}`);
             this.attach(`New ${editColumn}: ${this.repackagingMaterialCost}`);
 
-            this.payLoad.repackagingMaterialCost =  this.repackagingMaterialCost
+            this.payLoad.repackagingMaterialCost = this.repackagingMaterialCost
             break;
         case 'repackingLaborCost':
             if (value == 'random') {
@@ -733,7 +753,7 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
             logger.log('info', `New ${editColumn}: ${this.repackingLaborCost}`);
             this.attach(`New ${editColumn}: ${this.repackingLaborCost}`);
 
-            this.payLoad.repackingLaborCost =  this.repackingLaborCost
+            this.payLoad.repackingLaborCost = this.repackingLaborCost
             break;
         case 'isHidden':
             if (value == 'random') {
@@ -745,7 +765,7 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
             logger.log('info', `New ${editColumn}: ${this.isHidden}`);
             this.attach(`New ${editColumn}: ${this.isHidden}`);
 
-            this.payLoad.isHidden =  this.isHidden
+            this.payLoad.isHidden = this.isHidden
             break;
         case 'useHistoryOverride':
             if (value == 'random') {
@@ -757,7 +777,7 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
             logger.log('info', `New ${editColumn}: ${this.useHistoryOverride}`);
             this.attach(`New ${editColumn}: ${this.useHistoryOverride}`);
 
-            this.payLoad.useHistoryOverride =  this.useHistoryOverride
+            this.payLoad.useHistoryOverride = this.useHistoryOverride
             break;
         case 'casePackQty':
             if (value == 'random') {
@@ -767,7 +787,7 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
             logger.log('info', `New ${editColumn}: ${this.lotMultipleQty}`);
             this.attach(`New ${editColumn}: ${this.lotMultipleQty}`);
 
-            this.payLoad.lotMultipleQty =  this.lotMultipleQty
+            this.payLoad.lotMultipleQty = this.lotMultipleQty
             break;
         case 'inventorySourcePreference':
             if (value == 'random') {
@@ -782,7 +802,7 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
             logger.log('info', `New ${editColumn}: ${this.inventorySourcePreference}`);
             this.attach(`New ${editColumn}: ${this.inventorySourcePreference}`);
 
-            this.payLoad.inventorySourcePreference =  this.inventorySourcePreference
+            this.payLoad.inventorySourcePreference = this.inventorySourcePreference
             break;
         case 'purchaseAs':
             if (value == 'random') {
@@ -902,8 +922,8 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
             logger.log('info', `New ${editColumn}: ${this.lotMultipleItemName}`);
             this.attach(`New ${editColumn}: ${this.lotMultipleItemName}`);
 
-            this.payLoad.lotMultipleItemName =  this.lotMultipleItemName
-            this.payLoad.lotMultipleItemKey =  this.lotMultipleItemKey
+            this.payLoad.lotMultipleItemName = this.lotMultipleItemName
+            this.payLoad.lotMultipleItemKey = this.lotMultipleItemKey
             break;
         case 'useBackfill':
             if (value == 'random') {
@@ -915,35 +935,35 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
             logger.log('info', `New ${editColumn}: ${this.useBackfill}`);
             this.attach(`New ${editColumn}: ${this.useBackfill}`);
 
-            this.payLoad.useBackfill =  this.useBackfill
+            this.payLoad.useBackfill = this.useBackfill
             break;
-        case 'doNotOrder':                      
+        case 'doNotOrder':
             if (value == 'random') {
                 this.doNotOrder = !(Boolean(this.responseBodyOfAItemObject.doNotOrder));
             }
             else {
-                this.doNotOrder = value;                
+                this.doNotOrder = value;
             }
             logger.log('info', `New ${editColumn}: ${this.doNotOrder}`);
             this.attach(`New ${editColumn}: ${this.doNotOrder}`);
-    
-            this.payLoad.doNotOrder =  this.doNotOrder            
+
+            this.payLoad.doNotOrder = this.doNotOrder
             break;
-        case 'forecastDirty':                      
+        case 'forecastDirty':
             if (value == 'random') {
                 this.forecastDirty = !(Boolean(this.responseBodyOfAItemObject.forecastDirty));
             }
             else {
-                this.forecastDirty = value;                
+                this.forecastDirty = value;
             }
             logger.log('info', `New ${editColumn}: ${this.forecastDirty}`);
             this.attach(`New ${editColumn}: ${this.forecastDirty}`);
-    
-            this.payLoad.forecastDirty =  this.forecastDirty            
+
+            this.payLoad.forecastDirty = this.forecastDirty
             break;
         default:
             break;
-    }    
+    }
 
     logger.log('info', `Payload` + JSON.stringify(this.payLoad, undefined, 4));
     this.attach(`Payload` + JSON.stringify(this.payLoad, undefined, 4))
@@ -1089,8 +1109,191 @@ Given(`User sends GET request to get a item in "Manage Company > Item" to assign
     this.responseBodyOfAItemObject = this.itemToCheckSaleVelocitySetting
 });
 
+Then('User saves needed value to check Automatically Adjusted Weightings setting', function () {
+    // RestockAMZ
+    this.actualRestockAMZPercent2Day = this.restockCalculationResponseBody.salesVelocitySettingData.percent2Day;
+    this.actualRestockAMZPercent7Day = this.restockCalculationResponseBody.salesVelocitySettingData.percent7Day;
+    this.actualRestockAMZPercent14Day = this.restockCalculationResponseBody.salesVelocitySettingData.percent14Day;
+    this.actualRestockAMZPercent30Day = this.restockCalculationResponseBody.salesVelocitySettingData.percent30Day;
+    this.actualRestockAMZPercent60Day = this.restockCalculationResponseBody.salesVelocitySettingData.percent60Day;
+    this.actualRestockAMZPercent90Day = this.restockCalculationResponseBody.salesVelocitySettingData.percent90Day;
+    this.actualRestockAMZPercent180Day = this.restockCalculationResponseBody.salesVelocitySettingData.percent180Day;
+    this.actualRestockAMZPercentForecasted = this.restockCalculationResponseBody.salesVelocitySettingData.percentForecasted;
+    //Purchasing
+    this.actualPurchasingPercent2Day = this.getRestockSuggestionPurchasingResponseBody.salesVelocitySettingData.percent2Day;
+    this.actualPurchasingPercent7Day = this.getRestockSuggestionPurchasingResponseBody.salesVelocitySettingData.percent7Day;
+    this.actualPurchasingPercent14Day = this.getRestockSuggestionPurchasingResponseBody.salesVelocitySettingData.percent14Day;
+    this.actualPurchasingPercent30Day = this.getRestockSuggestionPurchasingResponseBody.salesVelocitySettingData.percent30Day;
+    this.actualPurchasingPercent60Day = this.getRestockSuggestionPurchasingResponseBody.salesVelocitySettingData.percent60Day;
+    this.actualPurchasingPercent90Day = this.getRestockSuggestionPurchasingResponseBody.salesVelocitySettingData.percent90Day;
+    this.actualPurchasingPercent180Day = this.getRestockSuggestionPurchasingResponseBody.salesVelocitySettingData.percent180Day;
+    this.actualPurchasingPercentForecasted = this.getRestockSuggestionPurchasingResponseBody.salesVelocitySettingData.percentForecasted;
+});
+
+Then('User checks Automatically Adjusted setting has been applied in Purchasing and RestockAMZ', function () {
+    if (this.itemHistoryLengthInDay < 31) {
+        this.expectedS2 = 10;
+        this.expectedS7 = 45;
+        this.expectedS14 = 45;
+        this.expectedS30 = 0;
+        this.expectedS60 = 0;
+        this.expectedS90 = 0;
+        this.expectedS180 = 0;
+        this.expectedForecast = 0;
+    }
+    if (this.itemHistoryLengthInDay > 30 && this.itemHistoryLengthInDay < 61) {
+        this.expectedS2 = 10;
+        this.expectedS7 = 30;
+        this.expectedS14 = 30;
+        this.expectedS30 = 30;
+        this.expectedS60 = 0;
+        this.expectedS90 = 0;
+        this.expectedS180 = 0;
+        this.expectedForecast = 0;
+    }
+    if (this.itemHistoryLengthInDay > 60 && this.itemHistoryLengthInDay < 91) {
+        this.expectedS2 = 10;
+        this.expectedS7 = 10;
+        this.expectedS14 = 10;
+        this.expectedS30 = 40;
+        this.expectedS60 = 30;
+        this.expectedS90 = 0;
+        this.expectedS180 = 0;
+        this.expectedForecast = 0;
+    }
+    if (this.itemHistoryLengthInDay > 90 && this.itemHistoryLengthInDay < 121) {
+        this.expectedS2 = 10;
+        this.expectedS7 = 10;
+        this.expectedS14 = 10;
+        this.expectedS30 = 30;
+        this.expectedS60 = 15;
+        this.expectedS90 = 25;
+        this.expectedS180 = 0;
+        this.expectedForecast = 0;
+    }
+    if (this.itemHistoryLengthInDay > 120 && this.itemHistoryLengthInDay < 151) {
+        this.expectedS2 = 10;
+        this.expectedS7 = 10;
+        this.expectedS14 = 10;
+        this.expectedS30 = 30;
+        this.expectedS60 = 20;
+        this.expectedS90 = 20;
+        this.expectedS180 = 0;
+        this.expectedForecast = 0;
+    }
+    if (this.itemHistoryLengthInDay > 150 && this.itemHistoryLengthInDay < 181) {
+        this.expectedS2 = 10;
+        this.expectedS7 = 10;
+        this.expectedS14 = 10;
+        this.expectedS30 = 30;
+        this.expectedS60 = 20;
+        this.expectedS90 = 20;
+        this.expectedS180 = 0;
+        this.expectedForecast = 0;
+    }
+    if (this.itemHistoryLengthInDay > 180 && this.itemHistoryLengthInDay < 361) {
+        this.expectedS2 = 10;
+        this.expectedS7 = 10;
+        this.expectedS14 = 10;
+        this.expectedS30 = 20;
+        this.expectedS60 = 20;
+        this.expectedS90 = 20;
+        this.expectedS180 = 10;
+        this.expectedForecast = 0;
+    }
+    if (this.itemHistoryLengthInDay > 360 && this.itemHistoryLengthInDay < 751) {
+        this.expectedS2 = 10;
+        this.expectedS7 = 10;
+        this.expectedS14 = 10;
+        this.expectedS30 = 20;
+        this.expectedS60 = 10;
+        this.expectedS90 = 10;
+        this.expectedS180 = 10;
+        this.expectedForecast = 20;
+    }
+    if (this.itemHistoryLengthInDay > 750) {
+        this.expectedS2 = 10;
+        this.expectedS7 = 10;
+        this.expectedS14 = 10;
+        this.expectedS30 = 0;
+        this.expectedS60 = 0;
+        this.expectedS90 = 0;
+        this.expectedS180 = 0;
+        this.expectedForecast = 70;
+    }
+    //RestockAMZ
+    //Percent 2-D
+    logger.log('info', `RestockAMZ Percent 2-D: Actual: ${this.actualRestockAMZPercent2Day} and Expected: ${this.expectedS2}`);
+    this.attach(`RestockAMZ Percent 2-D: Actual: ${this.actualRestockAMZPercent2Day} and Expected: ${this.expectedS2}`);
+    expect(this.actualRestockAMZPercent2Day, `In response body, the expected RestockAMZ Percent of 2-D: ${this.expectedS2}`).toBe(this.expectedS2);
+    //Percent 7-D
+    logger.log('info', `RestockAMZ Percent 7-D: Actual: ${this.actualRestockAMZPercent7Day} and Expected: ${this.expectedS7}`);
+    this.attach(`RestockAMZ Percent 7-D: Actual: ${this.actualRestockAMZPercent7Day} and Expected: ${this.expectedS7}`);
+    expect(this.actualRestockAMZPercent7Day, `In response body, the expected RestockAMZ Percent of 7-D: ${this.expectedS7}`).toBe(this.expectedS7);
+    //Percent 14-D
+    logger.log('info', `RestockAMZ Percent 14-D: Actual: ${this.actualRestockAMZPercent14Day} and Expected: ${this.expectedS14}`);
+    this.attach(`RestockAMZ Percent 14-D: Actual: ${this.actualRestockAMZPercent14Day} and Expected: ${this.expectedS14}`);
+    expect(this.actualRestockAMZPercent14Day, `In response body, the expected RestockAMZ Percent of 14-D: ${this.expectedS14}`).toBe(this.expectedS14);
+    //Percent 30-D
+    logger.log('info', `RestockAMZ Percent 30-D: Actual: ${this.actualRestockAMZPercent30Day} and Expected: ${this.expectedS30}`);
+    this.attach(`RestockAMZ Percent 30-D: Actual: ${this.actualRestockAMZPercent30Day} and Expected: ${this.expectedS30}`);
+    expect(this.actualRestockAMZPercent30Day, `In response body, the expected RestockAMZ Percent of 30-D: ${this.expectedS30}`).toBe(this.expectedS30);
+    //Percent 60-D
+    logger.log('info', `RestockAMZ Percent 60-D: Actual: ${this.actualRestockAMZPercent60Day} and Expected: ${this.expectedS60}`);
+    this.attach(`RestockAMZ Percent 60-D: Actual: ${this.actualRestockAMZPercent60Day} and Expected: ${this.expectedS60}`);
+    expect(this.actualRestockAMZPercent60Day, `In response body, the expected RestockAMZ Percent of 60-D: ${this.expectedS60}`).toBe(this.expectedS60);
+    //Percent 90-D
+    logger.log('info', `RestockAMZ Percent 90-D: Actual: ${this.actualRestockAMZPercent90Day} and Expected: ${this.expectedS90}`);
+    this.attach(`RestockAMZ Percent 90-D: Actual: ${this.actualRestockAMZPercent90Day} and Expected: ${this.expectedS90}`);
+    expect(this.actualRestockAMZPercent90Day, `In response body, the expected RestockAMZ Percent of 90-D: ${this.expectedS90}`).toBe(this.expectedS90);
+    //Percent 180-D
+    logger.log('info', `RestockAMZ Percent 180-D: Actual: ${this.actualRestockAMZPercent180Day} and Expected: ${this.expectedS180}`);
+    this.attach(`RestockAMZ Percent 180-D: Actual: ${this.actualRestockAMZPercent180Day} and Expected: ${this.expectedS180}`);
+    expect(this.actualRestockAMZPercent180Day, `In response body, the expected RestockAMZ Percent of 180-D: ${this.expectedS180}`).toBe(this.expectedS180);
+    //Percent Forecast
+    logger.log('info', `RestockAMZ Percent Forecast: Actual: ${this.actualRestockAMZPercentForecasted} and Expected: ${this.expectedForecast}`);
+    this.attach(`RestockAMZ Percent Forecast: Actual: ${this.actualRestockAMZPercentForecasted} and Expected: ${this.expectedForecast}`);
+    expect(this.actualRestockAMZPercentForecasted, `In response body, the expected RestockAMZ Percent of Forecast: ${this.expectedForecast}`).toBe(this.expectedForecast);
+
+    //Purchasing
+    //Percent 2-D
+    logger.log('info', `Purchasing Percent 2-D: Actual: ${this.actualPurchasingPercent2Day} and Expected: ${this.expectedS2}`);
+    this.attach(`Purchasing Percent 2-D: Actual: ${this.actualPurchasingPercent2Day} and Expected: ${this.expectedS2}`);
+    expect(this.actualPurchasingPercent2Day, `In response body, the expected Purchasing Percent of 2-D: ${this.expectedS2}`).toBe(this.expectedS2);
+    //Percent 7-D
+    logger.log('info', `Purchasing Percent 7-D: Actual: ${this.actualPurchasingPercent7Day} and Expected: ${this.expectedS7}`);
+    this.attach(`Purchasing Percent 7-D: Actual: ${this.actualPurchasingPercent7Day} and Expected: ${this.expectedS7}`);
+    expect(this.actualPurchasingPercent7Day, `In response body, the expected Purchasing Percent of 7-D: ${this.expectedS7}`).toBe(this.expectedS7);
+    //Percent 14-D
+    logger.log('info', `Purchasing Percent 14-D: Actual: ${this.actualPurchasingPercent14Day} and Expected: ${this.expectedS14}`);
+    this.attach(`Purchasing Percent 14-D: Actual: ${this.actualPurchasingPercent14Day} and Expected: ${this.expectedS14}`);
+    expect(this.actualPurchasingPercent14Day, `In response body, the expected Purchasing Percent of 14-D: ${this.expectedS14}`).toBe(this.expectedS14);
+    //Percent 30-D
+    logger.log('info', `Purchasing Percent 30-D: Actual: ${this.actualPurchasingPercent30Day} and Expected: ${this.expectedS30}`);
+    this.attach(`Purchasing Percent 30-D: Actual: ${this.actualPurchasingPercent30Day} and Expected: ${this.expectedS30}`);
+    expect(this.actualPurchasingPercent30Day, `In response body, the expected Purchasing Percent of 30-D: ${this.expectedS30}`).toBe(this.expectedS30);
+    //Percent 60-D
+    logger.log('info', `Purchasing Percent 60-D: Actual: ${this.actualPurchasingPercent60Day} and Expected: ${this.expectedS60}`);
+    this.attach(`Purchasing Percent 60-D: Actual: ${this.actualPurchasingPercent60Day} and Expected: ${this.expectedS60}`);
+    expect(this.actualPurchasingPercent60Day, `In response body, the expected Purchasing Percent of 60-D: ${this.expectedS60}`).toBe(this.expectedS60);
+    //Percent 90-D
+    logger.log('info', `Purchasing Percent 90-D: Actual: ${this.actualPurchasingPercent90Day} and Expected: ${this.expectedS90}`);
+    this.attach(`Purchasing Percent 90-D: Actual: ${this.actualPurchasingPercent90Day} and Expected: ${this.expectedS90}`);
+    expect(this.actualPurchasingPercent90Day, `In response body, the expected Purchasing Percent of 90-D: ${this.expectedS90}`).toBe(this.expectedS90);
+    //Percent 180-D
+    logger.log('info', `Purchasing Percent 180-D: Actual: ${this.actualPurchasingPercent180Day} and Expected: ${this.expectedS180}`);
+    this.attach(`Purchasing Percent 180-D: Actual: ${this.actualPurchasingPercent180Day} and Expected: ${this.expectedS180}`);
+    expect(this.actualPurchasingPercent180Day, `In response body, the expected Purchasing Percent of 180-D: ${this.expectedS180}`).toBe(this.expectedS180);
+    //Percent Forecast
+    logger.log('info', `Purchasing Percent Forecast: Actual: ${this.actualPurchasingPercentForecasted} and Expected: ${this.expectedForecast}`);
+    this.attach(`Purchasing Percent Forecast: Actual: ${this.actualPurchasingPercentForecasted} and Expected: ${this.expectedForecast}`);
+    expect(this.actualPurchasingPercentForecasted, `In response body, the expected Purchasing Percent of Forecast: ${this.expectedForecast}`).toBe(this.expectedForecast);
+});
+
 Then('User sets GET api endpoint to get item sales velocity settings', function () {
     linkGetItemSalesVelocitySettings = `${Links.API_ITEM_SALES_VELOCITY}/${this.itemKey}/purchasing`
+    logger.log('info', `linkGetItemSalesVelocitySettings:: ` + linkGetItemSalesVelocitySettings);
+    this.attach(`linkGetItemSalesVelocitySettings:: ` + linkGetItemSalesVelocitySettings);
 });
 
 Then('User sends GET request to get item sales velocity settings', async function () {
@@ -1101,11 +1304,10 @@ Then('User sends GET request to get item sales velocity settings', async functio
     this.getItemSalesVelocitySettingsResponse = this.response = await itemRequest.getItemSalesVelocitySettings(this.request, linkGetItemSalesVelocitySettings, options);
     const responseBodyText = await this.getItemSalesVelocitySettingsResponse.text();
 
-    console.log(this.getItemSalesVelocitySettingsResponse.status() + '-' + this.response.statusText())
     if (this.getItemSalesVelocitySettingsResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
-        this.responseBody = this.getItemSalesVelocitySettingsResponseBody = JSON.parse(await this.getItemSalesVelocitySettingsResponse.text());
-        logger.log('info', `Response GET ${linkGetItemSalesVelocitySettings}` + JSON.stringify(this.getItemSalesVelocitySettingsResponseBody, undefined, 4));
-        this.attach(`Response GET ${linkGetItemSalesVelocitySettings}` + JSON.stringify(this.getItemSalesVelocitySettingsResponseBody, undefined, 4))
+        this.responseBody = this.getItemSalesVelocitySettingsResponseBody = await this.getItemSalesVelocitySettingsResponse.text();
+        logger.log('info', `Response GET ${linkGetItemSalesVelocitySettings} ` + this.getItemSalesVelocitySettingsResponseBody);
+        this.attach(`Response GET ${linkGetItemSalesVelocitySettings} ` + this.getItemSalesVelocitySettingsResponseBody);
     }
     else {
         const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
@@ -1644,7 +1846,7 @@ Given('{} sets request body of edit item api with payload', async function (acto
 
             logger.log('info', `New ${editColumn}: ${this.onHand}`);
             this.attach(`New ${editColumn}: ${this.onHand}`);
-            break;        
+            break;
         case 'onHandQtyMin':
             if (value == 'random') {
                 this.onHandMin = Number(faker.random.numeric(3));

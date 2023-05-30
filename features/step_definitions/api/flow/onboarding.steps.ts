@@ -94,7 +94,14 @@ Then('{} sends a GET request to get company information by company key', async f
         this.getCompanyInfoResponseBody = JSON.parse(await this.getCompanyInfoResponse.text());
         this.lastForecastDate = this.getCompanyInfoResponseBody.lastForecastDate;
         this.marketplaceId = this.getCompanyInfoResponseBody.marketplaceId;
-        console.log(this.lastForecastDate);
+        //Global Purchasing settings
+        this.purchasingSalesVelocityType = this.getCompanyInfoResponseBody.purchasingSalesVelocityType;
+        //Global RestockAMZ settings
+        this.salesVelocityType = this.getCompanyInfoResponseBody.salesVelocityType;
+        logger.log('info', `purchasingSalesVelocityType:: ` + this.purchasingSalesVelocityType);
+        this.attach(`purchasingSalesVelocityType:: ` + this.purchasingSalesVelocityType)
+        logger.log('info', `salesVelocityType:: ` + this.salesVelocityType);
+        this.attach(`salesVelocityType:: ` + this.salesVelocityType)
         logger.log('info', `Response GET ${link}` + JSON.stringify(this.getCompanyInfoResponseBody, undefined, 4));
         this.attach(`Response GET ${link}` + JSON.stringify(this.getCompanyInfoResponseBody, undefined, 4))
     }
