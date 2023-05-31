@@ -374,7 +374,7 @@ Then(`User checks the system display the correct item list by filter function wi
 })
 
 Then(`User sets PUT api method to edit item in Item List as following data:`, function(dataTable: DataTable) {
-    this.linkEditItemInItemList = `${Links.API_GET_RESTOCK_SUGGESTION}/${this.itemKey}/restockAMZ`
+    this.linkEditItemInItemList = `${Links.API_GET_RESTOCK_SUGGESTION}/${encodeURIComponent(this.itemKey)}/restockAMZ`
 
     const {status} = dataTable.hashes()[0]
     this.status = status
