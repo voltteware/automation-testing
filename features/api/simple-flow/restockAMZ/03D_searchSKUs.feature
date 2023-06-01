@@ -87,3 +87,20 @@ Feature: API_Regression User can search SKUs
         Examples:
             | TC_ID             | companyType | restockType | email                      | expectedStatus | expectedStatusText | shipmentStatus |
             | TC_ASC_SSKUS001_2 | ASC         | SUPPLIER    | testautoforecast@gmail.com | 200            | OK                 | WORKING        |
+
+    @runthis
+    Scenario Outline: TEST testtestesttesttesttesttesttesttesttesttest
+        Given User picks company which has onboarded before with type <companyType> in above response
+        And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
+        And User prepares the supplier list as following data:
+            | supplierName | leadTime | orderInterval |
+            | random       | random   | random        |
+            | random       | random   | random        |
+            | random       | random   | random        |            
+        # And Get singed request
+        # And Upload to s3
+        # And Sync file
+
+        Examples:
+            | TC_ID             | companyType | restockType | email                      | expectedStatus | expectedStatusText | shipmentStatus |
+            | TC_ASC_SSKUS001_2 | CSV         | SUPPLIER    | testautoforecast@gmail.com | 200            | OK                 | WORKING        |
