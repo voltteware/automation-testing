@@ -38,10 +38,14 @@ Feature: API_Regression User can delete shipments which have Pending status
         And User sends a GET request to get list suppliers
         And The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
-        # And User sets PUT api endpoint to edit <editColumn> of the above item for company type <companyType> with new value: <value>
-        # And User sends a PUT request to edit the item
-        # And The expected status code should be <expectedStatus>
-        # And The status text is "<expectedStatusText>"
+        And User picks random supplier in above response
+        And User sets request body of edit item api with payload
+            | editColumn   | companyType   | value   |
+            | <editColumn> | <companyType> | <value> |
+        And User sends a PUT request to edit the item
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
         And User sets POST api endpoint to create Shipment
         And User sends a POST request to create Shipment
         And The expected status code should be <expectedStatus>
@@ -86,8 +90,8 @@ Feature: API_Regression User can delete shipments which have Pending status
         And User checks the deleted shipments does not exist in the list
 
         Examples:
-            | TC_ID        | companyType | casePackOption | restockType | editColumn   | value  | email                      | direction | expectedStatus | expectedStatusText | limitRow | shipmentStatus |
-            | TC_ASC_DS001 | ASC         | No             | SUPPLIER    | supplierName | random | testautoforecast@gmail.com | desc      | 200            | OK                 | 10       | PENDING        |
+            | TC_ID        | companyType | casePackOption | restockType | editColumn   | value                        | email                      | direction | expectedStatus | expectedStatusText | limitRow | shipmentStatus |
+            | TC_ASC_DS001 | ASC         | No             | SUPPLIER    | supplierName | supplierUpdatedSalesVelocity | testautoforecast@gmail.com | desc      | 200            | OK                 | 10       | PENDING        |
 
     @TC_ASC_DS002 @smoke-test-api @retry
     Scenario Outline: <TC_ID> - Verify user <email> could call APIs to delete shipments which have WORKING status
@@ -119,11 +123,14 @@ Feature: API_Regression User can delete shipments which have Pending status
         And User sends a GET request to get list suppliers
         And The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
-        # And User sets PUT api endpoint to edit <editColumn> of the above item for company type <companyType> with new value: <value>
-        # And User sends a PUT request to edit the item
-        # And The expected status code should be <expectedStatus>
-        # And The status text is "<expectedStatusText>"
-        # Hard Item to makse sure always create shipment successfully
+        And User picks random supplier in above response
+        And User sets request body of edit item api with payload
+            | editColumn   | companyType   | value   |
+            | <editColumn> | <companyType> | <value> |
+        And User sends a PUT request to edit the item
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
         And User sets POST api endpoint to create Shipment
         And User sends a POST request to create Shipment
         And The expected status code should be <expectedStatus>
@@ -205,26 +212,26 @@ Feature: API_Regression User can delete shipments which have Pending status
         And User checks the deleted shipments must be existed in the list
 
         Examples:
-            | TC_ID        | companyType | casePackOption | restockType | editColumn   | value  | email                      | direction | expectedStatus | expectedStatusText | limitRow | shipmentStatus |
-            | TC_ASC_DS002 | ASC         | No             | SUPPLIER    | supplierName | random | testautoforecast@gmail.com | desc      | 200            | OK                 | 10       | WORKING        |
+            | TC_ID        | companyType | casePackOption | restockType | editColumn   | value                        | email                      | direction | expectedStatus | expectedStatusText | limitRow | shipmentStatus |
+            | TC_ASC_DS002 | ASC         | No             | SUPPLIER    | supplierName | supplierUpdatedSalesVelocity | testautoforecast@gmail.com | desc      | 200            | OK                 | 10       | WORKING        |
 
-    # #Script to delete shipments on Amazon, change retry in cucumber.js
-    # @run-this @retry
-    # Scenario Outline: <TC_ID> - Verify user <email> could call APIs to delete shipments ITC which have WORKING status
-    #     Given User picks company which has onboarded before with type <companyType> in above response
-    #     And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
-    #     And User sets GET api endpoint to find itc auto shipments
-    #     And User sends a GET request to find the new created shipment
-    #     And User picks a just created shipment
-    #     # Get above shipment details
-    #     And User sets GET api endpoint to get shipment details in Manage Shipments
-    #     And User sends a GET request to get shipment details in Manage Shipments
-    #     # Delete above shipment
-    #     And User sets PUT api endpoint to modify shipment details
-    #     When User sends a PUT request to modify: DELETE shipment details
-    #     Then The expected status code should be <expectedStatus>
-    #     And The status text is "<expectedStatusText>"
+# #Script to delete shipments on Amazon, change retry in cucumber.js
+# @run-this @retry
+# Scenario Outline: <TC_ID> - Verify user <email> could call APIs to delete shipments ITC which have WORKING status
+#     Given User picks company which has onboarded before with type <companyType> in above response
+#     And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
+#     And User sets GET api endpoint to find itc auto shipments
+#     And User sends a GET request to find the new created shipment
+#     And User picks a just created shipment
+#     # Get above shipment details
+#     And User sets GET api endpoint to get shipment details in Manage Shipments
+#     And User sends a GET request to get shipment details in Manage Shipments
+#     # Delete above shipment
+#     And User sets PUT api endpoint to modify shipment details
+#     When User sends a PUT request to modify: DELETE shipment details
+#     Then The expected status code should be <expectedStatus>
+#     And The status text is "<expectedStatusText>"
 
-    #     Examples:
-    #         | TC_ID        | companyType | email                 | expectedStatus | expectedStatusText |
-    #         | TC_ASC_DS002 | ASC         | testautocsv@gmail.com | 400            | OK                 |
+#     Examples:
+#         | TC_ID        | companyType | email                 | expectedStatus | expectedStatusText |
+#         | TC_ASC_DS002 | ASC         | testautocsv@gmail.com | 400            | OK                 |

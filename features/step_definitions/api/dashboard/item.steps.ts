@@ -1442,6 +1442,9 @@ Then('User sends a GET request to get Item by Item key', async function () {
         logger.log('info', `Response GET ${linkItemKey} has status code ${this.response.status()} ${this.response.statusText()} and response body ${responseBodyText}`);
         this.attach(`Response GET ${linkItemKey} has status code ${this.response.status()} ${this.response.statusText()} and response body ${actualResponseText}`)
     }
+    
+    this.vendorPriceOfItem = this.getItemByItemKeyResponseBody.vendorPrice;
+    this.packageWeightOfItem = this.getItemByItemKeyResponseBody.packageWeight;
 });
 
 Then('User sends a GET request to get item by by filtered', async function () {

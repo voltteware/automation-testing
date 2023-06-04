@@ -17,7 +17,7 @@ Feature: API_Regression Address Book
         And User sends a GET request to get list suppliers
         And User picks random supplier in above response
         # Add new address book
-        And User sets POST api to add new address book with following informations:
+        And User sets POST api to add new address book with following information:
             | country | supplierName | streetLine1 | streetLine2 | city   | state  | zipCode | phoneNumber |
             | random  | random       | random      | random      | random | random | random  | random      |
         And User sends a POST request to add new address book
@@ -27,9 +27,9 @@ Feature: API_Regression Address Book
         And User checks values in response of add new address book are correct
         And User sets GET api to get list address books by full name
         And User sends a GET request to get list address books
-        And User checks just added address book must be found and display the correct informations
+        And User checks just added address book must be found and display the correct information
         # Update address book
-        And User sets PUT api to update address book with following informations:
+        And User sets PUT api to update address book with following information:
             | country | supplierName | streetLine1 | streetLine2 | city   | state  | zipCode | phoneNumber |
             | random  | random       | random      | random      | random | random | random  | random      |
         And User sends a PUT request to update address book
@@ -54,7 +54,7 @@ Feature: API_Regression Address Book
         And User sends a GET request to get list suppliers
         And User picks random supplier in above response
         # Add new address book
-        And User sets POST api to add new address book with following informations:
+        And User sets POST api to add new address book with following information:
             | country | supplierName | streetLine1 | streetLine2 | city   | state  | zipCode | phoneNumber |
             | random  | random       | random      |             | random | random | random  |             |
         And User sends a POST request to add new address book
@@ -64,9 +64,9 @@ Feature: API_Regression Address Book
         And User checks values in response of add new address book are correct
         And User sets GET api to get list address books by full name
         And User sends a GET request to get list address books
-        And User checks just added address book must be found and display the correct informations
+        And User checks just added address book must be found and display the correct information
         # Update address book
-        And User sets PUT api to update address book with following informations:
+        And User sets PUT api to update address book with following information:
             | country | supplierName | streetLine1 | streetLine2 | city   | state  | zipCode | phoneNumber |
             | random  | random       | random      | random      | random | random | random  | random      |
         And User sends a PUT request to update address book
