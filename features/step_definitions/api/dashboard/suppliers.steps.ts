@@ -433,32 +433,47 @@ Given('User sets PUT api endpoint to update sale velocity settings with type {} 
 });
 
 Given('User sends PUT request to update sale velocity settings with type {} of above supplier with the total percentage is {}%', async function (velocityType: string, percentage: string) {
-    const isNumber = !isNaN(parseFloat(percentage)) && isFinite(+percentage);
+    switch (velocityType) {
+        case '"Average"':
+            const isNumber = !isNaN(parseFloat(percentage)) && isFinite(+percentage);
 
-    this.randomWeightNumbers = []
+            this.randomWeightNumbers = []
 
-    if (isNumber) {
-        // The function returns the array of 8 numbers that add up to the desired sum (here is percentage of purchasing daily sales)
-        this.randomWeightNumbers = keyword.generateRandomNumbers(Number(percentage), 8);
+            if (isNumber) {
+                // The function returns the array of 8 numbers that add up to the desired sum (here is percentage of purchasing daily sales)
+                this.randomWeightNumbers = keyword.generateRandomNumbers(Number(percentage), 8);
 
-        this.payLoad = {
-            "companyKey": `${this.companyKey}`,
-            "companyType": `${this.companyType}`,
-            "salesVelocityType": "average",
-            "vendorKey": `${this.supplierKey}`,
-            "salesVelocitySettingData": {
-                "percent2Day": this.randomWeightNumbers[0],
-                "percent7Day": this.randomWeightNumbers[1],
-                "percent14Day": this.randomWeightNumbers[2],
-                "percent30Day": this.randomWeightNumbers[3],
-                "percent60Day": this.randomWeightNumbers[4],
-                "percent90Day": this.randomWeightNumbers[5],
-                "percent180Day": this.randomWeightNumbers[6],
-                "percentForecasted": this.randomWeightNumbers[7]
-            },
-            "salesVelocitySettingsType": "purchasing"
-        }
-    }
+                this.payLoad = {
+                    "companyKey": `${this.companyKey}`,
+                    "companyType": `${this.companyType}`,
+                    "salesVelocityType": "average",
+                    "vendorKey": `${this.supplierKey}`,
+                    "salesVelocitySettingData": {
+                    "percent2Day": this.randomWeightNumbers[0],
+                    "percent7Day": this.randomWeightNumbers[1],
+                    "percent14Day": this.randomWeightNumbers[2],
+                    "percent30Day": this.randomWeightNumbers[3],
+                    "percent60Day": this.randomWeightNumbers[4],
+                    "percent90Day": this.randomWeightNumbers[5],
+                    "percent180Day": this.randomWeightNumbers[6],
+                    "percentForecasted": this.randomWeightNumbers[7]
+                    },
+                    "salesVelocitySettingsType": "purchasing"
+                }
+            }
+            break;
+        case '"Automatically Adjusted Weightings"':
+            this.payLoad = {
+                "companyKey": `${this.companyKey}`,
+                "companyType": `${this.companyType}`,
+                "salesVelocityType": "auto",
+                "vendorKey": `${this.supplierKey}`,                
+                "salesVelocitySettingsType": "purchasing"
+            }
+            break;
+        default:
+            break;
+    }    
 
     logger.log('info', `Payload` + JSON.stringify(this.payLoad, undefined, 4));
     this.attach(`Payload` + JSON.stringify(this.payLoad, undefined, 4))
