@@ -718,7 +718,7 @@ Given('{} sets request body of edit supplier api with payload', async function (
     this.attach(`Payload` + JSON.stringify(this.payLoad, undefined, 4))
 });
 
-Then(`User sets POST api to add new address book with following informations:`, async function (dataTable: DataTable) {
+Then(`User sets POST api to add new address book with following information:`, async function (dataTable: DataTable) {
     this.linkApiAddNewAddressBook = Links.API_SUPPLIER
     const { country, supplierName, streetLine1, streetLine2, city, state, zipCode, phoneNumber } = dataTable.hashes()[0]
     if (country == 'random') {
@@ -852,7 +852,7 @@ Then(`User sends a GET request to get list address books`, async function () {
     }
 })
 
-Then(`User checks just added address book must be found and display the correct informations`, async function () {
+Then(`User checks just added address book must be found and display the correct information`, async function () {
     expect(this.getListAddressBooksResponseBody.length).toBeGreaterThanOrEqual(1)
     const justAddedAddressBook = this.getListAddressBooksResponseBody.find((addressBook: any) => addressBook.key == this.addNewAddressBookResponseBody.key)
     expect(justAddedAddressBook).not.toBe(undefined)
@@ -867,7 +867,7 @@ Then(`User checks just added address book must be found and display the correct 
     expect(justAddedAddressBook.phoneNumber).toBe(this.addNewAddressBookResponseBody.phoneNumber)
 })
 
-Then(`User sets PUT api to update address book with following informations:`, async function (dataTable: DataTable) {
+Then(`User sets PUT api to update address book with following information:`, async function (dataTable: DataTable) {
     this.linkApiUpdateAddressBook = `${Links.API_SUPPLIER}/${this.addNewAddressBookResponseBody.key}`
     const { country, supplierName, streetLine1, streetLine2, city, state, zipCode, phoneNumber } = dataTable.hashes()[0]
     if (country == 'random') {

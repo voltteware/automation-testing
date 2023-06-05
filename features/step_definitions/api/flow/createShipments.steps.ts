@@ -16,7 +16,6 @@ let linkListShipments: any;
 let itemKeyTmp: any;
 
 Then('{} sets POST api endpoint to create Shipment', async function (actor: string) {
-    // Hard item to make sure create shipments successfully
     link = `${Links.API_SHIPMENT}`
     itemKeyTmp = this.itemKey;
     this.payLoad = {
@@ -36,6 +35,7 @@ Then('{} sets POST api endpoint to create Shipment', async function (actor: stri
             whoPreps: "",
         },
         supplierCost: 0,
+        vendorKey: `${this.supplierKey}`
     }
 
     logger.log('info', `Payload: ` + JSON.stringify(this.payLoad, undefined, 4));
@@ -119,6 +119,7 @@ Then(`{} sends a PUT request to update shipment with casePackOption: {}`, async 
         payload = {
             key: `${this.shipmentKey}`,
             shipmentName: `${this.shipmentName}`,
+            labelPrepPreference: 'SELLER_LABEL',
             stepProgress: {
                 uploadInventory: true,
                 isFromRestockSuggestion: true,
@@ -230,11 +231,11 @@ Then(`{} sends a POST request to create shipment plan`, async function (actor: s
             countryCode: `${this.countryCode}`,
             fullName: `${this.fullName}`,
             addressLine1: `${this.addressLine1}`,
-            addressLine2: null,
+            addressLine2: `${this.addressLine2}`,
             city: `${this.city}`,
             stateOrProvinceCode: `${this.stateOrProvinceCode}`,
             postalCode: `${this.postalCode}`,
-            phoneNumber: null
+            phoneNumber: `${this.phoneNumber}`
         },
         labelPrepPreference: "SELLER_LABEL"
     }
