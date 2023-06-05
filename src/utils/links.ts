@@ -64,6 +64,8 @@ export class Links {
     static API_SYNC: string = '/api/sync';
     //API Count Summary
     static API_SUMMARY_COUNT: string = "/api/summary/count";
+    // API File
+    static API_FILE: string = "/api/file"
 }
 
 //URL for performance

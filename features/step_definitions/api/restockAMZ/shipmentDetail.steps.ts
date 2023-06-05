@@ -1,15 +1,9 @@
 import { DataTable, Then } from '@cucumber/cucumber';
 import * as shipmentRequest from '../../../../src/api/request/shipment.service';
-import * as s3Request from '../../../../src/api/request/s3.service';
-import * as syncRequest from '../../../../src/api/request/sync.service';
 import logger from '../../../../src/Logger/logger';
 import { Links } from '../../../../src/utils/links';
-import { faker } from '@faker-js/faker';
 import _ from "lodash";
-import { getListShipmentsResponseSchema } from '../assertion/restockAMZ/shipmentAssertionSchema';
 import { expect } from '@playwright/test';
-import path from 'path';
-import fs from 'fs';
 
 Then('{} sets GET api to get shipments in Manage Shipments by status:', async function (actor: string, dataTable: DataTable) {
     const { shipmentStatus, limit } = dataTable.hashes()[0]
@@ -83,68 +77,5 @@ Then(`User checks the system display the correct item list in shipment detail by
         this.attach(`---------`)
         expect(item.itemName?.toLowerCase().includes(this.searchText.toLowerCase()) || item.supplierSku?.toLowerCase().includes(this.searchText.toLowerCase()) || item.asin?.toLowerCase().includes(this.searchText.toLowerCase()) || item.fnsku?.toLowerCase().includes(this.searchText.toLowerCase()) || item.description?.toLowerCase().includes(this.searchText.toLowerCase())).toBeTruthy()
     });
-})
-
-Then(`User prepares the {} list as following data:`, async function (section: string, dataTable: DataTable) {
-    console.log(dataTable.rowsHash())
-})
-
-Then(`Get singed request`, async function () {
-    this.fileName = 'supplier-template-test.csv'   
-    this.linkGetSignedRequest = `https://preprod-my.forecastrx.com/api/file/auth/${this.companyKey}?fileName=${this.fileName}&os=mac`
-    const options = {
-        headers: this.headers
-    }
-    this.getSignedRequestResponse = this.response = await shipmentRequest.getShipmentInfo(this.request, this.linkGetSignedRequest, options);
-    const responseBodyText = await this.getSignedRequestResponse.text();
-    if (this.getSignedRequestResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
-        this.getSignedRequestResponseBody = JSON.parse(await this.getSignedRequestResponse.text());
-        logger.log('info', `Response GET ${this.linkGetSignedRequest}: ` + JSON.stringify(this.getSignedRequestResponseBody, undefined, 4));
-        this.attach(`Response GET ${this.linkGetSignedRequest}: ` + JSON.stringify(this.getSignedRequestResponseBody, undefined, 4));
-    }
-    else {
-        const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
-        logger.log('info', `Response ${this.linkGetSignedRequest} has status code ${this.getSignedRequestResponse.status()} ${this.getSignedRequestResponse.statusText()} and response body ${responseBodyText}`);
-        this.attach(`Response ${this.linkGetSignedRequest} has status code ${this.getSignedRequestResponse.status()} ${this.getSignedRequestResponse.statusText()} and response body ${actualResponseText}`);
-    }
-})
-
-Then(`Upload to s3`, async function() {    
-    const file = path.resolve("./src/data/", `${this.fileName}`)
-    const csv_buffer = fs.readFileSync(file)
-    const file_blob = new Blob([csv_buffer], {type: 'text/csv'})
-    console.log(file_blob)
-
-    this.uploadFileToS3 = this.response = await s3Request.uploadFileToS3(this.getSignedRequestResponseBody.signedRequest, this.companyKey, this.companyType, csv_buffer);
-    console.log(this.response.status())
-})
-
-Then(`Sync file`, async function () {
-    const link = `${Links.API_SYNC}/supplier`;
-    const payload = {
-        "fileName": `${this.fileName}`,
-        "fileType": "supplier",
-        "append": false,
-        "zero": false,
-        "userId": "",
-        "isCreateNew": true,
-        "isInitialUpload": false
-    }
-    this.runSyncResponse = this.response = await syncRequest.postSync(this.request, link, payload, this.headers);
-    const responseBodyText = await this.runSyncResponse.text();
-    if (this.runSyncResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
-        // this.runSyncResponseBody = JSON.parse(await this.runSyncResponse.text());
-        logger.log('info', `Response POST ${link}` + JSON.stringify(this.runSyncResponse, undefined, 4));
-        this.attach(`Response POST ${link} ` + JSON.stringify(this.runSyncResponse, undefined, 4))
-    }
-    else {
-        const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
-        logger.log('info', `Response ${link} has status code ${this.runSyncResponse.status()} ${this.runSyncResponse.statusText()} and response body ${responseBodyText}`);
-        this.attach(`Response ${link} has status code ${this.runSyncResponse.status()} ${this.runSyncResponse.statusText()} and response body ${actualResponseText}`)
-    }
-    const sleep = (milliseconds: number) => {
-        return new Promise(resolve => setTimeout(resolve, milliseconds))
-    }
-    await sleep(6000);
 })
 

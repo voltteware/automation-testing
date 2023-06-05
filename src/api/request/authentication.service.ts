@@ -19,7 +19,16 @@ async function resetPassword(request: APIRequestContext, linkApi:string, email:s
     logger.log('info',`Send GET request ${url}`);
     return await request.get(url);
 }
+
+// Get Signed Request
+async function getSignedRequest(request: APIRequestContext, linkApi: string, options?: object) {
+    const url = `${linkApi}`;
+    logger.log('info', `Send GET request ${url}`);
+    return await request.get(url, options);
+};
+
 export { 
     sendPOSTAuthenticateRequest,
-    resetPassword
+    resetPassword,
+    getSignedRequest
 }
