@@ -91,7 +91,7 @@ Then('{} sends a GET request to get company information by company key', async f
     this.getCompanyInfoResponse = this.response = await companyRequest.getCompanyInfo(this.request, link, options);
     const responseBodyText = await this.getCompanyInfoResponse.text();
     if (this.getCompanyInfoResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
-        this.getCompanyInfoResponseBody = JSON.parse(await this.getCompanyInfoResponse.text());
+        this.responseBodyOfACompanyObject = this.getCompanyInfoResponseBody = JSON.parse(await this.getCompanyInfoResponse.text());
         this.lastForecastDate = this.getCompanyInfoResponseBody.lastForecastDate;
         this.marketplaceId = this.getCompanyInfoResponseBody.marketplaceId;
         //Global Purchasing settings
