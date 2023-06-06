@@ -1,10 +1,10 @@
-import { Then, When } from '@cucumber/cucumber';
+import { Then, When, DataTable } from '@cucumber/cucumber';
 import { expect } from '@playwright/test';
 import * as demandRequest from '../../../../src/api/request/demand.service';
 import * as itemRequest from '../../../../src/api/request/item.service';
 import logger from '../../../../src/Logger/logger';
 import { Links } from '../../../../src/utils/links';
-import { format, sub } from 'date-fns'
+import { add, format } from 'date-fns'
 import { faker } from '@faker-js/faker';
 import _ from "lodash";
 
@@ -22,15 +22,24 @@ Then(`{} sets GET api endpoint to get demands with limit row: {}`, async functio
     linkLimitRow = `${Links.API_DEMAND}?offset=0&limit=${limitRow}`;
 });
 
-Then(`{} sets GET api endpoint to get demands with itemName: {}`, async function (actor, itemName: string) {
-    //API of amazon just calls 1 month in date-range. Therefore, will get list demand in latest 1 month.
-    //Define current date then change to yyyy-mm-dd format
-    var currentDate = new Date();
-    this.currentDateFormat = format(currentDate,'yyyy-MM-dd');
-    this.lastMonthDateFormat = format(sub(currentDate, {months: 1}),'yyyy-MM-dd');
+Then(`{} sets GET api endpoint to get demands with itemName and dateStart`, async function (actor: string, dataTable: DataTable) {
+    var dateStart: number = dataTable.hashes()[0].dateStart;
+    var itemName: string = dataTable.hashes()[0].itemName;
 
-    //Get latest demand
-    linkFiltered = `${Links.API_DEMAND}?offset=0&limit=100&where={"filters":[{"filters":[{"field":"itemName","operator":"contains","value":"${itemName}"}],"logic":"and"},{"filters":[{"field":"dueDate","operator":"lt","value":"${this.currentDateFormat}"},{"field":"dueDate","operator":"gte","value":"${this.lastMonthDateFormat}"}],"logic":"and"}],"logic":"and"}`
+    // Format date
+    // var dateFormat = format(currentDate, 'yyyy-MM-dd');
+    // Add or subtract date 
+    // var lastMonthDateFormat = format(add(dateFormat, {months: 1}), 'yyyy-MM-dd');
+    
+    const dateStartFormat = format(new Date(dateStart), 'yyyy-MM-dd');
+    const dateEndFormat = format(add(new Date(dateStartFormat), {days: 30}), 'yyyy-MM-dd');
+    logger.log('info', `dateStartFormat:: ` + dateStartFormat);
+    this.attach(`dateStartFormat:: ` + dateStartFormat);
+    logger.log('info', `dateEndFormat:: ` + dateEndFormat);
+    this.attach(`dateEndFormat:: ` + dateEndFormat);
+
+    //Get demand in duration from ... to ...
+    linkFiltered = `${Links.API_DEMAND}?offset=0&limit=100&where={"filters":[{"filters":[{"field":"itemName","operator":"contains","value":"${itemName}"}],"logic":"and"},{"filters":[{"field":"dueDate","operator":"lt","value":"${dateEndFormat}"},{"field":"dueDate","operator":"gt","value":"${dateStartFormat}"}],"logic":"and"}],"logic":"and"}`
 });
 
 Then(`{} sends a GET request to get list demands`, async function (actor: string) {
@@ -55,6 +64,9 @@ Then('{} picks random demand in above response', async function (actor: string) 
     this.responseBodyOfADemandObject = await this.getDemandResponseBody[Math.floor(Math.random() * this.getDemandResponseBody.length)];
     logger.log('info', `Random demand: ${JSON.stringify(this.responseBodyOfADemandObject, undefined, 4)}`);
     this.attach(`Random demand: ${JSON.stringify(this.responseBodyOfADemandObject, undefined, 4)}`);
+
+    // Get data of demand to compare data in report
+    this.orderKeyOfGrid = this.responseBodyOfADemandObject.orderKey;
 });
 
 Then('{} checks values in response of random demand are correct', async function (actor: string) {
@@ -304,8 +316,11 @@ Then(`{} sends a GET request to get specific demand of item`, async function (ac
     const responseBodyText = await this.getDemandResponse.text();
     if (this.getDemandResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
         this.responseBody = this.getDemandResponseBody = JSON.parse(await this.getDemandResponse.text());
-        logger.log('info', `Response GET ${link}: ` + JSON.stringify(this.getDemandResponseBody, undefined, 4));
-        this.attach(`Response GET ${link}: ` + JSON.stringify(this.getDemandResponseBody, undefined, 4))
+        logger.log('info', `Response GET ${linkFiltered}: ` + JSON.stringify(this.getDemandResponseBody, undefined, 4));
+        this.attach(`Response GET ${linkFiltered}: ` + JSON.stringify(this.getDemandResponseBody, undefined, 4));
+        this.countItem = this.getDemandResponseBody.length
+        logger.log('info', `this.getDemandResponseBody.length:: ` + this.getDemandResponseBody.length);
+        this.attach(`this.getDemandResponseBody.length:: ` + this.getDemandResponseBody.length);
     }
     else {
         //if response include <!doctype html> => 'html', else => response

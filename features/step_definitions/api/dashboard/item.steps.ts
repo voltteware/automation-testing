@@ -268,6 +268,7 @@ Given('User picks a random item in above list items', async function () {
     logger.log('info', `Random Item: ${JSON.stringify(this.responseBodyOfAItemObject, undefined, 4)}`);
     this.attach(`Random Item: ${JSON.stringify(this.responseBodyOfAItemObject, undefined, 4)}`);
 });
+
 When('{} picks {} random items in above list items', async function (actor, quantity: number) {
     this.itemsPickedRandomArray = itemRequest.getMultipleRandom(this.getItemsResponseBody, quantity);
     return this.itemsPickedRandomArray;

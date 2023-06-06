@@ -267,7 +267,7 @@ async function totalItemFromExportFile(file: any) {
       })
       console.log("convertJsonActual: ", convertJsonActual);
 
-    console.log("Actual number total just download: ", convertJsonActual.length);
+    console.log("Total Items in file: ", convertJsonActual.length);
     return convertJsonActual;
 }
 
