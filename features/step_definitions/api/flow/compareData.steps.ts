@@ -1,9 +1,14 @@
-import { Then } from '@cucumber/cucumber';
+import { Then, DataTable } from '@cucumber/cucumber';
 import logger from '../../../../src/Logger/logger';
 import reportType from '../../../../src/data/reportType.json'
 import _ from "lodash";
 import { getRegionByMarketplaceId } from '../../../../src/helpers/amazon-helper';
+import * as exportRequest from '../../../../src/api/request/export.service';
 import SellingPartnerAPI from 'amazon-sp-api';
+import { expect } from '@playwright/test';
+
+let totalItemFromExport: any;
+let expected: any;
 
 // Will research and change APIs to make it easily
 Then(`{} sends a POST method to create report on Amazon`, async function (actor: string) {
@@ -64,9 +69,9 @@ Then(`{} sends a GET method to get report document by reportDocumentID`, async f
     try {
         let sellingPartner = new SellingPartnerAPI(clientConfig);
         this.res = await sellingPartner.callAPI({
-            operation:'reports.getReportDocument',
+            operation: 'reports.getReportDocument',
             path: {
-                reportDocumentId:`${this.reportDocumentId}`
+                reportDocumentId: `${this.reportDocumentId}`
             }
         });
         this.getReportDocumentIdResponseBody = this.res;
@@ -105,9 +110,9 @@ Then(`{} sends a GET method to get report by reportID`, { timeout: 5500000 }, as
             logger.log('info', 'Get report Demand by Report Id from Amazon')
             await new Promise((resolve) => setTimeout(() => resolve(null), 10000));
             this.res = await sellingPartner.callAPI({
-                operation:'reports.getReport',
+                operation: 'reports.getReport',
                 path: {
-                    reportId:`${this.reportId}`
+                    reportId: `${this.reportId}`
                 }
             });
             this.getReportIdResponseBody = this.res;
@@ -125,4 +130,25 @@ Then(`{} sends a GET method to get report by reportID`, { timeout: 5500000 }, as
         logger.log('info', "Error message: " + e);
         this.attach("Error message: " + e);
     };
+});
+
+Then('{} checks total items in report file EQUALS total with section and item name', async function (actor: string, dataTable: DataTable) {
+    var itemName: number = dataTable.hashes()[0].itemName;
+    var section: string = dataTable.hashes()[0].section;
+
+    totalItemFromExport = await exportRequest.totalItemFromExportFile(`data-report/demand_May.csv`);
+    this.totalItemFromExportFiltered = totalItemFromExport.filter((filter: any) => filter.sku === `${itemName}` && !(filter[`item-status`] === 'Cancelled'));
+    
+    logger.log('info', "this.totalItemFromExportFiltered: " + JSON.stringify(this.totalItemFromExportFiltered));
+    this.attach("this.totalItemFromExportFiltered: " + JSON.stringify(this.totalItemFromExportFiltered));
+
+    logger.log('info', `totalItemFromExportFiltered ${this.totalItemFromExportFiltered.length}`, `countItem ${this.countItem}`);
+    this.attach(`totalItemFromExportFiltered ${this.totalItemFromExportFiltered.length}`, `countItem ${this.countItem}`);
+    expect(this.totalItemFromExportFiltered.length).toEqual(Number(this.countItem));
+});
+
+Then('{} checks value on grid match with value in report file', async function (actor: string) {
+    let expectedItem = this.totalItemFromExportFiltered.filter((ex: any) => ex[`amazon-order-id`] === `${this.orderKeyOfGrid}`);
+    expected = expectedItem.length;
+    expect(expected).toEqual(1);
 });
