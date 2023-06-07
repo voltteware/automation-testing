@@ -18,6 +18,8 @@ let linkGetRestockSuggestionPurchasingArray: string[] = [];
 let linkGetPercentDefaultOfAverages: string[] = [];
 let linkGetLimitFiveItemInMySuggested: any;
 let linkGetLimitFiveItemInCustom: any;
+let linkGetItemsInPurchasingCustomWithFilter: any;
+let linkCountItemsInPurchasingCustomWithFilter: any;
 
 // My Suggested POs
 Then(`{} sets GET api endpoint to get count summary by vendor`, async function (actor: string) {
@@ -343,6 +345,8 @@ Then(`{} sends a GET request to get count items in Purchasing Custom`, async fun
     const responseBodyText = await this.getCountItemsInPurchasingCustomResponse.text();
     if (this.getCountItemsInPurchasingCustomResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
         this.responseBody = this.getCountItemsInPurchasingCustomResponseBody = JSON.parse(await this.getCountItemsInPurchasingCustomResponse.body());
+        this.countItem = this.getCountItemsInPurchasingCustomResponseBody;
+        this.attach(`Count all items in Purchasing >>>>> ${this.countItem}`);
         logger.log('info', `Response GET ${linkCountItemsInPurchasingCustom} >>>>>>` + JSON.stringify(this.getCountItemsInPurchasingCustomResponseBody, undefined, 4));
         this.attach(`Response GET ${linkCountItemsInPurchasingCustom} >>>>>>` + JSON.stringify(this.getCountItemsInPurchasingCustomResponseBody, undefined, 4))
     }
@@ -700,4 +704,71 @@ Given(`User sends a GET request to get list items in items in "Purchasing > My S
 
 Then('{} checks API contract of get items in Purchasing Custom api', async function (actor: string) {
     itemsInPurchasingResponseSchema.parse(this.radomFiveItemsInPurchasingCustom);
+});
+
+Then('{} picks {} random item in above list items in Custom', async function (actor: string, quantity) {
+    this.attach(`User pick item random item in above list items in Custom >>>> ` + JSON.stringify(this.getItemsInPurchasingCustomResponseBody));
+    this.itemsPickedRandomArray =  itemRequest.getMultipleRandom(this.getItemsInPurchasingCustomResponseBody, quantity);
+    this.attach(`ItemInItemListPickedRandomArray: ` + JSON.stringify(this.itemsPickedRandomArray));
+    return this.itemsPickedRandomArray;
+});
+
+// Filter items
+Then(`{} sets GET api endpoint to get items in Purchasing Custom with filter {} column`, async function (actor: string, columnName: string) {
+    linkGetItemsInPurchasingCustomWithFilter = encodeURI(`${Links.API_SUMMARY_ITEMS_IN_PURCHASING_CUSTOM}?offset=0&limit=100&where={"filters":[{"filters":[{"field":"${columnName}","operator":"gt","value":100}],"logic":"and"}],"logic":"and"}`);
+
+    console.log(linkGetItemsInPurchasingCustomWithFilter);
+});
+
+Then(`{} sends a GET request to get items in Purchasing Custom with filter {} column`, async function (actor, columnName: string) {
+    const options = {
+        headers: this.headers
+    }
+    this.getItemsInPurchasingCustomWithFilterResponse = this.response = await itemRequest.getItemsInPurchasingCustom(this.request, linkGetItemsInPurchasingCustomWithFilter, options);
+    const responseBodyText = await this.getItemsInPurchasingCustomWithFilterResponse.text();
+    if (this.getItemsInPurchasingCustomWithFilterResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
+        this.responseBody = this.getItemsInPurchasingCustomWithFilterResponseBody = this.getItemsResponseBody = JSON.parse(await this.getItemsInPurchasingCustomWithFilterResponse.body());
+        this.randomAItemObject = this.getItemsInPurchasingCustomWithFilterResponseBody[Math.floor(Math.random() * this.getItemsInPurchasingCustomWithFilterResponseBody.length)];
+        logger.log('info', `Random object in response GET ${linkGetItemsInPurchasingCustomWithFilter} >>>>>>` + JSON.stringify(this.randomAItemObject, undefined, 4));
+        this.attach(`Random object in response GET ${linkGetItemsInPurchasingCustomWithFilter} >>>>>>` + JSON.stringify(this.randomAItemObject, undefined, 4))
+    }
+    else {
+        const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
+        logger.log('info', `Random object in Response GET ${linkGetItemsInPurchasingCustomWithFilter} has status code ${this.response.status()} ${this.response.statusText()} and response body >>>>>> ${responseBodyText}`);
+        this.attach(`Random object in Response GET ${linkGetItemsInPurchasingCustomWithFilter} has status code ${this.response.status()} ${this.response.statusText()} and response body >>>>>> ${actualResponseText}`)
+    }
+});
+
+// Count item after filtering
+Then(`{} sets GET api endpoint to get count items with filter {} column in Purchasing Custom`, async function (actor: string, columnName: string) {
+    linkCountItemsInPurchasingCustomWithFilter = encodeURI(`${Links.API_SUMMARY_COUNT}?where={"filters":[{"filters":[{"field":"onHand","operator":"gt","value":100}],"logic":"and"}],"logic":"and"}`);
+
+    console.log(linkCountItemsInPurchasingCustomWithFilter);
+});
+
+Then(`{} sends a GET request to get count items with filter {} column in Purchasing Custom`, async function (actor, columnName: string) {
+    const options = {
+        headers: this.headers
+    }
+    this.getCountItemsInPurchasingCustomWithFilterResponse = this.response = await itemRequest.getCountItemsInPurchasingCustom(this.request, linkCountItemsInPurchasingCustomWithFilter, options);
+    const responseBodyText = await this.getCountItemsInPurchasingCustomWithFilterResponse.text();
+    if (this.getCountItemsInPurchasingCustomWithFilterResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
+        this.responseBody = this.getCountItemsInPurchasingCustomWithFilterResponseBody = JSON.parse(await this.getCountItemsInPurchasingCustomWithFilterResponse.body());
+        this.countItem = this.getCountItemsInPurchasingCustomWithFilterResponseBody;
+        this.attach(`Count all items in Purchasing >>>>> ${this.countItem}`);
+        logger.log('info', `Response GET ${linkCountItemsInPurchasingCustomWithFilter} >>>>>>` + JSON.stringify(this.getCountItemsInPurchasingCustomWithFilterResponseBody, undefined, 4));
+        this.attach(`Response GET ${linkCountItemsInPurchasingCustomWithFilter} >>>>>>` + JSON.stringify(this.getCountItemsInPurchasingCustomWithFilterResponseBody, undefined, 4))
+    }
+    else {
+        const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
+        logger.log('info', `Response GET ${linkCountItemsInPurchasingCustomWithFilter} has status code ${this.response.status()} ${this.response.statusText()} and response body >>>>>> ${responseBodyText}`);
+        this.attach(`Response GET ${linkCountItemsInPurchasingCustomWithFilter} has status code ${this.response.status()} ${this.response.statusText()} and response body >>>>>> ${actualResponseText}`)
+    }
+});
+
+Then('{} picks {} random item in above list items after filtering and sorting', async function (actor: string, quantity) {
+    this.attach(`User pick item random item in above list items in Custom with filter >>>> ` + JSON.stringify(this.getItemsInPurchasingCustomWithFilterResponseBody));
+    this.itemsPickedRandomArray =  itemRequest.getMultipleRandom(this.getItemsInPurchasingCustomWithFilterResponseBody, quantity);
+    this.attach(`ItemInItemListPickedRandomArray: ` + JSON.stringify(this.itemsPickedRandomArray));
+    return this.itemsPickedRandomArray;
 });

@@ -165,7 +165,7 @@ Then(`{} sends a GET request to get count items`, async function (actor: string)
     const responseBodyText = await this.getCountItemsActiveResponse.text();
     if (this.getCountItemsActiveResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
         this.responseBody = this.getCountItemsActiveResponseBody = JSON.parse(await this.getCountItemsActiveResponse.body());
-        this.countItem = this.responseBody;
+        this.countItem = this.getCountItemsActiveResponseBody;
         logger.log('info', `Response GET ${linkCountItems}>>>>>` + JSON.stringify(this.getCountItemsActiveResponseBody, undefined, 4));
         this.attach(`Response GET ${linkCountItems}>>>>>>` + JSON.stringify(this.getCountItemsActiveResponseBody, undefined, 4))
     }
