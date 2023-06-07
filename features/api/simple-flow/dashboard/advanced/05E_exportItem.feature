@@ -18,6 +18,10 @@ Feature: API_Dashboard PUT /api/sync/item/download?<fields>
         Given User sets POST api endpoint to create item
         And User sets request body with payload as name: "<itemName>" and description: "<description>" and vendorName: "" and vendorPrice: "<vendorPrice>" and moq: "<moq>" and leadTime: "<leadTime>" and orderInterval: "<orderInterval>" and serviceLevel: "<serviceLevel>" and onHand: "<onHand>" and onHandMin: "<onHandMin>" and onHandThirdParty: "<onHandThirdParty>" and onHandThirdPartyMin: "<onHandThirdPartyMin>" and lotMultipleQty: "<lotMultipleQty>" and lotMultipleItemName: "" and asin: "" and fnsku: "" and skuNotes: "" and prepNotes: "" and supplierRebate: "" and inboundShippingCost: "" and reshippingCost: "" and repackagingMaterialCost: "" and repackingLaborCost: "" and rank: "" and inventorySourcePreference: "" and average7DayPrice: "" and isFbm: "" and key: "" and vendorKey: "" and lotMultipleItemKey: ""
         And User sends a POST method to create item
+        And User set GET api endpoint to get items with name contains "<containText>"
+        And User sends a GET request to get list items
+        And User picks a random item in above list items
+        And User saves the item key
         # Export Items
         And User sets POST api endpoint to export <section> with <columns>
         And User sets payload as name: "<removedItemKeys>"
@@ -36,12 +40,12 @@ Feature: API_Dashboard PUT /api/sync/item/download?<fields>
         And User sends a GET request to get list items
         And User picks <quantity> random items in above list items
         And User checks values of item that just picked the same as export file
-        # Hide item after created -> Currently (05302023), Preprod having issue with subscription so can't add a new item.
-        # And User sets PUT api endpoint to edit isHidden of the above item for company type <companyType> with new value: true
-        # And User sends a PUT request to edit the item
+        # Hide item after created
+        And User sets PUT api endpoint to edit isHidden of the above item for company type <companyType> with new value: true
+        And User sends a PUT request to edit the item
         Examples:
             | TC_ID        | companyType | email                      | section | quantity | containText | expectedStatus | expectedStatusText | removedItemKeys | itemName      | description     | vendorPrice | moq    | leadTime | orderInterval | serviceLevel | onHand | onHandMin | onHandThirdParty | onHandThirdPartyMin | lotMultipleQty | columns                                                               |
-            | TC_Export001 | CSV         | exportdatatest@gmail.com   | item    | 3        | Auto        | 200            | OK                 |                 | New Item Auto | New description | random      | random | random   | random        | random       | random | random    | random           | random              | random         | name,vendorName,vendorPrice,moq,serviceLevel,onHand,onHandThirdParty  |
+            | TC_Export001 | ASC         | exportdatatest@gmail.com   | item    | 3        | Auto        | 200            | OK                 |                 | New Item Auto | New description | random      | random | random   | random        | random       | random | random    | random           | random              | random         | name,vendorName,vendorPrice,moq,serviceLevel,onHand,onHandThirdParty  |
 
     # Manage Company > Suppliers
     @TC_Export002 @smoke-test-api @regression-api 
@@ -247,3 +251,85 @@ Feature: API_Dashboard PUT /api/sync/item/download?<fields>
         Examples:
             | TC_ID        | companyType | email                    | section         | quantity | limitRow | containText | expectedStatus | expectedStatusText | removedItemKeys | columns                                                                             |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
             | TC_Export008 | ASC         | exportdatatest@gmail.com | shipment-detail | 1        | 100      | Auto        | 200            | OK                 |                 | fnsku,description,packageWeight,cost,localQty,caseQty,shipmentQty,receivedQty,notes |
+
+    # Purchasing > My Suggested
+    @TC_Export009 @smoke-test-api @regression-api 
+    Scenario Outline: <TC_ID> - Verify user <email> could call API export data in Purchasing > My Suggested
+        Given User picks company which has onboarded before with type <companyType> in above response
+        And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
+        # Count item in PO
+        And User sets GET api endpoint to get summary by vendor
+        And User sends a GET request to get summary by vendor
+        And User selects any suggested purchase orders above that has supplier name
+        # Export data
+        And User sets POST api endpoint to export <section> with <columns>
+        And User sets payload as name: "<removedItemKeys>"
+        When User sends POST api endpoint to export <section>
+        Then The expected status code should be <expectedStatus>
+        And The status text is "<expectedStatusText>"
+        # User count all items in PO by vendor key
+        And User sets GET api endpoint to get count items in PO by vendor key <vendorKey>
+        And User sends request to get count items on Items in PO by vendor key
+        # Check total items in export file = total suppliers in the grid
+        And User checks total items in export file EQUALS total <section>
+        # Pick random item to check value in export file and in grid
+        And User sets api endpoint to get list items in PO of vendor key
+        And User sends a POST request to get list items in PO by vendor key
+        And User selects random items in Purchasing My Suggested
+        And User checks values of <section> that just picked the same as export file
+        Examples:
+            | TC_ID        | companyType | vendorKey | email                    | section      | containText | expectedStatus | expectedStatusText | removedItemKeys | columns                                                                                                                                               |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+            | TC_Export009 | ASC         | random    | exportdatatest@gmail.com | my-suggested | Auto        | 200            | OK                 |                 | itemName,description,tags,onNewPo,recommendedQty,purchaseQty,vendorPrice,total,snapshotQty,onHand,onHandThirdParty,openPurchaseOrders,openSalesOrders |
+        
+    # Purchasing > Custom
+    @TC_Export010 @smoke-test-api @regression-api 
+    Scenario Outline: <TC_ID> - Verify user <email> could call API export data in Purchasing > Custom
+        Given User picks company which has onboarded before with type <companyType> in above response
+        And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
+        # Export data
+        And User sets POST api endpoint to export <section> with <columns>
+        And User sets payload as name: "<removedItemKeys>"
+        When User sends POST api endpoint to export <section>
+        Then The expected status code should be <expectedStatus>
+        And The status text is "<expectedStatusText>"
+        # User count all items in Custom
+        And User sets GET api endpoint to get count items in Purchasing Custom
+        When User sends a GET request to get count items in Purchasing Custom
+        # Check total items in export file = total suppliers in the grid
+        And User checks total items in export file EQUALS total <section>
+        # Pick random item to check value in export file and in grid
+        And User sets GET api endpoint to get items in Purchasing Custom
+        And User sends a GET request to get items in Purchasing Custom
+        And User picks <quantity> random item in above list items in Custom
+        And User checks values of <section> that just picked the same as export file
+        Examples:
+            | TC_ID        | companyType | vendorKey | email                    | section | containText | expectedStatus | expectedStatusText | removedItemKeys | quantity | columns                                                                                                                                                              |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+            | TC_Export010 | ASC         | null      | exportdatatest@gmail.com | custom  | Auto        | 200            | OK                 |                 | 3        | itemName,description,tags,onNewPo,recommendedQty,purchaseQty,vendorPrice,total,snapshotQty,onHand,onHandThirdParty,openPurchaseOrders,openSalesOrders |
+
+    # Purchasing > Custom > Filter
+    @TC_Export011 @smoke-test-api @regression-api 
+    Scenario Outline: <TC_ID> - Verify user <email> could call API export data in Purchasing > Custom with filter and sort
+        Given User picks company which has onboarded before with type <companyType> in above response
+        And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
+        # Filtering items
+        And User sets GET api endpoint to get items in Purchasing Custom with filter <columnName> column
+        And User sends a GET request to get items in Purchasing Custom with filter <columnName> column
+        # Export data
+        And User sets POST api endpoint to export <section> with <columns>
+        And User sets payload as name: "<removedItemKeys>"
+        When User sends POST api endpoint to download <section> with filter <columnName> column and sort <sort>
+        Then The expected status code should be <expectedStatus>
+        And The status text is "<expectedStatusText>"
+        # User count all items in Custom after filtering
+        And User sets GET api endpoint to get count items with filter <columnName> column in Purchasing Custom 
+        When User sends a GET request to get count items with filter <columnName> column in Purchasing Custom 
+        # Check total items in export file = total suppliers in the grid
+        And User checks total items in export file EQUALS total <section>
+        # Pick random item to check value in export file and in grid
+        And User sets GET api endpoint to get items in Purchasing Custom
+        And User sends a GET request to get items in Purchasing Custom
+        And User picks <quantity> random item in above list items after filtering and sorting
+        And User checks values of <section> that just picked the same as export file
+        Examples:
+            | TC_ID        | companyType | vendorKey | email                    | section | columnName    | sort | containText | expectedStatus | expectedStatusText | removedItemKeys | quantity | columns                                                                                                                                                              |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+            | TC_Export011 | ASC         | null      | exportdatatest@gmail.com | custom  | onHand        | null | Auto        | 200            | OK                 |                 | 3        | itemName,description,tags,onNewPo,recommendedQty,purchaseQty,vendorPrice,total,snapshotQty,onHand,onHandThirdParty,openPurchaseOrders,openSalesOrders |
