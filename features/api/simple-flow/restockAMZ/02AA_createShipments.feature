@@ -209,8 +209,7 @@ Feature: API_Regression User can create shipments from Supplier
             | TC_ID        | companyType | casePackOption | restockType | editColumn   | value                        | email                      | direction | expectedStatus | expectedStatusText | limitRow |
             | TC_ASC_CS002 | ASC         | Yes            | SUPPLIER    | supplierName | supplierUpdatedSalesVelocity | testautoforecast@gmail.com | asc       | 200            | OK                 | 10       |
 
-    # TO DO Create Shipments from Warehouse
-    @runthiss
+    @TC_ASC_CS003 @smoke-test-api
     Scenario Outline: <TC_ID> - Verify user <email> could call APIs to create shipments from Warehouse
         Given User picks company which has onboarded before with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
@@ -246,5 +245,5 @@ Feature: API_Regression User can create shipments from Supplier
         # Check upload inventory successfully
         And User checks items in the shipment must be the same as in csv file
         Examples:
-            | TC_ID        | companyType | casePackOption | restockType | fileName                         | option | editColumn   | value                        | email                      | direction | expectedStatus | expectedStatusText | limitRow |
-            | TC_ASC_CS002 | ASC         | Yes            | WAREHOUSE   | warehouse-inventory-template.csv | true   | supplierName | supplierUpdatedSalesVelocity | testautoforecast@gmail.com | asc       | 200            | OK                 | 10       |
+            | TC_ID        | companyType | restockType | fileName                         | expectedStatus | expectedStatusText |
+            | TC_ASC_CS003 | ASC         | WAREHOUSE   | warehouse-inventory-template.csv | 200            | OK                 |

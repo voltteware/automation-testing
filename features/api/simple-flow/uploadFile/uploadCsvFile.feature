@@ -7,8 +7,7 @@ Feature: API_Regression User Upload file
         And User sets GET api endpoint to get companies information of current user
         And In Header of the request, she sets param Cookie as valid connect.sid
         When User sends a GET request to get companies
-
-    @runthis
+    
     Scenario Outline: Add new supplier via upload csv file
         Given User picks company which has onboarded before with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
