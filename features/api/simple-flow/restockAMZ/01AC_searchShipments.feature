@@ -43,11 +43,10 @@ Feature: API_Regression User can search shipments
         And User checks status code and status text of api
             | expectedStatus   | expectedStatusText   |
             | <expectedStatus> | <expectedStatusText> |
-        # And User sets PUT api endpoint to edit <editColumn> of the above item for company type <companyType> with new value: <value>
-        # And User sends a PUT request to edit the item
-        # And User checks status code and status text of api
-        #     | expectedStatus   | expectedStatusText   |
-        #     | <expectedStatus> | <expectedStatusText> |
+        And User picks random supplier in above response
+        And User sets request body of edit item api with payload
+            | editColumn   | companyType   | value   |
+            | <editColumn> | <companyType> | <value> |
         And User sets POST api endpoint to create Shipment
         And User sends a POST request to create Shipment
         And User checks status code and status text of api
@@ -103,8 +102,8 @@ Feature: API_Regression User can search shipments
         And User checks the deleted shipments does not exist in the list
 
         Examples:
-            | TC_ID        | companyType | casePackOption | restockType | editColumn   | value  | email                      | direction | expectedStatus | expectedStatusText | limitRow | shipmentStatus |
-            | TC_ASC_SS001 | ASC         | No             | SUPPLIER    | supplierName | random | testautoforecast@gmail.com | desc      | 200            | OK                 | 10       | PENDING        |
+            | TC_ID        | companyType | casePackOption | restockType | editColumn                   | value  | email                      | direction | expectedStatus | expectedStatusText | limitRow | shipmentStatus |
+            | TC_ASC_SS001 | ASC         | No             | SUPPLIER    | supplierUpdatedSalesVelocity | random | testautoforecast@gmail.com | desc      | 200            | OK                 | 10       | PENDING        |
 
     @TC_ASC_SS002 @smoke-test-api @retry
     Scenario Outline: <TC_ID> - Verify user <email> could call APIs could call APIs to search shipments - Working
@@ -141,11 +140,14 @@ Feature: API_Regression User can search shipments
         And User checks status code and status text of api
             | expectedStatus   | expectedStatusText   |
             | <expectedStatus> | <expectedStatusText> |
-        # And User sets PUT api endpoint to edit <editColumn> of the above item for company type <companyType> with new value: <value>
-        # And User sends a PUT request to edit the item
-        # And The expected status code should be <expectedStatus>
-        # And The status text is "<expectedStatusText>"
-        # Hard Item to makse sure always create shipment successfully
+        And User picks random supplier in above response
+        And User sets request body of edit item api with payload
+            | editColumn   | companyType   | value   |
+            | <editColumn> | <companyType> | <value> |
+        And User sends a PUT request to edit the item
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
         And User sets POST api endpoint to create Shipment
         And User sends a POST request to create Shipment
         And User checks status code and status text of api
@@ -239,8 +241,8 @@ Feature: API_Regression User can search shipments
         And User checks API contract essential types in modify shipment object are correct
         And User sets GET api endpoint to find the new created shipment
         And User sends a GET request to find the new created shipment
-        And User checks the deleted shipments must be existed in the list  
+        And User checks the deleted shipments must be existed in the list
 
         Examples:
-            | TC_ID        | companyType | casePackOption | restockType | editColumn   | value  | email                      | direction | expectedStatus | expectedStatusText | limitRow | shipmentStatus |
-            | TC_ASC_SS002 | ASC         | No             | SUPPLIER    | supplierName | random | testautoforecast@gmail.com | desc      | 200            | OK                 | 10       | WORKING        |
+            | TC_ID        | companyType | casePackOption | restockType | editColumn   | value                        | email                      | direction | expectedStatus | expectedStatusText | limitRow | shipmentStatus |
+            | TC_ASC_SS002 | ASC         | No             | SUPPLIER    | supplierName | supplierUpdatedSalesVelocity | testautoforecast@gmail.com | desc      | 200            | OK                 | 10       | WORKING        |

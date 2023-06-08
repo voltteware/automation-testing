@@ -10,6 +10,27 @@ Then('{} sets GET api to get shipments in Manage Shipments by status:', async fu
     this.linkGetShipmentsByStatus = `${Links.API_SHIPMENT}?offset=0&limit=${limit}&sort=[{"field":"restockType","direction":"desc"}]&where={"filters":[{"filters":[{"field":"status","operator":"eq","value":"${shipmentStatus}"}],"logic":"and"}],"logic":"and"}`;
 });
 
+Then('{} checks information in Shipment Details: {}', async function (actor, restockType: string) {
+    expect(this.actualShipmentName).toBe(this.shipmentName);
+    expect(this.actualDestinationFulfillmentCenterId).toBe("Amazon");
+    expect(this.actualStatus).toBe("PENDING");
+    expect(this.actualRestockType).toBe(`${restockType}`);
+    const expectedTotalPrice = Number(this.vendorPriceOfItem) * Number(this.requestedQty);
+    expect(Number(this.actualTotalCost)).toEqual(expectedTotalPrice);
+    expect(Number(this.actualTotalSKUs)).toEqual(1);
+    const expectedTotalWeight = Number(this.packageWeightOfItem) * Number(this.requestedQty);
+    expect(Number(this.actualTotalWeight)).toEqual(expectedTotalWeight);
+    expect(this.actualLabelPrepPreference).toBe("SELLER_LABEL");
+    expect(this.actualAddressLine1).toBe(this.addressLine1);
+    expect(this.actualAddressLine2).toBe(this.addressLine2);
+    expect(this.actualCity).toBe(this.city);
+    expect(this.actualCountryCode).toBe(this.countryCode);
+    expect(this.actualFullName).toBe(this.fullName);
+    expect(this.actualPhoneNumber).toBe(this.phoneNumber);
+    expect(this.actualPostalCode).toBe(this.postalCode);
+    expect(this.actualStateOrProvinceCode).toBe(this.stateOrProvinceCode);
+});
+
 Then(`{} send a GET request to get shipments in Manage Shipments`, async function (action: string) {
     const options = {
         headers: this.headers

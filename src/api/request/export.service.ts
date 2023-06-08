@@ -3,6 +3,9 @@ import logger from '../../Logger/logger';
 import csv from 'csvtojson';
 import _, { endsWith } from "lodash";
 
+let nameInExportFile: any;
+let valuesThatHaveFilter: string[] = [];
+
 // POST endpoint for export item
 async function exportItem(request: APIRequestContext, linkApi: string, headers: any, payLoad: any, fields: any, options?: object) {
     const url = `${linkApi}`;
@@ -19,6 +22,34 @@ async function exportItem(request: APIRequestContext, linkApi: string, headers: 
     });
     console.log("exportResponse: ", exportResponse.url(), "payload: ", payLoad, "headers: ", headers);
     return exportResponse;
+}
+
+// POST endpoint for export item
+async function exportItemWithFilter(request: APIRequestContext, linkApi: string, headers: any, payLoad: any, fields: any, columnName: string, sort: string) {
+  const url = `${linkApi}`;
+  logger.log('info', `Send POST request ${url} and fields ${fields}`);
+  const exportResponse = await request.post(url, {
+    headers: headers,
+    data: payLoad,
+    params: {
+      "fields": fields,
+      "headersOnly": false,
+      "sort": sort,
+      "where": JSON.stringify({ 
+        "filters": 
+        [{ 
+          "filters": [{ 
+            "field": columnName, 
+            "operator": "gt", 
+            "value": 100 }], 
+            "logic": "and" 
+        }], 
+        "logic": "and" 
+      })
+    }
+  });
+  console.log("exportResponse with filter: ", exportResponse.url(), "payload: ", payLoad, "headers: ", headers);
+  return exportResponse;
 }
 
 // POST endpoint for export skus in Item list
@@ -226,7 +257,7 @@ async function exportSKUsInShipmentDetails(request: APIRequestContext, linkApi: 
 // POST endpoint for export data in Purchasing > My Suggested
 async function exportItemsInPOByVendor(request: APIRequestContext, linkApi: string, headers: any, payLoad: any, fields: any, vendorKey:any, options?: object) {
   const url = `${linkApi}`;
-  logger.log('info', `Send POST request ${url} and fields ${fields}`);
+  logger.log('info', `Send POST request ${url} and fields ${fields} and vendor key: ${vendorKey}`);
   const exportResponse = await request.post(url, {
       headers: headers,
       data: payLoad,
@@ -238,7 +269,7 @@ async function exportItemsInPOByVendor(request: APIRequestContext, linkApi: stri
           "vendorKey": vendorKey,
       }
   });
-  console.log("exportResponse: ", exportResponse.url(), "payload: ", payLoad, "headers: ", headers);
+  console.log("export my suggested by vendor: ", exportResponse.url(), "payload: ", payLoad, "headers: ", headers);
   return exportResponse;
 }
 
@@ -265,38 +296,61 @@ async function totalItemFromExportFile(file: any) {
       .then(vendors => {
         return vendors;
       })
-      console.log("convertJsonActual: ", convertJsonActual);
+      // console.log("convertJsonActual: ", convertJsonActual);
 
-    console.log("Actual number total just download: ", convertJsonActual.length);
+    console.log("Total Items in file: ", convertJsonActual.length);
     return convertJsonActual;
 }
 
-async function filterItemThatHasPicked(file: any, containText: string, section: string) {
+async function filterRowThatHasPicked(file: any, containText: string, section: string) {
   console.log("Contain Text: ", containText);
   var itemsInArray = await totalItemFromExportFile(file);
-  logger.log(`info`, `Items in Export file: ${itemsInArray}`)
+  console.log("itemsInArray: >>>> ", itemsInArray)
   var lengthOfFile = itemsInArray.length;
-  let valuesThatHaveFilter = [];
   for(let i = 0; i < lengthOfFile; i++) {
-    let nameInExportFile;
-    // let nameInExportFile = itemsInArray[i]["Item Name"] || itemsInArray[i]["Supplier Name"] || itemsInArray[i]["Parent Name"] || itemsInArray[i]["SKU"];
     switch(section) {
       case "supplier":
-        return nameInExportFile = itemsInArray[i]["Supplier Name"];
+        nameInExportFile = itemsInArray[i]["Supplier Name"];
+        console.log("Service - Supplier Name in File export: ", nameInExportFile);
+
+        if(nameInExportFile === containText) {
+          valuesThatHaveFilter = itemsInArray[i];
+        }
+
+        break;
       case "bom":
-        return nameInExportFile = itemsInArray[i]["Parent Name"];
+        nameInExportFile = itemsInArray[i]["Parent Name"];
+
+        if(nameInExportFile === containText) {
+          valuesThatHaveFilter = itemsInArray[i];
+        }
+
+        break;
       case "shipment-details":
-        return nameInExportFile = itemsInArray[i]["SKU"];
+        nameInExportFile = itemsInArray[i]["SKU"];
+
+        if(nameInExportFile === containText) {
+          valuesThatHaveFilter = itemsInArray[i];
+        }
+
+        break;
+      case "custom":
+        nameInExportFile = itemsInArray[i]["FNSKU"];
+
+        if(nameInExportFile === containText) {
+          valuesThatHaveFilter = itemsInArray[i];
+        }
+
+        break;
       default: 
         nameInExportFile = itemsInArray[i]["Item Name"];
-    }
+        console.log("Service - Item Name in File export: ", nameInExportFile);
 
-    if(nameInExportFile === containText) {
-      valuesThatHaveFilter = itemsInArray[i];
-      console.log("nameInExportFile: ", nameInExportFile, "Contain Name: ", containText, "Row that has been filtered: ", valuesThatHaveFilter);
+        if(nameInExportFile === containText) {
+          valuesThatHaveFilter = itemsInArray[i];
+        }
     }
   }
-
   console.log("valuesThatHaveFilter: ", valuesThatHaveFilter);
   return valuesThatHaveFilter;
 }
@@ -307,81 +361,122 @@ async function addFieldsIntoArray(fields: string) {
 }
 
 async function mapColumn(columnName: string, section: string, companyType: string) {
+  console.log("Comapny Type: ", companyType);
   console.log("columnName >>>>", columnName);
   let columnAfterMapping;
   switch(section) {
     case "item":
-      if(companyType === "ASC" && columnName === "name") {
-        columnAfterMapping = Columns.asinSKU;
-        return columnAfterMapping;
+      if(companyType === "ASC" && columnName === "onHand") {
+        columnAfterMapping = "On Hand FBA Qty";
+        console.log("On Hand FBA column: ", columnAfterMapping)
       }
+      else {
+        columnAfterMapping = Columns[columnName];
+        console.log("columnAfterMapping item >>>> ", columnAfterMapping)
+      }
+
+      break;
     case "supplier":
       if(columnName === "name") {
         columnAfterMapping = Columns.supplierName;
         console.log("columnAfterMapping >>>> ", columnAfterMapping)
-        return columnAfterMapping;
       }
       else if(columnName === "leadTime") {
         columnAfterMapping = Columns.leadTime;
         console.log("columnAfterMapping >>>> ", columnAfterMapping)
-        return columnAfterMapping;
       }
+      else if(columnName === "key") {
+        columnAfterMapping = Columns.vendorKey;
+        console.log("columnAfterMapping >>>> ", columnAfterMapping)
+      }
+      else {
+        columnAfterMapping = Columns[columnName];
+      }
+
+      break;
     case "supply":
       if(columnName === "orderQty") {
         columnAfterMapping = Columns.orderQtySupply;
-        return columnAfterMapping;
       }
       else if(columnName === "openQty") {
         columnAfterMapping = Columns.openQtySupply;
-        return columnAfterMapping;
       }
+      else {
+        columnAfterMapping = Columns[columnName];
+      }
+
+      break;
     case "restock-suggestion":
       if(columnName === "orderQty") {
         columnAfterMapping = Columns.orderQtyRestock;
-        return columnAfterMapping;
       }
       else if(columnName === "supplier") {
         columnAfterMapping = Columns.supplierName;
-        return columnAfterMapping;
       }
+      else {
+        columnAfterMapping = Columns[columnName];
+      }
+
+      break;
     case "shipment":
       if(columnName === "status") {
         columnAfterMapping = Columns.shipmentStatus;
-        return columnAfterMapping;
       }
       else if(columnName === "key") {
         columnAfterMapping = Columns.shipmentKey;
-        return columnAfterMapping;
       }
+      else {
+        columnAfterMapping = Columns[columnName];
+      }
+
+      break;
     case "shipment-detail":
       if(columnName === "packageWeight") {
         columnAfterMapping = Columns.packageWeightSD;
-        return columnAfterMapping;
       }
       else if(columnName === "receivedQty") {
         columnAfterMapping = Columns.receivedQtySD;
-        return columnAfterMapping;
       }
       else if(columnName === "localQty") {
         columnAfterMapping = Columns.localQtySD;
-        return columnAfterMapping;
       }
+      else {
+        columnAfterMapping = Columns[columnName];
+      }
+
+      break;
+    case "custom":
+      if(columnName === "description") {
+        columnAfterMapping = Columns.descriptionPO;
+      }
+      else if(companyType === "ASC" && columnName === "onHand") {
+        console.log("Here >>>>>>>>> ", companyType, " >>>>> ", columnName)
+        columnAfterMapping = Columns.onHandFBAPo;
+      }
+      else {
+        columnAfterMapping = Columns[columnName];
+      }
+
+      break;
     default: 
       columnAfterMapping = Columns[columnName];
-      return columnAfterMapping;
   }
+
+  console.log("columnAfterMapping here: ", columnAfterMapping)
+  return columnAfterMapping;
 };
 
 export {
     exportItem,
     totalItemFromExportFile,
-    filterItemThatHasPicked,
+    filterRowThatHasPicked,
     addFieldsIntoArray,
     mapColumn,
     exportSKUInItemList,
     exportSKUsInShipmentDetails,
     exportItemsInPOByVendor,
-    exportItemsInCustom
+    exportItemsInCustom,
+    exportItemWithFilter
 }
 
 export const Columns: Record<string, string> = {
@@ -396,6 +491,7 @@ export const Columns: Record<string, string> = {
   serviceLevel: "Service Level",
   onHand: "On Hand Qty",
   onHandFBA: "On Hand FBA Qty",
+  onHandFBAPo: "On Hand FBA Qty",
   onHandThirdParty: "Warehouse Qty",
   orderInterval: "Order Interval",
   leadTime: "Lead Time",

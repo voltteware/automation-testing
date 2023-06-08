@@ -165,7 +165,7 @@ Then(`{} sends a GET request to get count items`, async function (actor: string)
     const responseBodyText = await this.getCountItemsActiveResponse.text();
     if (this.getCountItemsActiveResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
         this.responseBody = this.getCountItemsActiveResponseBody = JSON.parse(await this.getCountItemsActiveResponse.body());
-        this.countItem = this.responseBody;
+        this.countItem = this.getCountItemsActiveResponseBody;
         logger.log('info', `Response GET ${linkCountItems}>>>>>` + JSON.stringify(this.getCountItemsActiveResponseBody, undefined, 4));
         this.attach(`Response GET ${linkCountItems}>>>>>>` + JSON.stringify(this.getCountItemsActiveResponseBody, undefined, 4))
     }
@@ -268,6 +268,7 @@ Given('User picks a random item in above list items', async function () {
     logger.log('info', `Random Item: ${JSON.stringify(this.responseBodyOfAItemObject, undefined, 4)}`);
     this.attach(`Random Item: ${JSON.stringify(this.responseBodyOfAItemObject, undefined, 4)}`);
 });
+
 When('{} picks {} random items in above list items', async function (actor, quantity: number) {
     this.itemsPickedRandomArray = itemRequest.getMultipleRandom(this.getItemsResponseBody, quantity);
     return this.itemsPickedRandomArray;
@@ -408,6 +409,12 @@ Then(`{} sets api endpoint to edit some values of a item`, async function (actor
 
         this.payLoad.vendorKey = randomSupplier.key;
         this.payLoad.vendorName = randomSupplier.name;
+    } else if (supplierName === 'null') {
+        this.payLoad.vendorKey = null;
+        this.payLoad.vendorName = null;
+    } else if (supplierName === 'supplierUpdatedSalesVelocity') {
+        this.payLoad.vendorKey = this.supplierKey;
+        this.payLoad.vendorName = this.supplierName;
     }
 
     if (supplierPrice === 'random') {
@@ -1361,37 +1368,56 @@ Given('User sets PUT api endpoint to update item sales velocity setting with typ
     linkUpdateItemSalesVelocitySettings = `${Links.API_ITEM_SALES_VELOCITY}/${this.itemKey}`
 });
 
-When('User sends PUT request to update item sales velocity setting type {} with the total percentage is {}%', async function (velocityType: string, percentage: string) {
-    const isNumber = !isNaN(parseFloat(percentage)) && isFinite(+percentage);
+When('User sends PUT request to update item {} sales velocity setting type {} with the total percentage is {}%', async function (salesVelocitySettingsType: string, velocityType: string, percentage: string) {
+    switch (velocityType) {
+        case '"Average"':
+            const isNumber = !isNaN(parseFloat(percentage)) && isFinite(+percentage);
 
-    this.randomWeightNumbers = []
+            this.randomWeightNumbers = []
 
-    if (isNumber) {
-        // The function returns the array of 8 numbers that add up to the desired sum (here is percentage of purchasing daily sales)
-        this.randomWeightNumbers = keyword.generateRandomNumbers(Number(percentage), 8);
+            if (isNumber) {
+                 // The function returns the array of 8 numbers that add up to the desired sum (here is percentage of purchasing daily sales)
+                this.randomWeightNumbers = keyword.generateRandomNumbers(Number(percentage), 8);
 
-        this.payLoad = {
-            "companyType": `${this.responseBodyOfAItemObject.companyType}`,
-            "companyKey": `${this.responseBodyOfAItemObject.companyKey}`,
-            "itemKey": `${this.responseBodyOfAItemObject.key === undefined ? this.responseBodyOfAItemObject.itemKey : this.responseBodyOfAItemObject.key}`,
-            "salesVelocitySettingsType": "purchasing",
-            "restockModel": "DIRECT_SHIP",
-            "localLeadTime": 7,
-            "targetQtyOnHandMin": 30,
-            "targetQtyOnHandMax": 60,
-            "salesVelocityType": "average",
-            "salesVelocitySettingData": {
-                "percent2Day": this.randomWeightNumbers[0],
-                "percent7Day": this.randomWeightNumbers[1],
-                "percent14Day": this.randomWeightNumbers[2],
-                "percent30Day": this.randomWeightNumbers[3],
-                "percent60Day": this.randomWeightNumbers[4],
-                "percent90Day": this.randomWeightNumbers[5],
-                "percent180Day": this.randomWeightNumbers[6],
-                "percentForecasted": this.randomWeightNumbers[7]
+                this.payLoad = {
+                    "companyType": `${this.responseBodyOfAItemObject.companyType}`,
+                    "companyKey": `${this.responseBodyOfAItemObject.companyKey}`,
+                    "itemKey": `${this.responseBodyOfAItemObject.key === undefined ? this.responseBodyOfAItemObject.itemKey : this.responseBodyOfAItemObject.key}`,
+                    "salesVelocitySettingsType": `${salesVelocitySettingsType}`,
+                    "restockModel": "DIRECT_SHIP",
+                    "localLeadTime": 7,
+                    "targetQtyOnHandMin": 30,
+                    "targetQtyOnHandMax": 60,
+                    "salesVelocityType": "average",
+                    "salesVelocitySettingData": {
+                            "percent2Day": this.randomWeightNumbers[0],
+                            "percent7Day": this.randomWeightNumbers[1],
+                            "percent14Day": this.randomWeightNumbers[2],
+                            "percent30Day": this.randomWeightNumbers[3],
+                            "percent60Day": this.randomWeightNumbers[4],
+                            "percent90Day": this.randomWeightNumbers[5],
+                            "percent180Day": this.randomWeightNumbers[6],
+                            "percentForecasted": this.randomWeightNumbers[7]
+                    }
+                }
             }
-        }
-    }
+            break;
+        case '"Automatically Adjusted Weightings"':
+            this.payLoad = {
+                "companyType": `${this.responseBodyOfAItemObject.companyType}`,
+                "companyKey": `${this.responseBodyOfAItemObject.companyKey}`,
+                "itemKey": `${this.responseBodyOfAItemObject.key === undefined ? this.responseBodyOfAItemObject.itemKey : this.responseBodyOfAItemObject.key}`,
+                "salesVelocitySettingsType": `${salesVelocitySettingsType}`,
+                "restockModel": "DIRECT_SHIP",
+                "localLeadTime": 7,
+                "targetQtyOnHandMin": 30,
+                "targetQtyOnHandMax": 60,
+                "salesVelocityType": "auto"                
+            }
+            break;
+        default:
+            break;
+    }    
 
     logger.log('info', `Payload` + JSON.stringify(this.payLoad, undefined, 4));
     this.attach(`Payload` + JSON.stringify(this.payLoad, undefined, 4))
@@ -1442,6 +1468,9 @@ Then('User sends a GET request to get Item by Item key', async function () {
         logger.log('info', `Response GET ${linkItemKey} has status code ${this.response.status()} ${this.response.statusText()} and response body ${responseBodyText}`);
         this.attach(`Response GET ${linkItemKey} has status code ${this.response.status()} ${this.response.statusText()} and response body ${actualResponseText}`)
     }
+    
+    this.vendorPriceOfItem = this.getItemByItemKeyResponseBody.vendorPrice;
+    this.packageWeightOfItem = this.getItemByItemKeyResponseBody.packageWeight;
 });
 
 Then('User sends a GET request to get item by by filtered', async function () {

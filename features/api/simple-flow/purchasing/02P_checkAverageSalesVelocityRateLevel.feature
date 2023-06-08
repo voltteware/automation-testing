@@ -110,7 +110,7 @@ Feature: API Purchasing Setting for Daily Sale Rate
         And User sends GET request to get items in "Manage Company > Item"
         And User picks random a item from above list items
         And User sets PUT api endpoint to update item sales velocity setting with type "Average"
-        When User sends PUT request to update item sales velocity setting type "Average" with the total percentage is 100%
+        When User sends PUT request to update item purchasing sales velocity setting type "Average" with the total percentage is 100%
         Then The expected status code should be <expectedStatus>
         And User sets GET api endpoint to get item in Purchasing Custom to check purchasing daily sales rate
         And User sends a GET request to get item in Purchasing Custom to check purchasing daily sales rate
@@ -130,7 +130,7 @@ Feature: API Purchasing Setting for Daily Sale Rate
         And User sends GET request to get list items in "Purchasing > My Suggested"
         And User save a random item in above list suggested items
         And User sets PUT api endpoint to update item sales velocity setting with type "Average"
-        When User sends PUT request to update item sales velocity setting type "Average" with the total percentage is 100%
+        When User sends PUT request to update item purchasing sales velocity setting type "Average" with the total percentage is 100%
         Then The expected status code should be <expectedStatus>
         And User sets GET api endpoint to get restock suggestion purchasing of an above item
         And User sends GET request to get restock suggestion purchasing of an above item

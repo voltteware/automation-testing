@@ -7,6 +7,7 @@ reports/cucumber-html-report*
 reports/multiple-report
 videos/
 screenshots/
+export_data/export*
 ### Node ###
 # Logs
 logs

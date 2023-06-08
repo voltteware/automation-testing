@@ -49,6 +49,24 @@ Then(`{} sends a GET request to get shipment details in Manage Shipments`, async
         logger.log('info', `Response ${this.linkApiGetShipmentDetail} has status code ${this.getShipmentDetailsResponse.status()} ${this.getShipmentDetailsResponse.statusText()} and response body ${responseBodyText}`);
         this.attach(`Response ${this.linkApiGetShipmentDetail} has status code ${this.getShipmentDetailsResponse.status()} ${this.getShipmentDetailsResponse.statusText()} and response body ${actualResponseText}`);
     }
+    // Check information in Shipment Details
+    this.actualTotalCost = this.getShipmentDetailsResponseBody.totalCost;
+    this.actualTotalSKUs = this.getShipmentDetailsResponseBody.totalSKUs;
+    this.actualTotalWeight = this.getShipmentDetailsResponseBody.totalWeight;
+    this.actualDestinationFulfillmentCenterId = this.getShipmentDetailsResponseBody.destinationFulfillmentCenterId;
+    this.actualRestockType = this.getShipmentDetailsResponseBody.restockType;
+    this.actualShipmentName = this.getShipmentDetailsResponseBody.shipmentName;
+    this.actualStatus = this.getShipmentDetailsResponseBody.status;
+    this.actualLabelPrepPreference = this.getShipmentDetailsResponseBody.labelPrepPreference;
+    // Information of Ship from
+    this.actualAddressLine1 = this.getShipmentDetailsResponseBody.shipFromAddress.addressLine1;
+    this.actualAddressLine2 = this.getShipmentDetailsResponseBody.shipFromAddress.addressLine2;
+    this.actualCity = this.getShipmentDetailsResponseBody.shipFromAddress.city;
+    this.actualCountryCode = this.getShipmentDetailsResponseBody.shipFromAddress.countryCode;
+    this.actualFullName = this.getShipmentDetailsResponseBody.shipFromAddress.fullName;
+    this.actualPhoneNumber = this.getShipmentDetailsResponseBody.shipFromAddress.phoneNumber;
+    this.actualPostalCode = this.getShipmentDetailsResponseBody.shipFromAddress.postalCode;
+    this.actualStateOrProvinceCode = this.getShipmentDetailsResponseBody.shipFromAddress.stateOrProvinceCode;
 });
 
 Then(`User checks API contract essential types in shipment details are correct`, async function () {
