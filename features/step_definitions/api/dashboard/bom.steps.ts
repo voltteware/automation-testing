@@ -264,7 +264,7 @@ Given('User saves the parentKey key and childKey key', function () {
 
 Given('User sets PUT api endpoint to edit {} of the above bom for company type {} with new value: {}', function (editColumn: string, companyType: string, value: string) {
     // Prepare endpoint for request to edit demand
-    link = `${Links.API_BOM}/${this.parentKey}/${this.childKey}`;
+    link = `${Links.API_BOM}/${encodeURIComponent(this.parentKey)}/${encodeURIComponent(this.childKey)}`;
 
     switch (editColumn) {
         case 'parentName':

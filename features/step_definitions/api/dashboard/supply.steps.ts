@@ -240,6 +240,8 @@ When('User picks a random supply in above list supplies', async function () {
     this.responseBodyOfASupplyObject = await this.getSupplyResponseBody[Math.floor(Math.random() * this.getSupplyResponseBody.length)];
     logger.log('info', `Random Supply: ${JSON.stringify(this.responseBodyOfASupplyObject, undefined, 4)}`);
     this.attach(`Random Supply: ${JSON.stringify(this.responseBodyOfASupplyObject, undefined, 4)}`);
+
+    this.docType = this.responseBodyOfASupplyObject.docType;
 });
 
 When('User saves the supply key and order key', function () {
@@ -247,14 +249,14 @@ When('User saves the supply key and order key', function () {
     logger.log('info', `Supply key to edit: ${this.supplyKey}`);
     this.attach(`Supply key to edit: ${this.supplyKey}`)
 
-    this.orderkey = this.responseBodyOfASupplyObject.orderKey
-    logger.log('info', `Order key to edit: ${this.orderkey}`);
-    this.attach(`Order key to edit: ${this.orderkey}`)
+    this.orderKey = this.responseBodyOfASupplyObject.orderKey
+    logger.log('info', `Order key to edit: ${this.orderKey}`);
+    this.attach(`Order key to edit: ${this.orderKey}`)
 });
 
 When('User sets PUT api endpoint to edit {} of the above supply for company type {} with new value: {}', function (editColumn: string, compantType: string, value: string) {
     // Prepare endpoint for request to edit demand
-    link = `${Links.API_SUPPLY}/manual/${this.orderkey}/${this.supplyKey}`;
+    link = `${Links.API_SUPPLY}/${this.docType}/${this.orderKey}/${this.supplyKey}`;
 
     switch (editColumn) {
         case 'poNum':
@@ -291,7 +293,7 @@ When('User sets PUT api endpoint to edit {} of the above supply for company type
                 receiveDate.setDate(poDate.getDate() + daysToAdd); 
                 
                 // Outputs a date string in the format "mm/dd/yyyy"
-                // The expected due date have format "mm/dd/yyyy" because after edit the reponsebody return due date with format mm/dd/yyyy
+                // The expected due date have format "mm/dd/yyyy" because after edit the responseBody return due date with format mm/dd/yyyy
                 this.expectedDueDate = receiveDate.toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' });
 
                 // And  the due date in request body have format yyyy-mm-dd

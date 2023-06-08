@@ -25,8 +25,8 @@ Feature: API_Dashboard POST /api/bom
 
         Examples:
             | TC_ID    | companyType | email                   | limitRow | parentName | parentKey | childName | childKey | qty    | expectedStatus |
-            | TC_CB001 | CSV         | testcreatebom@gmail.com | 50       | random     | random    | random    | random   | random | 200            |
-            | TC_CB002 | ASC         | testcreatebom@gmail.com | 50       | random     | random    | random    | random   | random | 200            |
+            | TC_CB001 | CSV         | testcreatebom@gmail.com | 100      | random     | random    | random    | random   | random | 200            |
+            | TC_CB002 | ASC         | testcreatebom@gmail.com | 100      | random     | random    | random    | random   | random | 200            |
 
     #TC_CB003_1, TC_CB003_2 fail due to bug api
     @TC_CB003 @low-bug-skip
@@ -45,10 +45,10 @@ Feature: API_Dashboard POST /api/bom
         And The status text is "<expectedStatusText>"
         Examples:
             | TC_ID      | companyType | email                   | limitRow | cookie  | companyKeyHeader | companyTypeHeader | parentName | parentKey | childName | childKey | qty    | expectedStatus | expectedStatusText    |
-            | TC_CB003_1 | CSV         | testcreatebom@gmail.com | 30       | invalid | invalid          | invalid           | random     | random    | random    | random   | random | 401            | Unauthorized          |
-            | TC_CB003_2 | ASC         | testcreatebom@gmail.com | 30       | invalid | valid            | valid             | random     | random    | random    | random   | random | 401            | Unauthorized          |
-            | TC_CB003_3 | CSV         | testcreatebom@gmail.com | 30       | valid   | invalid          | invalid           | random     | random    | random    | random   | random | 400            | Company not found.    |
-            | TC_CB003_4 | ASC         | testcreatebom@gmail.com | 30       | valid   |                  |                   | random     | random    | random    | random   | random | 500            | Internal Server Error |
+            | TC_CB003_1 | CSV         | testcreatebom@gmail.com | 50       | invalid | invalid          | invalid           | random     | random    | random    | random   | random | 401            | Unauthorized          |
+            | TC_CB003_2 | ASC         | testcreatebom@gmail.com | 50       | invalid | valid            | valid             | random     | random    | random    | random   | random | 401            | Unauthorized          |
+            | TC_CB003_3 | CSV         | testcreatebom@gmail.com | 50       | valid   | invalid          | invalid           | random     | random    | random    | random   | random | 400            | Company not found.    |
+            | TC_CB003_4 | ASC         | testcreatebom@gmail.com | 50       | valid   |                  |                   | random     | random    | random    | random   | random | 500            | Internal Server Error |
 
     @TC_CB004
     Scenario Outline: TC_CB004 - Verify error when the item is a parent can't is a child
@@ -103,7 +103,7 @@ Feature: API_Dashboard POST /api/bom
         And The status text is "<expectedStatusText>"
         Examples:
             | userA               | userB                   | password  | limitRow | parentName | parentKey | childName | childKey | qty    | expectedStatus | expectedStatusText |
-            | may27user@gmail.com | testcreatebom@gmail.com | Test1111# | 50       | random     | random    | random    | random   | random | 400            | Company not found. |
+            | may27user@gmail.com | testcreatebom@gmail.com | Test1111# | 30       | random     | random    | random    | random   | random | 400            | Company not found. |
 
     @TC_CB007
     Scenario Outline: TC_CB007 - Verify error bom already exists
@@ -115,14 +115,14 @@ Feature: API_Dashboard POST /api/bom
         And User sends a GET request to get all boms
         And User sets POST api endpoint to create bom
         And User sets request body with payload as parentName: "<parentName>" and parentKey: "<parentKey>" and childName: "<childName>" and childKey: "<childKey>" and qty: "<qty>"
-        When User sends a POST method to create bom
+        And User sends a POST method to create bom
         When User sends a POST method to create bom
         Then The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
 
         Examples:
             | email                   | limitRow | parentName | parentKey | childName | childKey | qty    | expectedStatus | expectedStatusText     |
-            | testcreatebom@gmail.com | 100      | random     | random    | random    | random   | random | 400            | Record already exists. |
+            | testcreatebom@gmail.com | 30       | random     | random    | random    | random   | random | 400            | Record already exists. |
 
     @TC_CB008
     Scenario Outline: TC_CB008 - Verify error when user input is missing one required field
@@ -159,4 +159,4 @@ Feature: API_Dashboard POST /api/bom
         Examples:
             | TC_ID    | companyType | email                   | limitRow | parentName | parentKey | childName | childKey | qty    | expectedStatus | expectedStatusText |
             | TC_CB009 | QBFS        | testcreatebom@gmail.com | 30       | random     | random    | random    | random   | random | 400            | Bad Request        |
-# | TC_CB010 | QBO         | testcreatebom@gmail.com | 30       | random     | random    | random    | random   | random | 400            | Bad Request        |
+            # | TC_CB010 | QBO         | testcreatebom@gmail.com | 30       | random     | random    | random    | random   | random | 400            | Bad Request        |

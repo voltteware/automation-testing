@@ -75,7 +75,7 @@ export const getListShipmentsResponseSchema = z.object({
   shipmentName: z.string(),
   shipmentSource: z.string().nullable(),
   status: z.string(),
-  stepProgress: z.object({}),
+  stepProgress: z.object({}).nullable(),
   totalCost: z.number(),
   updatedAt: z.string(),
   updated_at: z.string(),

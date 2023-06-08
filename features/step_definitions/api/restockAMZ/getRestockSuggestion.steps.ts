@@ -316,7 +316,7 @@ Then('{} checks isHidden is true or false', async function (actor: string) {
 Then(`User sets GET api method to get all items in Item List with search function:`, async function (dataTable: DataTable) {
     const { supplierFilter, keyword } = dataTable.hashes()[0];
     this.keyword = keyword
-    link = encodeURI(`${Links.API_GET_RESTOCK_SUGGESTION}?offset=0&limit=50&where={"logic":"and","filters":[{"logic":"or","filters":[{"filters":[],"logic":"or"},{"filters":[],"logic":"or"}],"currentSupplierFilters":[{"text":"${supplierFilter}","value":"${supplierFilter}"}]},{"logic":"or","filters":[{"field":"sku","operator":"contains","value":"${keyword}"},{"field":"productName","operator":"contains","value":"${keyword}"},{"field":"category","operator":"contains","value":"${keyword}"},{"field":"supplier","operator":"contains","value":"${keyword}"},{"field":"supplierSku","operator":"contains","value":"${keyword}"},{"field":"asin","operator":"contains","value":"${keyword}"}]},{"logic":"and","filters":[]},{"logic":"and","filters":[{"field":"status","operator":"neq","value":"IGNORE"}]},{"logic":"and","filters":[{"field":"status","operator":"neq","value":"INACTIVE"}]}]}`);
+    link = encodeURI(`${Links.API_GET_RESTOCK_SUGGESTION}?offset=0&limit=50&where={"logic":"and","filters":[{"logic":"or","filters":[{"filters":[],"logic":"or"},{"filters":[],"logic":"or"}],"currentSupplierFilters":[{"text":"${supplierFilter}","value":"${supplierFilter}"}]},{"logic":"or","filters":[{"field":"sku","operator":"contains","value":"${keyword}"},{"field":"productName","operator":"contains","value":"${keyword}"},{"field":"category","operator":"contains","value":"${keyword}"},{"field":"supplier","operator":"contains","value":"${keyword}"},{"field":"supplierSku","operator":"contains","value":"${keyword}"},{"field":"asin","operator":"contains","value":"${keyword}"}]},{"logic":"and","filters":[]}]}`);    
 });
 
 Then(`User sets GET api method to get all items in Item List by filter function with flag, status:`, async function (dataTable: DataTable) {
@@ -457,6 +457,6 @@ When(`{} sends GET endpoint API to get list SKUs`, async function (actor) {
 Then('{} picks {} random SKU in above list items', async function (actor: string, quantity) {
     console.log("Here: ", this.getItemListResponseBody);
     this.itemsPickedRandomArray =  itemRequest.getMultipleRandom(this.getItemListResponseBody, quantity);
-    console.log("IteminItemListPickedRandomArray: ", this.itemsPickedRandomArray);
+    console.log("ItemsInItemListPickedRandomArray: ", this.itemsPickedRandomArray);
     return this.itemsPickedRandomArray;
 })

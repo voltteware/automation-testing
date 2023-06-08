@@ -9,7 +9,7 @@ import { expect } from '@playwright/test';
 
 Then('{} sets GET api to get shipments in Manage Shipments by status:', async function (actor: string, dataTable: DataTable) {
     const { shipmentStatus, limit } = dataTable.hashes()[0]
-    this.linkGetShipmentsByStatus = `${Links.API_SHIPMENT}?offset=0&limit=${limit}&sort=[{"field":"restockType","direction":"desc"}]&where={"filters":[{"filters":[{"field":"status","operator":"eq","value":"${shipmentStatus}"}],"logic":"and"}],"logic":"and"}`;
+    this.linkGetShipmentsByStatus = `${Links.API_SHIPMENT}?offset=0&limit=${limit}&sort=[{"field":"restockType","direction":"asc"}]&where={"filters":[{"filters":[{"field":"status","operator":"eq","value":"${shipmentStatus}"}],"logic":"and"}],"logic":"and"}`;
 });
 
 Then('{} checks information in Shipment Details: {}', async function (actor, restockType: string) {

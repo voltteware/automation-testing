@@ -371,7 +371,7 @@ Then('User sets PUT api to update history override with the following data:', as
             let gridYear = new Date().getFullYear() - row;
             if (monthNumber < currentMonth) gridYear = new Date().getFullYear() - row + 1;
             this.grid = gridMonth + '_' + gridYear;
-            const orderQty = historyValuesOfYears[row][(monthNumber + 12 + -5) % 12]
+            const orderQty = historyValuesOfYears[row][(monthNumber + 12 + - currentMonth) % 12]
             if (orderQty !== '') {
                 const row = {
                     itemKey: `${this.itemKey}`,

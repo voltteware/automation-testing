@@ -207,6 +207,9 @@ Feature: API_Regression User can search shipments
             | <expectedStatus> | <expectedStatusText> |
         And User sets POST api endpoint to complete shipment
         And User sends a POST request to complete shipment
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
         And User sets GET api endpoint to get items in shipments by restockType: <restockType>
         And User sends a GET request to get items in shipments by restockType: <restockType>
         And User checks and waits for Items can be updated in Shipment Review by restockType: <restockType>
