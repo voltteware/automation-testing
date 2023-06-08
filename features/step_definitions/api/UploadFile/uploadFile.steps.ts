@@ -56,7 +56,7 @@ Then(`User sends a PUT request to upload file to the Amazon S3`, async function 
 })
 
 Then(`User sets POST api to sync file {} from Amazon S3 with option isCreateNew: {}`, async function (fileName: string, isCreateNew: string) {
-    this.linkSyncFile = `${Links.API_SYNC}/supplier`;
+    this.linkSyncFile = `${Links.API_SYNC}/${this.section}`;
     this.payloadSyncFile = {
         "fileName": `${fileName}`,
         "fileType": `${this.section}`,

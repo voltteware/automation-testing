@@ -22,19 +22,43 @@ export function convertDataTableToCSVFile(dataTable: DataTable, section: string,
                 }
             })
 
-            // Write data to csv file            
-            const filePath = `./src/data/${fileName}`;
-            const writableStream = fs.createWriteStream(filePath);
-            const header = dataTable.raw()[0]; // Set header
-            const stringifier = stringify({ header: true, columns: header });
-            rows.forEach((row: any) => {
-                stringifier.write(row)
-            }) // Write data
-            stringifier.pipe(writableStream);
+            // // Write data to csv file            
+            // const filePath = `./src/data/${fileName}`;
+            // const writableStream = fs.createWriteStream(filePath);
+            // const header = dataTable.raw()[0]; // Set header
+            // const stringifier = stringify({ header: true, columns: header });
+            // rows.forEach((row: any) => {
+            //     stringifier.write(row)
+            // }) // Write data
+            // stringifier.pipe(writableStream);
             break;
-
+        case 'shipmentItem':
+            rows.forEach((row: any, index: number) => {
+                // SKU
+                if (row[0] === 'random') {
+                    rows[index][0] = `item shipment ${index} from upload auto ${Date.now()}`
+                }
+                // Product name
+                if (row[1] === 'random') {
+                    rows[index][1] = ``
+                }
+                // Warehouse qty
+                if (row[2] === 'random') {
+                    rows[index][2] = `${Number(faker.random.numeric())}`
+                }
+            })            
+            break;    
         default:
             break;
     }
+    // Write data to csv file            
+    const filePath = `./src/data/${fileName}`;
+    const writableStream = fs.createWriteStream(filePath);
+    const header = dataTable.raw()[0]; // Set header
+    const stringifier = stringify({ header: true, columns: header });
+    rows.forEach((row: any) => {
+        stringifier.write(row)
+    }) // Write data
+    stringifier.pipe(writableStream);
     return rows
 }

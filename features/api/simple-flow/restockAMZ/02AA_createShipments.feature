@@ -209,4 +209,42 @@ Feature: API_Regression User can create shipments from Supplier
             | TC_ID        | companyType | casePackOption | restockType | editColumn   | value                        | email                      | direction | expectedStatus | expectedStatusText | limitRow |
             | TC_ASC_CS002 | ASC         | Yes            | SUPPLIER    | supplierName | supplierUpdatedSalesVelocity | testautoforecast@gmail.com | asc       | 200            | OK                 | 10       |
 
-# TO DO Create Shipments from Warehouse
+    # TO DO Create Shipments from Warehouse
+    @runthiss
+    Scenario Outline: <TC_ID> - Verify user <email> could call APIs to create shipments from Warehouse
+        Given User picks company which has onboarded before with type <companyType> in above response
+        And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
+        # Prepares shipment inventory csv file
+        And User prepares the <fileName> file contains the list shipmentItem as following data:
+            | SKU           | Product Name | Warehouse Quantity |
+            | BA-01-TWS-811 |              | 5                  |
+        And User sets GET api to get signed request
+        And User sends a GET request to get signed request
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
+        And User sets PUT api to upload file <fileName> to the Amazon S3
+        And User sends a PUT request to upload file to the Amazon S3
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
+        # Create shipment from warehouse and upload warehouse inventory file
+        And User sets POST api to create shipment from Warehouse with name:
+            | shipmentName           |
+            | ITC_shipment_auto_name |
+        And User sends a POST request to create Shipment
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
+        # Get items in shipment
+        And User sets GET api endpoint to get items in shipments by restockType: <restockType>
+        And User sends a GET request to get items in shipments by restockType: <restockType>
+        And The expected status code should be <expectedStatus>
+        And The status text is "<expectedStatusText>"
+        And User picks random item to check api contract
+        And User checks API contract of get items in shipment
+        # Check upload inventory successfully
+        And User checks items in the shipment must be the same as in csv file
+        Examples:
+            | TC_ID        | companyType | casePackOption | restockType | fileName                         | option | editColumn   | value                        | email                      | direction | expectedStatus | expectedStatusText | limitRow |
+            | TC_ASC_CS002 | ASC         | Yes            | WAREHOUSE   | warehouse-inventory-template.csv | true   | supplierName | supplierUpdatedSalesVelocity | testautoforecast@gmail.com | asc       | 200            | OK                 | 10       |

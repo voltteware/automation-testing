@@ -8,6 +8,7 @@ import _ from "lodash";
 import { expect } from '@playwright/test';
 import { simpleShipmentResponseSchema, updateItemInfoWithLastStepResponseSchema, getListShipmentsResponseSchema, addSKUsResponseSchema } from '../assertion/restockAMZ/shipmentAssertionSchema';
 import { itemInfoInShipmentResponseSchema } from '../assertion/dashboard/itemAssertionSchema';
+import * as exportRequest from '../../../../src/api/request/export.service';
 
 let link: any;
 let payload: any;
@@ -580,4 +581,46 @@ Then(`User checks the new SKU must be found in the above list items`, async func
     expect(this.getShipmentItemsResponseBody.length).toBeGreaterThan(0)
     const sku = this.getShipmentItemsResponseBody.find((sku: any) => sku.itemName == this.payloadAddSKUs.itemName)
     expect(sku).not.toBe(undefined)
+})
+
+Then(`User sets POST api to create shipment from Warehouse with name:`, function (dataTable: DataTable) {
+    const {shipmentName} = dataTable.hashes()[0]
+    if (shipmentName === 'ITC_shipment_auto_name') {
+        this.shipmentName = `${shipmentName}_${Date.now()}`
+    }
+
+    link = `${Links.API_SHIPMENT}/upload-inventory`;
+    this.payLoad = {
+        "shipmentName": `${this.shipmentName}`,
+        "fileDetails": {
+            "fileName": `${this.fileName}`,
+            "fileType": "shipmentItem",
+            "append": false,
+            "zero": false,
+            "userId": "",
+            "isCreateNew": true,
+            "isInitialUpload": false
+            }
+    }
+
+    logger.log('info', `Payload: ` + JSON.stringify(this.payLoad, undefined, 4));
+    this.attach(`Payload: ` + JSON.stringify(this.payLoad, undefined, 4));
+})
+
+Then(`User checks items in the shipment must be the same as in csv file`, async function () {
+    // Convert csv file to json data
+    const data = await exportRequest.totalItemFromExportFile(`./src/data/${this.fileName}`);
+
+    logger.log('info', `Data: ` + JSON.stringify(data, undefined, 4));
+    this.attach(`Data: ` + JSON.stringify(data, undefined, 4));
+
+    const expectedSKU = data.map((item: any) => item.SKU)
+    logger.log('info', `expectedSKU: ` + JSON.stringify(expectedSKU, undefined, 4));
+    this.attach(`expectedSKU: ` + JSON.stringify(expectedSKU, undefined, 4));
+
+    const actualSKU = this.getShipmentItemsResponseBody.map((item: any) => item.fnsku)
+    logger.log('info', `actualSKU: ` + JSON.stringify(actualSKU, undefined, 4));
+    this.attach(`actualSKU: ` + JSON.stringify(actualSKU, undefined, 4));
+
+    expect(_.isEqual(actualSKU, expectedSKU)).toBeTruthy()
 })
