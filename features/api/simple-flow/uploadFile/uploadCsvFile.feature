@@ -16,7 +16,7 @@ Feature: API_Regression User Upload file
             | Supplier Name | Lead Time | Order Interval |
             | random        | random    | random         |
             | random        | random    | random         |
-            | random        | random    | random         |
+            | random        | random    | random         |            
         And User sets GET api to get signed request
         And User sends a GET request to get signed request
         And User checks status code and status text of api
