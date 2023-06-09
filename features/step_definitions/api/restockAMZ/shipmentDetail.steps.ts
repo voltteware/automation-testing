@@ -2,9 +2,7 @@ import { DataTable, Then } from '@cucumber/cucumber';
 import * as shipmentRequest from '../../../../src/api/request/shipment.service';
 import logger from '../../../../src/Logger/logger';
 import { Links } from '../../../../src/utils/links';
-import { faker } from '@faker-js/faker';
 import _ from "lodash";
-import { getListShipmentsResponseSchema } from '../assertion/restockAMZ/shipmentAssertionSchema';
 import { expect } from '@playwright/test';
 
 Then('{} sets GET api to get shipments in Manage Shipments by status:', async function (actor: string, dataTable: DataTable) {
@@ -58,7 +56,7 @@ Then(`User picks a shipment in Manage Shipments`, async function () {
 })
 
 Then('User sets GET api to search item in shipment detail with following data:', async function (dataTable: DataTable) {
-    const {restockType, searchText} = dataTable.hashes()[0];
+    const { restockType, searchText } = dataTable.hashes()[0];
     switch (searchText) {
         case 'nameOfAboveRandomItem':
             this.searchText = this.responseBodyOfAItemInShipmentObject.itemName
@@ -92,11 +90,11 @@ Then(`{} sends a GET request to get items in shipment detail by search function`
 Then(`User checks the system display the correct item list in shipment detail by search function`, async function () {
     this.getShipmentItemsResponseBody.forEach((item: any) => {
         this.attach(`searchText:` + this.searchText)
-        this.attach(`itemName:` + item.itemName)        
+        this.attach(`itemName:` + item.itemName)
         this.attach(`supplierSku:` + item.supplierSku)
         this.attach(`asin:` + item.asin)
         this.attach(`fnsku:` + item.fnsku)
-        this.attach(`description:` + item.description)                
+        this.attach(`description:` + item.description)
         this.attach(`---------`)
         expect(item.itemName?.toLowerCase().includes(this.searchText.toLowerCase()) || item.supplierSku?.toLowerCase().includes(this.searchText.toLowerCase()) || item.asin?.toLowerCase().includes(this.searchText.toLowerCase()) || item.fnsku?.toLowerCase().includes(this.searchText.toLowerCase()) || item.description?.toLowerCase().includes(this.searchText.toLowerCase())).toBeTruthy()
     });

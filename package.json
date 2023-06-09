@@ -37,6 +37,7 @@
     "allure-js-commons": "^2.0.0-beta.19",
     "assert": "2.0.0",
     "aws-sdk": "2.1353.0",
+    "csv": "^6.3.1",
     "date-fns": "2.29.3",
     "dotenv": "16.0.3",
     "googleapis": "115.0.0",

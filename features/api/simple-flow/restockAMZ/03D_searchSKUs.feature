@@ -86,4 +86,4 @@ Feature: API_Regression User can search SKUs
 
         Examples:
             | TC_ID             | companyType | restockType | email                      | expectedStatus | expectedStatusText | shipmentStatus |
-            | TC_ASC_SSKUS001_2 | ASC         | SUPPLIER    | testautoforecast@gmail.com | 200            | OK                 | WORKING        |
+            | TC_ASC_SSKUS001_2 | ASC         | SUPPLIER    | testautoforecast@gmail.com | 200            | OK                 | WORKING        |    
