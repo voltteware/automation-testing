@@ -427,7 +427,6 @@ Then('{} sends a PUT request to update shipment Item key casePackOption: {}', as
         payload = {
             shipmentQty: 2,
             restockKey: `${this.shipmentKey}`,
-            // Hard item to match item in file csv
             itemKey: `${this.itemKey}`,
             itemName: `${this.itemName}`,
         }
