@@ -101,14 +101,14 @@ Then(`{} sends a GET request to get items in shipments by restockType: {}`, asyn
         this.getShipmentItemsResponseBody = JSON.parse(await this.getShipmentItemsResponse.text());
         logger.log('info', `Response GET ${link}: ` + JSON.stringify(this.getShipmentItemsResponseBody, undefined, 4));
         this.attach(`Response GET ${link}: ` + JSON.stringify(this.getShipmentItemsResponseBody, undefined, 4));
-
-        this.shipmentItemKey = this.getShipmentItemsResponseBody[0].shipmentItemKey;
     }
     else {
         const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
         logger.log('info', `Response ${link} has status code ${this.getShipmentItemsResponse.status()} ${this.getShipmentItemsResponse.statusText()} and response body ${responseBodyText}`);
         this.attach(`Response ${link} has status code ${this.getShipmentItemsResponse.status()} ${this.getShipmentItemsResponse.statusText()} and response body ${actualResponseText}`);
     }
+
+    this.shipmentItemKey = this.getShipmentItemsResponseBody[0]?.shipmentItemKey;
 });
 
 Then('{} sets PUT api endpoint to update shipment', async function (actor: string) {

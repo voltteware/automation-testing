@@ -2,7 +2,7 @@
 Feature: API_Dashboard PUT /api/bom
     Background: Send GET /realm request to get all company keys of current logged in user before each test
         Given user sends a POST login request to get valid cookie with role
-            | role  | username                   | password  |
+            | role  | username             | password  |
             | admin | testgetbom@gmail.com | Test1111# |
         And User sets GET api endpoint to get companies information of current user
         And In Header of the request, she sets param Cookie as valid connect.sid
@@ -25,7 +25,7 @@ Feature: API_Dashboard PUT /api/bom
         And The new <editColumn> of bom must be updated successfully
 
         Examples:
-            | TC_ID      | companyType | email                      | limitRow | editColumn | value  | expectedStatus |
+            | TC_ID      | companyType | email                | limitRow | editColumn | value  | expectedStatus |
             | TC_UB001_1 | ASC         | testgetbom@gmail.com | 100      | parentName | random | 200            |
             | TC_UB001_6 | CSV         | testgetbom@gmail.com | 100      | kitQty     | random | 200            |
 
@@ -45,7 +45,7 @@ Feature: API_Dashboard PUT /api/bom
         And The new <editColumn> of bom must be updated successfully
 
         Examples:
-            | TC_ID      | companyType | email                      | limitRow | editColumn    | value  | expectedStatus |
+            | TC_ID      | companyType | email                | limitRow | editColumn    | value  | expectedStatus |
             | TC_UB001_2 | ASC         | testgetbom@gmail.com | 100      | componentName | random | 200            |
             | TC_UB001_3 | ASC         | testgetbom@gmail.com | 100      | kitQty        | random | 200            |
             | TC_UB001_4 | CSV         | testgetbom@gmail.com | 100      | parentName    | random | 200            |

@@ -354,7 +354,7 @@ export const itemInfoInShipmentResponseSchema = z.object({
     oversized: z.string().nullable(),
     packageWeight: z.number().nullable(),
     pending: z.number(),
-    prepDetailsList: z.array(z.string().nullable()),
+    prepDetailsList: z.object({}).or(z.array(z.object({}).nullable())).nullable(),
     rank: z.number().nullable(),
     receivedQty: z.number(),
     recommendedQty: z.number(),
