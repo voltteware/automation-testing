@@ -136,7 +136,7 @@ Then('{} checks total items in report file EQUALS total with section and item na
     var itemName: number = dataTable.hashes()[0].itemName;
     var section: string = dataTable.hashes()[0].section;
 
-    totalItemFromExport = await exportRequest.totalItemFromExportFile(`data-report/demand_May.csv`);
+    totalItemFromExport = await exportRequest.totalItemFromExportFile(`src/data/demand_May.csv`);
     this.totalItemFromExportFiltered = totalItemFromExport.filter((filter: any) => filter.sku === `${itemName}` && !(filter[`item-status`] === 'Cancelled'));
     
     logger.log('info', "this.totalItemFromExportFiltered: " + JSON.stringify(this.totalItemFromExportFiltered));

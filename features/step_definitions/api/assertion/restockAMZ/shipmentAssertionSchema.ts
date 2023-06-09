@@ -22,7 +22,7 @@ export const simpleShipmentResponseSchema = z.object({
   shipmentSource: z.string().nullable(),
   status: z.string(),
   stepProgress: z.object({
-    isFromRestockSuggestion: z.boolean(),
+    isFromRestockSuggestion: z.boolean().optional(),
     uploadInventory: z.boolean(),
   }),
   totalCost: z.number(),

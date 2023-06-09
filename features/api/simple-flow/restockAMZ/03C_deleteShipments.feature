@@ -166,7 +166,7 @@ Feature: API_Regression User can delete shipments which have Pending status
         And User sends a POST request to create shipment plan
         And The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
-        And User sets GET api endpoint to count items in Shipment Review
+        And User sets GET api endpoint to count items in Shipment Review with restockType: <restockType>
         And User sends a GET request to count items in Shipment Review
         And The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
