@@ -109,6 +109,8 @@ Then(`{} sends a GET request to get items in shipments by restockType: {}`, asyn
     }
 
     this.shipmentItemKey = this.getShipmentItemsResponseBody[0]?.shipmentItemKey;
+    this.itemName = this.getShipmentItemsResponseBody[0]?.itemName;
+    this.itemKey = this.getShipmentItemsResponseBody[0]?.itemKey;
 });
 
 Then('{} sets PUT api endpoint to update shipment', async function (actor: string) {
@@ -344,12 +346,12 @@ Then('{} sends a POST request to sync', async function (actor: string) {
     await sleep(6000);
 });
 
-Then(`{} sets GET api endpoint to count items in Shipment Review`, async function (actor: string) {
+Then(`{} sets GET api endpoint to count items in Shipment Review with restockType: {}`, async function (actor, restockType: string) {
     const sleep = (milliseconds: number) => {
         return new Promise(resolve => setTimeout(resolve, milliseconds))
     }
     await sleep(5000);
-    linkCount = `${Links.API_SHIPMENT}-detail/count?where=%7B%22logic%22:%22and%22,%22filters%22:%5B%5D%7D&key=${this.shipmentKey}&type=amazon&restockType=SUPPLIER`;
+    linkCount = `${Links.API_SHIPMENT}-detail/count?where=%7B%22logic%22:%22and%22,%22filters%22:%5B%5D%7D&key=${this.shipmentKey}&type=amazon&restockType=${restockType}`;
 });
 
 Then(`{} checks and waits for Items can be updated in Shipment Review by restockType: {}`, async function (actor, restockType: string) {
@@ -402,22 +404,32 @@ Then(`{} sets PUT api endpoint to update shipment Item key`, async function (act
     link = `${Links.API_SHIPMENT}-detail/${this.shipmentItemKey}`;
 });
 
-Then('{} sends a PUT request to update shipment Item key', async function (actor: string) {
-    payload = {
-        isShipByCase: true,
-        itemKey: `${this.itemKey}`,
-        itemName: `${this.itemName}`,
-        caseQty: 2,
-        shipmentItemKey: `${this.shipmentItemKey}`,
-        shipmentQty: 10,
-        restockKey: `${this.shipmentKey}`,
-        vendorKey: `${this.vendorKey}`,
-        vendorName: `${this.fullName}`,
-        boxHeight: Number(faker.datatype.number({ 'min': 1, 'max': 5 })),
-        boxLength: Number(faker.datatype.number({ 'min': 1, 'max': 5 })),
-        boxWeight: Number(faker.datatype.number({ 'min': 1, 'max': 5 })),
-        boxWidth: Number(faker.datatype.number({ 'min': 1, 'max': 5 })),
-        whoPreps: "Amazon"
+Then('{} sends a PUT request to update shipment Item key casePackOption: {}', async function (actor, casePackOption: string) {
+    if (casePackOption == 'Yes') {
+        payload = {
+            isShipByCase: true,
+            itemKey: `${this.itemKey}`,
+            itemName: `${this.itemName}`,
+            caseQty: 2,
+            shipmentItemKey: `${this.shipmentItemKey}`,
+            shipmentQty: 10,
+            restockKey: `${this.shipmentKey}`,
+            vendorKey: `${this.vendorKey}`,
+            vendorName: `${this.fullName}`,
+            boxHeight: Number(faker.datatype.number({ 'min': 1, 'max': 5 })),
+            boxLength: Number(faker.datatype.number({ 'min': 1, 'max': 5 })),
+            boxWeight: Number(faker.datatype.number({ 'min': 1, 'max': 5 })),
+            boxWidth: Number(faker.datatype.number({ 'min': 1, 'max': 5 })),
+            whoPreps: "Amazon"
+        }
+    }
+    else {
+        payload = {
+            shipmentQty: 2,
+            restockKey: `${this.shipmentKey}`,
+            itemKey: `${this.itemKey}`,
+            itemName: `${this.itemName}`,
+        }
     }
 
     // Send PUT request
@@ -618,7 +630,7 @@ Then(`User checks items in the shipment must be the same as in csv file`, async 
     logger.log('info', `expectedSKU: ` + JSON.stringify(expectedSKU, undefined, 4));
     this.attach(`expectedSKU: ` + JSON.stringify(expectedSKU, undefined, 4));
 
-    const actualSKU = this.getShipmentItemsResponseBody.map((item: any) => item.fnsku)
+    const actualSKU = this.getShipmentItemsResponseBody.map((item: any) => item.itemName)
     logger.log('info', `actualSKU: ` + JSON.stringify(actualSKU, undefined, 4));
     this.attach(`actualSKU: ` + JSON.stringify(actualSKU, undefined, 4));
 
