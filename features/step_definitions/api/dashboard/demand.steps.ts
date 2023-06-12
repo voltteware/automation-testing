@@ -176,7 +176,7 @@ When('User saves the demand key and order key', function () {
     this.attach(`Order key to edit: ${this.orderkey}`)
 });
 
-When('User sets PUT api endpoint to edit {} of the above demand for company type {} with new value: {}', async function (editColumn: string, compantType: string, value: string) {
+When('User sets PUT api endpoint to edit {} of the above demand for company type {} with new value: {}', async function (editColumn: string, companyType: string, value: string) {
     // Prepare endpoint for request to edit demand
     link = `${Links.API_DEMAND}/manual/${this.orderKey}/${this.demandKey}`;
 
@@ -205,7 +205,7 @@ When('User sets PUT api endpoint to edit {} of the above demand for company type
                 const randomDate = new Date(minDate.getTime() + randomTime);
 
                 // Outputs a date string in the format "mm/dd/yyyy"
-                // The expected due date have format "mm/dd/yyyy" because after edit the reponsebody return due date with format mm/dd/yyyy
+                // The expected due date have format "mm/dd/yyyy" because after edit the responseBody return due date with format mm/dd/yyyy
                 this.expectedDueDate = randomDate.toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' });
 
                 // And  the due date in request body have format yyyy-mm-dd
@@ -251,8 +251,8 @@ When('User sets PUT api endpoint to edit {} of the above demand for company type
 
     // Prepare payload for request to edit demand
     this.payLoad = {
-        "companyType": `${this.responseBodyOfADemandObject.compantType}`,
-        "companyKey": `${this.responseBodyOfADemandObject.compantKey}`,
+        "companyType": `${this.responseBodyOfADemandObject.companyType}`,
+        "companyKey": `${this.responseBodyOfADemandObject.companyKey}`,
         "docType": `${this.responseBodyOfADemandObject.docType}`,
         "orderKey": `${this.responseBodyOfADemandObject.orderKey}`,
         "rowKey": `${this.responseBodyOfADemandObject.rowKey}`,

@@ -274,11 +274,11 @@ When('{} picks {} random items in above list items', async function (actor, quan
     return this.itemsPickedRandomArray;
 });
 
-Given('User saves list items that have already set as purchas as of orther items', async function () {
+Given('User saves list items that have already set as purchase as of other items', async function () {
     // expect(this.getItemsResponseBody.length, 'There is at least 1 item to pick random').toBeGreaterThanOrEqual(1);
-    this.listItemsAlreadySetAsPurchaseAsOfOrtherItem = this.getItemsResponseBody.map((item: any) => item.lotMultipleItemKey)
-    logger.log('info', `list items that have already set as purchas as of orther items: ${JSON.stringify(this.listItemsAlreadySetAsPurchaseAsOfOrtherItem, undefined, 4)}`);
-    this.attach(`list items that have already set as purchas as of orther items: ${JSON.stringify(this.listItemsAlreadySetAsPurchaseAsOfOrtherItem, undefined, 4)}`);
+    this.listItemsAlreadySetAsPurchaseAsOfOtherItem = this.getItemsResponseBody.map((item: any) => item.lotMultipleItemKey)
+    logger.log('info', `list items that have already set as purchase as of other items: ${JSON.stringify(this.listItemsAlreadySetAsPurchaseAsOfOtherItem, undefined, 4)}`);
+    this.attach(`list items that have already set as purchase as of other items: ${JSON.stringify(this.listItemsAlreadySetAsPurchaseAsOfOtherItem, undefined, 4)}`);
 });
 
 Given('{} picks a random item which does not have Purchase As', async function (actor: string) {
@@ -902,7 +902,7 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
                 } else {
                     const excludedItemKey = this.itemKey
                     // Filter out the excluded item have already set as purchase as of other items in the list items
-                    const filteredArray = this.getItemsResponseBody.filter((item: any) => ((item.key !== excludedItemKey) && (!this.listItemsAlreadySetAsPurchaseAsOfOrtherItem.includes(item.key))));
+                    const filteredArray = this.getItemsResponseBody.filter((item: any) => ((item.key !== excludedItemKey) && (!this.listItemsAlreadySetAsPurchaseAsOfOtherItem.includes(item.key))));
                     const randomItem = filteredArray[Math.floor(Math.random() * filteredArray.length)];
 
                     this.lotMultipleItemName = randomItem.name
@@ -920,7 +920,7 @@ Given('User sets PUT api endpoint to edit {} of the above item for company type 
             } else if (value == "dynamic") {
                 const excludedItemKey = this.itemKey
                 // Filter out the excluded item have already set as purchase as of other items the list items
-                const filteredArray = this.getItemsResponseBody.filter((item: any) => ((item.key !== excludedItemKey) && (!this.listItemsAlreadySetAsPurchaseAsOfOrtherItem.includes(item.key))));
+                const filteredArray = this.getItemsResponseBody.filter((item: any) => ((item.key !== excludedItemKey) && (!this.listItemsAlreadySetAsPurchaseAsOfOtherItem.includes(item.key))));
                 const randomItem = filteredArray[Math.floor(Math.random() * filteredArray.length)];
 
                 this.lotMultipleItemName = randomItem.name
@@ -2095,8 +2095,8 @@ Given('{} sets request body of edit item api with payload', async function (acto
                     }
                 } else {
                     const excludedItemKey = this.itemKey
-                    // Filter out the excluded item have already set as purchas as of orther items the list items
-                    const filteredArray = this.getItemsResponseBody.filter((item: any) => ((item.key !== excludedItemKey) && (!this.listItemsAlreadySetAsPurchaseAsOfOrtherItem.includes(item.key))));
+                    // Filter out the excluded item have already set as purchase as of other items the list items
+                    const filteredArray = this.getItemsResponseBody.filter((item: any) => ((item.key !== excludedItemKey) && (!this.listItemsAlreadySetAsPurchaseAsOfOtherItem.includes(item.key))));
                     const randomItem = filteredArray[Math.floor(Math.random() * filteredArray.length)];
 
                     this.lotMultipleItemName = randomItem.name
@@ -2114,7 +2114,7 @@ Given('{} sets request body of edit item api with payload', async function (acto
             } else if (value == "dynamic") {
                 const excludedItemKey = this.itemKey
                 // Filter out the excluded item have already set as purchase as of other items the list items
-                const filteredArray = this.getItemsResponseBody.filter((item: any) => ((item.key !== excludedItemKey) && (!this.listItemsAlreadySetAsPurchaseAsOfOrtherItem.includes(item.key))));
+                const filteredArray = this.getItemsResponseBody.filter((item: any) => ((item.key !== excludedItemKey) && (!this.listItemsAlreadySetAsPurchaseAsOfOtherItem.includes(item.key))));
                 const randomItem = filteredArray[Math.floor(Math.random() * filteredArray.length)];
 
                 this.lotMultipleItemName = randomItem.name

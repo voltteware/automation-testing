@@ -148,7 +148,7 @@ Feature: API_Dashboard PUT /api/item
     And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
     And User sets GET api endpoint to get items that have purchase as
     And User sends a GET request to get list items
-    And User saves list items that have already set as purchas as of orther items
+    And User saves list items that have already set as purchase as of other items
     And User sets GET api endpoint to get items that have not purchase as
     And User sends a GET request to get list items
     And User picks a random item in above list items

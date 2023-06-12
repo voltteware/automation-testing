@@ -154,64 +154,64 @@ Then('{} sends a PUT method to update company of {} by company key', async funct
 
 Then('{} checks values of {} in response of update company are correct', async function (actor, properties: string) {
     const companyType = ['ASC', 'CSV', 'QBFS', 'QBO'];
-    const expectedleadTime = this.payLoad.leadTime;
-    const expectedorderInterval = this.payLoad.orderInterval;
-    const expectedserviceLevel = this.payLoad.serviceLevel;
-    const expectedisLostSaleTracking = this.payLoad.isLostSaleTracking;
-    const expectedisNotifyingAfterSync = this.payLoad.isNotifyingAfterSync;
-    const expectedisNotifyingAfterForecast = this.payLoad.isNotifyingAfterForecast;
-    const expectedpendingOrderToggle = this.payLoad.pendingOrderToggle;
-    const expectedinventorySourcePreference = this.payLoad.inventorySourcePreference;
-    const expectedpurchasingSalesVelocitySettingData = this.payLoad.purchasingSalesVelocitySettingData;
+    const expectedLeadTime = this.payLoad.leadTime;
+    const expectedOrderInterval = this.payLoad.orderInterval;
+    const expectedServiceLevel = this.payLoad.serviceLevel;
+    const expectedIsLostSaleTracking = this.payLoad.isLostSaleTracking;
+    const expectedIsNotifyingAfterSync = this.payLoad.isNotifyingAfterSync;
+    const expectedIsNotifyingAfterForecast = this.payLoad.isNotifyingAfterForecast;
+    const expectedPendingOrderToggle = this.payLoad.pendingOrderToggle;
+    const expectedInventorySourcePreference = this.payLoad.inventorySourcePreference;
+    const expectedPurchasingSalesVelocitySettingData = this.payLoad.purchasingSalesVelocitySettingData;
     expect(companyType, `Company Type should be one of ${companyType}`).toContain(this.responseBodyOfACompanyObject.companyType);
     expect(this.responseBodyOfACompanyObject.companyKey).not.toBeNull();
-    if (expectedleadTime) {
-        expect(this.responseBodyOfACompanyObject.leadTime, `In response body, leadTime should be matched with the data request: ${expectedleadTime}`).toBe(expectedleadTime);
+    if (expectedLeadTime) {
+        expect(this.responseBodyOfACompanyObject.leadTime, `In response body, leadTime should be matched with the data request: ${expectedLeadTime}`).toBe(expectedLeadTime);
     }
-    if (expectedorderInterval) {
-        expect(this.responseBodyOfACompanyObject.orderInterval, `In response body, leadTime should be matched with the data request: ${expectedorderInterval}`).toBe(expectedorderInterval);
+    if (expectedOrderInterval) {
+        expect(this.responseBodyOfACompanyObject.orderInterval, `In response body, leadTime should be matched with the data request: ${expectedOrderInterval}`).toBe(expectedOrderInterval);
     }
-    if (expectedserviceLevel) {
-        expect(this.responseBodyOfACompanyObject.serviceLevel, `In response body, leadTime should be matched with the data request: ${expectedserviceLevel}`).toBe(expectedserviceLevel);
+    if (expectedServiceLevel) {
+        expect(this.responseBodyOfACompanyObject.serviceLevel, `In response body, leadTime should be matched with the data request: ${expectedServiceLevel}`).toBe(expectedServiceLevel);
     }
-    if (expectedisLostSaleTracking == "true") {
+    if (expectedIsLostSaleTracking == "true") {
         expect(this.responseBodyOfACompanyObject.isLostSaleTracking, `In response body, isLostSaleTracking should be true`).toBeTruthy();
-    } else if (expectedisLostSaleTracking == "false") {
+    } else if (expectedIsLostSaleTracking == "false") {
         expect(this.responseBodyOfACompanyObject.isLostSaleTracking, `In response body, isLostSaleTracking should be false`).toBeFalsy();
     }
-    if (expectedisNotifyingAfterForecast == "true") {
+    if (expectedIsNotifyingAfterForecast == "true") {
         expect(this.responseBodyOfACompanyObject.isNotifyingAfterForecast, `In response body, isNotifyingAfterForecast should be true`).toBeTruthy();
-    } else if (expectedisNotifyingAfterForecast == "false") {
+    } else if (expectedIsNotifyingAfterForecast == "false") {
         expect(this.responseBodyOfACompanyObject.isNotifyingAfterForecast, `In response body, isNotifyingAfterForecast should be false`).toBeFalsy();
     }
-    if (expectedisNotifyingAfterSync == "true") {
+    if (expectedIsNotifyingAfterSync == "true") {
         expect(this.responseBodyOfACompanyObject.isNotifyingAfterSync, `In response body, isNotifyingAfterSync should be true`).toBeTruthy();
-    } else if (expectedisNotifyingAfterSync == "false") {
+    } else if (expectedIsNotifyingAfterSync == "false") {
         expect(this.responseBodyOfACompanyObject.isNotifyingAfterSync, `In response body, isNotifyingAfterSync should be false`).toBeFalsy();
     }
-    if (expectedpendingOrderToggle == "true") {
+    if (expectedPendingOrderToggle == "true") {
         expect(this.responseBodyOfACompanyObject.pendingOrderToggle, `In response body, pendingOrderToggle should be true`).toBeTruthy();
-    } else if (expectedpendingOrderToggle == "false") {
+    } else if (expectedPendingOrderToggle == "false") {
         expect(this.responseBodyOfACompanyObject.pendingOrderToggle, `In response body, pendingOrderToggle should be false`).toBeFalsy();
     }
-    if (expectedinventorySourcePreference) {
-        expect(this.responseBodyOfACompanyObject.inventorySourcePreference, `In response body, inventorySourcePreference should be matched with the data request: ${expectedinventorySourcePreference}`).toBe(expectedinventorySourcePreference);
+    if (expectedInventorySourcePreference) {
+        expect(this.responseBodyOfACompanyObject.inventorySourcePreference, `In response body, inventorySourcePreference should be matched with the data request: ${expectedInventorySourcePreference}`).toBe(expectedInventorySourcePreference);
     }
-    if (expectedpurchasingSalesVelocitySettingData) {
-        const expectedpercent2Day = this.payLoad.purchasingSalesVelocitySettingData.percent2Day;
-        const expectedpercent7Day = this.payLoad.purchasingSalesVelocitySettingData.percent7Day;
-        const expectedpercent30Day = this.payLoad.purchasingSalesVelocitySettingData.percent30Day;
-        const expectedpercent60Day = this.payLoad.purchasingSalesVelocitySettingData.percent60Day;
-        const expectedpercent90Day = this.payLoad.purchasingSalesVelocitySettingData.percent90Day;
-        const expectedpercent180Day = this.payLoad.purchasingSalesVelocitySettingData.percent180Day;
-        const expectedpercentForecasted = this.payLoad.purchasingSalesVelocitySettingData.percentForecasted;
-        expect(this.responseBodyOfACompanyObject.purchasingSalesVelocitySettingData.percent2Day, `In response body, percent2Day should be matched with the data request: ${expectedpercent2Day}`).toBe(expectedpercent2Day);
-        expect(this.responseBodyOfACompanyObject.purchasingSalesVelocitySettingData.percent7Day, `In response body, percent7Day should be matched with the data request: ${expectedpercent7Day}`).toBe(expectedpercent7Day);
-        expect(this.responseBodyOfACompanyObject.purchasingSalesVelocitySettingData.percent30Day, `In response body, percent30Day should be matched with the data request: ${expectedpercent30Day}`).toBe(expectedpercent30Day);
-        expect(this.responseBodyOfACompanyObject.purchasingSalesVelocitySettingData.percent60Day, `In response body, percent60Day should be matched with the data request: ${expectedpercent60Day}`).toBe(expectedpercent60Day);
-        expect(this.responseBodyOfACompanyObject.purchasingSalesVelocitySettingData.percent90Day, `In response body, percent90Day should be matched with the data request: ${expectedpercent90Day}`).toBe(expectedpercent90Day);
-        expect(this.responseBodyOfACompanyObject.purchasingSalesVelocitySettingData.percent180Day, `In response body, percent180Day should be matched with the data request: ${expectedpercent180Day}`).toBe(expectedpercent180Day);
-        expect(this.responseBodyOfACompanyObject.purchasingSalesVelocitySettingData.percentForecasted, `In response body, percentForecasted should be matched with the data request: ${expectedpercentForecasted}`).toBe(expectedpercentForecasted);
+    if (expectedPurchasingSalesVelocitySettingData) {
+        const expectedPercent2Day = this.payLoad.purchasingSalesVelocitySettingData.percent2Day;
+        const expectedPercent7Day = this.payLoad.purchasingSalesVelocitySettingData.percent7Day;
+        const expectedPercent30Day = this.payLoad.purchasingSalesVelocitySettingData.percent30Day;
+        const expectedPercent60Day = this.payLoad.purchasingSalesVelocitySettingData.percent60Day;
+        const expectedPercent90Day = this.payLoad.purchasingSalesVelocitySettingData.percent90Day;
+        const expectedPercent180Day = this.payLoad.purchasingSalesVelocitySettingData.percent180Day;
+        const expectedPercentForecasted = this.payLoad.purchasingSalesVelocitySettingData.percentForecasted;
+        expect(this.responseBodyOfACompanyObject.purchasingSalesVelocitySettingData.percent2Day, `In response body, percent2Day should be matched with the data request: ${expectedPercent2Day}`).toBe(expectedPercent2Day);
+        expect(this.responseBodyOfACompanyObject.purchasingSalesVelocitySettingData.percent7Day, `In response body, percent7Day should be matched with the data request: ${expectedPercent7Day}`).toBe(expectedPercent7Day);
+        expect(this.responseBodyOfACompanyObject.purchasingSalesVelocitySettingData.percent30Day, `In response body, percent30Day should be matched with the data request: ${expectedPercent30Day}`).toBe(expectedPercent30Day);
+        expect(this.responseBodyOfACompanyObject.purchasingSalesVelocitySettingData.percent60Day, `In response body, percent60Day should be matched with the data request: ${expectedPercent60Day}`).toBe(expectedPercent60Day);
+        expect(this.responseBodyOfACompanyObject.purchasingSalesVelocitySettingData.percent90Day, `In response body, percent90Day should be matched with the data request: ${expectedPercent90Day}`).toBe(expectedPercent90Day);
+        expect(this.responseBodyOfACompanyObject.purchasingSalesVelocitySettingData.percent180Day, `In response body, percent180Day should be matched with the data request: ${expectedPercent180Day}`).toBe(expectedPercent180Day);
+        expect(this.responseBodyOfACompanyObject.purchasingSalesVelocitySettingData.percentForecasted, `In response body, percentForecasted should be matched with the data request: ${expectedPercentForecasted}`).toBe(expectedPercentForecasted);
     }
 })
 
@@ -223,7 +223,7 @@ Then('The expected Total percentage should be {int}', async function (expectedTo
     expect(TotalPercentage).toBe(expectedTotalPercentage);
 })
 
-Then(`{} sets PUT api endpoint to update "Purchasing Daily Sales Rate Rules > Average" in the "Manage Company > Company Details" of a bove company with the total percentage is {}%`, async function (actor: string, percentage: string) {
+Then(`{} sets PUT api endpoint to update "Purchasing Daily Sales Rate Rules > Average" in the "Manage Company > Company Details" of above company with the total percentage is {}%`, async function (actor: string, percentage: string) {
     link = `${Links.API_GET_COMPANY}/${this.companyKey}`;
     this.payLoad = this.responseBodyOfACompanyObject
 

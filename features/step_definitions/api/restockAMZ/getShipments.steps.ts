@@ -56,7 +56,7 @@ When(`{} sends GET endpoint API to get list shipments`, async function (actor) {
 Then('{} picks {} random shipment in above list shipments', async function (actor: string, quantity) {
     console.log("Here: ", this.getListShipmentWithLimitRowResponseBody);
     this.itemsPickedRandomArray =  itemRequest.getMultipleRandom(this.getListShipmentWithLimitRowResponseBody, quantity);
-    console.log("IteminItemListPickedRandomArray: ", this.itemsPickedRandomArray);
+    console.log("ItemInItemListPickedRandomArray: ", this.itemsPickedRandomArray);
     return this.itemsPickedRandomArray;
 });
 

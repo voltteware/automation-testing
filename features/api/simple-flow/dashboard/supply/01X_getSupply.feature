@@ -56,7 +56,7 @@ Feature: API_Dashboard GET /api/supply
             | may27user@gmail.com | testgetsupply@gmail.com | Test1111# | random     | 400            | Company not found. |
 
     @TC_GSL004
-    Scenario Outline: <TC_ID> - Verify user could set limit <limitRow> in this API to get list supplys sorted by refNum with direction <direction>
+    Scenario Outline: <TC_ID> - Verify user could set limit <limitRow> in this API to get list supply sorted by refNum with direction <direction>
         Given User sets GET api endpoint to get information of a company belongs to <email> using company key <companyKey>
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get supply keys with limit row: <limitRow> and sort field: <sortField> with direction: <direction>

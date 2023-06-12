@@ -363,7 +363,7 @@ Then('{} checks that the lastForecastDate field was updated and jobInitiator is 
 })
 
 Given('User sets GET api to get information of {string} company', function (companyType) {
-    this.linkApiAdminGetInfomationCompany = `${Links.API_ADMIN_GET_COMPANIES}/${this.companyKey}/${companyType}`
+    this.linkApiAdminGetInformationCompany = `${Links.API_ADMIN_GET_COMPANIES}/${this.companyKey}/${companyType}`
 });
 
 Given('User sends GET request to get information of company', async function () {
@@ -371,7 +371,7 @@ Given('User sends GET request to get information of company', async function () 
         headers: this.headers
     }
 
-    this.getInformationCompanyResponse = this.response = await companyRequest.getCompanyInfo(this.request, this.linkApiAdminGetInfomationCompany, options);
+    this.getInformationCompanyResponse = this.response = await companyRequest.getCompanyInfo(this.request, this.linkApiAdminGetInformationCompany, options);
     const responseBodyText = await this.getInformationCompanyResponse.text();
     if (this.getInformationCompanyResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
         this.getInformationCompanyResponseBody = JSON.parse(await this.getInformationCompanyResponse.text());
@@ -380,8 +380,8 @@ Given('User sends GET request to get information of company', async function () 
     }
     else {
         const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
-        logger.log('info', `Response ${this.linkApiAdminGetInfomationCompany} has status code ${this.getInformationCompanyResponse.status()} ${this.getInformationCompanyResponse.statusText()} and response body ${responseBodyText}`);
-        this.attach(`Response ${this.linkApiAdminGetInfomationCompany} has status code ${this.getInformationCompanyResponse.status()} ${this.getInformationCompanyResponse.statusText()} and response body ${actualResponseText}`)
+        logger.log('info', `Response ${this.linkApiAdminGetInformationCompany} has status code ${this.getInformationCompanyResponse.status()} ${this.getInformationCompanyResponse.statusText()} and response body ${responseBodyText}`);
+        this.attach(`Response ${this.linkApiAdminGetInformationCompany} has status code ${this.getInformationCompanyResponse.status()} ${this.getInformationCompanyResponse.statusText()} and response body ${actualResponseText}`)
     }
 });
 

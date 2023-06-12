@@ -352,8 +352,8 @@ Then('{} picks random grid view of custom items in PO in above response', async 
 
 Then('{} checks values in response of get grid view custom items in PO are correct', async function (actor: string) {
     const companyType = ['ASC', 'CSV', 'QBFS', 'QBO'];
-    const expecteditemType = "custom-items-in-po";
-    expect(this.responseBodyOfAGridViewObject.itemType, `In response body, itemType should be is: ${expecteditemType}`).toBe(expecteditemType);
+    const expectedItemType = "custom-items-in-po";
+    expect(this.responseBodyOfAGridViewObject.itemType, `In response body, itemType should be is: ${expectedItemType}`).toBe(expectedItemType);
     expect(companyType, `Company Type should be one of ${companyType}`).toContain(this.responseBodyOfAGridViewObject.companyType);
     expect(this.responseBodyOfAGridViewObject.companyKey).not.toBeNull();
 })

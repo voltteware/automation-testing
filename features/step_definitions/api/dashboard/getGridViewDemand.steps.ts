@@ -244,8 +244,8 @@ Then('{} picks random grid view of demand in above response', async function (ac
 
 Then('{} checks values in response of get grid view demand are correct', async function (actor: string) {
     const companyType = ['ASC', 'CSV', 'QBFS', 'QBO'];
-    const expecteditemType = "demand";
-    expect(this.responseBodyOfAGridViewObject.itemType, `In response body, itemType should be is: ${expecteditemType}`).toBe(expecteditemType);
+    const expectedItemType = "demand";
+    expect(this.responseBodyOfAGridViewObject.itemType, `In response body, itemType should be is: ${expectedItemType}`).toBe(expectedItemType);
     expect(companyType, `Company Type should be one of ${companyType}`).toContain(this.responseBodyOfAGridViewObject.companyType);
     expect(this.responseBodyOfAGridViewObject.companyKey).not.toBeNull();
 })

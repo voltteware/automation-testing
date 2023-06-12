@@ -97,7 +97,7 @@ Feature: API_Item User checks Automatically Adjusted Weightings setting for Rest
             | expectedStatus   | expectedStatusText   |
             | <expectedStatus> | <expectedStatusText> |
         # Set Sale velocity settings = "Average" in Company Detail
-        And User sets PUT api endpoint to update "Purchasing Daily Sales Rate Rules > Average" in the "Manage Company > Company Details" of a bove company with the total percentage is 100%
+        And User sets PUT api endpoint to update "Purchasing Daily Sales Rate Rules > Average" in the "Manage Company > Company Details" of above company with the total percentage is 100%
         And User sends PUT request to update "Purchasing Daily Sales Rate Rules > Average"
         And User finds the list items contain value: <valueContain>
         And User picks a random item in above list items
@@ -146,7 +146,7 @@ Feature: API_Item User checks Automatically Adjusted Weightings setting for Rest
             | expectedStatus   | expectedStatusText   |
             | <expectedStatus> | <expectedStatusText> |
         # Set Sale velocity settings = "Average" in Company Detail
-        And User sets PUT api endpoint to update "Purchasing Daily Sales Rate Rules > Average" in the "Manage Company > Company Details" of a bove company with the total percentage is 100%
+        And User sets PUT api endpoint to update "Purchasing Daily Sales Rate Rules > Average" in the "Manage Company > Company Details" of above company with the total percentage is 100%
         And User sends PUT request to update "Purchasing Daily Sales Rate Rules > Average"
         And User finds the list items contain value: <valueContain>
         And User picks a random item in above list items
