@@ -190,7 +190,7 @@ Feature: API_Regression User can search shipments
         And User checks status code and status text of api
             | expectedStatus   | expectedStatusText   |
             | <expectedStatus> | <expectedStatusText> |
-        And User sets GET api endpoint to count items in Shipment Review
+        And User sets GET api endpoint to count items in Shipment Review with restockType: <restockType>
         And User sends a GET request to count items in Shipment Review
         And User checks status code and status text of api
             | expectedStatus   | expectedStatusText   |

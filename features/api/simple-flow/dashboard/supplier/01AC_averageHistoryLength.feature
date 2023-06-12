@@ -1,11 +1,11 @@
-@test-api @api-dashboard @average-history-length
+@test-api @api-dashboard @average-history-length @bug1972
 Feature: API_Dashboard Cannot update average history length
     Background: Send GET /realm request to get all company keys of current logged in user before each test
         Given user sends a POST login request to get valid cookie with role
             | role  | username                     | password  |
             | admin | testuserforecastrx@gmail.com | Test1111# |
 
-    @TC_AHL001_CSV @smoke-test-api @bug1972
+    @TC_AHL001_CSV @smoke-test-api
     Scenario Outline: <TC_ID> - Verify user <email> cannot update average history length in Supplier section when company is Onboarding
         Given In Header of the request, User sets param Cookie as valid connect.sid
         And User sets request body of create company api with payload

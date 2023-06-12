@@ -1,11 +1,11 @@
-@test-api @api-dashboard @item-history-length
+@test-api @api-dashboard @item-history-length @bug1969
 Feature: API_Dashboard Cannot update item history length
     Background: Send GET /realm request to get all company keys of current logged in user before each test
         Given user sends a POST login request to get valid cookie with role
             | role  | username                     | password  |
             | admin | testuserforecastrx@gmail.com | Test1111# |
 
-    @TC_IHL001_CSV @smoke-test-api @bug1969
+    @TC_IHL001_CSV @smoke-test-api
     Scenario Outline: <TC_ID> - Verify user <email> cannot update item history length in Items section when company <companyType> is Onboarding
         Given In Header of the request, User sets param Cookie as valid connect.sid
         And User sets request body of create company api with payload

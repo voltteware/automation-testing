@@ -301,7 +301,7 @@ Then('The new {} of demand must be updated successfully', function (editColumn: 
             expect(this.openQty).toEqual(this.editDemandResponseBody.openQty)
             break;
         case 'referenceNumber':
-            expect(this.refNum).toEqual(this.editDemandResponseBody.refNum)
+            expect(Number(this.refNum)).toEqual(Number(this.editDemandResponseBody.refNum))
             break;
         default:
             break;
