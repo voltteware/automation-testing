@@ -411,7 +411,13 @@ Feature: APIs: All features need to run forecast for CSV & QBFS companies
     @TC_PA002a @api-items @api-purchaseAs @regression-api
     Scenario Outline: <TC_ID> - Verify user <email> checks Purchase As validation item cannot assign Purchase As for itself of company <companyType>
         # Item cannot assign Purchase As for itself
-        Given User picks company which has onboarded before with type <companyType> in above response
+        Given user sends a POST login request to get valid cookie with role
+            | role  | username                  | password  |
+            | admin | testforecastcsv@gmail.com | Test1111# |
+        And User sets GET api endpoint to get companies information of current user
+        And In Header of the request, she sets param Cookie as valid connect.sid
+        And User sends a GET request to get companies
+        And User picks company which has onboarded before with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get item with limit row: <limitRow>
         And User sends a GET request to get list items
