@@ -29,7 +29,7 @@ When('{} sets payload as name: {}', async function (actor: string, removedItemKe
 Then('{} picks {} random SKU in above list SKUs', async function (actor: string, quantity) {
     console.log("Here >>>> ", this.getSKUsInShipmentDetailsResponseBody);
     this.itemsPickedRandomArray =  itemRequest.getMultipleRandom(this.getSKUsInShipmentDetailsResponseBody, quantity);
-    console.log("IteminItemListPickedRandomArray: ", this.itemsPickedRandomArray);
+    console.log("ItemInItemListPickedRandomArray: ", this.itemsPickedRandomArray);
     return this.itemsPickedRandomArray;
 });
 

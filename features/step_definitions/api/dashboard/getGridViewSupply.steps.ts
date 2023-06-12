@@ -10,11 +10,11 @@ import { gridViewPayLoadSupplier } from '../../../../src/utils/gridViewPayLoad';
 let link: any;
 let payload: gridViewPayLoadSupplier = {};
 
-Then(`{} sets GET api endpoint to get grid view supplys`, async function (actor: string) {
+Then(`{} sets GET api endpoint to get grid view supply`, async function (actor: string) {
     link = Links.API_GET_GRIDVIEW_SUPPLY;
 });
 
-Then(`{} sends a GET request to get grid view supplys of {} by company key and company type`, async function (actor, email: string) {
+Then(`{} sends a GET request to get grid view supply of {} by company key and company type`, async function (actor, email: string) {
     const options = {
         headers: this.headers
     }
@@ -127,8 +127,8 @@ Then('{} picks random grid view of supply in above response', async function (ac
 
 Then('{} checks values in response of get grid view supply are correct', async function (actor: string) {
     const companyType = ['ASC', 'CSV', 'QBFS', 'QBO'];
-    const expecteditemType = "supply";
-    expect(this.responseBodyOfAGridViewObject.itemType, `In response body, itemType should be is: ${expecteditemType}`).toBe(expecteditemType);
+    const expectedItemType = "supply";
+    expect(this.responseBodyOfAGridViewObject.itemType, `In response body, itemType should be is: ${expectedItemType}`).toBe(expectedItemType);
     expect(companyType, `Company Type should be one of ${companyType}`).toContain(this.responseBodyOfAGridViewObject.companyType);
     expect(this.responseBodyOfAGridViewObject.companyKey).not.toBeNull();
 })

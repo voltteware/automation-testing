@@ -4,13 +4,13 @@ import { HeaderComponent } from '../../../src/pages/components/header.component'
 import { ToastComponent } from '../../../src/pages/components/toast.component';
 import { LoginPage } from '../../../src/pages/login.page';
 import '../../../src/hooks/setup-ui'
-import { SubscriptonPage } from '../../../src/pages/subscription.page';
+import { SubscriptionPage } from '../../../src/pages/subscription.page';
 import { CreateCompanyPage } from '../../../src/pages/createCompany.page';
 
 let loginPage: LoginPage;
 let headerComponent: HeaderComponent;
 let toastComponent: ToastComponent;
-let subscriptionPage: SubscriptonPage;
+let subscriptionPage: SubscriptionPage;
 let createNewCompany: CreateCompanyPage;
 
 When('User clicks on Subscriptions after clicking on the user name of {} company', async function (companyName: string) {
@@ -20,7 +20,7 @@ When('User clicks on Subscriptions after clicking on the user name of {} company
 });
 
 When('User is on Subscriptions page', async function () {
-    subscriptionPage = new SubscriptonPage(this.page);
+    subscriptionPage = new SubscriptionPage(this.page);
     await expect(this.page).toHaveURL(/.*subscriptions/);
 });
 

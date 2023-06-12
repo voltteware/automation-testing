@@ -41,7 +41,7 @@ When('User sends a POST method to renew trial', async function () {
     else {
         const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
         logger.log('info', `Response POST renew Trial ${this.linkApiRenewTrial} has status code ${this.renewTrialResponse.status()} ${this.renewTrialResponse.statusText()} and response body ${responseBodyText}`);
-        this.attach(`Response POST renew Trial ${this.lilinkApiRenewTrialnk} has status code ${this.renewTrialResponse.status()} ${this.renewTrialResponse.statusText()} and response body ${actualResponseText}`)
+        this.attach(`Response POST renew Trial ${this.linkApiRenewTrial} has status code ${this.renewTrialResponse.status()} ${this.renewTrialResponse.statusText()} and response body ${actualResponseText}`)
     }
 })
 

@@ -99,15 +99,15 @@ Then(`{} sends a GET request to get all supplies`, async function (actor: string
 });
 
 Then('{} checks {} supply exist in the system, if it does not exist will create new supply', async function (actor, supplyRefnumKeyword: string) {
-    var numberofSupplys;
+    var numberOfSupply;
     if (supplyRefnumKeyword != 'any') {
-        numberofSupplys = await this.getSupplyResponseBody.filter((su: any) => su.refNum.includes(supplyRefnumKeyword)).length;
+        numberOfSupply = await this.getSupplyResponseBody.filter((su: any) => su.refNum.includes(supplyRefnumKeyword)).length;
     }
     else {
-        numberofSupplys = await this.getSupplyResponseBody.length;
+        numberOfSupply = await this.getSupplyResponseBody.length;
     }
 
-    if (numberofSupplys < 1) {        
+    if (numberOfSupply < 1) {        
         randomItem = this.getItemsResponseBody[Math.floor(Math.random() * this.getItemsResponseBody.length)];
         // Can create supply with items unassigned supplier
         // randomSupplier = this.getSupplierResponseBody[Math.floor(Math.random() * this.getSupplierResponseBody.length)]
@@ -254,7 +254,7 @@ When('User saves the supply key and order key', function () {
     this.attach(`Order key to edit: ${this.orderKey}`)
 });
 
-When('User sets PUT api endpoint to edit {} of the above supply for company type {} with new value: {}', function (editColumn: string, compantType: string, value: string) {
+When('User sets PUT api endpoint to edit {} of the above supply for company type {} with new value: {}', function (editColumn: string, companyType: string, value: string) {
     // Prepare endpoint for request to edit demand
     link = `${Links.API_SUPPLY}/${this.docType}/${this.orderKey}/${this.supplyKey}`;
 

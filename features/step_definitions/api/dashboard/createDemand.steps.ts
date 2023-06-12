@@ -30,7 +30,7 @@ Then('{} sets request body with payload as itemName: {string} and dateOfSale: {s
         case 'random':
             const currentDate = new Date();
             // Outputs a date string in the format "mm/dd/yyyy"
-            // The expected due date have format "mm/dd/yyyy" because after edit the reponsebody return due date with format mm/dd/yyyy
+            // The expected due date have format "mm/dd/yyyy" because after edit the responseBody return due date with format mm/dd/yyyy
             this.expectedDueDate = currentDate.toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' });
 
             // And  the due date in request body have format yyyy-mm-dd

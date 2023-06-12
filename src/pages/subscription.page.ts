@@ -1,7 +1,7 @@
 import { expect, Locator, Page } from '@playwright/test';
 import { random } from 'lodash';
 
-export class SubscriptonPage {
+export class SubscriptionPage {
     readonly page: Page;
     readonly subscriptionRow: Locator;
     readonly infoOnBanner: Locator;
@@ -9,10 +9,10 @@ export class SubscriptonPage {
     readonly changeCardButton: Locator;
     readonly annualBilling: Locator;
     readonly notifyOnDashboard: Locator;
-    // readonly notifyOnSubscriptonDetailWithCanceled: Locator;
+    // readonly notifyOnSubscriptionDetailWithCanceled: Locator;
     showCompanyName: any;
     index: any;
-    amountDisccounted: any;
+    amountDiscounted: any;
     price: any;
     dataTestID: string;
     resultArray: (string | any)[];
@@ -32,7 +32,7 @@ export class SubscriptonPage {
         this.notifyOnDashboard = page.locator('div.notification-banner');
         this.showCompanyName = "";
         this.index = "";
-        this.amountDisccounted = "";
+        this.amountDiscounted = "";
         this.price = "";
         this.dataTestID = "";
         this.resultArray = [];
@@ -42,7 +42,7 @@ export class SubscriptonPage {
         await this.page.goto('/login', { timeout: 5 * 5000 })
     }
 
-    async clickOnSubscription(comapnyName: string, id: any) {
+    async clickOnSubscription(companyName: string, id: any) {
         const responsePromise = this.page.waitForResponse(resp => resp.url() === `https://preprod-my.forecastrx.com/api/billing/pending-subscription/${id[1]}/${id[0]}` && resp.status() === 200);
         await this.subscriptionRow.getByText(id[4]).click();
         const response = await responsePromise;
@@ -92,20 +92,20 @@ export class SubscriptonPage {
         await this.page.locator('[placeholder="1234 1234 1234 1234"]').fill(card);
         await this.page.locator('[placeholder="MM / YY"]').fill(expirationDate);
         await this.page.locator('#cardCvc').fill('242');
-        await this.page.locator('#billingName').fill('Subcription Test');
+        await this.page.locator('#billingName').fill('Subscription Test');
         // Add promotion code
         await this.page.locator('#promotionCode').click();
-        await this.page.locator('#promotionCode').fill(promotionCodeId); // disccount 20%
+        await this.page.locator('#promotionCode').fill(promotionCodeId); // discount 20%
         await this.page.locator('button:has-text("Apply")').click();
 
         await this.page.waitForTimeout(4000); // wait for load data in 4s
 
-        this.amountDisccounted = await this.page.locator('#OrderDetails-TotalAmount').textContent();
+        this.amountDiscounted = await this.page.locator('#OrderDetails-TotalAmount').textContent();
     }
 
     async verifyPromotionCodeAndCurrentPlan(promotionCodeValue: any, buttonName: string, id: string) {
         console.log('Plans[this.index].', Plans[this.index], Plans[this.index].price, Plans[this.index].dataTestID, promotionCodeValue);
-        console.log("amountDisccounted: ", this.amountDisccounted);
+        console.log("amountDiscounted: ", this.amountDiscounted);
 
         // Create our number formatter.
         const formatter = new Intl.NumberFormat('en-US', {
@@ -119,7 +119,7 @@ export class SubscriptonPage {
 
         console.log(formatter.format(1000)); /* $2,500.00 */
 
-        expect(this.amountDisccounted).toEqual(formatter.format(Plans[this.index].price - (Plans[this.index].price * promotionCodeValue)/100));
+        expect(this.amountDiscounted).toEqual(formatter.format(Plans[this.index].price - (Plans[this.index].price * promotionCodeValue)/100));
 
         // Click on the Start Trial to subscribe plan
         await Promise.all([

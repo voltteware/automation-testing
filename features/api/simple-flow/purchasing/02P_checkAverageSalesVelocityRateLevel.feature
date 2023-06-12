@@ -14,7 +14,7 @@ Feature: API Purchasing Setting for Daily Sale Rate
         And User sets GET api endpoint to get information of a company belongs to <email> using company key <companyKey>
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sends a GET request to get company information of <email> by company key
-        And User sets PUT api endpoint to update "Purchasing Daily Sales Rate Rules > Average" in the "Manage Company > Company Details" of a bove company with the total percentage is 100%
+        And User sets PUT api endpoint to update "Purchasing Daily Sales Rate Rules > Average" in the "Manage Company > Company Details" of above company with the total percentage is 100%
         When User sends PUT request to update "Purchasing Daily Sales Rate Rules > Average"
         Then The expected status code should be <expectedStatus>
         And User sets GET api endpoint to get items in Purchasing Custom to check purchasing daily sales rate
@@ -34,7 +34,7 @@ Feature: API Purchasing Setting for Daily Sale Rate
         And User sets GET api endpoint to get information of a company belongs to <email> using company key <companyKey>
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sends a GET request to get company information of <email> by company key
-        And User sets PUT api endpoint to update "Purchasing Daily Sales Rate Rules > Average" in the "Manage Company > Company Details" of a bove company with the total percentage is 100%
+        And User sets PUT api endpoint to update "Purchasing Daily Sales Rate Rules > Average" in the "Manage Company > Company Details" of above company with the total percentage is 100%
         When User sends PUT request to update "Purchasing Daily Sales Rate Rules > Average"
         Then The expected status code should be <expectedStatus>
         And User sets GET api endpoint to get count items in PO by vendor key <vendorKey>

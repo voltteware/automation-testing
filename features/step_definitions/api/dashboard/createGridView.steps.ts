@@ -231,9 +231,9 @@ Then('{} sends a POST method to create gridview', async function (actor: string)
 Then('{} checks values in response of create grid view are correct', async function (actor: string) {
     const companyType = ['ASC', 'CSV', 'QBFS', 'QBO'];
     const expectedName = payload.name;
-    const expecteditemType = payload.itemType;
+    const expectedItemType = payload.itemType;
     expect(this.responseBodyOfAGridViewObject.name, `In response body, name should be matched with the data request: ${expectedName}`).toBe(expectedName);
-    expect(this.responseBodyOfAGridViewObject.itemType, `In response body, itemType should be matched with the data request: ${expecteditemType}`).toBe(expecteditemType);
+    expect(this.responseBodyOfAGridViewObject.itemType, `In response body, itemType should be matched with the data request: ${expectedItemType}`).toBe(expectedItemType);
     expect(companyType, `Company Type should be one of ${companyType}`).toContain(this.responseBodyOfAGridViewObject.companyType);
     expect(this.responseBodyOfAGridViewObject.companyKey).not.toBeNull();
 })

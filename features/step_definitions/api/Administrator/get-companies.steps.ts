@@ -88,8 +88,8 @@ Given('Use picks a random companies with type {string} in above response', async
     this.companyKey = this.responseBodyOfACompanyObject.companyKey
     this.companyType = this.responseBodyOfACompanyObject.companyType
     this.companyName = this.responseBodyOfACompanyObject.companyName
-    logger.log('info', `Conpany key: ${this.companyKey}, Company type: ${this.companyType}, Company name: ${this.companyName}`)
-    this.attach(`Conpany key: ${this.companyKey}, Company type: ${this.companyType}, Company name: ${this.companyName}`)  
+    logger.log('info', `Company key: ${this.companyKey}, Company type: ${this.companyType}, Company name: ${this.companyName}`)
+    this.attach(`Company key: ${this.companyKey}, Company type: ${this.companyType}, Company name: ${this.companyName}`)  
 });
   
 Given('User saves information of above company', function () {
@@ -97,6 +97,6 @@ Given('User saves information of above company', function () {
     this.companyType = this.responseBodyOfACompanyObject.companyType
     this.companyName = this.responseBodyOfACompanyObject.companyName
 
-    logger.log('info', `Conpany key: ${this.companyKey}, Company type: ${this.companyType}, Company name: ${this.companyName}`)
-    this.attach(`Conpany key: ${this.companyKey}, Company type: ${this.companyType}, Company name: ${this.companyName}`)
+    logger.log('info', `Company key: ${this.companyKey}, Company type: ${this.companyType}, Company name: ${this.companyName}`)
+    this.attach(`Company key: ${this.companyKey}, Company type: ${this.companyType}, Company name: ${this.companyName}`)
 });
