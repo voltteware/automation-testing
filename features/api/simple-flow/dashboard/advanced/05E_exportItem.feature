@@ -232,7 +232,7 @@ Feature: API_Dashboard PUT /api/sync/item/download?<fields>
         # User count all shipments
         And User sets GET endpoint API to get list shipments with limit row: <limitRow>
         And User sends GET endpoint API to get list shipments
-        # User count all shipments
+        # User count all SKUs in Shipment Details
         And User sets GET endpoint api to count all SKUs in Shipment Details
         And User sends GET endpoint api to count all SKUs in Shipment Details
         # Export data
@@ -250,11 +250,11 @@ Feature: API_Dashboard PUT /api/sync/item/download?<fields>
         And User checks values of <section> that just picked the same as export file
         Examples:
             | TC_ID        | companyType | email                    | section         | quantity | limitRow | containText | expectedStatus | expectedStatusText | removedItemKeys | columns                                                                             |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
-            | TC_Export008 | ASC         | exportdatatest@gmail.com | shipment-detail | 1        | 100      | Auto        | 200            | OK                 |                 | fnsku,description,packageWeight,cost,localQty,caseQty,shipmentQty,receivedQty,notes |
+            | TC_Export008 | ASC         | exportdatatest@gmail.com | shipment-detail | 1        | 1000     | Auto        | 200            | OK                 |                 | itemName,supplierSku,asin,fnsku,description,packageWeight,cost,localQty,caseQty,shipmentQty,receivedQty,notes |
 
     # Purchasing > My Suggested
     @TC_Export009 @smoke-test-api @regression-api 
-    Scenario Outline: <TC_ID> - Verify user <email> could call API export data in Purchasing > My Suggested
+    Scenario Outline: <TC_ID> - Verify user <email> could call API export data in Purchasing > My Suggested 
         Given User picks company which has onboarded before with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         # Count item in PO
@@ -294,7 +294,7 @@ Feature: API_Dashboard PUT /api/sync/item/download?<fields>
         And The status text is "<expectedStatusText>"
         # User count all items in Custom
         And User sets GET api endpoint to get count items in Purchasing Custom
-        When User sends a GET request to get count items in Purchasing Custom
+        And User sends a GET request to get count items in Purchasing Custom
         # Check total items in export file = total suppliers in the grid
         And User checks total items in export file EQUALS total <section>
         # Pick random item to check value in export file and in grid
@@ -311,25 +311,117 @@ Feature: API_Dashboard PUT /api/sync/item/download?<fields>
     Scenario Outline: <TC_ID> - Verify user <email> could call API export data in Purchasing > Custom with filter and sort
         Given User picks company which has onboarded before with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
-        # Filtering items
-        And User sets GET api endpoint to get items in Purchasing Custom with filter <columnName> column
-        And User sends a GET request to get items in Purchasing Custom with filter <columnName> column
         # Export data
         And User sets POST api endpoint to export <section> with <columns>
         And User sets payload as name: "<removedItemKeys>"
-        When User sends POST api endpoint to download <section> with filter <columnName> column and sort <sort>
+        When User sends POST api endpoint to download <section> after filtering <columnName> column with value <operator> <value> and sorting <columnNameSort> <sort>
         Then The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
         # User count all items in Custom after filtering
-        And User sets GET api endpoint to get count items with filter <columnName> column in Purchasing Custom 
-        When User sends a GET request to get count items with filter <columnName> column in Purchasing Custom 
+        And User sets GET api endpoint in Purchasing Custom to get count items after filtering <columnName> column with value <operator> <value> 
+        And User sends a GET request in Purchasing Custom to get count items after filtering <columnName> column with value <operator> <value>
         # Check total items in export file = total suppliers in the grid
         And User checks total items in export file EQUALS total <section>
         # Pick random item to check value in export file and in grid
-        And User sets GET api endpoint to get items in Purchasing Custom
-        And User sends a GET request to get items in Purchasing Custom
+        And User sets GET api endpoint in Purchasing Custom to get items after filtering <columnName> column with value <operator> <value>
+        And User sends a GET request in Purchasing Custom to get items after filtering <columnName> column with value <operator> <value> and sorting <columnNameSort> <sort>
         And User picks <quantity> random item in above list items after filtering and sorting
         And User checks values of <section> that just picked the same as export file
+        And User picks the first and the end row in export file the same as in the grid
+        And User checks the first and the end row that just picked the same as export file <section>
+        Examples: 
+            | TC_ID          | companyType | vendorKey | email                    | section               | columnName    | columnNameSort | operator | value | sort | containText | expectedStatus | expectedStatusText | removedItemKeys | quantity  | columns                                                                                                                                              |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+            | TC_Export011   | ASC         | null      | exportdatatest@gmail.com | custom-filter-sort    | onHand        | itemName       | gt       | 10    | desc | Auto        | 200            | OK                 |                 | 3        | itemName,description,tags,onNewPo,recommendedQty,purchaseQty,vendorPrice,total,snapshotQty,onHand,onHandThirdParty,openPurchaseOrders,openSalesOrders |
+
+    # Purchasing > My Suggested
+    @TC_Export012 @smoke-test-api @regression-api 
+    Scenario Outline: <TC_ID> - Verify user <email> could call API export data in Purchasing > My Suggested with filter and sort
+        Given User picks company which has onboarded before with type <companyType> in above response
+        And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
+        # Count item in PO
+        And User sets GET api endpoint to get summary by vendor
+        And User sends a GET request to get summary by vendor
+        And User selects any suggested purchase orders above that has supplier name
+        # Export data
+        And User sets POST api endpoint to export <section> with <columns>
+        And User sets payload as name: "<removedItemKeys>"
+        When User sends POST api endpoint to download items by: vendor <vendorKey> in <section>, filtering <columnName> column with value <operator> <value>, sorting <columnNameSort> <sort>
+        Then The expected status code should be <expectedStatus>
+        And The status text is "<expectedStatusText>"
+        # User count all items in Custom after filtering
+        And User sets GET api endpoint to get count items in PO by: filtering <columnName> column with value <operator> <value>, sorting <columnNameSort> <sort>, vendor key <vendorKey>
+        And User sends GET api endpoint to get count items in PO by: filtering <columnName> column with value <operator> <value>, sorting <columnNameSort> <sort>, vendor key <vendorKey>
+        # Check total items in export file = total suppliers in the grid
+        And User checks total items in export file EQUALS total <section>
+        # Pick random item to check value in export file and in grid
+        And User sets GET api endpoint to get items in PO by: filtering <columnName> column with value <operator> <value>, sorting <columnNameSort> <sort>, vendor key <vendorKey>
+        And User sends GET api endpoint to get items in PO by: filtering <columnName> column with value <operator> <value>, sorting <columnNameSort> <sort>, vendor key <vendorKey>
+        And User picks <quantity> random item in above list items in PO after filtering and sorting
+        And User checks values of <section> that just picked the same as export file
+        And User picks the first and the end row in export file the same as in the grid
+        And User checks the first and the end row that just picked the same as export file <section>
         Examples:
-            | TC_ID        | companyType | vendorKey | email                    | section | columnName    | sort | containText | expectedStatus | expectedStatusText | removedItemKeys | quantity | columns                                                                                                                                                              |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
-            | TC_Export011 | ASC         | null      | exportdatatest@gmail.com | custom  | onHand        | null | Auto        | 200            | OK                 |                 | 3        | itemName,description,tags,onNewPo,recommendedQty,purchaseQty,vendorPrice,total,snapshotQty,onHand,onHandThirdParty,openPurchaseOrders,openSalesOrders |
+            | TC_ID        | companyType | vendorKey | email                    | section               | columnName    | columnNameSort | operator | value | sort  | containText | expectedStatus | expectedStatusText | removedItemKeys | quantity | columns                                                                                                                                               |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+            | TC_Export012 | ASC         | random    | exportdatatest@gmail.com | suggested-filter-sort | snapshotQty   | itemName       | gt       | 1     | desc  | Auto        | 200            | OK                 |                 | 3        | itemName,description,tags,onNewPo,recommendedQty,purchaseQty,vendorPrice,total,snapshotQty,onHand,onHandThirdParty,openPurchaseOrders,openSalesOrders |
+
+    # RestockAMZ > Manage Shipments with filter, sort and search -> Failed due to bug id: 2082 
+    @TC_Export013 @smoke-test-api @regression-api 
+    Scenario Outline: <TC_ID> - Verify user <email> could call API export all shipments with filter, sort and search
+        # Pick ASC company 
+        Given User picks company which has onboarded before with type <companyType> in above response
+        And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
+        # Export data
+        And User sets POST api endpoint to export <section> with <columns>
+        And User sets payload as name: "<removedItemKeys>"
+        When User sends POST api endpoint with filter <columnName> column, value <operator> <value>, sort <columnNameSort> column <sort> and search <searchValue> value to export <section>
+        Then The expected status code should be <expectedStatus>
+        And The status text is "<expectedStatusText>"
+        # User count all shipments after filtering, sorting and searching
+        And User sets GET endpoint api to count all shipments
+        And User sends GET endpoint api with filter <columnName> column, value <operator> <value>, sort <columnNameSort> column <sort> and search <searchValue> value to count all shipments
+        # Check total items in export file = total suppliers in the grid
+        And User checks total items in export file EQUALS total <section>
+        # Pick random item to check value in export file and in grid
+        And User sets GET endpoint API to get list shipments with limit row: <limitRow>
+        And User sends GET endpoint API with filter <columnName> column, value <operator> <value>, sort <columnNameSort> column <sort> and search <searchValue> value to get list shipments
+        And User picks <quantity> random shipment in above list shipments
+        And User checks values of <section> that just picked the same as export file
+        And User picks the first and the end row in export file the same as in the grid
+        And User checks the first and the end row that just picked the same as export file <section>
+        Examples:
+            | TC_ID        | companyType | email                    | section      | columnName    | columnNameSort | operator | value   | sort | searchValue | quantity | limitRow | containText | expectedStatus | expectedStatusText | removedItemKeys | columns                                                                                                                                    |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+            | TC_Export013 | ASC         | exportdatatest@gmail.com | shipment_FSS | status        | requestedQty   | contains | Working | asc  | MEM1        | 1        | 100      | Auto        | 200            | OK                 |                 | key,shipmentId,shipmentName,shipmentSource,destinationFulfillmentCenterId,status,requestedQty,receivedQty,totalCost,restockType,orderNotes |
+
+    # Purchasing > Custom > Filter
+    @TC_Export014 @smoke-test-api @regression-api 
+    Scenario Outline: <TC_ID> - Verify user <email> could call API export data in Purchasing > Custom with filter and sort
+        # Create new supplier with contain text "Auto"
+        Given User sets GET api endpoint to get suppliers with limit row: <limitRow>
+        And User sends a GET request to get list suppliers
+        And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
+        And User checks "<supplierKeyWord>" supplier exist in the system, if it does not exist will create new supplier
+        # Export Items
+        And User sets POST api endpoint to export <section> with <columns>
+        And User sets payload as name: "<removedItemKeys>"
+        When User sends POST api endpoint to download <section> after filtering <columnName> column with value <operator> <value> and sorting <columnNameSort> <sort>
+        Then The expected status code should be <expectedStatus>
+        And The status text is "<expectedStatusText>"
+        # Count all suppliers
+        And User sends a GET request with filter <columnName> column <operator> <value> and sort <columnNameSort> <sort> to get total of suppliers
+        # Check total items in export file = total suppliers in the grid
+        And User checks total items in export file EQUALS total <section>
+        # Pick random item to check value in export file and in grid
+        And User sets GET api endpoint to get suppliers with limit row: <limitRow>
+        And User sends a GET request with filter <columnName> column <operator> <value> and sort <columnNameSort> <sort> to get list suppliers
+        # And User picks the first and the end row in export file the same as in the grid
+        # And User checks the first and the end row that just picked the same as export file <section>
+        # Delete supplier that just created
+        And User filters <numberOfSuppliers> suppliers which has the name includes <supplierNameKeyword>
+        And User checks there is at least 1 supplier found
+        And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
+        When User sends a DELETE method to delete supplier
+        Examples: 
+            | TC_ID        | companyType | vendorKey | email                    | section               | limitRow | columnName    | columnNameSort | operator | value | sort | containText | expectedStatus | expectedStatusText | removedItemKeys | quantity  | supplierNameKeyword | numberOfSuppliers | columns                                                                                                                                              |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+            | TC_Export014 | ASC         | null      | exportdatatest@gmail.com | supplier_filter-sort  |  1000    | leadTime      | name           | gt       | 5     | desc | Auto        | 200            | OK                 |                 | 3         | Auto                | 1                 | name,leadTime,orderInterval,averageHistoryLength                                                                                                      |
+
+   

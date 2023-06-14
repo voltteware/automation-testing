@@ -36,11 +36,131 @@ async function getCountItemsInPurchasingCustom(request: APIRequestContext, linkA
     return await request.get(url, options);
 }
 
-//Get Items in Purchasing Custom
+//Get Items in Purchasing Custom 
 async function getItemsInPurchasingCustom(request: APIRequestContext, linkApi: string, options?: object) {
     const url = `${linkApi}`;
     logger.log('info', `Send GET request ${url}`);
     return await request.get(url, options);
+}
+
+//Get Items in Purchasing Custom with filter and sort
+async function getItemsInPurchasingCustomWithFilter(request: APIRequestContext, headers: any, linkApi: string, columnName: string, operator: string, value: string, columnNameSort: string, sort: string, options?: object) {
+    const url = `${linkApi}`;
+    const exportResponse = await request.get(url, {
+        headers: headers,
+        params: {
+            "offset": 0,
+            "limit": 10000,
+            "sort": JSON.stringify([{
+                "field": columnNameSort,
+                "direction": sort
+            }]),
+            "where": JSON.stringify({ 
+                "logic": "and" ,
+                "filters": [{ 
+                    "filters": [{ 
+                        "field": columnName, 
+                        "operator": operator, 
+                        "value": value 
+                    }], 
+                    "logic": "and" 
+                }], 
+            }),
+        }
+    });
+    console.log("Get items in Purchasing > Custom with filter: ", exportResponse.url(), "operator: ", operator, "value: ", value, "Column Name: ", columnName, "columnNameSort: ",columnNameSort, sort );
+    return exportResponse;
+}
+
+//Get Items in Purchasing Custom with filter and sort
+async function getCountItemsInPurchasingCustomWithFilter(request: APIRequestContext, headers: any, linkApi: string, columnName: string, operator: string, value: string) {
+    const url = `${linkApi}`;
+    const exportResponse = await request.get(url, {
+        headers: headers,
+        params: {
+            "where": JSON.stringify({
+                "filters": [{
+                    "filters": [{
+                        "field": columnName,
+                        "operator": operator,
+                        "value": value
+                    }],
+                    "logic": "and"
+                }],
+                "logic": "and"
+            }),
+        }
+    });
+    console.log("header: ", headers, "Get count items in Purchasing > Custom with filter: ", exportResponse.url(), "operator: ", operator, "value: ", value, "Column Name: ", columnName);
+    return exportResponse;
+}
+
+// Get Count Items in Purchasing > My Suggested by Vendor with filter and sort
+async function getCountItemsInPurchasingSuggestedByVendorWithFilter(request: APIRequestContext, headers: any, linkApi: string, columnName: string, operator: string, value: number, columnNameSort: string, sort: string, vendorKey: any) {
+    const url = `${linkApi}`;
+    const exportResponse = await request.get(url, {
+        headers: headers,
+        data: {
+            "removedItemKeys": []
+        },
+        params: {
+            "offset": 0,
+            "limit": 100,
+            "sort": JSON.stringify([{
+                "field": columnNameSort,
+                "direction": sort
+            }]),
+            "where": JSON.stringify({
+                "logic": "and",
+                "filters": [{
+                    "filters": [{
+                        "field": columnName,
+                        "operator": operator,
+                        "value": Number(value)
+                    }],
+                    "logic": "and"
+                }],
+            }),
+            "vendorKey": vendorKey,
+        }
+    });
+    console
+    console.log("header: ", headers, "Get count items in Purchasing > Custom with filter: ", exportResponse.url(), "operator: ", operator, "value: ", value, "Column Name: ", columnName);
+    return exportResponse;
+}
+
+// Get Items in Purchasing > My Suggested by Vendor with filter and sort
+async function getItemsInPurchasingSuggestedByVendorWithFilter(request: APIRequestContext, headers: any, linkApi: string, columnName: string, operator: string, value: number, columnNameSort: string, sort: string, vendorKey: any) {
+    const url = `${linkApi}`;
+    const exportResponse = await request.post(url, {
+        headers: headers,
+        data: {
+            "removedItemKeys": []
+        },
+        params: {
+            "offset": 0,
+            "limit": 100,
+            "sort": JSON.stringify([{
+                "field": columnNameSort,
+                "direction": sort
+            }]),
+            "where": JSON.stringify({
+                "logic": "and",
+                "filters": [{
+                    "filters": [{
+                        "field": columnName,
+                        "operator": operator,
+                        "value": Number(value)
+                    }],
+                    "logic": "and"
+                }],
+            }),
+            "vendorKey": vendorKey,
+        }
+    });
+    console
+    console.log("header: ", headers, "Get count items in Purchasing > Custom with filter: ", exportResponse.url(), "operator: ", operator, "value: ", value, "Column Name: ", columnName);
+    return exportResponse;
 }
 
 //Create item
@@ -56,7 +176,7 @@ async function createItem(request: APIRequestContext, linkApi: string, payLoad: 
 
 //Edit item
 async function editItem(request: APIRequestContext, linkApi: string, payLoad: any, header?: any) {
-    const url = `${linkApi}`;    
+    const url = `${linkApi}`;
     logger.log('info', `Send PUT request ${url} with ${JSON.stringify(payLoad, undefined, 4)}`);
     const editResponse = await request.put(url, {
         data: payLoad,
@@ -100,10 +220,10 @@ async function getConsolidatedQty(request: APIRequestContext, linkApi: string, o
 // Get multiple random items from an array
 function getMultipleRandom(responseBody: string, num: number) {
     const shuffled = [...responseBody].sort(() => 0.5 - Math.random());
-  
+
     return shuffled.slice(0, num);
-  }
-  
+}
+
 
 export {
     getItemSummary,
@@ -118,5 +238,9 @@ export {
     getItemsInPurchasingCustom,
     getConsolidatedQty,
     getCountItemsThatIsHidden,
-    getMultipleRandom
+    getMultipleRandom,
+    getCountItemsInPurchasingCustomWithFilter,
+    getItemsInPurchasingCustomWithFilter,
+    getCountItemsInPurchasingSuggestedByVendorWithFilter,
+    getItemsInPurchasingSuggestedByVendorWithFilter
 }
