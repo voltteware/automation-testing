@@ -43,6 +43,26 @@ Then(`{} sends a GET request to get list suppliers`, async function (actor) {
     }
 })
 
+// Get list supplier with filter and sort
+Then(`{} sends a GET request with filter {} column {} {} and sort {} {} to get list suppliers`, async function (actor, columnName: string, operator: string, value: string, columnNameSort: string, sort: string) {
+    const options = {
+        headers: this.headers
+    }
+    this.getSupplierResponse = this.response = await supplierRequest.getSuppliersWithFilterAndSort(this.request, link, columnName, operator, value, columnNameSort, sort, options);
+    const responseBodyText = await this.getSupplierResponse.text();
+    if (this.getSupplierResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
+        this.responseBody = this.getSupplierResponseBody = JSON.parse(await this.getSupplierResponse.text());
+        this.pickFirstAndEndRow =  this.getSupplierResponseBody;
+        logger.log('info', `Response GET ${link}` + JSON.stringify(this.getSupplierResponseBody, undefined, 4));
+        this.attach(`Response GET ${link}` + JSON.stringify(this.getSupplierResponseBody, undefined, 4))
+    }
+    else {
+        const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
+        logger.log('info', `Response GET ${link} has status code ${this.response.status()} ${this.response.statusText()} and response body ${responseBodyText}`);
+        this.attach(`Response GET ${link} has status code ${this.response.status()} ${this.response.statusText()} and response body ${actualResponseText}`)
+    }
+})
+
 Then(`{} sends a GET request to get total of suppliers`, async function (actor: string) {
     const link = `${Links.API_SUPPLIERS}/count?where=%7B%22logic%22:%22and%22,%22filters%22:%5B%5D%7D`
     const options = {
@@ -53,6 +73,19 @@ Then(`{} sends a GET request to get total of suppliers`, async function (actor: 
     this.countItem = this.totalSupplier;
     logger.log('info', `Response GET ${link} has status code ${this.response.status()} ${this.response.statusText()} and response body ${this.totalSupplier}`);
     this.attach(`Response GET ${link} has status code ${this.response.status()} ${this.response.statusText()} and response body ${this.totalSupplier}`)
+})
+
+// Count all supplier when filtering and sorting
+Then(`{} sends a GET request with filter {} column {} {} and sort {} {} to get total of suppliers`, async function (actor: string, columnName: string, operator: string, value: string, columnNameSort: string, sort: string) {
+    const link = `${Links.API_SUPPLIERS}/count?where=%7B%22logic%22:%22and%22,%22filters%22:%5B%7B%22filters%22:%5B%7B%22field%22:%22${columnName}%22,%22operator%22:%22${operator}%22,%22value%22:${value}%7D%5D,%22logic%22:%22and%22%7D%5D%7D`;
+    const options = {
+        headers: this.headers
+    }
+    this.getTotalSupplierWithFilterResponse = this.response = await supplierRequest.getSuppliers(this.request, link, options);
+    this.totalSupplier = await this.getTotalSupplierWithFilterResponse.text();
+    this.countItem = this.totalSupplier;
+    logger.log('info', `Response GET with filter ${link} has status code ${this.response.status()} ${this.response.statusText()} and response body ${this.totalSupplier}`);
+    this.attach(`Response GET with filter ${link} has status code ${this.response.status()} ${this.response.statusText()} and response body ${this.totalSupplier}`)
 })
 
 Then('{} picks random supplier in above response', async function (actor: string) {

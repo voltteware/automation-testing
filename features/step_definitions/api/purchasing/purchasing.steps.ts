@@ -20,6 +20,8 @@ let linkGetLimitFiveItemInMySuggested: any;
 let linkGetLimitFiveItemInCustom: any;
 let linkGetItemsInPurchasingCustomWithFilter: any;
 let linkCountItemsInPurchasingCustomWithFilter: any;
+let linkCountItemsInPOWithFilterAndSort: any;
+let linkItemsInPOWithFilterAndSort: any;
 
 // My Suggested POs
 Then(`{} sets GET api endpoint to get count summary by vendor`, async function (actor: string) {
@@ -93,6 +95,7 @@ Then(`{} sends a GET request to get total price, total qty and unique items on P
 
 Then(`{} selects any suggested purchase orders above that has supplier name`, async function (actor: string) {
     const purchaseOrdersHasSupplierName = await this.getSummaryByVendorResponseBody.filter((po: { vendorKey: null; }) => po.vendorKey != null);
+    console.log("purchaseOrdersHasSupplierName: ", purchaseOrdersHasSupplierName);
     if (purchaseOrdersHasSupplierName.length > 0) {
         this.randomVendorKey = await purchaseOrdersHasSupplierName[Math.floor(Math.random() * purchaseOrdersHasSupplierName.length)].vendorKey;
         logger.log('info', `Random Vendor Key: ${JSON.stringify(this.randomVendorKey, undefined, 4)}`);
@@ -714,21 +717,22 @@ Then('{} picks {} random item in above list items in Custom', async function (ac
 });
 
 // Filter items
-Then(`{} sets GET api endpoint to get items in Purchasing Custom with filter {} column`, async function (actor: string, columnName: string) {
-    linkGetItemsInPurchasingCustomWithFilter = encodeURI(`${Links.API_SUMMARY_ITEMS_IN_PURCHASING_CUSTOM}?offset=0&limit=100&where={"filters":[{"filters":[{"field":"${columnName}","operator":"gt","value":100}],"logic":"and"}],"logic":"and"}`);
+Then(`{} sets GET api endpoint in Purchasing Custom to get items after filtering {} column with value {} {}`, async function (actor: string, columnName: string, operator: string, value: string) {
+    linkGetItemsInPurchasingCustomWithFilter = encodeURI(`${Links.API_SUMMARY_ITEMS_IN_PURCHASING_CUSTOM}`);
 
     console.log(linkGetItemsInPurchasingCustomWithFilter);
 });
 
-Then(`{} sends a GET request to get items in Purchasing Custom with filter {} column`, async function (actor, columnName: string) {
+Then(`{} sends a GET request in Purchasing Custom to get items after filtering {} column with value {} {} and sorting {} {}`, async function (actor, columnName: string, operator: string, value: string, columnNameSort: string, sort: string) {
     const options = {
         headers: this.headers
     }
-    this.getItemsInPurchasingCustomWithFilterResponse = this.response = await itemRequest.getItemsInPurchasingCustom(this.request, linkGetItemsInPurchasingCustomWithFilter, options);
+    this.getItemsInPurchasingCustomWithFilterResponse = this.response = await itemRequest.getItemsInPurchasingCustomWithFilter(this.request, this.headers, linkGetItemsInPurchasingCustomWithFilter, columnName, operator, value, columnNameSort, sort, options);
     const responseBodyText = await this.getItemsInPurchasingCustomWithFilterResponse.text();
     if (this.getItemsInPurchasingCustomWithFilterResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
         this.responseBody = this.getItemsInPurchasingCustomWithFilterResponseBody = this.getItemsResponseBody = JSON.parse(await this.getItemsInPurchasingCustomWithFilterResponse.body());
         this.randomAItemObject = this.getItemsInPurchasingCustomWithFilterResponseBody[Math.floor(Math.random() * this.getItemsInPurchasingCustomWithFilterResponseBody.length)];
+        this.pickFirstAndEndRow = this.getItemsInPurchasingCustomWithFilterResponseBody;
         logger.log('info', `Random object in response GET ${linkGetItemsInPurchasingCustomWithFilter} >>>>>>` + JSON.stringify(this.randomAItemObject, undefined, 4));
         this.attach(`Random object in response GET ${linkGetItemsInPurchasingCustomWithFilter} >>>>>>` + JSON.stringify(this.randomAItemObject, undefined, 4))
     }
@@ -740,17 +744,14 @@ Then(`{} sends a GET request to get items in Purchasing Custom with filter {} co
 });
 
 // Count item after filtering
-Then(`{} sets GET api endpoint to get count items with filter {} column in Purchasing Custom`, async function (actor: string, columnName: string) {
-    linkCountItemsInPurchasingCustomWithFilter = encodeURI(`${Links.API_SUMMARY_COUNT}?where={"filters":[{"filters":[{"field":"onHand","operator":"gt","value":100}],"logic":"and"}],"logic":"and"}`);
+Then(`{} sets GET api endpoint in Purchasing Custom to get count items after filtering {} column with value {} {}`, async function (actor: string, columnName: string, operator: string, value: string) {
+    linkCountItemsInPurchasingCustomWithFilter = encodeURI(`${Links.API_SUMMARY_COUNT}`);
 
     console.log(linkCountItemsInPurchasingCustomWithFilter);
 });
 
-Then(`{} sends a GET request to get count items with filter {} column in Purchasing Custom`, async function (actor, columnName: string) {
-    const options = {
-        headers: this.headers
-    }
-    this.getCountItemsInPurchasingCustomWithFilterResponse = this.response = await itemRequest.getCountItemsInPurchasingCustom(this.request, linkCountItemsInPurchasingCustomWithFilter, options);
+Then(`{} sends a GET request in Purchasing Custom to get count items after filtering {} column with value {} {}`, async function (actor, columnName: string, operator: string, value: string) {
+    this.getCountItemsInPurchasingCustomWithFilterResponse = this.response = await itemRequest.getCountItemsInPurchasingCustomWithFilter(this.request, this.headers, linkCountItemsInPurchasingCustomWithFilter, columnName, operator, value);
     const responseBodyText = await this.getCountItemsInPurchasingCustomWithFilterResponse.text();
     if (this.getCountItemsInPurchasingCustomWithFilterResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
         this.responseBody = this.getCountItemsInPurchasingCustomWithFilterResponseBody = JSON.parse(await this.getCountItemsInPurchasingCustomWithFilterResponse.body());
@@ -766,9 +767,76 @@ Then(`{} sends a GET request to get count items with filter {} column in Purchas
     }
 });
 
+// Pick random item in above list items
 Then('{} picks {} random item in above list items after filtering and sorting', async function (actor: string, quantity) {
-    this.attach(`User pick item random item in above list items in Custom with filter >>>> ` + JSON.stringify(this.getItemsInPurchasingCustomWithFilterResponseBody));
+    this.attach(`List items after filtering and sorting >>>>>: ` + JSON.stringify(this.getItemsInPurchasingCustomWithFilterResponseBody));
     this.itemsPickedRandomArray =  itemRequest.getMultipleRandom(this.getItemsInPurchasingCustomWithFilterResponseBody, quantity);
-    this.attach(`ItemInItemListPickedRandomArray: ` + JSON.stringify(this.itemsPickedRandomArray));
+    this.attach(`User pick item random item in above list items in Custom with filter >>>> : ` + JSON.stringify(this.itemsPickedRandomArray));
+    return this.itemsPickedRandomArray;
+});
+
+// Pick the first and the end item in the above list items
+Then('{} picks the first and the end row in export file the same as in the grid', async function (actor) {
+    this.attach(`List items >>>> ` + JSON.stringify(this.pickFirstAndEndRow));
+    this.itemsPickedRandomArrayWithFilter = [
+        this.pickFirstAndEndRow[0], 
+        this.pickFirstAndEndRow[this.pickFirstAndEndRow.length - 1]
+    ];
+    this.attach(`User picks the first and the end row in export file the same as in the grid >>>> : ` + JSON.stringify(this.itemsPickedRandomArray));
+    console.log('The first item and the end item: ', this.itemsPickedRandomArrayWithFilter);
+    return this.itemsPickedRandomArrayWithFilter;
+})
+
+Then(`{} sets GET api endpoint to get count items in PO by: filtering {} column with value {} {}, sorting {} {}, vendor key {}`, async function(actor, columnName: string, operator: string, value: string, columnNameSort: string, sort: string, vendorKey: string) {
+    linkCountItemsInPOWithFilterAndSort = encodeURI(`${Links.API_SUMMARY_COUNT}`);
+})
+
+// Get Count Items in Purchasing > My Suggested by Vendor with filter and sort
+Then(`{} sends GET api endpoint to get count items in PO by: filtering {} column with value {} {}, sorting {} {}, vendor key {}`, async function(actor, columnName: string, operator: string, value: number, columnNameSort: string, sort: string, vendorKey: string) {
+    this.getCountItemsInPurchasingSuggestedByVendorWithFilterResponse = this.response = await itemRequest.getCountItemsInPurchasingSuggestedByVendorWithFilter(this.request, this.headers, linkCountItemsInPOWithFilterAndSort, columnName, operator, value, columnNameSort, sort, this.randomVendorKey);
+    const responseBodyText = await this.getCountItemsInPurchasingSuggestedByVendorWithFilterResponse.text();
+    if (this.getCountItemsInPurchasingSuggestedByVendorWithFilterResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
+        this.responseBody = this.getCountItemsInPurchasingSuggestedByVendorWithFilterResponseBody = JSON.parse(await this.getCountItemsInPurchasingSuggestedByVendorWithFilterResponse.body());
+        this.countItem = this.getCountItemsInPurchasingSuggestedByVendorWithFilterResponseBody;
+        this.attach(`Count all items in Purchasing > My Suggested by Vendor >>>>> ${this.countItem}`);
+        logger.log('info', `Response GET ${linkCountItemsInPOWithFilterAndSort} >>>>>>` + JSON.stringify(this.getCountItemsInPurchasingSuggestedByVendorWithFilterResponseBody, undefined, 4));
+        this.attach(`Response GET ${linkCountItemsInPOWithFilterAndSort} >>>>>>` + JSON.stringify(this.getCountItemsInPurchasingSuggestedByVendorWithFilterResponseBody, undefined, 4))
+    }
+    else {
+        const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
+        logger.log('info', `Response GET ${linkCountItemsInPOWithFilterAndSort} has status code ${this.response.status()} ${this.response.statusText()} and response body >>>>>> ${responseBodyText}`);
+        this.attach(`Response GET ${linkCountItemsInPOWithFilterAndSort} has status code ${this.response.status()} ${this.response.statusText()} and response body >>>>>> ${actualResponseText}`)
+    }
+})
+
+// Get Items in Purchasing > My Suggested by Vendor with filter and sort
+Then(`{} sets GET api endpoint to get items in PO by: filtering {} column with value {} {}, sorting {} {}, vendor key {}`, async function(actor, columnName: string, operator: string, value: string, columnNameSort: string, sort: string, vendorKey: string){
+    linkItemsInPOWithFilterAndSort = encodeURI(`${Links.API_SUMMARY_VENDOR_ITEMS_IN_PO}`);
+})
+
+// Get Items in Purchasing > My Suggested by Vendor with filter and sort
+Then(`{} sends GET api endpoint to get items in PO by: filtering {} column with value {} {}, sorting {} {}, vendor key {}`, async function(actor, columnName: string, operator: string, value: number, columnNameSort: string, sort: string, vendorKey: string){
+    this.getItemsInPurchasingSuggestedByVendorWithFilterResponse = this.response = await itemRequest.getItemsInPurchasingSuggestedByVendorWithFilter(this.request, this.headers, linkItemsInPOWithFilterAndSort, columnName, operator, value, columnNameSort, sort, this.randomVendorKey);
+    const responseBodyText = await this.getItemsInPurchasingSuggestedByVendorWithFilterResponse.text();
+    if (this.getItemsInPurchasingSuggestedByVendorWithFilterResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
+        this.responseBody = this.getItemsInPurchasingSuggestedByVendorWithFilterResponseBody = JSON.parse(await this.getItemsInPurchasingSuggestedByVendorWithFilterResponse.body());
+        this.countItem = this.getItemsInPurchasingSuggestedByVendorWithFilterResponseBody;
+        this.pickFirstAndEndRow = this.getItemsInPurchasingSuggestedByVendorWithFilterResponseBody.model;
+        this.attach(`Get all items in Purchasing > My Suggested by Vendor >>>>> ${this.countItem}`);
+        logger.log('info', `Response GET ${linkItemsInPOWithFilterAndSort} >>>>>>` + JSON.stringify(this.getItemsInPurchasingSuggestedByVendorWithFilterResponseBody, undefined, 4));
+        this.attach(`Response GET ${linkItemsInPOWithFilterAndSort} >>>>>>` + JSON.stringify(this.getItemsInPurchasingSuggestedByVendorWithFilterResponseBody, undefined, 4))
+    }
+    else {
+        const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
+        logger.log('info', `Response GET ${linkItemsInPOWithFilterAndSort} has status code ${this.response.status()} ${this.response.statusText()} and response body >>>>>> ${responseBodyText}`);
+        this.attach(`Response GET ${linkItemsInPOWithFilterAndSort} has status code ${this.response.status()} ${this.response.statusText()} and response body >>>>>> ${actualResponseText}`)
+    }
+})
+
+// Pick random item in above list items of "Item in POs"
+Then('{} picks {} random item in above list items in PO after filtering and sorting', async function (actor: string, quantity) {
+    this.attach(`List items after filtering and sorting >>>>>: ` + JSON.stringify(this.getItemsInPurchasingSuggestedByVendorWithFilterResponseBody.model));
+    this.itemsPickedRandomArray =  itemRequest.getMultipleRandom(this.getItemsInPurchasingSuggestedByVendorWithFilterResponseBody.model, quantity);
+    this.attach(`User pick item random item in above list items in Custom with filter >>>> : ` + JSON.stringify(this.itemsPickedRandomArray));
     return this.itemsPickedRandomArray;
 });

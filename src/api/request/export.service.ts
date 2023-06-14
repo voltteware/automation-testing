@@ -8,24 +8,6 @@ let valuesThatHaveFilter: string[] = [];
 
 // POST endpoint for export item
 async function exportItem(request: APIRequestContext, linkApi: string, headers: any, payLoad: any, fields: any, options?: object) {
-    const url = `${linkApi}`;
-    logger.log('info', `Send POST request ${url} and fields ${fields}`);
-    const exportResponse = await request.post(url, {
-        headers: headers,
-        data: payLoad,
-        params: {
-            "fields": fields,
-            "headersOnly": false,
-            "sort": "null",
-            "where": JSON.stringify({ "logic": "and", "filters": [] })
-        }
-    });
-    console.log("exportResponse: ", exportResponse.url(), "payload: ", payLoad, "headers: ", headers);
-    return exportResponse;
-}
-
-// POST endpoint for export item
-async function exportItemWithFilter(request: APIRequestContext, linkApi: string, headers: any, payLoad: any, fields: any, columnName: string, sort: string) {
   const url = `${linkApi}`;
   logger.log('info', `Send POST request ${url} and fields ${fields}`);
   const exportResponse = await request.post(url, {
@@ -34,21 +16,200 @@ async function exportItemWithFilter(request: APIRequestContext, linkApi: string,
     params: {
       "fields": fields,
       "headersOnly": false,
-      "sort": sort,
-      "where": JSON.stringify({ 
-        "filters": 
-        [{ 
-          "filters": [{ 
-            "field": columnName, 
-            "operator": "gt", 
-            "value": 100 }], 
-            "logic": "and" 
-        }], 
-        "logic": "and" 
-      })
+      "sort": "null",
+      "where": JSON.stringify({ "logic": "and", "filters": [] })
     }
   });
-  console.log("exportResponse with filter: ", exportResponse.url(), "payload: ", payLoad, "headers: ", headers);
+  console.log("exportResponse: ", exportResponse.url(), "payload: ", payLoad, "headers: ", headers);
+  return exportResponse;
+}
+
+// POST endpoint for export item with filter
+async function exportItemWithFilter(request: APIRequestContext, linkApi: string, headers: any, payLoad: any, fields: any, columnName: string, operator: string, value: string, columnNameSort: string, sort: string) {
+  const url = `${linkApi}`;
+  logger.log('info', `Send POST request ${url} and fields ${fields}`);
+  const exportResponse = await request.post(url, {
+    headers: headers,
+    data: payLoad,
+    params: {
+      "fields": fields,
+      "headersOnly": false,
+      "sort": JSON.stringify({
+        "name": columnNameSort,
+        "direction": sort
+      }),
+      "where": JSON.stringify({
+        "filters":
+          [{
+            "filters": [{
+              "field": columnName,
+              "operator": operator,
+              "value": value
+            }],
+            "logic": "and"
+          }],
+        "logic": "and"
+      }),
+    }
+  });
+  console.log("exportResponse with filter: ", exportResponse.url(), "payload: ", payLoad, "headers: ", headers, "columnNameSort: ", columnNameSort, "direction: ", sort);
+  return exportResponse;
+}
+
+// POST endpoint for export item by vendor key, filter and sort
+async function exportItemByVendorKeyWithFilter(request: APIRequestContext, linkApi: string, headers: any, payLoad: any, fields: any, columnName: string, operator: string, value: string, columnNameSort: string, sort: string, vendorKey: string) {
+  const url = `${linkApi}`;
+  logger.log('info', `Send POST request ${url} and fields ${fields}`);
+  const exportResponse = await request.post(url, {
+    headers: headers,
+    data: payLoad,
+    params: {
+      "fields": fields,
+      "headersOnly": false,
+      "sort": JSON.stringify({
+        "name": columnNameSort,
+        "direction": sort
+      }),
+      "where": JSON.stringify({
+        "filters":
+          [{
+            "filters": [{
+              "field": columnName,
+              "operator": operator,
+              "value": value
+            }],
+            "logic": "and"
+          }],
+        "logic": "and"
+      }),
+      "vendorKey": vendorKey
+    }
+  });
+  console.log("exportResponse with filter: ", exportResponse.url(), "payload: ", payLoad, "headers: ", headers, "columnNameSort: ", columnNameSort, "direction: ", sort, "exportItemByVendorKeyWithFilter: ", vendorKey);
+  return exportResponse;
+}
+
+// POST endpoint to export items with filter, sort and search
+async function exportItemWithFilterSortAndSearch(request: APIRequestContext, linkApi: string, headers: any, payLoad: any, fields: any, columnName: string, operator: string, value: string, columnNameSort: string, sort: string, searchValue: string) {
+  const url = `${linkApi}`;
+  logger.log('info', `Send POST request ${url} and fields ${fields}`);
+  const exportResponse = await request.post(url, {
+    headers: headers,
+    data: payLoad,
+    params: {
+      "fields": fields,
+      "headersOnly": false,
+      "sort": JSON.stringify({
+        "name": columnNameSort,
+        "direction": sort
+      }),
+      "where": JSON.stringify({
+        "logic": "and",
+        "filters": [{
+          "filters": [{
+            "field": columnName,
+            "operator": operator,
+            "value": value
+          }],
+          "logic": "and"
+        },
+        {
+          "logic": "or",
+          "filters": [{
+            "field": "shipmentName",
+            "operator": "contains",
+            "value": searchValue
+          },
+          {
+            "field": "shipmentSource",
+            "operator": "contains",
+            "value": searchValue
+          },
+          {
+            "field": "destinationFulfillmentCenterId",
+            "operator": "contains",
+            "value": searchValue
+          },
+          {
+            "field": "status",
+            "operator": "contains",
+            "value": searchValue
+          }
+          ]
+        }]
+      }),
+    }
+  });
+  console.log("exportResponse with filter: ", exportResponse.url(), "payload: ", payLoad, "headers: ", headers, "columnNameSort: ", columnNameSort, "direction: ", sort, "searchValue: ", searchValue);
+  return exportResponse;
+}
+
+// POST endpoint to export items in Manage Shipments > Shipment Details with filter, sort and search
+async function exportItemInShipmentDetailsWithFilterSortAndSearch(request: APIRequestContext, linkApi: string, headers: any, payLoad: any, fields: any, columnName: string, operator: string, value: string, columnNameSort: string, sort: string, searchValue: string, restockKey: string, restockType: string) {
+  const url = `${linkApi}`;
+  searchValue = "WC-02-TP1-024-PNK-L";
+  logger.log('info', `Send POST request ${url} and fields ${fields}`);
+  const exportResponse = await request.post(url, {
+    headers: headers,
+    data: payLoad,
+    params: {
+      "fields": fields,
+      "headersOnly": false,
+      "sort": JSON.stringify({
+        "name": columnNameSort,
+        "direction": sort
+      }),
+      "where": JSON.stringify({
+        "logic": "and", 
+        "filters": 
+        [{ 
+          "filters": 
+          [{ 
+            "field": "shipmentQty", 
+            "operator": "eq", 
+            "value": value 
+          }], 
+          "logic": "and" 
+        }, 
+        { 
+          "logic": "or", 
+          "filters":
+          [
+            { 
+              "field": "itemName", 
+              "operator": "contains", 
+              "value": searchValue 
+            }, 
+            { 
+              "field": "supplierSku", 
+              "operator": "contains", 
+              "value": searchValue 
+            }, 
+            { 
+              "field": "asin", 
+              "operator": "contains", 
+              "value": searchValue 
+            }, 
+            { 
+              "field": "fnsku", 
+              "operator": "contains", 
+              "value": searchValue 
+            }, 
+            { 
+              "field": "description", 
+              "operator": "contains", 
+              "value": searchValue 
+            }] 
+          }]
+      }),
+      "vendorKey": "null",
+      "restockKey": "4f8e64e9-ddc9-4b00-9f69-68353f9490bc",
+      "type": "amazon",
+      "restockType": "AMAZON",
+      "gridType": "undefined"
+    }
+  });
+  console.log("exportResponse with filter: ", exportResponse.url(), "payload: ", payLoad, "headers: ", headers, "columnNameSort: ", columnNameSort, "direction: ", sort, "searchValue: ", searchValue);
   return exportResponse;
 }
 
@@ -57,217 +218,219 @@ async function exportSKUInItemList(request: APIRequestContext, linkApi: string, 
   const url = `${linkApi}`;
   let exportRestockSuggestionResponse;
   logger.log('info', `Send POST request ${url} and fields ${fields} and Supplier Name: ${supplierName}`);
-  if(supplierName === "[My Warehouse]") {
+  if (supplierName === "[My Warehouse]") {
     exportRestockSuggestionResponse = await request.post(url, {
       headers: headers,
       data: payLoad,
       params: {
-          "fields": fields,
-          "headersOnly": false,
-          "sort": "null",
-          "where": JSON.stringify(
-            {
-                "logic": "and",
+        "fields": fields,
+        "headersOnly": false,
+        "sort": "null",
+        "where": JSON.stringify(
+          {
+            "logic": "and",
+            "filters": [
+              {
+                "logic": "or",
                 "filters": [
-                    {
-                        "logic": "or",
-                        "filters": [
-                            {
-                                "filters": [],
-                                "logic": "or"
-                            },
-                            {
-                                "filters": [],
-                                "logic": "or"
-                            }
-                        ],
-                        "currentSupplierFilters": [
-                            {
-                                "text": "[My Warehouse]",
-                                "value": "[My Warehouse]"
-                            }
-                        ]
-                    },
-                    {
-                        "logic": "or",
-                        "filters": [
-                            {
-                                "field": "localQty",
-                                "operator": "gt",
-                                "value": 0
-                            },
-                            {
-                                "field": "localQty",
-                                "operator": "gt",
-                                "value": 0
-                            }
-                        ]
-                    },
-                    {
-                        "logic": "and",
-                        "filters": []
-                    }
+                  {
+                    "filters": [],
+                    "logic": "or"
+                  },
+                  {
+                    "filters": [],
+                    "logic": "or"
+                  }
+                ],
+                "currentSupplierFilters": [
+                  {
+                    "text": "[My Warehouse]",
+                    "value": "[My Warehouse]"
+                  }
                 ]
-            }
+              },
+              {
+                "logic": "or",
+                "filters": [
+                  {
+                    "field": "localQty",
+                    "operator": "gt",
+                    "value": 0
+                  },
+                  {
+                    "field": "localQty",
+                    "operator": "gt",
+                    "value": 0
+                  }
+                ]
+              },
+              {
+                "logic": "and",
+                "filters": []
+              }
+            ]
+          }
         )
       }
-  });
-  logger.log("exportResponse of My Warehouse: ", exportRestockSuggestionResponse.url(), "payload: ", payLoad, "headers: ", headers);
-  return exportRestockSuggestionResponse;
+    });
+    logger.log("exportResponse of My Warehouse: ", exportRestockSuggestionResponse.url(), "payload: ", payLoad, "headers: ", headers);
+    return exportRestockSuggestionResponse;
   }
-  if(supplierName === "[All Suppliers]") {
+  if (supplierName === "[All Suppliers]") {
     exportRestockSuggestionResponse = await request.post(url, {
       headers: headers,
       data: payLoad,
       params: {
-          "fields": fields,
-          "headersOnly": false,
-          "sort": "null",
-          "where": JSON.stringify(
-            {
-                "logic": "and",
+        "fields": fields,
+        "headersOnly": false,
+        "sort": "null",
+        "where": JSON.stringify(
+          {
+            "logic": "and",
+            "filters": [
+              {
+                "logic": "or",
                 "filters": [
-                    {
-                        "logic": "or",
-                        "filters": [
-                            {
-                                "filters": [],
-                                "logic": "or"
-                            },
-                            {
-                                "filters": [],
-                                "logic": "or"
-                            }
-                        ],
-                        "currentSupplierFilters": [
-                            {
-                                "text": "[All Suppliers]",
-                                "value": "[All Suppliers]"
-                            }
-                        ]
-                    },
-                    {
-                        "logic": "and",
-                        "filters": []
-                    }
+                  {
+                    "filters": [],
+                    "logic": "or"
+                  },
+                  {
+                    "filters": [],
+                    "logic": "or"
+                  }
+                ],
+                "currentSupplierFilters": [
+                  {
+                    "text": "[All Suppliers]",
+                    "value": "[All Suppliers]"
+                  }
                 ]
-            }
+              },
+              {
+                "logic": "and",
+                "filters": []
+              }
+            ]
+          }
         )
       }
-  });
-  logger.log("exportResponse of All Suppliers: ", exportRestockSuggestionResponse.url(), "payload: ", payLoad, "headers: ", headers);
-  return exportRestockSuggestionResponse;
+    });
+    logger.log("exportResponse of All Suppliers: ", exportRestockSuggestionResponse.url(), "payload: ", payLoad, "headers: ", headers);
+    return exportRestockSuggestionResponse;
   }
   else {
     exportRestockSuggestionResponse = await request.post(url, {
       headers: headers,
       data: payLoad,
       params: {
-          "fields": fields,
-          "headersOnly": false,
-          "sort": "null",
-          "where": JSON.stringify(
-            {
-              "logic": "and",
-              "filters": [
+        "fields": fields,
+        "headersOnly": false,
+        "sort": "null",
+        "where": JSON.stringify(
+          {
+            "logic": "and",
+            "filters": [
+              {
+                "logic": "or",
+                "filters": [
                   {
-                      "logic": "or",
-                      "filters": [
-                          {
-                              "filters": [],
-                              "logic": "or"
-                          },
-                          {
-                              "filters": [],
-                              "logic": "or"
-                          }
-                      ],
-                      "currentSupplierFilters": [
-                          {
-                              "text": `${supplierName}`,
-                              "value": `${supplierName}`
-                          }
-                      ]
+                    "filters": [],
+                    "logic": "or"
                   },
                   {
-                      "logic": "or",
-                      "filters": [
-                          {
-                              "field": "supplier",
-                              "operator": "eq",
-                              "value": `${supplierName}`
-                          },
-                          {
-                              "field": "supplier",
-                              "operator": "eq",
-                              "value": `${supplierName}`
-                          }
-                      ]
-                  },
-                  {
-                      "logic": "and",
-                      "filters": []
-                  },
-                  {
-                      "logic": "or",
-                      "filters": [
-                          {
-                              "field": "localQty",
-                              "operator": "eq",
-                              "value": 0
-                          },
-                          {
-                              "field": "localQty",
-                              "operator": "isnull",
-                              "value": null
-                          }
-                      ]
+                    "filters": [],
+                    "logic": "or"
                   }
-              ]
+                ],
+                "currentSupplierFilters": [
+                  {
+                    "text": `${supplierName}`,
+                    "value": `${supplierName}`
+                  }
+                ]
+              },
+              {
+                "logic": "or",
+                "filters": [
+                  {
+                    "field": "supplier",
+                    "operator": "eq",
+                    "value": `${supplierName}`
+                  },
+                  {
+                    "field": "supplier",
+                    "operator": "eq",
+                    "value": `${supplierName}`
+                  }
+                ]
+              },
+              {
+                "logic": "and",
+                "filters": []
+              },
+              {
+                "logic": "or",
+                "filters": [
+                  {
+                    "field": "localQty",
+                    "operator": "eq",
+                    "value": 0
+                  },
+                  {
+                    "field": "localQty",
+                    "operator": "isnull",
+                    "value": null
+                  }
+                ]
+              }
+            ]
           }
-          )
+        )
       }
     });
-  logger.log("exportResponse: ", exportRestockSuggestionResponse.url(), "payload: ", payLoad, "headers: ", headers);
-  return exportRestockSuggestionResponse;
+    logger.log("exportResponse: ", exportRestockSuggestionResponse.url(), "payload: ", payLoad, "headers: ", headers);
+    return exportRestockSuggestionResponse;
   }
 }
 
 // POST endpoint for export sku in Shipment Details
 async function exportSKUsInShipmentDetails(request: APIRequestContext, linkApi: string, headers: any, payLoad: any, fields: any, key: string, restockType: string, options?: object) {
-    const url = `${linkApi}`;
-    logger.log('info', `Send POST request ${url} and fields ${fields}`);
-    const exportResponse = await request.post(url, {
-        headers: headers,
-        data: payLoad,
-        params: {
-            "fields": fields,
-            "headersOnly": false,
-            "sort": "null",
-            "restockKey": key,
-            "type": "amazon",
-            "restockType": restockType,
-            "where": JSON.stringify({ "logic": "and", "filters": [] })
-        }
-    });
-    console.log("exportResponse: ", exportResponse.url(), "payload: ", payLoad, "headers: ", headers);
-    return exportResponse;
+  const url = `${linkApi}`;
+  logger.log('info', `Send POST request ${url} and fields ${fields}`);
+  const exportResponse = await request.post(url, {
+    headers: headers,
+    data: payLoad,
+    params: {
+      "fields": fields,
+      "headersOnly": false,
+      "sort": "null",
+      "where": JSON.stringify({ "logic": "and", "filters": [] }),
+      "vendorKey": "null",
+      "restockKey": key,
+      "type": "amazon",
+      "restockType": restockType,
+      "gridType": "undefined"
+    }
+  });
+  console.log("exportResponse: ", exportResponse.url(), "payload: ", payLoad, "headers: ", headers);
+  return exportResponse;
 }
 
 // POST endpoint for export data in Purchasing > My Suggested
-async function exportItemsInPOByVendor(request: APIRequestContext, linkApi: string, headers: any, payLoad: any, fields: any, vendorKey:any, options?: object) {
+async function exportItemsInPOByVendor(request: APIRequestContext, linkApi: string, headers: any, payLoad: any, fields: any, vendorKey: any, options?: object) {
   const url = `${linkApi}`;
   logger.log('info', `Send POST request ${url} and fields ${fields} and vendor key: ${vendorKey}`);
   const exportResponse = await request.post(url, {
-      headers: headers,
-      data: payLoad,
-      params: {
-          "fields": fields,
-          "headersOnly": false,
-          "sort": "null",
-          "where": JSON.stringify({ "logic": "and", "filters": [] }),
-          "vendorKey": vendorKey,
-      }
+    headers: headers,
+    data: payLoad,
+    params: {
+      "fields": fields,
+      "headersOnly": false,
+      "sort": "null",
+      "where": JSON.stringify({ "logic": "and", "filters": [] }),
+      "vendorKey": vendorKey,
+    }
   });
   console.log("export my suggested by vendor: ", exportResponse.url(), "payload: ", payLoad, "headers: ", headers);
   return exportResponse;
@@ -278,28 +441,28 @@ async function exportItemsInCustom(request: APIRequestContext, linkApi: string, 
   const url = `${linkApi}`;
   logger.log('info', `Send POST request ${url} and fields ${fields}`);
   const exportResponse = await request.post(url, {
-      headers: headers,
-      data: payLoad,
-      params: {
-          "fields": fields,
-          "headersOnly": false,
-          "sort": "null",
-          "where": JSON.stringify({ "logic": "and", "filters": [] }),
-      }
+    headers: headers,
+    data: payLoad,
+    params: {
+      "fields": fields,
+      "headersOnly": false,
+      "sort": "null",
+      "where": JSON.stringify({ "logic": "and", "filters": [] }),
+    }
   });
   console.log("exportResponse: ", exportResponse.url(), "payload: ", payLoad, "headers: ", headers);
   return exportResponse;
 }
 
 async function totalItemFromExportFile(file: any) {
-    const convertJsonActual = await csv().fromFile(file) // Convert CSV to JSON with export file
-      .then(vendors => {
-        return vendors;
-      })
-      // console.log("convertJsonActual: ", convertJsonActual);
+  const convertJsonActual = await csv().fromFile(file) // Convert CSV to JSON with export file
+    .then(vendors => {
+      return vendors;
+    })
+  // console.log("convertJsonActual: ", convertJsonActual);
 
-    console.log("Total Items in file: ", convertJsonActual.length);
-    return convertJsonActual;
+  console.log("Total Items in file: ", convertJsonActual.length);
+  return convertJsonActual;
 }
 
 async function filterRowThatHasPicked(file: any, containText: string, section: string) {
@@ -307,13 +470,13 @@ async function filterRowThatHasPicked(file: any, containText: string, section: s
   var itemsInArray = await totalItemFromExportFile(file);
   console.log("itemsInArray: >>>> ", itemsInArray)
   var lengthOfFile = itemsInArray.length;
-  for(let i = 0; i < lengthOfFile; i++) {
-    switch(section) {
+  for (let i = 0; i < lengthOfFile; i++) {
+    switch (section) {
       case "supplier":
         nameInExportFile = itemsInArray[i]["Supplier Name"];
         console.log("Service - Supplier Name in File export: ", nameInExportFile);
 
-        if(nameInExportFile === containText) {
+        if (nameInExportFile === containText) {
           valuesThatHaveFilter = itemsInArray[i];
         }
 
@@ -321,7 +484,7 @@ async function filterRowThatHasPicked(file: any, containText: string, section: s
       case "bom":
         nameInExportFile = itemsInArray[i]["Parent Name"];
 
-        if(nameInExportFile === containText) {
+        if (nameInExportFile === containText) {
           valuesThatHaveFilter = itemsInArray[i];
         }
 
@@ -329,7 +492,7 @@ async function filterRowThatHasPicked(file: any, containText: string, section: s
       case "shipment-details":
         nameInExportFile = itemsInArray[i]["SKU"];
 
-        if(nameInExportFile === containText) {
+        if (nameInExportFile === containText) {
           valuesThatHaveFilter = itemsInArray[i];
         }
 
@@ -337,16 +500,16 @@ async function filterRowThatHasPicked(file: any, containText: string, section: s
       case "custom":
         nameInExportFile = itemsInArray[i]["FNSKU"];
 
-        if(nameInExportFile === containText) {
+        if (nameInExportFile === containText) {
           valuesThatHaveFilter = itemsInArray[i];
         }
 
         break;
-      default: 
+      default:
         nameInExportFile = itemsInArray[i]["Item Name"];
         console.log("Service - Item Name in File export: ", nameInExportFile);
 
-        if(nameInExportFile === containText) {
+        if (nameInExportFile === containText) {
           valuesThatHaveFilter = itemsInArray[i];
         }
     }
@@ -355,18 +518,26 @@ async function filterRowThatHasPicked(file: any, containText: string, section: s
   return valuesThatHaveFilter;
 }
 
+// Filter the first and the end row from export file
+async function filterFirstAndEndRow(file: any) {
+  var itemsInArray = await totalItemFromExportFile(file);
+  var valueOfFirstAndEndRow = [itemsInArray[0], itemsInArray[itemsInArray.length - 1]];
+  console.log("valueOfFirstAndEndRow >>>>> : ", valueOfFirstAndEndRow);
+  return valueOfFirstAndEndRow;
+}
+
 async function addFieldsIntoArray(fields: string) {
   let addFieldsIntoArray = fields.split(',');
   return addFieldsIntoArray;
 }
 
 async function mapColumn(columnName: string, section: string, companyType: string) {
-  console.log("Comapny Type: ", companyType);
+  console.log("Company Type: ", companyType);
   console.log("columnName >>>>", columnName);
   let columnAfterMapping;
-  switch(section) {
+  switch (section) {
     case "item":
-      if(companyType === "ASC" && columnName === "onHand") {
+      if (companyType === "ASC" && columnName === "onHand") {
         columnAfterMapping = "On Hand FBA Qty";
         console.log("On Hand FBA column: ", columnAfterMapping)
       }
@@ -377,15 +548,15 @@ async function mapColumn(columnName: string, section: string, companyType: strin
 
       break;
     case "supplier":
-      if(columnName === "name") {
+      if (columnName === "name") {
         columnAfterMapping = Columns.supplierName;
         console.log("columnAfterMapping >>>> ", columnAfterMapping)
       }
-      else if(columnName === "leadTime") {
+      else if (columnName === "leadTime") {
         columnAfterMapping = Columns.leadTime;
         console.log("columnAfterMapping >>>> ", columnAfterMapping)
       }
-      else if(columnName === "key") {
+      else if (columnName === "key") {
         columnAfterMapping = Columns.vendorKey;
         console.log("columnAfterMapping >>>> ", columnAfterMapping)
       }
@@ -395,10 +566,10 @@ async function mapColumn(columnName: string, section: string, companyType: strin
 
       break;
     case "supply":
-      if(columnName === "orderQty") {
+      if (columnName === "orderQty") {
         columnAfterMapping = Columns.orderQtySupply;
       }
-      else if(columnName === "openQty") {
+      else if (columnName === "openQty") {
         columnAfterMapping = Columns.openQtySupply;
       }
       else {
@@ -407,10 +578,10 @@ async function mapColumn(columnName: string, section: string, companyType: strin
 
       break;
     case "restock-suggestion":
-      if(columnName === "orderQty") {
+      if (columnName === "orderQty") {
         columnAfterMapping = Columns.orderQtyRestock;
       }
-      else if(columnName === "supplier") {
+      else if (columnName === "supplier") {
         columnAfterMapping = Columns.supplierName;
       }
       else {
@@ -419,10 +590,22 @@ async function mapColumn(columnName: string, section: string, companyType: strin
 
       break;
     case "shipment":
-      if(columnName === "status") {
+      if (columnName === "status") {
         columnAfterMapping = Columns.shipmentStatus;
       }
-      else if(columnName === "key") {
+      else if (columnName === "key") {
+        columnAfterMapping = Columns.shipmentKey;
+      }
+      else {
+        columnAfterMapping = Columns[columnName];
+      }
+
+      break;
+    case "shipment_FSS":
+      if (columnName === "status") {
+        columnAfterMapping = Columns.shipmentStatus;
+      }
+      else if (columnName === "key") {
         columnAfterMapping = Columns.shipmentKey;
       }
       else {
@@ -431,13 +614,28 @@ async function mapColumn(columnName: string, section: string, companyType: strin
 
       break;
     case "shipment-detail":
-      if(columnName === "packageWeight") {
+      if (columnName === "packageWeight") {
         columnAfterMapping = Columns.packageWeightSD;
       }
-      else if(columnName === "receivedQty") {
+      else if (columnName === "receivedQty") {
         columnAfterMapping = Columns.receivedQtySD;
       }
-      else if(columnName === "localQty") {
+      else if (columnName === "localQty") {
+        columnAfterMapping = Columns.localQtySD;
+      }
+      else {
+        columnAfterMapping = Columns[columnName];
+      }
+
+      break;
+    case "shipment-detail_FSS":
+      if (columnName === "packageWeight") {
+        columnAfterMapping = Columns.packageWeightSD;
+      }
+      else if (columnName === "receivedQty") {
+        columnAfterMapping = Columns.receivedQtySD;
+      }
+      else if (columnName === "localQty") {
         columnAfterMapping = Columns.localQtySD;
       }
       else {
@@ -446,10 +644,10 @@ async function mapColumn(columnName: string, section: string, companyType: strin
 
       break;
     case "custom":
-      if(columnName === "description") {
+      if (columnName === "description") {
         columnAfterMapping = Columns.descriptionPO;
       }
-      else if(companyType === "ASC" && columnName === "onHand") {
+      else if (companyType === "ASC" && columnName === "onHand") {
         console.log("Here >>>>>>>>> ", companyType, " >>>>> ", columnName)
         columnAfterMapping = Columns.onHandFBAPo;
       }
@@ -458,7 +656,34 @@ async function mapColumn(columnName: string, section: string, companyType: strin
       }
 
       break;
-    default: 
+    case "custom-filter-sort":
+      if (columnName === "description") {
+        columnAfterMapping = Columns.descriptionPO;
+      }
+      else if (companyType === "ASC" && columnName === "onHand") {
+        console.log("Here >>>>>>>>> ", companyType, " >>>>> ", columnName)
+        columnAfterMapping = Columns.onHandFBAPo;
+      }
+      else {
+        columnAfterMapping = Columns[columnName];
+      }
+
+      break;
+
+    case "suggested-filter-sort":
+      if (columnName === "description") {
+        columnAfterMapping = Columns.descriptionPO;
+      }
+      else if (companyType === "ASC" && columnName === "onHand") {
+        console.log("Here >>>>>>>>> ", companyType, " >>>>> ", columnName)
+        columnAfterMapping = Columns.onHandFBAPo;
+      }
+      else {
+        columnAfterMapping = Columns[columnName];
+      }
+
+      break;
+    default:
       columnAfterMapping = Columns[columnName];
   }
 
@@ -467,16 +692,20 @@ async function mapColumn(columnName: string, section: string, companyType: strin
 };
 
 export {
-    exportItem,
-    totalItemFromExportFile,
-    filterRowThatHasPicked,
-    addFieldsIntoArray,
-    mapColumn,
-    exportSKUInItemList,
-    exportSKUsInShipmentDetails,
-    exportItemsInPOByVendor,
-    exportItemsInCustom,
-    exportItemWithFilter
+  exportItem,
+  totalItemFromExportFile,
+  filterRowThatHasPicked,
+  addFieldsIntoArray,
+  mapColumn,
+  exportSKUInItemList,
+  exportSKUsInShipmentDetails,
+  exportItemsInPOByVendor,
+  exportItemsInCustom,
+  exportItemWithFilter,
+  filterFirstAndEndRow,
+  exportItemByVendorKeyWithFilter,
+  exportItemWithFilterSortAndSearch,
+  exportItemInShipmentDetailsWithFilterSortAndSearch
 }
 
 export const Columns: Record<string, string> = {

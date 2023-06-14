@@ -8,6 +8,19 @@ async function getSuppliers(request: APIRequestContext, linkApi: string, options
     return await request.get(url, options);
 }
 
+//Get list supplier with filter and sort
+async function getSuppliersWithFilterAndSort(request: APIRequestContext, linkApi: string, columnName: string, operator: string, value: string, columnNameSort: string, sort: string, options?: object) {
+    const url = `${linkApi}`;
+    logger.log('info', `Send GET request ${url}`);
+    return await request.get(url, {
+        params: {
+            "sort": JSON.stringify([{"field":columnNameSort,"direction":sort}]),
+            "where": JSON.stringify({"logic":"and","filters":[{"filters":[{"field":columnName,"operator":operator,"value":value}],"logic":"and"}]})
+        }
+    }
+    );
+}
+
 //Create supplier
 async function createSupplier(request: APIRequestContext, linkApi: string, payLoad: any, header?: any) {
     const url = `${linkApi}`;
@@ -118,5 +131,6 @@ export {
     getItemsInPO,
     getVendorSalesVelocitySettings,
     updateVendorSalesVelocitySettings,
-    countAllSuppliers
+    countAllSuppliers,
+    getSuppliersWithFilterAndSort
 }
