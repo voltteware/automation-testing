@@ -58,7 +58,7 @@ Then(`{} sends a GET request to get shipment details in Manage Shipments`, async
     this.actualShipmentName = this.getShipmentDetailsResponseBody.shipmentName;
     this.actualStatus = this.getShipmentDetailsResponseBody.status;
     this.actualLabelPrepPreference = this.getShipmentDetailsResponseBody.labelPrepPreference;
-    // Information of Ship from
+    // Information of Ship from - Ship to
     this.actualAddressLine1 = this.getShipmentDetailsResponseBody.shipFromAddress.addressLine1;
     this.actualAddressLine2 = this.getShipmentDetailsResponseBody.shipFromAddress.addressLine2;
     this.actualCity = this.getShipmentDetailsResponseBody.shipFromAddress.city;
@@ -67,6 +67,7 @@ Then(`{} sends a GET request to get shipment details in Manage Shipments`, async
     this.actualPhoneNumber = this.getShipmentDetailsResponseBody.shipFromAddress.phoneNumber;
     this.actualPostalCode = this.getShipmentDetailsResponseBody.shipFromAddress.postalCode;
     this.actualStateOrProvinceCode = this.getShipmentDetailsResponseBody.shipFromAddress.stateOrProvinceCode;
+    this.actualShipmentSource = this.getShipmentDetailsResponseBody.shipmentSource;
 });
 
 Then(`User checks API contract essential types in shipment details are correct`, async function () {
