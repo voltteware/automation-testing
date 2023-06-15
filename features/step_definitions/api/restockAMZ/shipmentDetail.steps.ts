@@ -11,16 +11,52 @@ Then('{} sets GET api to get shipments in Manage Shipments by status:', async fu
 });
 
 Then('{} checks information in Shipment Details: {}', async function (actor, restockType: string) {
+    const expectedTotalWeight = Number(this.packageWeightOfItem) * Number(this.requestedQty);
+    const expectedTotalPrice = Number(this.vendorPriceOfItem) * Number(this.requestedQty);
+    logger.log('info', `shipmentName: Actual ${this.actualShipmentName} vs Expected ${this.shipmentName}`);
+    this.attach(`shipmentName: Actual ${this.actualShipmentName} vs Expected ${this.shipmentName}`);
+    logger.log('info', `DestinationFulfillmentCenterId: Actual ${this.actualDestinationFulfillmentCenterId} vs Expected Amazon`);
+    this.attach(`DestinationFulfillmentCenterId: Actual ${this.actualDestinationFulfillmentCenterId} vs Expected Amazon`);
+    logger.log('info', `Status: Actual ${this.actualStatus} vs Expected Pending`);
+    this.attach(`Status: Actual ${this.actualStatus} vs Expected Pending`);
+    logger.log('info', `restockType: Actual ${this.actualRestockType} vs Expected ${restockType}`);
+    this.attach(`restockType: Actual ${this.actualRestockType} vs Expected ${restockType}`);
+    logger.log('info', `totalCost: Actual ${this.actualTotalCost} vs Expected ${expectedTotalPrice}`);
+    this.attach(`totalCost: Actual ${this.actualTotalCost} vs Expected ${expectedTotalPrice}`);
+    logger.log('info', `totalSKUs: Actual ${this.actualTotalSKUs} vs Expected 1`);
+    this.attach(`totalSKUs: Actual ${this.actualTotalSKUs} vs Expected 1`);
+    logger.log('info', `totalWeight: Actual ${this.actualTotalWeight} vs Expected ${expectedTotalWeight}`);
+    this.attach(`totalWeight: Actual ${this.actualTotalWeight} vs Expected ${expectedTotalWeight}`);
+    logger.log('info', `labelPreference: Actual ${this.actualLabelPrepPreference} vs Expected SELLER_LABEL`);
+    this.attach(`labelPreference: Actual ${this.actualLabelPrepPreference} vs Expected SELLER_LABEL`);
+    logger.log('info', `addressLine1: Actual ${this.actualAddressLine1} vs Expected ${this.addressLine1}`);
+    this.attach(`addressLine1: Actual ${this.actualAddressLine1} vs Expected ${this.addressLine1}`);
+    logger.log('info', `addressLine2: Actual ${this.actualAddressLine2} vs Expected ${this.addressLine2}`);
+    this.attach(`addressLine2: Actual ${this.actualAddressLine2} vs Expected ${this.addressLine2}`);
+    logger.log('info', `city: Actual ${this.actualCity} vs Expected ${this.city}`);
+    this.attach(`city: Actual ${this.actualCity} vs Expected ${this.city}`);
+    logger.log('info', `countryCode: Actual ${this.actualCountryCode} vs Expected ${this.countryCode}`);
+    this.attach(`countryCode: Actual ${this.actualCountryCode} vs Expected ${this.countryCode}`);
+    logger.log('info', `fullName: Actual ${this.actualFullName} vs Expected ${this.fullName}`);
+    this.attach(`fullName: Actual ${this.actualFullName} vs Expected ${this.fullName}`);
+    logger.log('info', `phoneNumber: Actual ${this.actualPhoneNumber} vs Expected ${this.phoneNumber}`);
+    this.attach(`phoneNumber: Actual ${this.actualPhoneNumber} vs Expected ${this.phoneNumber}`);
+    logger.log('info', `postalCode: Actual ${this.actualPostalCode} vs Expected ${this.postalCode}`);
+    this.attach(`postalCode: Actual ${this.actualPostalCode} vs Expected ${this.postalCode}`);
+    logger.log('info', `stateOrProvinceCode: Actual ${this.actualStateOrProvinceCode} vs Expected ${this.stateOrProvinceCode}`);
+    this.attach(`stateOrProvinceCode: Actual ${this.actualStateOrProvinceCode} vs Expected ${this.stateOrProvinceCode}`);
+    logger.log('info', `ShipmentSource: Actual ${this.actualShipmentSource} vs Expected ${this.expectedShipmentSource}`);
+    this.attach(`ShipmentSource: Actual ${this.actualShipmentSource} vs Expected ${this.expectedShipmentSource}`);
+
     expect(this.actualShipmentName).toBe(this.shipmentName);
     expect(this.actualDestinationFulfillmentCenterId).toBe("Amazon");
     expect(this.actualStatus).toBe("PENDING");
     expect(this.actualRestockType).toBe(`${restockType}`);
-    const expectedTotalPrice = Number(this.vendorPriceOfItem) * Number(this.requestedQty);
     expect(Number(this.actualTotalCost)).toEqual(expectedTotalPrice);
     expect(Number(this.actualTotalSKUs)).toEqual(1);
-    const expectedTotalWeight = Number(this.packageWeightOfItem) * Number(this.requestedQty);
     expect(Number(this.actualTotalWeight)).toEqual(expectedTotalWeight);
     expect(this.actualLabelPrepPreference).toBe("SELLER_LABEL");
+    // Check ship from - ship to
     expect(this.actualAddressLine1).toBe(this.addressLine1);
     expect(this.actualAddressLine2).toBe(this.addressLine2);
     expect(this.actualCity).toBe(this.city);
@@ -29,6 +65,7 @@ Then('{} checks information in Shipment Details: {}', async function (actor, res
     expect(this.actualPhoneNumber).toBe(this.phoneNumber);
     expect(this.actualPostalCode).toBe(this.postalCode);
     expect(this.actualStateOrProvinceCode).toBe(this.stateOrProvinceCode);
+    expect(this.actualShipmentSource).toBe(this.expectedShipmentSource);
 });
 
 Then(`{} send a GET request to get shipments in Manage Shipments`, async function (action: string) {

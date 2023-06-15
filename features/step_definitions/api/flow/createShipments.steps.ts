@@ -132,21 +132,6 @@ Then(`{} sends a PUT request to update shipment with casePackOption: {}`, async 
                 shipmentReview: true
             }
         }
-        logger.log('info', `Payload: ` + JSON.stringify(payload, undefined, 4));
-        this.attach(`Payload: ` + JSON.stringify(payload, undefined, 4));
-
-        this.updateShipmentInfoResponse = this.response = await shipmentRequest.putShipment(this.request, link, payload, this.headers);
-        const responseBodyText = await this.updateShipmentInfoResponse.text();
-        if (this.updateShipmentInfoResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
-            this.updateShipmentInfoResponseBody = JSON.parse(await this.updateShipmentInfoResponse.text());
-            logger.log('info', `Response PUT ${link}: ` + JSON.stringify(this.updateShipmentInfoResponseBody, undefined, 4));
-            this.attach(`Response PUT ${link}: ` + JSON.stringify(this.updateShipmentInfoResponseBody, undefined, 4));
-        }
-        else {
-            const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
-            logger.log('info', `Response ${link} has status code ${this.updateShipmentInfoResponse.status()} ${this.updateShipmentInfoResponse.statusText()} and response body ${responseBodyText}`);
-            this.attach(`Response ${link} has status code ${this.updateShipmentInfoResponse.status()} ${this.updateShipmentInfoResponse.statusText()} and response body ${actualResponseText}`);
-        }
     }
     else {
         payload = {
@@ -176,22 +161,24 @@ Then(`{} sends a PUT request to update shipment with casePackOption: {}`, async 
             },
             updated_at: new Date(),
         }
-        logger.log('info', `Payload: ` + JSON.stringify(payload, undefined, 4));
-        this.attach(`Payload: ` + JSON.stringify(payload, undefined, 4));
-
-        this.updateShipmentInfoResponse = this.response = await shipmentRequest.putShipment(this.request, link, payload, this.headers);
-        const responseBodyText = await this.updateShipmentInfoResponse.text();
-        if (this.updateShipmentInfoResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
-            this.updateShipmentInfoResponseBody = JSON.parse(await this.updateShipmentInfoResponse.text());
-            logger.log('info', `Response PUT ${link}: ` + JSON.stringify(this.updateShipmentInfoResponseBody, undefined, 4));
-            this.attach(`Response PUT ${link}: ` + JSON.stringify(this.updateShipmentInfoResponseBody, undefined, 4));
-        }
-        else {
-            const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
-            logger.log('info', `Response ${link} has status code ${this.updateShipmentInfoResponse.status()} ${this.updateShipmentInfoResponse.statusText()} and response body ${responseBodyText}`);
-            this.attach(`Response ${link} has status code ${this.updateShipmentInfoResponse.status()} ${this.updateShipmentInfoResponse.statusText()} and response body ${actualResponseText}`);
-        }
     }
+
+    logger.log('info', `Payload: ` + JSON.stringify(payload, undefined, 4));
+    this.attach(`Payload: ` + JSON.stringify(payload, undefined, 4));
+
+    this.updateShipmentInfoResponse = this.response = await shipmentRequest.putShipment(this.request, link, payload, this.headers);
+    const responseBodyText = await this.updateShipmentInfoResponse.text();
+    if (this.updateShipmentInfoResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
+        this.updateShipmentInfoResponseBody = JSON.parse(await this.updateShipmentInfoResponse.text());
+        logger.log('info', `Response PUT ${link}: ` + JSON.stringify(this.updateShipmentInfoResponseBody, undefined, 4));
+        this.attach(`Response PUT ${link}: ` + JSON.stringify(this.updateShipmentInfoResponseBody, undefined, 4));
+    }
+    else {
+        const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
+        logger.log('info', `Response ${link} has status code ${this.updateShipmentInfoResponse.status()} ${this.updateShipmentInfoResponse.statusText()} and response body ${responseBodyText}`);
+        this.attach(`Response ${link} has status code ${this.updateShipmentInfoResponse.status()} ${this.updateShipmentInfoResponse.statusText()} and response body ${actualResponseText}`);
+    }
+    this.expectedShipmentSource = this.updateShipmentInfoResponseBody?.shipmentSource;
 });
 
 Then(`{} sends a GET request to check local qty error`, async function (actor: string) {
@@ -596,7 +583,7 @@ Then(`User checks the new SKU must be found in the above list items`, async func
 })
 
 Then(`User sets POST api to create shipment from Warehouse with name:`, function (dataTable: DataTable) {
-    const {shipmentName} = dataTable.hashes()[0]
+    const { shipmentName } = dataTable.hashes()[0]
     if (shipmentName === 'ITC_shipment_auto_name') {
         this.shipmentName = `${shipmentName}_${Date.now()}`
     }
@@ -612,7 +599,7 @@ Then(`User sets POST api to create shipment from Warehouse with name:`, function
             "userId": "",
             "isCreateNew": true,
             "isInitialUpload": false
-            }
+        }
     }
 
     logger.log('info', `Payload: ` + JSON.stringify(this.payLoad, undefined, 4));

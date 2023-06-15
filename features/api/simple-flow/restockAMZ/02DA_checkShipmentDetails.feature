@@ -1,4 +1,5 @@
-@test-api @regression-api @check-shipment-detials @api-restockAMZ
+# This scenario run failed, because total cost in shipment detail always displays 0 
+@test-api @regression-api @check-shipment-detials @api-restockAMZ @bug2102
 Feature: API_Regression User creates shipments and check information in shipment details
     Background: Send POST /login request to login before each test
         Given user sends a POST login request to get valid cookie with role
@@ -8,8 +9,8 @@ Feature: API_Regression User creates shipments and check information in shipment
         And In Header of the request, she sets param Cookie as valid connect.sid
         When User sends a GET request to get companies
 
-    @TC_ASC_CSD001 @smoke-test-api
-    Scenario Outline: <TC_ID> - Verify user <email> could call APIs to delete shipments which have Pending status
+    @TC_ASC_CSD001 @smoke-test-api @bug2102
+    Scenario Outline: <TC_ID> - Verify user <email> could call APIs to check shipments details (Pending)
         Given User picks company which has onboarded before with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets GET api method to get restock suggestion by vendor
@@ -93,6 +94,12 @@ Feature: API_Regression User creates shipments and check information in shipment
         And User checks status code and status text of api
             | expectedStatus   | expectedStatusText   |
             | <expectedStatus> | <expectedStatusText> |
+        And User sets PUT api endpoint to update shipment
+        And User sends a PUT request to update shipment with casePackOption: <casePackOption>
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
+        And User checks API contract of update shipment by shipment key api
         And User sets GET api endpoint to find the new created shipment
         And User sends a GET request to find the new created shipment
         And User checks the new created shipment: <shipmentStatus>
