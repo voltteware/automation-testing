@@ -12,6 +12,16 @@ async function postShipment(request: APIRequestContext, linkApi: string, payLoad
     return createShipmentResponse;
 };
 
+//Refresh Shipment Status
+async function refreshShipmentStatus(request: APIRequestContext, linkApi: string, header?: any) {
+    const url = `${linkApi}`;
+    logger.log('info', `Send PUT request ${url}`);
+    const refreshShipmentStatusResponse = await request.put(url, {
+        headers: header
+    });
+    return refreshShipmentStatusResponse;
+};
+
 //Complete Shipment
 async function completeShipment(request: APIRequestContext, linkApi: string, payLoad: any, header?: any) {
     const url = `${linkApi}`;
@@ -454,5 +464,6 @@ export {
     getAllShipmentsInManageShipmentsWithFSS,
     getListShipmentsWithFSS,
     countAllSKUsInShipmentDetailsWithFSS,
-    getSKUInShipmentDetailsWithFSS
+    getSKUInShipmentDetailsWithFSS,
+    refreshShipmentStatus
 }

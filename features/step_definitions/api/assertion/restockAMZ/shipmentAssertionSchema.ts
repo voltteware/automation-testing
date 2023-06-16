@@ -25,7 +25,7 @@ export const simpleShipmentResponseSchema = z.object({
     isFromRestockSuggestion: z.boolean().optional(),
     uploadInventory: z.boolean(),
   }),
-  totalCost: z.number(),
+  totalCost: z.number().nullable(),
   updatedAt: z.string(),
   updated_at: z.string(),
   whoPreps: z.string().nullable(),
@@ -76,7 +76,7 @@ export const getListShipmentsResponseSchema = z.object({
   shipmentSource: z.string().nullable(),
   status: z.string(),
   stepProgress: z.object({}).nullable(),
-  totalCost: z.number(),
+  totalCost: z.number().nullable(),
   updatedAt: z.string(),
   updated_at: z.string(),
   whoPreps: z.string().nullable(),
@@ -99,7 +99,7 @@ export const shipmentDetailSchema = z.object({
   restockType: z.string(),
   requestedQty: z.number(),
   receivedQty: z.number(),
-  totalCost: z.number(),
+  totalCost: z.number().nullable(),
   createdAt: z.string(),
   updatedAt: z.string(),
   orderNotes: z.null(),
@@ -130,8 +130,8 @@ export const shipmentDetailSchema = z.object({
     postalCode: z.string(),
     phoneNumber: z.null(),
   }).nullable(),
-  totalSKUs: z.number(),
-  totalWeight: z.number(),
+  totalSKUs: z.number().nullable(),
+  totalWeight: z.number().nullable(),
 });
 
 export const addSKUsResponseSchema = z.object({

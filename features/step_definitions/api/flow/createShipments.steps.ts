@@ -451,7 +451,7 @@ Then('{} sends a GET request to export file', async function (actor: string) {
 });
 
 Then('{} sets GET api endpoint to find the new created shipment', async function (actor: string) {
-    linkListShipments = encodeURI(`${Links.API_SHIPMENT}?offset=0&limit=10&sort=[{"field":"createdAt","direction":"desc"}]&where={"logic":"and","filters":[{"logic":"or","filters":[{"field":"shipmentName","operator":"contains","value":"${this.shipmentName}"},{"field":"shipmentSource","operator":"contains","value":"${this.shipmentName}"},{"field":"destinationFulfillmentCenterId","operator":"contains","value":"${this.shipmentName}"},{"field":"status","operator":"contains","value":"${this.shipmentName}"}]}]}`);
+    linkListShipments = encodeURI(`${Links.API_SHIPMENT}?offset=0&limit=10&sort=[{"field":"createdAt","direction":"desc"}]&where={"logic":"and","filters":[{"filters":[{"field":"status","operator":"contains","value":"Working"}],"logic":"and"},{"logic":"or","filters":[{"field":"shipmentName","operator":"contains","value":"${this.shipmentName}"},{"field":"shipmentSource","operator":"contains","value":"${this.shipmentName}"},{"field":"destinationFulfillmentCenterId","operator":"contains","value":"${this.shipmentName}"},{"field":"status","operator":"contains","value":"${this.shipmentName}"}]}]}`);
 });
 
 Then('{} sets GET api endpoint to find itc auto shipments', async function (actor: string) {
