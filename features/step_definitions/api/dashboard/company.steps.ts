@@ -362,6 +362,35 @@ Then('{} checks that the lastForecastDate field was updated and jobInitiator is 
     // }).toBeFalsy();
 })
 
+Then('{} checks that the shipmentLastRefresh field was updated and jobInitiator is null in company detail information after running refresh all', { timeout: 10 * 60 * 1000 }, async function (actor: string) {
+    const linkGetCompanyInfo = `${Links.API_GET_COMPANY}/${this.companyKey}`;
+    const options = {
+        headers: this.headers
+    }
+
+    // jobInitiator is a value to check completing refresh all
+    await expect.poll(async () => {
+        const getCompanyInfoResponse = await companyRequest.getCompanyInfo(this.request, linkGetCompanyInfo, options);
+        const getCompanyInfoResponseBody = JSON.parse(await getCompanyInfoResponse.text());
+        const jobInitiator = getCompanyInfoResponseBody.jobInitiator;
+        console.log(`jobInitiator is: >>>>>> `, jobInitiator);
+        logger.log('info', `jobInitiator is: >>>>>> ` + jobInitiator);
+        this.attach(`jobInitiator is: >>>>>> ` + jobInitiator);
+        return jobInitiator;
+    }, {
+        // Custom error message, optional.
+        message: `jobInitiator is not null => Job is not done`, // custom error message
+        // Probe, wait 1s, probe, wait 5s, probe, wait 10s, probe, wait 10s, probe, .... Defaults to [100, 250, 500, 1000].
+        intervals: [1_000, 2_000, 5_000],
+        timeout: 8 * 60 * 1000,
+    }).toBeNull();
+
+    const sleep = (milliseconds: number) => {
+        return new Promise(resolve => setTimeout(resolve, milliseconds))
+    }
+    await sleep(5000);
+});
+
 Given('User sets GET api to get information of {string} company', function (companyType) {
     this.linkApiAdminGetInformationCompany = `${Links.API_ADMIN_GET_COMPANIES}/${this.companyKey}/${companyType}`
 });

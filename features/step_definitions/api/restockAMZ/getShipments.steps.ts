@@ -138,7 +138,7 @@ When(`{} sends GET endpoint api with filter {} column, value {} {}, sort {} colu
 Then('{} picks {} random shipment in above list shipments', async function (actor: string, quantity) {
     console.log("Here: ", this.listToPickRandom);
     this.itemsPickedRandomArray =  itemRequest.getMultipleRandom(this.listToPickRandom, quantity);
-    console.log("IteminItemListPickedRandomArray: ", this.itemsPickedRandomArray);
+    console.log("ItemInItemListPickedRandomArray: ", this.itemsPickedRandomArray);
     return this.itemsPickedRandomArray;
 });
 

@@ -10,7 +10,7 @@ Feature: API_Regression User can refresh status for shipments
 
     # Refresh status for specific shipment
     # My scenario: Using account amz-ca-automation to delete one shipment Working (@ITC_shipment_Auto). After that, using account Fishers Finery Amazon to refresh status for this shipment => Then check shipment status of this shipment
-    @TC_RSS001_1 @smoke-test-api
+    @TC_RSS001 @smoke-test-api
     Scenario Outline: <TC_ID> - User can refresh status for specific shipment
         # Get infor of amz-ca-for-AUTOMATION company
         Given User picks company which has onboarded before with type <companyType> in above response
@@ -44,5 +44,39 @@ Feature: API_Regression User can refresh status for shipments
         And User checks status of this shipment after updated
 
         Examples:
-            | TC_ID       | companyType | email                      | expectedStatus | expectedStatusText | companyName           |
-            | TC_RSS001_1 | ASC         | testautoforecast@gmail.com | 200            | OK                 | Fishers Finery Amazon |
+            | TC_ID     | companyType | email                      | expectedStatus | expectedStatusText | companyName           |
+            | TC_RSS001 | ASC         | testautoforecast@gmail.com | 200            | OK                 | Fishers Finery Amazon |
+
+    # Refresh All Shipments Status
+    # Please update file csv again before run this scenario if you want to check real time
+    @TC_RSS002 @smoke-test-api
+    Scenario Outline: <TC_ID> - User can refresh status for all shipments
+        Given And User picks a company with type <companyType> and name <companyName> in above response
+        And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
+        And User sets GET api endpoint to get company information by company key
+        And User sends a GET request to get company information by company key
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
+        And User sets POST api endpoint to refresh all status shipments
+        And Users sends a POST request to refresh all status shipments
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
+        And User checks that the shipmentLastRefresh field was updated and jobInitiator is null in company detail information after running refresh all
+        And User sets GET api to get lasted shipments in Manage Shipments
+        And User sends a GET request to get shipments in Manage Shipments
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
+        And User checks API contract of get list shipments api
+        # Pick a shipment
+        And User picks a shipment in Manage Shipments
+        When User checks total items in report file EQUALS total with section and item name
+            | itemName   | section   | file       |
+            | <itemName> | <section> | <fileName> |
+        Then User checks value on grid match with value in report file: <section>
+
+        Examples:
+            | TC_ID     | companyType | email                      | expectedStatus | expectedStatusText | companyName           | section   | itemName | fileName              |
+            | TC_RSS002 | ASC         | testautoforecast@gmail.com | 200            | OK                 | Fishers Finery Amazon | shipments | null     | refreshShipmentStatus |

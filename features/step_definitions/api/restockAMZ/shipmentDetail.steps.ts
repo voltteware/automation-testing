@@ -10,6 +10,10 @@ Then('{} sets GET api to get shipments in Manage Shipments by status:', async fu
     this.linkGetShipmentsByStatus = `${Links.API_SHIPMENT}?offset=0&limit=${limit}&sort=[{"field":"restockType","direction":"asc"}]&where={"filters":[{"filters":[{"field":"status","operator":"eq","value":"${shipmentStatus}"}],"logic":"and"}],"logic":"and"}`;
 });
 
+Then('{} sets GET api to get lasted shipments in Manage Shipments', async function (actor: string) {
+    this.linkGetShipmentsByStatus = `${Links.API_SHIPMENT}?offset=0&limit=10&sort=[{"field":"updatedAt","direction":"desc"}]&where={"logic":"and","filters":[]}`;
+});
+
 Then('{} checks information in Shipment Details: {}', async function (actor, restockType: string) {
     const expectedTotalWeight = Number(this.packageWeightOfItem) * Number(this.requestedQty);
     const expectedTotalPrice = Number(this.vendorPriceOfItem) * Number(this.requestedQty);
@@ -68,7 +72,7 @@ Then('{} checks information in Shipment Details: {}', async function (actor, res
     expect(this.actualShipmentSource).toBe(this.expectedShipmentSource);
 });
 
-Then(`{} send a GET request to get shipments in Manage Shipments`, async function (action: string) {
+Then(`{} sends a GET request to get shipments in Manage Shipments`, async function (action: string) {
     const options = {
         headers: this.headers
     }
@@ -84,12 +88,14 @@ Then(`{} send a GET request to get shipments in Manage Shipments`, async functio
         logger.log('info', `Response ${this.linkGetShipmentsByStatus} has status code ${this.getListShipmentsResponse.status()} ${this.getListShipmentsResponse.statusText()} and response body ${responseBodyText}`);
         this.attach(`Response ${this.linkGetShipmentsByStatus} has status code ${this.getListShipmentsResponse.status()} ${this.getListShipmentsResponse.statusText()} and response body ${actualResponseText}`);
     }
+    this.countItem = this.getListShipmentsResponseBody.length;
 });
 
 Then(`User picks a shipment in Manage Shipments`, async function () {
     this.aShipmentResponseBody = await this.getListShipmentsResponseBody[Math.floor(Math.random() * this.getListShipmentsResponseBody.length)];
     this.shipmentKey = this.aShipmentResponseBody.key;
     this.shipmentName = this.aShipmentResponseBody.shipmentName;
+    this.status = this.aShipmentResponseBody.status;
 })
 
 Then('User sets GET api to search item in shipment detail with following data:', async function (dataTable: DataTable) {

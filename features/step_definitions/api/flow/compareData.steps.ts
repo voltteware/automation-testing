@@ -9,6 +9,7 @@ import { expect } from '@playwright/test';
 
 let totalItemFromExport: any;
 let expected: any;
+let expectedItem: any;
 
 // Will research and change APIs to make it easily
 Then(`{} sends a POST method to create report on Amazon`, async function (actor: string) {
@@ -135,10 +136,15 @@ Then(`{} sends a GET method to get report by reportID`, { timeout: 5500000 }, as
 Then('{} checks total items in report file EQUALS total with section and item name', async function (actor: string, dataTable: DataTable) {
     var itemName: number = dataTable.hashes()[0].itemName;
     var section: string = dataTable.hashes()[0].section;
+    var fileName: string = dataTable.hashes()[0].file;
 
-    totalItemFromExport = await exportRequest.totalItemFromExportFile(`src/data/demand_May.csv`);
-    this.totalItemFromExportFiltered = totalItemFromExport.filter((filter: any) => filter.sku === `${itemName}` && !(filter[`item-status`] === 'Cancelled'));
-    
+    if (section == 'demand') {
+        totalItemFromExport = await exportRequest.totalItemFromExportFile(`src/data/${fileName}.csv`);
+        this.totalItemFromExportFiltered = totalItemFromExport.filter((filter: any) => filter.sku === `${itemName}` && !(filter[`item-status`] === 'Cancelled'));
+    }
+    else {
+        this.totalItemFromExportFiltered = totalItemFromExport = await exportRequest.totalItemFromExportFile(`src/data/${fileName}.csv`);
+    }
     logger.log('info', "this.totalItemFromExportFiltered: " + JSON.stringify(this.totalItemFromExportFiltered));
     this.attach("this.totalItemFromExportFiltered: " + JSON.stringify(this.totalItemFromExportFiltered));
 
@@ -147,8 +153,18 @@ Then('{} checks total items in report file EQUALS total with section and item na
     expect(this.totalItemFromExportFiltered.length).toEqual(Number(this.countItem));
 });
 
-Then('{} checks value on grid match with value in report file', async function (actor: string) {
-    let expectedItem = this.totalItemFromExportFiltered.filter((ex: any) => ex[`amazon-order-id`] === `${this.orderKeyOfGrid}`);
-    expected = expectedItem.length;
-    expect(expected).toEqual(1);
+Then('{} checks value on grid match with value in report file: {}', async function (actor, section: string) {
+    if (section == 'demand') {
+        expectedItem = this.totalItemFromExportFiltered.filter((ex: any) => ex[`amazon-order-id`] === `${this.orderKeyOfGrid}`);
+        expected = expectedItem.length;
+        expect(expected).toEqual(1);
+    }
+    else {
+        expectedItem = this.totalItemFromExportFiltered.filter((ex: any) => ex[`Shipment name`] === `${this.shipmentName}`);
+        logger.log('info', "expectedItemStatus: " + expectedItem[0].Status);
+        this.attach("expectedItemStatus: " + expectedItem[0].Status);
+        expect(this.status).toBe((expectedItem[0].Status).toUpperCase());
+    }
+    logger.log('info', "expectedItem: " + JSON.stringify(expectedItem));
+    this.attach("expectedItem: " + JSON.stringify(expectedItem));
 });

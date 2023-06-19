@@ -16,7 +16,7 @@ Feature: API_Regression User can search SKUs
         And User sets GET api to get shipments in Manage Shipments by status:
             | shipmentStatus   | limit |
             | <shipmentStatus> | 2     |
-        And User send a GET request to get shipments in Manage Shipments
+        And User sends a GET request to get shipments in Manage Shipments
         And User checks status code and status text of api
             | expectedStatus   | expectedStatusText   |
             | <expectedStatus> | <expectedStatusText> |
@@ -56,7 +56,7 @@ Feature: API_Regression User can search SKUs
         And User sets GET api to get shipments in Manage Shipments by status:
             | shipmentStatus   | limit |
             | <shipmentStatus> | 2     |
-        And User send a GET request to get shipments in Manage Shipments
+        And User sends a GET request to get shipments in Manage Shipments
         And User checks status code and status text of api
             | expectedStatus   | expectedStatusText   |
             | <expectedStatus> | <expectedStatusText> |

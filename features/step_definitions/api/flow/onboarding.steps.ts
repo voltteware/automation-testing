@@ -94,6 +94,7 @@ Then('{} sends a GET request to get company information by company key', async f
         this.responseBodyOfACompanyObject = this.getCompanyInfoResponseBody = JSON.parse(await this.getCompanyInfoResponse.text());
         this.lastForecastDate = this.getCompanyInfoResponseBody.lastForecastDate;
         this.marketplaceId = this.getCompanyInfoResponseBody.marketplaceId;
+        this.shipmentLastRefresh = this.getCompanyInfoResponseBody.marketplaceId;
         //Global Purchasing settings
         this.purchasingSalesVelocityType = this.getCompanyInfoResponseBody.purchasingSalesVelocityType;
         //Global RestockAMZ settings
