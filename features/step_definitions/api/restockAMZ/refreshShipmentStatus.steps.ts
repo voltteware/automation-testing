@@ -32,6 +32,23 @@ Then('{} sends a PUT request to refresh status of specific shipment', async func
     actualStatus = this.refreshShipmentStatusResponseBody.status;
 });
 
-Then(`User checks status of this shipment after updated`, async function () {
+Then(`{} checks status of this shipment after updated`, async function (actor: string) {
     expect(actualStatus).toBe("DELETED");
+});
+
+Then(`{} sets POST api endpoint to refresh all status shipments`, async function (actor: string) {
+    link = `${Links.API_SYNC}/sync/shipment`;
+});
+
+Then('{} sends a POST request to refresh all status shipments', async function (actor: string) {
+    // Send POST request
+    this.response = await shipmentRequest.refreshAll(this.request, link, this.getCompanyInfoResponseBody, this.headers);
+    if (this.response.status() == 200) {
+        this.refreshAllResponseBody = JSON.parse(await this.response.text())
+        logger.log('info', `Refresh All Response ${link} has status code ${this.response.status()} ${this.response.statusText()} and refreshAllResponseBody body ${JSON.stringify(this.refreshAllResponseBody, undefined, 4)}`);
+        this.attach(`Refresh All Response ${link} has status code ${this.response.status()} ${this.response.statusText()} and refreshAllResponseBody body ${JSON.stringify(this.refreshAllResponseBody, undefined, 4)}`);
+    } else {
+        logger.log('info', `Refresh All Response ${link} has status code ${this.response.status()} ${this.response.statusText()}`);
+        this.attach(`Refresh All Response ${link} has status code ${this.response.status()} ${this.response.statusText()}`);
+    }
 });

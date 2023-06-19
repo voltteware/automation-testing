@@ -17,7 +17,7 @@ Feature: API_Testing Compare data on ForecastRx and Amazon in Demand section
         And User sends a GET request to get company information by company key
         And User sets GET api endpoint to get demands with itemName and dateStart
             | itemName   | dateStart   |
-            | <itemName> | <dateStart> | 
+            | <itemName> | <dateStart> |
         And User sends a GET request to get specific demand of item
         And User checks status code and status text of api
             | expectedStatus   | expectedStatusText   |
@@ -27,12 +27,12 @@ Feature: API_Testing Compare data on ForecastRx and Amazon in Demand section
         # And User sends a GET method to get report by reportID
         # And User sends a GET method to get report document by reportDocumentID
         And User checks total items in report file EQUALS total with section and item name
-            | itemName   | section   |
-            | <itemName> | <section> |
+            | itemName   | section   | file       |
+            | <itemName> | <section> | <fileName> |
         When User picks random demand in above response
-        Then User checks value on grid match with value in report file
+        Then User checks value on grid match with value in report file: <section>
 
         Examples:
-            | TC_ID       | companyType | email                      | itemName     | expectedStatus | expectedStatusText | dateStart  | companyName           | section |
-            | TC_CDD001_1 | ASC         | testautoforecast@gmail.com | AB0101-BLK-U | 200            | OK                 | 2023-05-01 | Fishers Finery Amazon | demand  |
-            | TC_CDD001_2 | ASC         | testautoforecast@gmail.com | AB0101-NWH-U | 200            | OK                 | 2023-05-01 | Fishers Finery Amazon | demand  |
+            | TC_ID       | companyType | email                      | itemName     | expectedStatus | expectedStatusText | dateStart  | companyName           | section | fileName   |
+            | TC_CDD001_1 | ASC         | testautoforecast@gmail.com | AB0101-BLK-U | 200            | OK                 | 2023-05-01 | Fishers Finery Amazon | demand  | demand_May |
+            | TC_CDD001_2 | ASC         | testautoforecast@gmail.com | AB0101-NWH-U | 200            | OK                 | 2023-05-01 | Fishers Finery Amazon | demand  | demand_May |
