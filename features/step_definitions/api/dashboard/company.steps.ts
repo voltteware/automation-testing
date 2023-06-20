@@ -46,8 +46,9 @@ Then('{} sends a GET request to get companies', async function (actor: string) {
     const responseBodyText = await this.getCompaniesResponse.text();
     if (this.getCompaniesResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
         this.getCompaniesResponseBody = JSON.parse(await this.getCompaniesResponse.text());
+        console.log("Company Key: ", this.getCompaniesResponseBody[0].subscriptionStatus);
         // logger.log('info', `Response GET ${Links.API_REALM}` + JSON.stringify(this.getCompaniesResponseBody, undefined, 4));
-        // this.attach(`Response GET ${Links.API_REALM}` + JSON.stringify(this.getCompaniesResponseBody, undefined, 4))
+        this.attach(`Response GET ${Links.API_REALM}` + JSON.stringify(this.getCompaniesResponseBody, undefined, 4))
     }
     else {
         const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
@@ -74,10 +75,12 @@ Then('{} picks random company which has onboarded in above response', async func
     this.attach(`Random company: ${JSON.stringify(this.randomCompany, undefined, 4)}`);
     this.companyKey = this.randomCompany.companyKey;
     this.companyType = this.randomCompany.companyType;
+    this.sub = this.randomCompany.id;
+    this.cus = this.randomCompany.customer;
     logger.log('info', `companyKey: ${this.companyKey}`);
-    this.attach(`COMPANY KEY: ${this.companyKey}`);
+    logger.log('info', `subscription_id: ${this.sub}`);
+    logger.log('info', `customer: ${this.cus}`);
     logger.log('info', `companyType: ${this.companyType}`);
-    this.attach(`COMPANY TYPE: ${this.companyType}`);
 })
 
 Then('{} picks company which has onboarded before with type {} in above response', async function (actor, companyType: string) {
