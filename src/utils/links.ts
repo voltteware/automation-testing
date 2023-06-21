@@ -66,6 +66,10 @@ export class Links {
     static API_SUMMARY_COUNT: string = "/api/summary/count";
     // API File
     static API_FILE: string = "/api/file"
+    // API Subscription
+    static API_PAYMENT_METHOD = "/api/billing/payment-method/";
+    static API_PLANS = "/api/billing/plans";
+    static API_SWITCH_PLAN = "/api/billing/plan/";
 }
 
 //URL for performance
