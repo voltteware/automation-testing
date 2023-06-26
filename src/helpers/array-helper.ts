@@ -12,6 +12,12 @@ function flattenArray(nestedArray: Array<any>, nestedPropName: string): Array<an
     return result;
 }
 
+function isSubset(array1: Array<any>, array2: Array<any>) {
+    return array2.every((element) => array1.includes(element));
+    // For example:
+    // console.log(isSubset([1, 2, 3, 4, 5, 6, 7], [5, 7, 6])); => true
+}
+
 //Reference: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
 function sortLocale(array: Array<any>, field: string, direction: 'asc' | 'desc' = 'asc') {
     return array.sort((a, b) => {
@@ -56,5 +62,6 @@ function sortLocale(array: Array<any>, field: string, direction: 'asc' | 'desc' 
 
 export {
     flattenArray,
-    sortLocale
+    sortLocale,
+    isSubset
 }

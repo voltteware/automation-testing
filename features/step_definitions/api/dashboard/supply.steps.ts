@@ -26,7 +26,7 @@ Then(`{} sets GET api endpoint to get supplies with limit row: {}`, async functi
     linkLimitRow = `${Links.API_SUPPLY}?offset=0&limit=${limitRow}`;
 });
 
-Then(`{} sets GET api endpoint to get supplies by item name {string}`, async function (actor, itemName: string) {
+Then(`{} sets GET api endpoint to get supplies by item name {}`, async function (actor, itemName: string) {
     if (itemName == 'itemAbove') {
         itemName = this.editItemResponseBody.name
     }
@@ -242,6 +242,7 @@ When('User picks a random supply in above list supplies', async function () {
     this.attach(`Random Supply: ${JSON.stringify(this.responseBodyOfASupplyObject, undefined, 4)}`);
 
     this.docType = this.responseBodyOfASupplyObject.docType;
+    this.itemName = this.responseBodyOfASupplyObject.itemName;
 });
 
 When('User saves the supply key and order key', function () {

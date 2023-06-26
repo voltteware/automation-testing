@@ -42,7 +42,7 @@ Then(`{} sets GET api endpoint to get items that have not purchase as`, async fu
 });
 
 Then(`{} finds the list items contain value: {}`, async function (actor, valueContain: string) {
-    let link = `${Links.API_ITEMS}?offset=0&limit=10&where={"filters":[{"filters":[{"field":"name","operator":"contains","value":"${valueContain}"}],"logic":"and"}],"logic":"and"}`;
+    let link = `${Links.API_ITEMS}?offset=0&limit=100&where={"filters":[{"filters":[{"field":"name","operator":"contains","value":"${valueContain}"}],"logic":"and"}],"logic":"and"}`;
     const options = {
         headers: this.headers
     }
@@ -50,13 +50,13 @@ Then(`{} finds the list items contain value: {}`, async function (actor, valueCo
     const responseBodyText = await this.getItemsResponse.text();
     if (this.getItemsResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
         this.responseBody = this.getItemsResponseBody = JSON.parse(await this.getItemsResponse.text());
-        logger.log('info', `Response GET ${linkGetItems}` + JSON.stringify(this.getItemsResponseBody, undefined, 4));
-        this.attach(`Response GET ${linkGetItems}` + JSON.stringify(this.getItemsResponseBody, undefined, 4))
+        logger.log('info', `Response GET ${link}` + JSON.stringify(this.getItemsResponseBody, undefined, 4));
+        this.attach(`Response GET ${link}` + JSON.stringify(this.getItemsResponseBody, undefined, 4))
     }
     else {
         const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
-        logger.log('info', `Response GET ${linkGetItems} has status code ${this.response.status()} ${this.response.statusText()} and response body ${responseBodyText}`);
-        this.attach(`Response GET ${linkGetItems} has status code ${this.response.status()} ${this.response.statusText()} and response body ${actualResponseText}`)
+        logger.log('info', `Response GET ${link} has status code ${this.response.status()} ${this.response.statusText()} and response body ${responseBodyText}`);
+        this.attach(`Response GET ${link} has status code ${this.response.status()} ${this.response.statusText()} and response body ${actualResponseText}`)
     }
 });
 
@@ -261,10 +261,9 @@ Then(`{} sends a GET request to get item summary`, async function (actor: string
 })
 
 Given('User picks a random item in above list items', async function () {
-    // expect(this.getItemsResponseBody.length, 'There is at least 1 item to pick random').toBeGreaterThanOrEqual(1);
-    this.responseBodyOfAItemObject = await this.getItemsResponseBody[Math.floor(Math.random() * this.getItemsResponseBody.length)];
-    this.randomItem = this.responseBodyOfAItemObject;
+    this.randomItem = this.responseBodyOfAItemObject = await this.getItemsResponseBody[Math.floor(Math.random() * this.getItemsResponseBody.length)];
     this.itemHistoryLengthInDay = this.responseBodyOfAItemObject.itemHistoryLengthInDay;
+    this.itemName = this.responseBodyOfAItemObject.name;
     logger.log('info', `Random Item: ${JSON.stringify(this.responseBodyOfAItemObject, undefined, 4)}`);
     this.attach(`Random Item: ${JSON.stringify(this.responseBodyOfAItemObject, undefined, 4)}`);
 });
@@ -275,7 +274,6 @@ When('{} picks {} random items in above list items', async function (actor, quan
 });
 
 Given('User saves list items that have already set as purchase as of other items', async function () {
-    // expect(this.getItemsResponseBody.length, 'There is at least 1 item to pick random').toBeGreaterThanOrEqual(1);
     this.listItemsAlreadySetAsPurchaseAsOfOtherItem = this.getItemsResponseBody.map((item: any) => item.lotMultipleItemKey)
     logger.log('info', `list items that have already set as purchase as of other items: ${JSON.stringify(this.listItemsAlreadySetAsPurchaseAsOfOtherItem, undefined, 4)}`);
     this.attach(`list items that have already set as purchase as of other items: ${JSON.stringify(this.listItemsAlreadySetAsPurchaseAsOfOtherItem, undefined, 4)}`);
@@ -312,8 +310,6 @@ Then(`{} checks random items has status is Active`, async function (actor) {
             headers: this.headers
         }
 
-        // const maxRandomItemNumbers = this.getCountItemsinPurchasingCustomResponseBody > 10 ? 10 : this.getCountItemsinPurchasingCustomResponseBody;
-        // const randomMax10Items: any = _.sampleSize(this.getItemsinPurchasingCustomResponseBody, maxRandomItemNumbers);
         for await (const item of this.randomMax10Items) {
             var itemKey = item.itemKey || item.key;
             const detailItemLink = `${Links.API_ITEMS}/${itemKey}`;
@@ -369,12 +365,6 @@ Then(`{} checks supplier name of above random items in Manage Company Items`, as
         this.attach(`There is no item`);
     }
 });
-
-// Given('User picks a random item in above list items', async function () {
-//     this.responseBodyOfAItemObject = await this.getItemsResponseBody[Math.floor(Math.random() * this.getItemsResponseBody.length)];
-//     logger.log('info', `Random Item: ${JSON.stringify(this.responseBodyOfAItemObject, undefined, 4)}`);
-//     this.attach(`Random Item: ${JSON.stringify(this.responseBodyOfAItemObject, undefined, 4)}`);
-// });
 
 Then(`{} saves the item key`, async function (actor: string) {
     this.itemKey = this.responseBodyOfAItemObject.key;

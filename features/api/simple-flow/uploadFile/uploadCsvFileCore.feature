@@ -1,4 +1,5 @@
-@test-api @upload-file
+@upload-file
+# If you want to run this scenario, please use the tag @test-api
 Feature: API_Regression User Upload file
     Background: Send POST /login request to login before each test
         Given user sends a POST login request to get valid cookie with role
@@ -7,7 +8,7 @@ Feature: API_Regression User Upload file
         And User sets GET api endpoint to get companies information of current user
         And In Header of the request, she sets param Cookie as valid connect.sid
         When User sends a GET request to get companies
-    
+
     Scenario Outline: Add new supplier via upload csv file
         Given User picks company which has onboarded before with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
@@ -15,7 +16,7 @@ Feature: API_Regression User Upload file
             | Supplier Name | Lead Time | Order Interval |
             | random        | random    | random         |
             | random        | random    | random         |
-            | random        | random    | random         |            
+            | random        | random    | random         |
         And User sets GET api to get signed request
         And User sends a GET request to get signed request
         And User checks status code and status text of api
@@ -33,5 +34,5 @@ Feature: API_Regression User Upload file
             | <expectedStatus> | <expectedStatusText> |
 
         Examples:
-            | TC_ID             | companyType | email                      | fileName                        | option | expectedStatus | expectedStatusText |
-            | TC_ASC_SSKUS001_2 | CSV         | testautoforecast@gmail.com | supplier-template-test-auto.csv | true   | 200            | OK                 |
+            | TC_ID      | companyType | email                      | fileName                        | option | expectedStatus | expectedStatusText |
+            | TC_ULFC001 | CSV         | testautoforecast@gmail.com | supplier-template-test-auto.csv | true   | 200            | OK                 |
