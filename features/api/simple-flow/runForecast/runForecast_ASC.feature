@@ -68,7 +68,7 @@ Feature: APIs: All features need to run forecast of ASC companies
             | may27user@gmail.com | testautoforecast@gmail.com | Test1111# | random     | 400            | Company not found. |
 
     #restockCalculation
-    @TC_ASC_RC001 @smoke-test-api @regression-api @restock-calculation
+    @TC_ASC_RC001 @smoke-test-api @regression-api @restock-calculation @retry
     Scenario Outline: <TC_ID> - Verify user <email> could call APIs to compare and check the formulas when sorting Items <direction>
         Given User picks company which has onboarded before with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header

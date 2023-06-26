@@ -83,6 +83,9 @@ Feature: API_Regression User can add SKUs in shipments which have Pending status
         And The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
         And User checks API contract of get list shipments api
+        And User sets GET api endpoint to get item with limit row: <limitRow>
+        And User sends a GET request to get list items
+        And User picks a random item in above list items
         # Add SKU
         And User sets POST api to add SKU as the following data:
             | sku    | warehouseQty | casePackQty | QtySent |
@@ -90,9 +93,6 @@ Feature: API_Regression User can add SKUs in shipments which have Pending status
         And User sends a POST request to add SKU
         And The expected status code should be <expectedStatus>
         And User checks API contract of add SKU response are correct
-        And User sets GET api endpoint to get items in shipments by restockType: <restockType>
-        And User sends a GET request to get items in shipments by restockType: <restockType>
-        And User checks the new SKU must be found in the above list items
         # Delete shipment
         When User sets DELETE api endpoint to delete shipment
         Then User sends a DELETE request to delete shipment

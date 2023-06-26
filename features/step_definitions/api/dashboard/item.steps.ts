@@ -264,6 +264,7 @@ Given('User picks a random item in above list items', async function () {
     this.randomItem = this.responseBodyOfAItemObject = await this.getItemsResponseBody[Math.floor(Math.random() * this.getItemsResponseBody.length)];
     this.itemHistoryLengthInDay = this.responseBodyOfAItemObject.itemHistoryLengthInDay;
     this.itemName = this.responseBodyOfAItemObject.name;
+    this.itemKey = this.responseBodyOfAItemObject.key;
     logger.log('info', `Random Item: ${JSON.stringify(this.responseBodyOfAItemObject, undefined, 4)}`);
     this.attach(`Random Item: ${JSON.stringify(this.responseBodyOfAItemObject, undefined, 4)}`);
 });
