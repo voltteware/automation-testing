@@ -12,7 +12,7 @@ const reportJson = require('path').join(__dirname, 'reports', 'cucumber-report.j
 const generateHtml = require('path').join(__dirname, 'reports', `cucumber-html-report-${env}-${dateFormat}.html`);
 
 
-console.log('+++++++++++ Generate report++++++++++++++++', generateHtml);
+console.log('+++++++++++ Generate report ++++++++++++++++', generateHtml);
 
 var options = {
     theme: 'bootstrap',
@@ -27,11 +27,11 @@ var options = {
     metadata: {
         "Test Environment": env,
         "Sprint": process.env.SPRINT,
-        "Generate Report Datetime": ms
+        "Generate Report DateTime": ms
     }
 };
 
 reporter.generate(options);
 //more info on `metadata` is available in `options` section below.
-//to generate consodilated report from multi-cucumber JSON files, please use `jsonDir` option instead of `jsonFile`. More info is available in `options` section below.
+//to generate consolidated report from multi-cucumber JSON files, please use `jsonDir` option instead of `jsonFile`. More info is available in `options` section below.
 

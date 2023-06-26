@@ -1,5 +1,5 @@
 @test-api @regression-api @delete-shipments @api-restockAMZ
-Feature: API_Regression User can delete shipments which have Pending status
+Feature: API_Regression User can delete shipments which have Pending & Working status
     Background: Send POST /login request to login before each test
         Given user sends a POST login request to get valid cookie with role
             | role  | username                   | password  |

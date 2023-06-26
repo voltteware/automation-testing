@@ -93,6 +93,8 @@ Then(`{} sends a GET request to get shipments in Manage Shipments`, async functi
 
 Then(`User picks a shipment in Manage Shipments`, async function () {
     this.aShipmentResponseBody = await this.getListShipmentsResponseBody[Math.floor(Math.random() * this.getListShipmentsResponseBody.length)];
+    logger.log('info', `aShipmentResponseBody: ` + JSON.stringify(this.aShipmentResponseBody, undefined, 4));
+    this.attach(`aShipmentResponseBody: ` + JSON.stringify(this.aShipmentResponseBody, undefined, 4));
     this.shipmentKey = this.aShipmentResponseBody.key;
     this.shipmentName = this.aShipmentResponseBody.shipmentName;
     this.status = this.aShipmentResponseBody.status;

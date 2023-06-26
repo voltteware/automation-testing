@@ -2,17 +2,17 @@
 Feature: API_Dashboard PUT /api/sync/item/download?<fields>
     Background: Send GET /realm request to get all company keys of current logged in user before each test
         Given user sends a POST login request to get valid cookie with role
-            | role  | username                    | password  |
-            | admin | exportdatatest@gmail.com    | Test1111# |
+            | role  | username                 | password  |
+            | admin | exportdatatest@gmail.com | Test1111# |
         And User sets GET api endpoint to get companies information of current user
         And In Header of the request, she sets param Cookie as valid connect.sid
         When User sends a GET request to get companies
         Then User picks random company which has onboarded in above response
         And User sets GET api endpoint to get information of a company belongs to themself using company key random
         And User sets valid cookie of themself and valid companyKey and valid companyType in the header
-    
+
     # Manage Company > Items
-    @TC_Export001 @smoke-test-api @regression-api 
+    @TC_Export001 @smoke-test-api @regression-api
     Scenario Outline: <TC_ID> - Verify user <email> could call API export <section>
         # Create new item with contain text "Auto"
         Given User sets POST api endpoint to create item
@@ -44,17 +44,17 @@ Feature: API_Dashboard PUT /api/sync/item/download?<fields>
         And User sets PUT api endpoint to edit isHidden of the above item for company type <companyType> with new value: true
         And User sends a PUT request to edit the item
         Examples:
-            | TC_ID        | companyType | email                      | section | quantity | containText | expectedStatus | expectedStatusText | removedItemKeys | itemName      | description     | vendorPrice | moq    | leadTime | orderInterval | serviceLevel | onHand | onHandMin | onHandThirdParty | onHandThirdPartyMin | lotMultipleQty | columns                                                               |
-            | TC_Export001 | ASC         | exportdatatest@gmail.com   | item    | 3        | Auto        | 200            | OK                 |                 | New Item Auto | New description | random      | random | random   | random        | random       | random | random    | random           | random              | random         | name,vendorName,vendorPrice,moq,serviceLevel,onHand,onHandThirdParty  |
+            | TC_ID        | companyType | email                    | section | quantity | containText | expectedStatus | expectedStatusText | removedItemKeys | itemName      | description     | vendorPrice | moq    | leadTime | orderInterval | serviceLevel | onHand | onHandMin | onHandThirdParty | onHandThirdPartyMin | lotMultipleQty | columns                                                              |
+            | TC_Export001 | ASC         | exportdatatest@gmail.com | item    | 3        | Auto        | 200            | OK                 |                 | New Item Auto | New description | random      | random | random   | random        | random       | random | random    | random           | random              | random         | name,vendorName,vendorPrice,moq,serviceLevel,onHand,onHandThirdParty |
 
     # Manage Company > Suppliers
-    @TC_Export002 @smoke-test-api @regression-api 
+    @TC_Export002 @smoke-test-api @regression-api
     Scenario Outline: <TC_ID> - Verify user <email> could call API export <section>
         # Create new supplier with contain text "Auto"
         Given User sets GET api endpoint to get suppliers with limit row: <limitRow>
         And User sends a GET request to get list suppliers
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
-        And User checks "<supplierKeyWord>" supplier exist in the system, if it does not exist will create new supplier
+        And User checks "<supplierNameKeyword>" supplier exist in the system, if it does not exist will create new supplier
         # Export Items
         And User sets POST api endpoint to export <section> with <columns>
         And User sets payload as name: "<removedItemKeys>"
@@ -76,8 +76,8 @@ Feature: API_Dashboard PUT /api/sync/item/download?<fields>
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         When User sends a DELETE method to delete supplier
         Examples:
-            | TC_ID        | companyType | email                    | section   | supplierNameKeyword | numberOfSuppliers | quantity | limitRow | containText | expectedStatus | expectedStatusText | removedItemKeys | supplierName      | description     | emailSupplier       | moq    | leadTime | orderInterval | serviceLevel | columns                                          |
-            | TC_Export002 | CSV         | exportdatatest@gmail.com | supplier  | Auto                | 1                 | 3        | 10       | Auto        | 200            | OK                 |                 | New Supplier Auto | New description | emailtest@gmail.com | random | random   | random        | random       | name,leadTime,orderInterval,averageHistoryLength |
+            | TC_ID        | companyType | email                    | section  | supplierNameKeyword | numberOfSuppliers | quantity | limitRow | containText | expectedStatus | expectedStatusText | removedItemKeys | supplierName      | description     | emailSupplier       | moq    | leadTime | orderInterval | serviceLevel | columns                                          |
+            | TC_Export002 | CSV         | exportdatatest@gmail.com | supplier | Auto                | 1                 | 3        | 10       | Auto        | 200            | OK                 |                 | New Supplier Auto | New description | emailtest@gmail.com | random | random   | random        | random       | name,leadTime,orderInterval,averageHistoryLength |
 
     # Manage Company > Demand
     @TC_Export003 @smoke-test-api @regression-api
@@ -110,7 +110,7 @@ Feature: API_Dashboard PUT /api/sync/item/download?<fields>
             | TC_Export003 | CSV         | exportdatatest@gmail.com | demand  | 3        | 10       | Auto        | 200            | OK                 |                 | New Supplier Auto | New description | emailtest@gmail.com | random | random   | random        | random       | itemName,orderQty,openQty,refNum |
 
     # Manage Company > Supply
-    @TC_Export004 @smoke-test-api @regression-api 
+    @TC_Export004 @smoke-test-api @regression-api
     Scenario Outline: <TC_ID> - Verify user <email> could call API export <section>
         # Create new supplier with contain text "Auto"
         Given User picks company which has onboarded before with type <companyType> in above response
@@ -138,7 +138,7 @@ Feature: API_Dashboard PUT /api/sync/item/download?<fields>
             | TC_Export004 | CSV         | exportdatatest@gmail.com | supply  | 3        | 10       | Auto        | 200            | OK                 |                 | New Supplier Auto | New description | emailtest@gmail.com | random | random   | random        | random       | vendorName,itemName,orderQty,openQty |
 
     # Manage Company > Edit Kits (Boms)
-    @TC_Export005 @smoke-test-api @regression-api 
+    @TC_Export005 @smoke-test-api @regression-api
     Scenario Outline: <TC_ID> - Verify user <email> could call API export <section>
         # Create new supplier with contain text "Auto"
         Given User picks company which has onboarded before with type <companyType> in above response
@@ -168,9 +168,9 @@ Feature: API_Dashboard PUT /api/sync/item/download?<fields>
             | TC_Export005 | CSV         | exportdatatest@gmail.com | bom     | 3        | 10       | Auto        | 200            | OK                 |                 | New Supplier Auto | New description | emailtest@gmail.com | random | random   | random        | random       | parentName,childName,qty |
 
     # RestockAMZ > Item List
-    @TC_Export006 @smoke-test-api @regression-api 
+    @TC_Export006 @smoke-test-api @regression-api
     Scenario Outline: <TC_ID> - Verify user <email> could call API export <section>
-        # Pick ASC company 
+        # Pick ASC company
         Given User picks company which has onboarded before with type ASC in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         # User get restock total by vendor
@@ -194,13 +194,13 @@ Feature: API_Dashboard PUT /api/sync/item/download?<fields>
         And User picks <quantity> random SKU in above list items
         And User checks values of <section> that just picked the same as export file
         Examples:
-            | TC_ID        | companyType | email                    | section            | quantity | limitRow | containText | expectedStatus | expectedStatusText | removedItemKeys | supplierName      | description     | emailSupplier       | moq    | leadTime | orderInterval | serviceLevel | columns                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |   
+            | TC_ID        | companyType | email                    | section            | quantity | limitRow | containText | expectedStatus | expectedStatusText | removedItemKeys | supplierName      | description     | emailSupplier       | moq    | leadTime | orderInterval | serviceLevel | columns                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
             | TC_Export005 | ASC         | exportdatatest@gmail.com | restock-suggestion | 3        | 10       | Auto        | 200            | OK                 |                 | New Supplier Auto | New description | emailtest@gmail.com | random | random   | random        | random       | sku,productName,asin,tags,doNotRestock,prepGuide,skuNotes,prepNotes,supplierSku,supplierCost,supplierRebate,inboundShippingCost,reshippingCost,repackagingMaterialCost,repackingLaborCost,restockModel,fnsku,upc,ean,fba,lowestFba,nonFba,lowestNonFba,packageWeight,dimensionalWeight,casePackQuantity,hazmat,oversized,s2d,s7d,s14d,s30d,s60d,s90d,s180d,average7DayPrice,listPrice,newBuyBox,estimatedMargin,estimatedMarginPercentage,estimatedMarkupPercentage,qoh,inbound,inboundFcTransfer,sum,inboundWorking,inboundShipped,inboundReceiving,inboundTotal,targetDays,remaining,demand,outOfStockPercentage,reserved,unfulfillable,pending,localQty,maximumShipmentQty,suggShip,suggReorder,onOrder,restockNeeded,category,rank,referralFee,fbaFee,forecastRecommendedQty,recommendedSupplierQty,recommendedWarehouseQty,orderQty |
 
     # RestockAMZ > Manage Shipments
-    @TC_Export007 @smoke-test-api @regression-api 
+    @TC_Export007 @smoke-test-api @regression-api
     Scenario Outline: <TC_ID> - Verify user <email> could call API export all shipments
-        # Pick ASC company 
+        # Pick ASC company
         Given User picks company which has onboarded before with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         # Export data
@@ -220,13 +220,13 @@ Feature: API_Dashboard PUT /api/sync/item/download?<fields>
         And User picks <quantity> random shipment in above list shipments
         And User checks values of <section> that just picked the same as export file
         Examples:
-            | TC_ID        | companyType | email                    | section  | quantity | limitRow | containText | expectedStatus | expectedStatusText | removedItemKeys | columns                                                                                                                                |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+            | TC_ID        | companyType | email                    | section  | quantity | limitRow | containText | expectedStatus | expectedStatusText | removedItemKeys | columns                                                                                                                                    |
             | TC_Export007 | ASC         | exportdatatest@gmail.com | shipment | 1        | 100      | Auto        | 200            | OK                 |                 | key,shipmentId,shipmentName,shipmentSource,destinationFulfillmentCenterId,status,requestedQty,receivedQty,totalCost,restockType,orderNotes |
 
     # RestockAMZ > Manage Shipments > Shipment Details
-    @TC_Export008 @smoke-test-api @regression-api 
+    @TC_Export008 @smoke-test-api @regression-api
     Scenario Outline: <TC_ID> - Verify user <email> could call API export data in Shipment Details
-        # Pick ASC company 
+        # Pick ASC company
         Given User picks company which has onboarded before with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         # User count all shipments
@@ -249,12 +249,12 @@ Feature: API_Dashboard PUT /api/sync/item/download?<fields>
         And User picks <quantity> random SKU in above list SKUs
         And User checks values of <section> that just picked the same as export file
         Examples:
-            | TC_ID        | companyType | email                    | section         | quantity | limitRow | containText | expectedStatus | expectedStatusText | removedItemKeys | columns                                                                             |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+            | TC_ID        | companyType | email                    | section         | quantity | limitRow | containText | expectedStatus | expectedStatusText | removedItemKeys | columns                                                                                                       |
             | TC_Export008 | ASC         | exportdatatest@gmail.com | shipment-detail | 1        | 1000     | Auto        | 200            | OK                 |                 | itemName,supplierSku,asin,fnsku,description,packageWeight,cost,localQty,caseQty,shipmentQty,receivedQty,notes |
 
     # Purchasing > My Suggested
-    @TC_Export009 @smoke-test-api @regression-api 
-    Scenario Outline: <TC_ID> - Verify user <email> could call API export data in Purchasing > My Suggested 
+    @TC_Export009 @smoke-test-api @regression-api
+    Scenario Outline: <TC_ID> - Verify user <email> could call API export data in Purchasing > My Suggested
         Given User picks company which has onboarded before with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         # Count item in PO
@@ -278,11 +278,11 @@ Feature: API_Dashboard PUT /api/sync/item/download?<fields>
         And User selects random items in Purchasing My Suggested
         And User checks values of <section> that just picked the same as export file
         Examples:
-            | TC_ID        | companyType | vendorKey | email                    | section      | containText | expectedStatus | expectedStatusText | removedItemKeys | columns                                                                                                                                               |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+            | TC_ID        | companyType | vendorKey | email                    | section      | containText | expectedStatus | expectedStatusText | removedItemKeys | columns                                                                                                                                               |
             | TC_Export009 | ASC         | random    | exportdatatest@gmail.com | my-suggested | Auto        | 200            | OK                 |                 | itemName,description,tags,onNewPo,recommendedQty,purchaseQty,vendorPrice,total,snapshotQty,onHand,onHandThirdParty,openPurchaseOrders,openSalesOrders |
-        
+
     # Purchasing > Custom
-    @TC_Export010 @smoke-test-api @regression-api 
+    @TC_Export010 @smoke-test-api @regression-api
     Scenario Outline: <TC_ID> - Verify user <email> could call API export data in Purchasing > Custom
         Given User picks company which has onboarded before with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
@@ -303,11 +303,11 @@ Feature: API_Dashboard PUT /api/sync/item/download?<fields>
         And User picks <quantity> random item in above list items in Custom
         And User checks values of <section> that just picked the same as export file
         Examples:
-            | TC_ID        | companyType | vendorKey | email                    | section | containText | expectedStatus | expectedStatusText | removedItemKeys | quantity | columns                                                                                                                                                              |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+            | TC_ID        | companyType | vendorKey | email                    | section | containText | expectedStatus | expectedStatusText | removedItemKeys | quantity | columns                                                                                                                                               |
             | TC_Export010 | ASC         | null      | exportdatatest@gmail.com | custom  | Auto        | 200            | OK                 |                 | 3        | itemName,description,tags,onNewPo,recommendedQty,purchaseQty,vendorPrice,total,snapshotQty,onHand,onHandThirdParty,openPurchaseOrders,openSalesOrders |
 
     # Purchasing > Custom > Filter
-    @TC_Export011 @smoke-test-api @regression-api 
+    @TC_Export011 @smoke-test-api @regression-api
     Scenario Outline: <TC_ID> - Verify user <email> could call API export data in Purchasing > Custom with filter and sort
         Given User picks company which has onboarded before with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
@@ -318,7 +318,7 @@ Feature: API_Dashboard PUT /api/sync/item/download?<fields>
         Then The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
         # User count all items in Custom after filtering
-        And User sets GET api endpoint in Purchasing Custom to get count items after filtering <columnName> column with value <operator> <value> 
+        And User sets GET api endpoint in Purchasing Custom to get count items after filtering <columnName> column with value <operator> <value>
         And User sends a GET request in Purchasing Custom to get count items after filtering <columnName> column with value <operator> <value>
         # Check total items in export file = total suppliers in the grid
         And User checks total items in export file EQUALS total <section>
@@ -329,12 +329,12 @@ Feature: API_Dashboard PUT /api/sync/item/download?<fields>
         And User checks values of <section> that just picked the same as export file
         And User picks the first and the end row in export file the same as in the grid
         And User checks the first and the end row that just picked the same as export file <section>
-        Examples: 
-            | TC_ID          | companyType | vendorKey | email                    | section               | columnName    | columnNameSort | operator | value | sort | containText | expectedStatus | expectedStatusText | removedItemKeys | quantity  | columns                                                                                                                                              |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
-            | TC_Export011   | ASC         | null      | exportdatatest@gmail.com | custom-filter-sort    | onHand        | itemName       | gt       | 10    | desc | Auto        | 200            | OK                 |                 | 3        | itemName,description,tags,onNewPo,recommendedQty,purchaseQty,vendorPrice,total,snapshotQty,onHand,onHandThirdParty,openPurchaseOrders,openSalesOrders |
+        Examples:
+            | TC_ID        | companyType | vendorKey | email                    | section            | columnName | columnNameSort | operator | value | sort | containText | expectedStatus | expectedStatusText | removedItemKeys | quantity | columns                                                                                                                                               |
+            | TC_Export011 | ASC         | null      | exportdatatest@gmail.com | custom-filter-sort | onHand     | itemName       | gt       | 10    | desc | Auto        | 200            | OK                 |                 | 3        | itemName,description,tags,onNewPo,recommendedQty,purchaseQty,vendorPrice,total,snapshotQty,onHand,onHandThirdParty,openPurchaseOrders,openSalesOrders |
 
     # Purchasing > My Suggested
-    @TC_Export012 @smoke-test-api @regression-api 
+    @TC_Export012 @smoke-test-api @regression-api
     Scenario Outline: <TC_ID> - Verify user <email> could call API export data in Purchasing > My Suggested with filter and sort
         Given User picks company which has onboarded before with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
@@ -361,13 +361,13 @@ Feature: API_Dashboard PUT /api/sync/item/download?<fields>
         And User picks the first and the end row in export file the same as in the grid
         And User checks the first and the end row that just picked the same as export file <section>
         Examples:
-            | TC_ID        | companyType | vendorKey | email                    | section               | columnName    | columnNameSort | operator | value | sort  | containText | expectedStatus | expectedStatusText | removedItemKeys | quantity | columns                                                                                                                                               |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
-            | TC_Export012 | ASC         | random    | exportdatatest@gmail.com | suggested-filter-sort | snapshotQty   | itemName       | gt       | 1     | desc  | Auto        | 200            | OK                 |                 | 3        | itemName,description,tags,onNewPo,recommendedQty,purchaseQty,vendorPrice,total,snapshotQty,onHand,onHandThirdParty,openPurchaseOrders,openSalesOrders |
+            | TC_ID        | companyType | vendorKey | email                    | section               | columnName  | columnNameSort | operator | value | sort | containText | expectedStatus | expectedStatusText | removedItemKeys | quantity | columns                                                                                                                                               |
+            | TC_Export012 | ASC         | random    | exportdatatest@gmail.com | suggested-filter-sort | snapshotQty | itemName       | gt       | 1     | desc | Auto        | 200            | OK                 |                 | 3        | itemName,description,tags,onNewPo,recommendedQty,purchaseQty,vendorPrice,total,snapshotQty,onHand,onHandThirdParty,openPurchaseOrders,openSalesOrders |
 
-    # RestockAMZ > Manage Shipments with filter, sort and search -> Failed due to bug id: 2082 
-    @TC_Export013 @smoke-test-api @regression-api 
+    # RestockAMZ > Manage Shipments with filter, sort and search -> Failed due to bug id: 2082
+    @TC_Export013 @smoke-test-api @regression-api
     Scenario Outline: <TC_ID> - Verify user <email> could call API export all shipments with filter, sort and search
-        # Pick ASC company 
+        # Pick ASC company
         Given User picks company which has onboarded before with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         # Export data
@@ -389,17 +389,17 @@ Feature: API_Dashboard PUT /api/sync/item/download?<fields>
         And User picks the first and the end row in export file the same as in the grid
         And User checks the first and the end row that just picked the same as export file <section>
         Examples:
-            | TC_ID        | companyType | email                    | section      | columnName    | columnNameSort | operator | value   | sort | searchValue | quantity | limitRow | containText | expectedStatus | expectedStatusText | removedItemKeys | columns                                                                                                                                    |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
-            | TC_Export013 | ASC         | exportdatatest@gmail.com | shipment_FSS | status        | requestedQty   | contains | Working | asc  | MEM1        | 1        | 100      | Auto        | 200            | OK                 |                 | key,shipmentId,shipmentName,shipmentSource,destinationFulfillmentCenterId,status,requestedQty,receivedQty,totalCost,restockType,orderNotes |
+            | TC_ID        | companyType | email                    | section      | columnName | columnNameSort | operator | value   | sort | searchValue | quantity | limitRow | containText | expectedStatus | expectedStatusText | removedItemKeys | columns                                                                                                                                    |
+            | TC_Export013 | ASC         | exportdatatest@gmail.com | shipment_FSS | status     | requestedQty   | contains | Working | asc  | MEM1        | 1        | 100      | Auto        | 200            | OK                 |                 | key,shipmentId,shipmentName,shipmentSource,destinationFulfillmentCenterId,status,requestedQty,receivedQty,totalCost,restockType,orderNotes |
 
     # Purchasing > Custom > Filter
-    @TC_Export014 @smoke-test-api @regression-api 
+    @TC_Export014 @smoke-test-api @regression-api
     Scenario Outline: <TC_ID> - Verify user <email> could call API export data in Purchasing > Custom with filter and sort
         # Create new supplier with contain text "Auto"
         Given User sets GET api endpoint to get suppliers with limit row: <limitRow>
         And User sends a GET request to get list suppliers
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
-        And User checks "<supplierKeyWord>" supplier exist in the system, if it does not exist will create new supplier
+        And User checks "<supplierNameKeyword>" supplier exist in the system, if it does not exist will create new supplier
         # Export Items
         And User sets POST api endpoint to export <section> with <columns>
         And User sets payload as name: "<removedItemKeys>"
@@ -420,8 +420,6 @@ Feature: API_Dashboard PUT /api/sync/item/download?<fields>
         And User checks there is at least 1 supplier found
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         When User sends a DELETE method to delete supplier
-        Examples: 
-            | TC_ID        | companyType | vendorKey | email                    | section               | limitRow | columnName    | columnNameSort | operator | value | sort | containText | expectedStatus | expectedStatusText | removedItemKeys | quantity  | supplierNameKeyword | numberOfSuppliers | columns                                                                                                                                              |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
-            | TC_Export014 | ASC         | null      | exportdatatest@gmail.com | supplier_filter-sort  |  1000    | leadTime      | name           | gt       | 5     | desc | Auto        | 200            | OK                 |                 | 3         | Auto                | 1                 | name,leadTime,orderInterval,averageHistoryLength                                                                                                      |
-
-   
+        Examples:
+            | TC_ID        | companyType | vendorKey | email                    | section              | limitRow | columnName | columnNameSort | operator | value | sort | containText | expectedStatus | expectedStatusText | removedItemKeys | quantity | supplierNameKeyword | numberOfSuppliers | columns                                          |
+            | TC_Export014 | ASC         | null      | exportdatatest@gmail.com | supplier_filter-sort | 1000     | leadTime   | name           | gt       | 5     | desc | Auto        | 200            | OK                 |                 | 3        | Auto                | 1                 | name,leadTime,orderInterval,averageHistoryLength |
