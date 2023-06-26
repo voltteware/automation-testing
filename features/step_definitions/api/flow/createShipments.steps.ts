@@ -8,7 +8,6 @@ import _ from "lodash";
 import { expect } from '@playwright/test';
 import { simpleShipmentResponseSchema, updateItemInfoWithLastStepResponseSchema, getListShipmentsResponseSchema, addSKUsResponseSchema } from '../assertion/restockAMZ/shipmentAssertionSchema';
 import { itemInfoInShipmentResponseSchema } from '../assertion/dashboard/itemAssertionSchema';
-import * as exportRequest from '../../../../src/api/request/export.service';
 
 let link: any;
 let payload: any;
@@ -318,7 +317,6 @@ Then('{} sends a POST request to sync', async function (actor: string) {
     this.runSyncResponse = this.response = await syncRequest.postSync(this.request, link, this.getCompanyInfoResponseBody, this.headers);
     const responseBodyText = await this.runSyncResponse.text();
     if (this.runSyncResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
-        // this.runSyncResponseBody = JSON.parse(await this.runSyncResponse.text());
         logger.log('info', `Response POST ${link}` + JSON.stringify(this.runSyncResponse, undefined, 4));
         this.attach(`Response POST ${link} ` + JSON.stringify(this.runSyncResponse, undefined, 4))
     }
@@ -604,22 +602,4 @@ Then(`User sets POST api to create shipment from Warehouse with name:`, function
 
     logger.log('info', `Payload: ` + JSON.stringify(this.payLoad, undefined, 4));
     this.attach(`Payload: ` + JSON.stringify(this.payLoad, undefined, 4));
-})
-
-Then(`User checks items in the shipment must be the same as in csv file`, async function () {
-    // Convert csv file to json data
-    const data = await exportRequest.totalItemFromExportFile(`./src/data/${this.fileName}`);
-
-    logger.log('info', `Data: ` + JSON.stringify(data, undefined, 4));
-    this.attach(`Data: ` + JSON.stringify(data, undefined, 4));
-
-    const expectedSKU = data.map((item: any) => item.SKU)
-    logger.log('info', `expectedSKU: ` + JSON.stringify(expectedSKU, undefined, 4));
-    this.attach(`expectedSKU: ` + JSON.stringify(expectedSKU, undefined, 4));
-
-    const actualSKU = this.getShipmentItemsResponseBody.map((item: any) => item.itemName)
-    logger.log('info', `actualSKU: ` + JSON.stringify(actualSKU, undefined, 4));
-    this.attach(`actualSKU: ` + JSON.stringify(actualSKU, undefined, 4));
-
-    expect(_.isEqual(actualSKU, expectedSKU)).toBeTruthy()
 })

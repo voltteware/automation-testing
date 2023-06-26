@@ -52,7 +52,7 @@ Then(`{} sends a GET request with filter {} column {} {} and sort {} {} to get l
     const responseBodyText = await this.getSupplierResponse.text();
     if (this.getSupplierResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
         this.responseBody = this.getSupplierResponseBody = JSON.parse(await this.getSupplierResponse.text());
-        this.pickFirstAndEndRow =  this.getSupplierResponseBody;
+        this.pickFirstAndEndRow = this.getSupplierResponseBody;
         logger.log('info', `Response GET ${link}` + JSON.stringify(this.getSupplierResponseBody, undefined, 4));
         this.attach(`Response GET ${link}` + JSON.stringify(this.getSupplierResponseBody, undefined, 4))
     }
@@ -98,7 +98,7 @@ Then('{} picks random supplier in above response', async function (actor: string
 })
 
 Then('{} picks {} random suppliers in above list suppliers', async function (actor: string, quantity) {
-    this.itemsPickedRandomArray =  itemRequest.getMultipleRandom(this.getSupplierResponseBody, quantity);
+    this.itemsPickedRandomArray = itemRequest.getMultipleRandom(this.getSupplierResponseBody, quantity);
     console.log("itemsPickedRandomArray: ", this.itemsPickedRandomArray);
     return this.itemsPickedRandomArray;
 })
@@ -182,6 +182,30 @@ Then('{} search the deleted suppliers and checks that there is no supplier found
         }
 
         expect(searchSupplierResponseBody.length, `Expect that there is no supplier ${supplierName} in the system`).toBe(0);
+    }
+})
+
+Then('{} filters one column and sorts one column', async function (actor: string, dataTable: DataTable) {
+    var columnFilter: string = dataTable.hashes()[0].columnFilter;
+    var valueColumnFilter: string = dataTable.hashes()[0].valueColumnFilter;
+    var sortColumn: string = dataTable.hashes()[0].sortColumn;
+    var directionSort: string = dataTable.hashes()[0].directionSort;
+    const options = {
+        headers: this.headers
+    }
+    const link = encodeURI(`${Links.API_SUPPLIERS}?offset=0&limit=100&sort=[{"field":"${sortColumn}","direction":"${directionSort}"}]&where={"filters":[{"filters":[{"field":"${columnFilter}","operator":"contains","value":"${valueColumnFilter}"}],"logic":"and"}],"logic":"and"}`);
+
+    const searchSupplierResponse = await supplierRequest.getSuppliers(this.request, link, options);
+    let responseBodyText = await searchSupplierResponse.text();
+    this.responseBodyOfASupplierObject = this.getSupplierResponseBody = JSON.parse(responseBodyText);
+    if (searchSupplierResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
+        logger.log('info', `Response GET ${link}>>>>>>>` + JSON.stringify(responseBodyText, undefined, 4));
+        this.attach(`Response GET ${link}>>>>>>>>` + JSON.stringify(responseBodyText, undefined, 4))
+    }
+    else {
+        const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
+        logger.log('info', `Response GET ${link} has status code ${searchSupplierResponse.status()} ${searchSupplierResponse.statusText()} and response body ${responseBodyText}`);
+        this.attach(`Response GET ${link} has status code ${searchSupplierResponse.status()} ${searchSupplierResponse.statusText()} and response body ${actualResponseText}`)
     }
 })
 
@@ -482,14 +506,14 @@ Given('User sends PUT request to update sale velocity settings with type {} of a
                     "salesVelocityType": "average",
                     "vendorKey": `${this.supplierKey}`,
                     "salesVelocitySettingData": {
-                    "percent2Day": this.randomWeightNumbers[0],
-                    "percent7Day": this.randomWeightNumbers[1],
-                    "percent14Day": this.randomWeightNumbers[2],
-                    "percent30Day": this.randomWeightNumbers[3],
-                    "percent60Day": this.randomWeightNumbers[4],
-                    "percent90Day": this.randomWeightNumbers[5],
-                    "percent180Day": this.randomWeightNumbers[6],
-                    "percentForecasted": this.randomWeightNumbers[7]
+                        "percent2Day": this.randomWeightNumbers[0],
+                        "percent7Day": this.randomWeightNumbers[1],
+                        "percent14Day": this.randomWeightNumbers[2],
+                        "percent30Day": this.randomWeightNumbers[3],
+                        "percent60Day": this.randomWeightNumbers[4],
+                        "percent90Day": this.randomWeightNumbers[5],
+                        "percent180Day": this.randomWeightNumbers[6],
+                        "percentForecasted": this.randomWeightNumbers[7]
                     },
                     "salesVelocitySettingsType": "purchasing"
                 }
@@ -500,13 +524,13 @@ Given('User sends PUT request to update sale velocity settings with type {} of a
                 "companyKey": `${this.companyKey}`,
                 "companyType": `${this.companyType}`,
                 "salesVelocityType": "auto",
-                "vendorKey": `${this.supplierKey}`,                
+                "vendorKey": `${this.supplierKey}`,
                 "salesVelocitySettingsType": "purchasing"
             }
             break;
         default:
             break;
-    }    
+    }
 
     logger.log('info', `Payload` + JSON.stringify(this.payLoad, undefined, 4));
     this.attach(`Payload` + JSON.stringify(this.payLoad, undefined, 4))
