@@ -70,6 +70,8 @@ export class Links {
     static API_PAYMENT_METHOD = "/api/billing/payment-method/";
     static API_PLANS = "/api/billing/plans";
     static API_SWITCH_PLAN = "/api/billing/plan/";
+    static API_CHECKOUT = "/api/billing/checkout";
+    static API_LATEST_SUB = "/api/billing/payment-intent/";
 }
 
 //URL for performance

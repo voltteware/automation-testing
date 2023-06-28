@@ -8,7 +8,7 @@ async function getCurrentSubscription(request: APIRequestContext, linkApi: strin
     const exportResponse = await request.get(url, {
       headers: headers,
     });
-    console.log("exportResponse: ", exportResponse.url(), "headers: ", headers);
+    console.log("exportResponse get current subscription: ", exportResponse.url(), "headers: ", headers);
     return exportResponse;
 }
 
@@ -19,7 +19,7 @@ async function getCurrentPlanOfSubscription(request: APIRequestContext, linkApi:
   const exportResponse = await request.get(url, {
     headers: headers,
   });
-  console.log("exportResponse: ", exportResponse.url(), "headers: ", headers);
+  console.log("exportResponse get current plan of subscription: ", exportResponse.url(), "headers: ", headers);
   return exportResponse;
 }
 
@@ -30,7 +30,7 @@ async function getPlans(request: APIRequestContext, linkApi: string, headers: an
   const exportResponse = await request.get(url, {
     headers: headers,
   });
-  console.log("exportResponse: ", exportResponse.url(), "headers: ", headers);
+  console.log("exportResponse get plans: ", exportResponse.url(), "headers: ", headers);
   return exportResponse;
 }
 
@@ -42,7 +42,53 @@ async function switchPlan(request: APIRequestContext, linkApi: string, headers: 
     headers: headers,
     data: payload,
   });
-  console.log("exportResponse: ", exportResponse.url(), "headers: ", exportResponse.headers(), "Request payload: ", payload,  "plan: ", planChanged);
+  console.log("exportResponse switch plan: ", exportResponse.url(), "headers: ", exportResponse.headers(), "Request payload: ", payload,  "plan: ", planChanged);
+  return exportResponse;
+}
+
+// Get Checkout Link
+async function getCheckoutLink(request: APIRequestContext, linkApi: string, headers: any, payload: any) {
+  const url = `${linkApi}`;
+  logger.log('info', `Send POST request ${url}`);
+  const exportResponse = await request.post(url, {
+    headers: headers,
+    data: payload,
+  });
+  console.log("exportResponse get checkout link: ", exportResponse.url(), "headers: ", exportResponse.headers(), "Request payload: ", payload);
+  return exportResponse;
+}
+
+// Get muid/guid/id from stripe
+async function getIds(request: APIRequestContext, linkApi: string, headers: any) {
+  const url = `${linkApi}`;
+  logger.log('info', `Send POST request ${url}`);
+  const exportResponse = await request.post(url, {
+    headers: headers,
+  });
+  console.log("exportResponse get guid, muid, sid: ", exportResponse.url(), "headers: ", exportResponse.headers());
+  return exportResponse;
+}
+
+// Confirm Subscribed
+async function confirmSubscribed(request: APIRequestContext, linkApi: string, headers: any, payload: any) {
+  const url = `${linkApi}`;
+  logger.log('info', `Send POST request ${url}`);
+  const exportResponse = await request.post(url, {
+    headers: headers,
+    form: payload,
+  });
+  console.log("exportResponse confirm subscribed: ", exportResponse, "headers: ", exportResponse.headers());
+  return exportResponse;
+}
+
+// Get latest Subscription
+async function latestSubscription(request: APIRequestContext, linkApi: string, headers: any) {
+  const url = `${linkApi}`;
+  logger.log('info', `Send POST request ${url}`);
+  const exportResponse = await request.get(url, {
+    headers: headers,
+  });
+  console.log("exportResponse Get latest Subscription: ", exportResponse, "headers: ", exportResponse.headers());
   return exportResponse;
 }
 
@@ -50,5 +96,9 @@ export {
     getCurrentSubscription,
     getCurrentPlanOfSubscription,
     getPlans,
-    switchPlan
+    switchPlan,
+    getCheckoutLink,
+    getIds,
+    confirmSubscribed,
+    latestSubscription
 }

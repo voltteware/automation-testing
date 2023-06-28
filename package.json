@@ -38,10 +38,12 @@
     "assert": "2.0.0",
     "aws-sdk": "2.1353.0",
     "csv": "^6.3.1",
+    "csv-stringify": "^6.4.0",
     "date-fns": "2.29.3",
     "dotenv": "16.0.3",
     "googleapis": "115.0.0",
     "soft-assert": "0.2.6",
+    "stripe": "^12.10.0",
     "zod": "3.21.4"
   },
   "devDependencies": {
