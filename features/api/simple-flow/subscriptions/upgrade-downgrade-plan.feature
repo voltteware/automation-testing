@@ -16,7 +16,7 @@ Feature: API_Subscriptions api/billing/plan/id
         Then User sends GET api endpoint to get current plan of subscription
         And User sets GET api endpoint to get all plans of system
         And User sends GET api endpoint to get all plans of system
-        And User picks random plan except current plan to upgrade or downgrade
+        And User picks random plan except current plan to change any plan
         And User sets POST api endpoint to upgrade and downgrade
         And User sets request body with payload to upgrade and downgrade
         And User sends POST api endpoint to upgrade and downgrade
@@ -40,7 +40,7 @@ Feature: API_Subscriptions api/billing/plan/id
         And User sets GET api endpoint to get all plans of system
         And User sends GET api endpoint to get all plans of system
         And User filters <interval> plans from list above
-        And User picks random <interval> plan except current plan to upgrade or downgrade
+        And User picks random <interval> plan except current plan to switch any monthly plan
         And User sets POST api endpoint to upgrade and downgrade
         And User sets request body with payload to upgrade and downgrade
         And User sends POST api endpoint to upgrade and downgrade
@@ -64,7 +64,7 @@ Feature: API_Subscriptions api/billing/plan/id
         And User sets GET api endpoint to get all plans of system
         And User sends GET api endpoint to get all plans of system
         And User filters <interval> plans from list above
-        And User picks random <interval> plan except current plan to upgrade or downgrade
+        And User picks random <interval> plan except current plan to switch any yearly plan
         And User sets POST api endpoint to upgrade and downgrade
         And User sets request body with payload to upgrade and downgrade
         And User sends POST api endpoint to upgrade and downgrade
@@ -88,7 +88,7 @@ Feature: API_Subscriptions api/billing/plan/id
         And User sets GET api endpoint to get all plans of system
         And User sends GET api endpoint to get all plans of system
         And User filters <interval> plans from list above
-        And User picks random <interval> plan except current plan to upgrade or downgrade
+        And User picks random <interval> plan except current plan to switch from yearly to monthly
         And User sets POST api endpoint to upgrade and downgrade
         And User sets request body with payload to upgrade and downgrade
         And User sends POST api endpoint to upgrade and downgrade
@@ -112,7 +112,7 @@ Feature: API_Subscriptions api/billing/plan/id
         And User sets GET api endpoint to get all plans of system
         And User sends GET api endpoint to get all plans of system
         And User filters <interval> plans from list above
-        And User picks random <interval> plan except current plan to upgrade or downgrade
+        And User picks random <interval> plan except current plan to switch from monthly to yearly
         And User sets POST api endpoint to upgrade and downgrade
         And User sets request body with payload to upgrade and downgrade
         And User sends POST api endpoint to upgrade and downgrade
