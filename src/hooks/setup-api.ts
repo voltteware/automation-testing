@@ -1,4 +1,4 @@
-import { After, AfterAll, AfterStep, Before, BeforeAll, BeforeStep, ITestCaseHookParameter, ITestStepHookParameter } from "@cucumber/cucumber";
+import { After, AfterStep, Before, BeforeStep, ITestCaseHookParameter, ITestStepHookParameter } from "@cucumber/cucumber";
 import logger from '../Logger/logger';
 import { ActionWords } from "../utils/actionwords";
 import { setParallelCanAssign, parallelCanAssignHelpers } from '@cucumber/cucumber'
@@ -13,10 +13,10 @@ setParallelCanAssign(function (pickleInQuestion, picklesInProgress) {
 })
 
 let actionwords: ActionWords = new ActionWords()
-export let currentTestCaseID: string;
+export let currentTestCaseIDApi: string;
 
 Before({ tags: "@test-api or @test-api-extra" }, async function (scenario: ITestCaseHookParameter) {
-    currentTestCaseID = scenario.pickle.name.split('-')[0].trim();
+    currentTestCaseIDApi = scenario.pickle.name.split('-')[0].trim();
     // Only one pickle with @tag1 can run at a time
     // And only one pickle with @tag2 can run at a time
     setParallelCanAssign(myTagRule)
@@ -30,7 +30,7 @@ After({ tags: "@test-api or @test-api-extra" }, async function (scenario: ITestC
 });
 
 BeforeStep({ tags: "@test-api or @test-api-extra" }, async function (testStep: ITestStepHookParameter) {
-    currentTestCaseID = testStep.pickle.name.split('-')[0].trim();   
+    currentTestCaseIDApi = testStep.pickle.name.split('-')[0].trim();   
     this.countErrors = 0;
     logger.log('info', testStep.pickleStep.text)     
 })

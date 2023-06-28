@@ -1,5 +1,6 @@
-import winston, { createLogger, transports } from 'winston'
-import {currentTestCaseID} from './../hooks/setup-api'
+import winston, { createLogger, transports } from 'winston';
+import {currentTestCaseIDApi} from './../hooks/setup-api';
+import {currentTestCaseIDUi} from './../hooks/setup-ui';
 const format = winston.format.combine(
     winston.format.timestamp({
         format: 'YYYY-MM-DD HH:mm:ss.SSS'
@@ -8,7 +9,7 @@ const format = winston.format.combine(
     // winston.format.colorize({all:true}),
     winston.format.printf(
         log => {
-            return `[${log.timestamp}] [${log.level}] [${currentTestCaseID}] ${log.message}`;
+            return `[${log.timestamp}] [${log.level}] [${currentTestCaseIDApi === undefined ? currentTestCaseIDUi : currentTestCaseIDApi}] ${log.message}`;
         }
     )
 )

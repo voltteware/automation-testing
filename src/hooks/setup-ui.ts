@@ -1,4 +1,4 @@
-import { After, AfterAll, AfterStep, Before, BeforeAll, ITestCaseHookParameter, ITestStepHookParameter } from "@cucumber/cucumber";
+import { After, AfterStep, Before, BeforeStep, ITestCaseHookParameter, ITestStepHookParameter } from "@cucumber/cucumber";
 import { Browser } from "@playwright/test";
 import { ActionWords } from '../../src/utils/actionwords';
 import logger from '../../src/Logger/logger';
@@ -7,6 +7,7 @@ import { config } from '../../playwright.config';
 let globalWithBrowser = global as typeof globalThis & { browser: Browser }
 let actionwords: ActionWords = new ActionWords();
 let timestamp: string
+export let currentTestCaseIDUi: string;
 
 // BeforeAll(async function () {
 //     await actionwords.createBrowser(globalWithBrowser)
@@ -18,6 +19,7 @@ let timestamp: string
 // });
 
 Before('@test-ui', async function (scenario: ITestCaseHookParameter) {
+    currentTestCaseIDUi = scenario.pickle.name.split('-')[0].trim();
     this.request = await actionwords.createRequestContext();
     await actionwords.createBrowser(globalWithBrowser);
     timestamp = actionwords.formatDate(new Date())
@@ -75,3 +77,8 @@ AfterStep('@test-ui', async function (testStep: ITestStepHookParameter) {
     })
 })
 
+BeforeStep({ tags: "@test-ui" }, async function (testStep: ITestStepHookParameter) {
+    currentTestCaseIDUi = testStep.pickle.name.split('-')[0].trim();
+    this.countErrors = 0;
+    logger.log('info', testStep.pickleStep.text)
+})
