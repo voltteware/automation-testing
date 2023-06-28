@@ -23,7 +23,7 @@ Feature: API_Regression User can create shipments from Warehouse/Supplier
         And User sends a GET api method to count all Items have alerts in All Suppliers
         And The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
-        And User sets GET api method to get Items belonged to All Suppliers with direction: <direction>
+        And User sets GET api method to get Items belonged to All Suppliers with field: <field> direction: <direction> contain value: <valueContain>
         And User sends a GET api method to get Items belonged to All Suppliers
         # Item with Auto name cannot create shipment
         And User picks a random item which does not has Auto in the name in Item list
@@ -101,8 +101,6 @@ Feature: API_Regression User can create shipments from Warehouse/Supplier
         And User sends a POST request to complete shipment
         And The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
-        And User sets POST api endpoint to sync
-        And User sends a POST request to sync
         # Please ignore the message, I will find the root cause later
         # Call API to get list shipment to check the new created shipment
         When User sets GET api endpoint to find the new created shipment
@@ -113,8 +111,8 @@ Feature: API_Regression User can create shipments from Warehouse/Supplier
         And User checks API contract of get list shipments api
 
         Examples:
-            | TC_ID        | companyType | casePackOption | restockType | editColumn   | value                        | email                      | direction | expectedStatus | expectedStatusText | limitRow | shipmentStatus |
-            | TC_ASC_CS001 | ASC         | No             | SUPPLIER    | supplierName | supplierUpdatedSalesVelocity | testautoforecast@gmail.com | desc      | 200            | OK                 | 10       | WORKING        |
+            | TC_ID        | companyType | casePackOption | restockType | editColumn   | value                        | email                      | direction | expectedStatus | expectedStatusText | limitRow | shipmentStatus | field                  | valueContain |
+            | TC_ASC_CS001 | ASC         | No             | SUPPLIER    | supplierName | supplierUpdatedSalesVelocity | testautoforecast@gmail.com | desc      | 200            | OK                 | 10       | WORKING        | recommendedSupplierQty | HB           |
 
     @TC_ASC_CS002 @smoke-test-api
     Scenario Outline: <TC_ID> - Verify user <email> could call APIs to create shipments from Supplier having Case packs
@@ -130,7 +128,7 @@ Feature: API_Regression User can create shipments from Warehouse/Supplier
         And User sends a GET api method to count all Items have alerts in All Suppliers
         And The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
-        And User sets GET api method to get Items belonged to All Suppliers with direction: <direction>
+        And User sets GET api method to get Items belonged to All Suppliers with field: <field> direction: <direction> contain value: <valueContain>
         And User sends a GET api method to get Items belonged to All Suppliers
         # Item with Auto name cannot create shipment
         And User picks a random item which does not has Auto in the name in Item list
@@ -207,8 +205,8 @@ Feature: API_Regression User can create shipments from Warehouse/Supplier
         And User checks the deleted shipments does not exist in the list
 
         Examples:
-            | TC_ID        | companyType | casePackOption | restockType | editColumn   | value                        | email                      | direction | expectedStatus | expectedStatusText | limitRow |
-            | TC_ASC_CS002 | ASC         | Yes            | SUPPLIER    | supplierName | supplierUpdatedSalesVelocity | testautoforecast@gmail.com | asc       | 200            | OK                 | 10       |
+            | TC_ID        | companyType | casePackOption | restockType | editColumn   | value                        | email                      | direction | expectedStatus | expectedStatusText | limitRow | field                  | valueContain |
+            | TC_ASC_CS002 | ASC         | Yes            | SUPPLIER    | supplierName | supplierUpdatedSalesVelocity | testautoforecast@gmail.com | asc       | 200            | OK                 | 10       | recommendedSupplierQty | HB           |
 
     # Create shipments from Warehouse
     @TC_ASC_CS003 @smoke-test-api @retry
@@ -305,8 +303,6 @@ Feature: API_Regression User can create shipments from Warehouse/Supplier
         And User checks status code and status text of api
             | expectedStatus   | expectedStatusText   |
             | <expectedStatus> | <expectedStatusText> |
-        And User sets POST api endpoint to sync
-        And User sends a POST request to sync
         # Please ignore the message, I will find the root cause later
         # Call API to get list shipment to check the new created shipment
         When User sets GET api endpoint to find the new created shipment
