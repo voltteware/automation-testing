@@ -49,3 +49,5 @@ Then Show report with Cucumber-HTML-Reporter
   - ```Ph@@21102001```
 
 - References: ```https://k6.io/docs/results-output/real-time/cloud/```
+
+- UI: upload file reference: https://testersdock.com/playwright-file-upload/
