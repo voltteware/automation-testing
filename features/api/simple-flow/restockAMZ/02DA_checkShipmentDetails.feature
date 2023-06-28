@@ -25,7 +25,7 @@ Feature: API_Regression User creates shipments and check information in shipment
         And User checks status code and status text of api
             | expectedStatus   | expectedStatusText   |
             | <expectedStatus> | <expectedStatusText> |
-        And User sets GET api method to get Items belonged to All Suppliers with direction: <direction>
+        And User sets GET api method to get Items belonged to All Suppliers with field: <field> direction: <direction> contain value: <valueContain>
         And User sends a GET api method to get Items belonged to All Suppliers
         # Item with Auto name cannot create shipment
         And User picks a random item which does not has Auto in the name in Item list
@@ -116,5 +116,5 @@ Feature: API_Regression User creates shipments and check information in shipment
         And User checks information in Shipment Details: <restockType>
         
         Examples:
-            | TC_ID         | companyType | casePackOption | restockType | editColumn   | value                        | email                      | direction | expectedStatus | expectedStatusText | limitRow | shipmentStatus |
-            | TC_ASC_CSD001 | ASC         | No             | SUPPLIER    | supplierName | supplierUpdatedSalesVelocity | testautoforecast@gmail.com | desc      | 200            | OK                 | 10       | PENDING        |
+            | TC_ID         | companyType | casePackOption | restockType | editColumn   | value                        | email                      | direction | expectedStatus | expectedStatusText | limitRow | shipmentStatus | field                  | valueContain |
+            | TC_ASC_CSD001 | ASC         | No             | SUPPLIER    | supplierName | supplierUpdatedSalesVelocity | testautoforecast@gmail.com | desc      | 200            | OK                 | 10       | PENDING        | recommendedSupplierQty | HB           |

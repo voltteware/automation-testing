@@ -22,7 +22,7 @@ Feature: API_Regression User can add SKUs in shipments which have Pending status
         And User sends a GET api method to count all Items have alerts in All Suppliers
         And The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
-        And User sets GET api method to get Items belonged to All Suppliers with direction: <direction>
+        And User sets GET api method to get Items belonged to All Suppliers with field: <field> direction: <direction> contain value: <valueContain>
         And User sends a GET api method to get Items belonged to All Suppliers
         # Item with Auto name cannot create shipment
         And User picks a random item which does not has Auto in the name in Item list
@@ -102,5 +102,5 @@ Feature: API_Regression User can add SKUs in shipments which have Pending status
         And User checks the deleted shipments does not exist in the list
 
         Examples:
-            | TC_ID          | companyType | casePackOption | restockType | editColumn   | value                        | email                      | direction | expectedStatus | expectedStatusText | limitRow | shipmentStatus |
-            | TC_ASC_ASKU001 | ASC         | No             | SUPPLIER    | supplierName | supplierUpdatedSalesVelocity | testautoforecast@gmail.com | desc      | 200            | OK                 | 10       | PENDING        |
+            | TC_ID          | companyType | casePackOption | restockType | editColumn   | value                        | email                      | direction | expectedStatus | expectedStatusText | limitRow | shipmentStatus | field                  | valueContain |
+            | TC_ASC_ASKU001 | ASC         | No             | SUPPLIER    | supplierName | supplierUpdatedSalesVelocity | testautoforecast@gmail.com | desc      | 200            | OK                 | 10       | PENDING        | recommendedSupplierQty | HB           |

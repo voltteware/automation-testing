@@ -22,7 +22,7 @@ Feature: API_Regression User can delete shipments which have Pending & Working s
         And User sends a GET api method to count all Items have alerts in All Suppliers
         And The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
-        And User sets GET api method to get Items belonged to All Suppliers with direction: <direction>
+        And User sets GET api method to get Items belonged to All Suppliers with field: <field> direction: <direction> contain value: <valueContain>
         And User sends a GET api method to get Items belonged to All Suppliers
         # Item with Auto name cannot create shipment
         And User picks a random item which does not has Auto in the name in Item list
@@ -90,8 +90,8 @@ Feature: API_Regression User can delete shipments which have Pending & Working s
         And User checks the deleted shipments does not exist in the list
 
         Examples:
-            | TC_ID        | companyType | casePackOption | restockType | editColumn   | value                        | email                      | direction | expectedStatus | expectedStatusText | limitRow | shipmentStatus |
-            | TC_ASC_DS001 | ASC         | No             | SUPPLIER    | supplierName | supplierUpdatedSalesVelocity | testautoforecast@gmail.com | desc      | 200            | OK                 | 10       | PENDING        |
+            | TC_ID        | companyType | casePackOption | restockType | editColumn   | value                        | email                      | direction | expectedStatus | expectedStatusText | limitRow | shipmentStatus | field                  | valueContain |
+            | TC_ASC_DS001 | ASC         | No             | SUPPLIER    | supplierName | supplierUpdatedSalesVelocity | testautoforecast@gmail.com | desc      | 200            | OK                 | 10       | PENDING        | recommendedSupplierQty | HB           |
 
     @TC_ASC_DS002 @smoke-test-api @retry
     Scenario Outline: <TC_ID> - Verify user <email> could call APIs to delete shipments which have WORKING status
@@ -107,7 +107,7 @@ Feature: API_Regression User can delete shipments which have Pending & Working s
         And User sends a GET api method to count all Items have alerts in All Suppliers
         And The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
-        And User sets GET api method to get Items belonged to All Suppliers with direction: <direction>
+        And User sets GET api method to get Items belonged to All Suppliers with field: <field> direction: <direction> contain value: <valueContain>
         And User sends a GET api method to get Items belonged to All Suppliers
         # Item with Auto name cannot create shipment
         And User picks a random item which does not has Auto in the name in Item list
@@ -185,8 +185,6 @@ Feature: API_Regression User can delete shipments which have Pending & Working s
         And User sends a POST request to complete shipment
         And The expected status code should be <expectedStatus>
         And The status text is "<expectedStatusText>"
-        And User sets POST api endpoint to sync
-        And User sends a POST request to sync
         # Please ignore the message, I will find the root cause later
         # Call API to get list shipment to check the new created shipment
         And User sets GET api endpoint to find the new created shipment
@@ -212,8 +210,8 @@ Feature: API_Regression User can delete shipments which have Pending & Working s
         And User checks the deleted shipments must be existed in the list
 
         Examples:
-            | TC_ID        | companyType | casePackOption | restockType | editColumn   | value                        | email                      | direction | expectedStatus | expectedStatusText | limitRow | shipmentStatus |
-            | TC_ASC_DS002 | ASC         | No             | SUPPLIER    | supplierName | supplierUpdatedSalesVelocity | testautoforecast@gmail.com | desc      | 200            | OK                 | 10       | WORKING        |
+            | TC_ID        | companyType | casePackOption | restockType | editColumn   | value                        | email                      | direction | expectedStatus | expectedStatusText | limitRow | shipmentStatus | field                  | valueContain |
+            | TC_ASC_DS002 | ASC         | No             | SUPPLIER    | supplierName | supplierUpdatedSalesVelocity | testautoforecast@gmail.com | desc      | 200            | OK                 | 10       | WORKING        | recommendedSupplierQty | HB           |
 
     # #Script to delete shipments on Amazon, change retry in cucumber.js
     # @run-this @retry

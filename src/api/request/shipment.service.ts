@@ -73,6 +73,13 @@ async function getShipmentInfo(request: APIRequestContext, linkApi: string, opti
     return await request.get(url, options);
 };
 
+//Get Inbound Analyzer
+async function getInboundAnalyzer(request: APIRequestContext, linkApi: string, options?: object) {
+    const url = `${linkApi}`;
+    logger.log('info', `Send GET request ${url}`);
+    return await request.get(url, options);
+};
+
 //Check local qty error
 async function getCheckLocalQtyError(request: APIRequestContext, linkApi: string, options?: object) {
     const url = `${linkApi}`;
@@ -477,5 +484,6 @@ export {
     countAllSKUsInShipmentDetailsWithFSS,
     getSKUInShipmentDetailsWithFSS,
     refreshShipmentStatus,
-    refreshAll
+    refreshAll,
+    getInboundAnalyzer
 }

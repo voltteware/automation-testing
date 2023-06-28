@@ -83,21 +83,24 @@ Feature: APIs: All features need to run forecast of ASC companies
         # And User checks that the lastForecastDate field was updated and jobInitiator is null in company detail information after running forecast
         And User sets GET api method to get restock suggestion by vendor
         And User sends a GET api method to get restock suggestion by vendor
-        And The expected status code should be <expectedStatus>
-        And The status text is "<expectedStatusText>"
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
         # Select option All Suppliers because it contains a lot of Items
         And User selects the All Suppliers in Supplier list
         And User checks API contract of get restock suggestion by vendor api
         And User sends a GET api method to count all Items have alerts in All Suppliers
-        And The expected status code should be <expectedStatus>
-        And The status text is "<expectedStatusText>"
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
         And User saves needed alert items information
         And User compares and checks the total of Items which have alerts
         # Get Desc items to have data of Recommendation
-        And User sets GET api method to get Items belonged to All Suppliers with direction: <direction>
+        And User sets GET api method to get Items belonged to All Suppliers with field: <field> direction: <direction> contain value: <valueContain>
         And User sends a GET api method to get Items belonged to All Suppliers
-        And The expected status code should be <expectedStatus>
-        And The status text is "<expectedStatusText>"
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
         And User picks random item in Item list
         And User checks API contract of get items in Item list
         And User saves needed values for calculations
@@ -107,8 +110,9 @@ Feature: APIs: All features need to run forecast of ASC companies
         And User checks value Suggestions on grid
         And User sets GET api endpoint to get restock suggestion restockAMZ of an above item
         And User sends GET request to get restock suggestion restockAMZ of an above item
-        And The expected status code should be <expectedStatus>
-        And The status text is "<expectedStatusText>"
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
         And User sets GET api endpoint to get restock suggestion restockAMZ of an above item
         And User sends GET request to get restock suggestion restockAMZ of an above item
         And User checks API contract of get restock calculation api
@@ -123,9 +127,9 @@ Feature: APIs: All features need to run forecast of ASC companies
         And User checks value Recommendations in Restock Model
 
         Examples:
-            | TC_ID          | companyType | email                      | direction | expectedStatus | expectedStatusText |
-            | TC_ASC_RC001_1 | ASC         | testautoforecast@gmail.com | asc       | 200            | OK                 |
-            | TC_ASC_RC001_2 | ASC         | testautoforecast@gmail.com | desc      | 200            | OK                 |
+            | TC_ID          | companyType | email                      | direction | expectedStatus | expectedStatusText | field                  | valueContain |
+            | TC_ASC_RC001_1 | ASC         | testautoforecast@gmail.com | asc       | 200            | OK                 | recommendedSupplierQty | HB           |
+            | TC_ASC_RC001_2 | ASC         | testautoforecast@gmail.com | desc      | 200            | OK                 | recommendedSupplierQty | HB           |
 
     #viewPurchasingMySuggested
     @TC_PMS001-4 @smoke-test-api @api-purchasing-mySuggested
@@ -247,8 +251,9 @@ Feature: APIs: All features need to run forecast of ASC companies
         And User sets PUT api endpoint to edit <editColumn> of the above item for company type <companyType> with new value: <value>
         And User sends a PUT request to edit the item
         And User checks API contract of update history override api
-        And The expected status code should be <expectedStatus>
-        And The status text is "<expectedStatusText>"
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
         And User sets PUT api endpoint to edit <editColumnA> of the above item for company type <companyType> with new value: <value>
         And User sends a PUT request to edit the item
         And The expected status code should be <expectedStatus>
@@ -256,23 +261,27 @@ Feature: APIs: All features need to run forecast of ASC companies
         And User sends a GET request to get history override of item
         And User checks API contract of get history override of item api
         And User checks value after editing history override of item
-        And The expected status code should be <expectedStatus>
-        And The status text is "<expectedStatusText>"
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
         # Get Company info before run forecast
         And User sets GET api endpoint to get company information by company key
         And User sends a GET request to get company information by company key
-        And The expected status code should be <expectedStatus>
-        And The status text is "<expectedStatusText>"
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
         And User sets POST api to run forecast
         And User sends a POST request to run forecast
-        And The expected status code should be <expectedStatus>
-        And The status text is "<expectedStatusText>"
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
         And User checks that the lastForecastDate field was updated and jobInitiator is null in company detail information after running forecast
         And User sets GET api endpoint to get results of item
         When User sends a GET request to get results of item
         Then User checks API contract of get results of item
-        And The expected status code should be <expectedStatus>
-        And The status text is "<expectedStatusText>"
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
         And User checks override history values in Purchasing
         Examples:
             | TC_ID     | user  | email                      | password  | companyType | expectedStatus | expectedStatusText | editColumn         | value | editColumnA   |
@@ -318,8 +327,9 @@ Feature: APIs: All features need to run forecast of ASC companies
         But User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get item with limit row: <limitRow>
         And User sends a GET request to get list items
-        And The expected status code should be <expectedStatus>
-        And The status text is "<expectedStatusText>"
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
         And User picks a random item which does not have Purchase As
         And User saves the item key
         # Delete all history-override values of item
@@ -328,8 +338,9 @@ Feature: APIs: All features need to run forecast of ASC companies
         And User sets PUT api endpoint to update history override
         And User sends a PUT request to update history override
         And User checks API contract of update history override api
-        And The expected status code should be <expectedStatus>
-        And The status text is "<expectedStatusText>"
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
         And User sets PUT api endpoint to edit <editColumn> of the above item for company type <companyType> with new value: <value>
         And User sends a PUT request to edit the item
         And The expected status code should be <expectedStatus>
@@ -339,23 +350,27 @@ Feature: APIs: All features need to run forecast of ASC companies
         And User sends a GET request to get history override of item
         And User checks API contract of get history override of item api
         And User checks value after editing history override of item
-        And The expected status code should be <expectedStatus>
-        And The status text is "<expectedStatusText>"
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
         # Get Company info before run forecast
         And User sets GET api endpoint to get company information by company key
         And User sends a GET request to get company information by company key
-        And The expected status code should be <expectedStatus>
-        And The status text is "<expectedStatusText>"
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
         And User sets POST api to run forecast
         And User sends a POST request to run forecast
-        And The expected status code should be <expectedStatus>
-        And The status text is "<expectedStatusText>"
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
         And User checks that the lastForecastDate field was updated and jobInitiator is null in company detail information after running forecast
         And User sets GET api endpoint to get results of item
         When User sends a GET request to get results of item
         Then User checks API contract of get results of item
-        And The expected status code should be <expectedStatus>
-        And The status text is "<expectedStatusText>"
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
         And User checks override history values in Purchasing
 
         Examples:
@@ -376,33 +391,38 @@ Feature: APIs: All features need to run forecast of ASC companies
         And User saves the item key
         And User sets PUT api endpoint to edit <editColumn> of the above item for company type <companyType> with new value: <value>
         And User sends a PUT request to edit the item
-        And The expected status code should be <expectedStatus>
-        And The status text is "<expectedStatusText>"
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
         And The new <editColumn> of item must be updated successfully
         And User checks API contract essential types in item object are correct
         # This is information of Item which is disappeared in Purchasing
         And User sets api endpoint to get a item in Custom
         And User sends a GET request to get a item in Custom
-        And The expected status code should be <expectedStatus>
-        And The status text is "<expectedStatusText>"
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
         And User saves needed information to calculate normal item
         And User checks value in Item card
         # This is information of Item which is appeared in Purchasing Custom
         And User sets api endpoint to get a Purchase As item in Custom
         And User sends a GET request to get a Purchase As item in Custom
-        And The expected status code should be <expectedStatus>
-        And The status text is "<expectedStatusText>"
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
         And User saves needed information to calculate purchase as item
         # Get Company info before run forecast
         And User sets GET api endpoint to get company information by company key
         And User sends a GET request to get company information by company key
-        And The expected status code should be <expectedStatus>
-        And The status text is "<expectedStatusText>"
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
         # Run Forecast
         And User sets POST api to run forecast
         And User sends a POST request to run forecast
-        And The expected status code should be <expectedStatus>
-        And The status text is "<expectedStatusText>"
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
         And User checks API contract of run forecast api
         And User checks that the lastForecastDate field was updated and jobInitiator is null in company detail information after running forecast
         # This is information of Item which is appeared in Purchasing Custom after run forecast
@@ -657,8 +677,9 @@ Feature: APIs: All features need to run forecast of ASC companies
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get item with limit row: <limitRow>
         And User sends a GET request to get list items
-        And The expected status code should be <expectedStatus>
-        And The status text is "<expectedStatusText>"
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
         And User picks a random item which does not have Purchase As
         And User saves the item key
         # Update doNotOrder = flase => show in Purchasing to check historySnapshot
@@ -679,8 +700,9 @@ Feature: APIs: All features need to run forecast of ASC companies
         # You must have at least one full year worth of data for this item in order to use Backfill feature
         And User sets PUT api endpoint to update history override for full year of <rowNum> top row in data table
         And User sends a PUT request to update history override for full year of <rowNum> top row in data table
-        And The expected status code should be <expectedStatus>
-        And The status text is "<expectedStatusText>"
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
         And User checks API contract of update history override api
 
         # Turn ON Backfill feature
@@ -692,46 +714,51 @@ Feature: APIs: All features need to run forecast of ASC companies
         And User sets GET api endpoint to get history override of item
         And User sends a GET request to get history override of item
         And User checks API contract of get history override of item api
-        And The expected status code should be <expectedStatus>
-        And The status text is "<expectedStatusText>"
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
         # Get Demand aggregation
         # if column in backfill view does not have value, it will get data (orderQty) from Demand
         And User sets POST api to get demand aggregation of item
-        And User sends a POST request to get demand aggregation of item        
+        And User sends a POST request to get demand aggregation of item
         And User checks value after editing history override values of item must be displayed exactly
         And User calculates the order qty of other years after turning on backfill feature and saves those values
 
         # Get Company info before run forecast
         And User sets GET api endpoint to get company information by company key
         And User sends a GET request to get company information by company key
-        And The expected status code should be <expectedStatus>
-        And The status text is "<expectedStatusText>"
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
         # Run forecast
         And User sets POST api to run forecast
         And User sends a POST request to run forecast
-        And The expected status code should be <expectedStatus>
-        And The status text is "<expectedStatusText>"
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
         And User checks that the lastForecastDate field was updated and jobInitiator is null in company detail information after running forecast
 
         # Get item result to check history override values
         And User sets GET api endpoint to get results of item
         When User sends a GET request to get results of item
         Then User checks API contract of get results of item
-        And The expected status code should be <expectedStatus>
-        And The status text is "<expectedStatusText>"
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
         And User checks override history values must be displayed exactly in Purchasing
         Examples:
             | TC_ID       | companyType | email                      | limitRow | rowNum | expectedStatus | expectedStatusText | editColumn  | value |
             | TC_BFV001_2 | ASC         | testautoforecast@gmail.com | 20       | 1      | 200            | OK                 | useBackfill | true  |
 
-    @TC_BFV002 @smoke-test-api @regression-api @api-backfill-value 
+    @TC_BFV002 @smoke-test-api @regression-api @api-backfill-value
     Scenario Outline: <TC_ID> - Verify the the system can backfill for 37 months (12 months of 1st year, 12 months of 2nd year, 12 months of 3rd year and the last month of 4th year) with the 1st year has full values for <companyType> company
         Given User picks company which has onboarded before with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get item with limit row: <limitRow>
         And User sends a GET request to get list items
-        And The expected status code should be <expectedStatus>
-        And The status text is "<expectedStatusText>"
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
         And User picks a random item which does not have Purchase As
         And User saves the item key
         # Update doNotOrder = flase => show in Purchasing to check historySnapshot
@@ -757,8 +784,9 @@ Feature: APIs: All features need to run forecast of ASC companies
             |            |             |            |             |            |            |              |             |            |            |               |              |
             |            |             |            |             |            |            |              |             |            |            |               |              |
         And User sends a PUT request to update history override values
-        And The expected status code should be <expectedStatus>
-        And The status text is "<expectedStatusText>"
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
         And User checks API contract of update history override api
         # Turn ON Backfill feature
         And User sets PUT api endpoint to edit <editColumn> of the above item for company type <companyType> with new value: <value>
@@ -768,30 +796,34 @@ Feature: APIs: All features need to run forecast of ASC companies
         And User sets GET api endpoint to get history override of item
         And User sends a GET request to get history override of item
         And User checks API contract of get history override of item api
-        And The expected status code should be <expectedStatus>
-        And The status text is "<expectedStatusText>"   
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
         # Get Demand aggregation
         # if column in backfill view does not have value, it will get data (orderQty) from Demand
         And User sets POST api to get demand aggregation of item
         And User sends a POST request to get demand aggregation of item
-        And User calculates the order qty of other years after turning on backfill feature and saves those values     
+        And User calculates the order qty of other years after turning on backfill feature and saves those values
         # Get Company info before run forecast
         And User sets GET api endpoint to get company information by company key
         And User sends a GET request to get company information by company key
-        And The expected status code should be <expectedStatus>
-        And The status text is "<expectedStatusText>"
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
         # Run forecast
         And User sets POST api to run forecast
         And User sends a POST request to run forecast
-        And The expected status code should be <expectedStatus>
-        And The status text is "<expectedStatusText>"
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
         And User checks that the lastForecastDate field was updated and jobInitiator is null in company detail information after running forecast
         # Get item result to check history override values
         And User sets GET api endpoint to get results of item
         When User sends a GET request to get results of item
         Then User checks API contract of get results of item
-        And The expected status code should be <expectedStatus>
-        And The status text is "<expectedStatusText>"        
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
         And User checks override history values must be displayed exactly in Purchasing as the following data:
             | firstMonth | secondMonth | thirthMonth | fourthMonth | fifthMonth | sixthMonth | seventhMonth | eighthMonth | ninthMonth | tenthMonth | eleventhMonth | twelfthMonth |
             | 4          | 9           | 14          | 2           | 16         | 8          | 23           | 1           | 5          | 10         | 21            | 12           |
@@ -808,8 +840,9 @@ Feature: APIs: All features need to run forecast of ASC companies
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get item with limit row: <limitRow>
         And User sends a GET request to get list items
-        And The expected status code should be <expectedStatus>
-        And The status text is "<expectedStatusText>"
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
         And User picks a random item which does not have Purchase As
         And User saves the item key
         # Update doNotOrder = flase => show in Purchasing to check historySnapshot
@@ -835,8 +868,9 @@ Feature: APIs: All features need to run forecast of ASC companies
             |            |             |            |             |            |            |              |             |            |            |               |              |
             |            |             |            |             |            |            |              |             |            |            |               |              |
         And User sends a PUT request to update history override values
-        And The expected status code should be <expectedStatus>
-        And The status text is "<expectedStatusText>"
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
         And User checks API contract of update history override api
         # Turn ON Backfill feature
         And User sets PUT api endpoint to edit <editColumn> of the above item for company type <companyType> with new value: <value>
@@ -846,8 +880,9 @@ Feature: APIs: All features need to run forecast of ASC companies
         And User sets GET api endpoint to get history override of item
         And User sends a GET request to get history override of item
         And User checks API contract of get history override of item api
-        And The expected status code should be <expectedStatus>
-        And The status text is "<expectedStatusText>"
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
         # Get Demand aggregation
         # if column in backfill view does not have value, it will get data (orderQty) from Demand
         And User sets POST api to get demand aggregation of item
@@ -856,20 +891,23 @@ Feature: APIs: All features need to run forecast of ASC companies
         # Get Company info before run forecast
         And User sets GET api endpoint to get company information by company key
         And User sends a GET request to get company information by company key
-        And The expected status code should be <expectedStatus>
-        And The status text is "<expectedStatusText>"
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
         # Run forecast
         And User sets POST api to run forecast
         And User sends a POST request to run forecast
-        And The expected status code should be <expectedStatus>
-        And The status text is "<expectedStatusText>"
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
         And User checks that the lastForecastDate field was updated and jobInitiator is null in company detail information after running forecast
         # Get item result to check history override values
         And User sets GET api endpoint to get results of item
         When User sends a GET request to get results of item
         Then User checks API contract of get results of item
-        And The expected status code should be <expectedStatus>
-        And The status text is "<expectedStatusText>"
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
         # Rule: Just fill in the months have no data
         # Example for this case:
         # 1st year: same user edit
@@ -891,8 +929,9 @@ Feature: APIs: All features need to run forecast of ASC companies
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get item with limit row: <limitRow>
         And User sends a GET request to get list items
-        And The expected status code should be <expectedStatus>
-        And The status text is "<expectedStatusText>"
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
         And User picks a random item which does not have Purchase As
         And User saves the item key
         # Update doNotOrder = flase => show in Purchasing to check historySnapshot
@@ -902,7 +941,7 @@ Feature: APIs: All features need to run forecast of ASC companies
         # This step was captured when user takes action on browser. Update forecastDirty = true => will run forecast
         And User sets PUT api endpoint to edit forecastDirty of the above item for company type <companyType> with new value: true
         And User sends a PUT request to edit the item
-        And The expected status code should be <expectedStatus>        
+        And The expected status code should be <expectedStatus>
         # Turn ON Override history
         And User sets PUT api endpoint to edit useHistoryOverride of the above item for company type <companyType> with new value: <value>
         And User sends a PUT request to edit the item
@@ -918,8 +957,9 @@ Feature: APIs: All features need to run forecast of ASC companies
             |            |             | 23         |             |            | 19         |              | 15          |            |            |               |              |
             |            |             |            |             |            |            |              |             |            |            |               |              |
         And User sends a PUT request to update history override values
-        And The expected status code should be <expectedStatus>
-        And The status text is "<expectedStatusText>"
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
         And User checks API contract of update history override api
         # Turn ON Backfill feature
         And User sets PUT api endpoint to edit <editColumn> of the above item for company type <companyType> with new value: <value>
@@ -929,8 +969,9 @@ Feature: APIs: All features need to run forecast of ASC companies
         And User sets GET api endpoint to get history override of item
         And User sends a GET request to get history override of item
         And User checks API contract of get history override of item api
-        And The expected status code should be <expectedStatus>
-        And The status text is "<expectedStatusText>"
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
         # Get Demand aggregation
         # if column in backfill view does not have value, it will get data (orderQty) from Demand
         And User sets POST api to get demand aggregation of item
@@ -939,20 +980,23 @@ Feature: APIs: All features need to run forecast of ASC companies
         # Get Company info before run forecast
         And User sets GET api endpoint to get company information by company key
         And User sends a GET request to get company information by company key
-        And The expected status code should be <expectedStatus>
-        And The status text is "<expectedStatusText>"
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
         # Run forecast
         And User sets POST api to run forecast
         And User sends a POST request to run forecast
-        And The expected status code should be <expectedStatus>
-        And The status text is "<expectedStatusText>"
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
         And User checks that the lastForecastDate field was updated and jobInitiator is null in company detail information after running forecast
         # Get item result to check history override values
         And User sets GET api endpoint to get results of item
         When User sends a GET request to get results of item
         Then User checks API contract of get results of item
-        And The expected status code should be <expectedStatus>
-        And The status text is "<expectedStatusText>"
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
         # Rule: Just fill in the months have no data
         # Example for this case:
         # 1st year: same user edit
@@ -974,11 +1018,12 @@ Feature: APIs: All features need to run forecast of ASC companies
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get item with limit row: <limitRow>
         And User sends a GET request to get list items
-        And The expected status code should be <expectedStatus>
-        And The status text is "<expectedStatusText>"
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
         And User picks a random item which does not have Purchase As
         And User saves the item key
-        # Update doNotOrder = flase => show in Purchasing to check historySnapshot 
+        # Update doNotOrder = flase => show in Purchasing to check historySnapshot
         And User sets PUT api endpoint to edit doNotOrder of the above item for company type <companyType> with new value: false
         And User sends a PUT request to edit the item
         And The expected status code should be <expectedStatus>
@@ -1001,8 +1046,9 @@ Feature: APIs: All features need to run forecast of ASC companies
             |            |             |            |             |            |            |              |             |            |            |               |              |
             |            |             |            |             |            |            |              |             |            |            |               |              |
         And User sends a PUT request to update history override values
-        And The expected status code should be <expectedStatus>
-        And The status text is "<expectedStatusText>"
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
         And User checks API contract of update history override api
         # Turn ON Backfill feature
         And User sets PUT api endpoint to edit <editColumn> of the above item for company type <companyType> with new value: <value>
@@ -1012,8 +1058,9 @@ Feature: APIs: All features need to run forecast of ASC companies
         And User sets GET api endpoint to get history override of item
         And User sends a GET request to get history override of item
         And User checks API contract of get history override of item api
-        And The expected status code should be <expectedStatus>
-        And The status text is "<expectedStatusText>"
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
         # Get Demand aggregation
         # if column in backfill view does not have value, it will get data (orderQty) from Demand
         And User sets POST api to get demand aggregation of item
@@ -1022,20 +1069,23 @@ Feature: APIs: All features need to run forecast of ASC companies
         # Get Company info before run forecast
         And User sets GET api endpoint to get company information by company key
         And User sends a GET request to get company information by company key
-        And The expected status code should be <expectedStatus>
-        And The status text is "<expectedStatusText>"
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
         # Run forecast
         And User sets POST api to run forecast
         And User sends a POST request to run forecast
-        And The expected status code should be <expectedStatus>
-        And The status text is "<expectedStatusText>"
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
         And User checks that the lastForecastDate field was updated and jobInitiator is null in company detail information after running forecast
         # Get item result to check history override values
         And User sets GET api endpoint to get results of item
         When User sends a GET request to get results of item
         Then User checks API contract of get results of item
-        And The expected status code should be <expectedStatus>
-        And The status text is "<expectedStatusText>"
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
         And User checks override history values must be displayed exactly in Purchasing as the following data:
             | firstMonth | secondMonth | thirthMonth | fourthMonth | fifthMonth | sixthMonth | seventhMonth | eighthMonth | ninthMonth | tenthMonth | eleventhMonth | twelfthMonth |
             | 0          | 0           | 0           | 0           | 0          | 0          | 0            | 0           | 0          | 0          | 0             | 0            |
@@ -1046,14 +1096,15 @@ Feature: APIs: All features need to run forecast of ASC companies
             | TC_ID       | companyType | email                      | limitRow | expectedStatus | expectedStatusText | editColumn  | value |
             | TC_BFV005_2 | ASC         | testautoforecast@gmail.com | 20       | 200            | OK                 | useBackfill | true  |
 
-    @TC_BFV006 @smoke-test-api @regression-api @api-backfill-value 
+    @TC_BFV006 @smoke-test-api @regression-api @api-backfill-value
     Scenario Outline: <TC_ID> - Verify that the system will fill "0" for orther months. if the 1st year, 2nd year has no value and the 3rd year has full values for <companyType>
         Given User picks company which has onboarded before with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get item with limit row: <limitRow>
         And User sends a GET request to get list items
-        And The expected status code should be <expectedStatus>
-        And The status text is "<expectedStatusText>"
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
         And User picks a random item which does not have Purchase As
         And User saves the item key
         # Update doNotOrder = flase => show in Purchasing to check historySnapshot
@@ -1079,8 +1130,9 @@ Feature: APIs: All features need to run forecast of ASC companies
             | 4          | 9           | 14         | 2           | 16         | 8          | 23           | 1           | 5          | 10         | 21            | 12           |
             |            |             |            |             |            |            |              |             |            |            |               |              |
         And User sends a PUT request to update history override values
-        And The expected status code should be <expectedStatus>
-        And The status text is "<expectedStatusText>"
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
         And User checks API contract of update history override api
         # Turn ON Backfill feature
         And User sets PUT api endpoint to edit <editColumn> of the above item for company type <companyType> with new value: <value>
@@ -1090,8 +1142,9 @@ Feature: APIs: All features need to run forecast of ASC companies
         And User sets GET api endpoint to get history override of item
         And User sends a GET request to get history override of item
         And User checks API contract of get history override of item api
-        And The expected status code should be <expectedStatus>
-        And The status text is "<expectedStatusText>"
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
         # Get Demand aggregation
         # if column in backfill view does not have value, it will get data (orderQty) from Demand
         And User sets POST api to get demand aggregation of item
@@ -1100,20 +1153,23 @@ Feature: APIs: All features need to run forecast of ASC companies
         # Get Company info before run forecast
         And User sets GET api endpoint to get company information by company key
         And User sends a GET request to get company information by company key
-        And The expected status code should be <expectedStatus>
-        And The status text is "<expectedStatusText>"
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
         # Run forecast
         And User sets POST api to run forecast
         And User sends a POST request to run forecast
-        And The expected status code should be <expectedStatus>
-        And The status text is "<expectedStatusText>"
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
         And User checks that the lastForecastDate field was updated and jobInitiator is null in company detail information after running forecast
         # Get item result to check history override values
         And User sets GET api endpoint to get results of item
         When User sends a GET request to get results of item
         Then User checks API contract of get results of item
-        And The expected status code should be <expectedStatus>
-        And The status text is "<expectedStatusText>"
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
         And User checks override history values must be displayed exactly in Purchasing as the following data:
             | firstMonth | secondMonth | thirthMonth | fourthMonth | fifthMonth | sixthMonth | seventhMonth | eighthMonth | ninthMonth | tenthMonth | eleventhMonth | twelfthMonth |
             | 0          | 0           | 0           | 0           | 0          | 0          | 0            | 0           | 0          | 0          | 0             | 0            |
@@ -1123,3 +1179,57 @@ Feature: APIs: All features need to run forecast of ASC companies
         Examples:
             | TC_ID       | companyType | email                      | limitRow | expectedStatus | expectedStatusText | editColumn  | value |
             | TC_BFV006_2 | ASC         | testautoforecast@gmail.com | 20       | 200            | OK                 | useBackfill | true  |
+
+    # Check Expedite Recommedation
+    # I just build the skeleton of Expedite Recommendation. Maybe it can run passed or failed => Will find the new solution for this
+    # Issue: Items, with Inbound > 0, can calculate Expedite Recommendation. But when edit information in Inbound, you only edit Working Shipments so that calculate Expedite Recommendation => Cannot control the item currently.  
+    @TC_ASC_CER001 @smoke-test-api @regression-api @check-expedite-recommendation
+    Scenario Outline: <TC_ID> - Verify user <email> could call APIs to create shipments from Supplier and check Expedite Recommendation
+        Given User picks company which has onboarded before with type <companyType> in above response
+        And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
+        And User sets GET api method to get restock suggestion by vendor
+        And User sends a GET api method to get restock suggestion by vendor
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
+        # Select option All Suppliers because it contains a lot of Items
+        And User selects the All Suppliers in Supplier list
+        And User checks API contract of get restock suggestion by vendor api
+        And User sends a GET api method to count all Items have alerts in All Suppliers
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
+        And User sets GET api method to get Items belonged to All Suppliers with field: <field> direction: <direction> contain value: <valueContain>
+        And User sends a GET api method to get Items belonged to All Suppliers
+        And User picks a random item which does not has Auto in the name in Item list
+        And User sends a GET api method to get inbound analyzer
+        And User picks a random shipment in inbound analyzer
+        And User sets GET api endpoint to find the new created shipment
+        And User sends a GET request to find the new created shipment
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
+        And User checks API contract of get list shipments api
+        And User picks a just created shipment
+        And User sends PUT request to update Estimated Receive Date
+        # Get Company info before run forecast
+        And User sets GET api endpoint to get company information by company key
+        And User sends a GET request to get company information by company key
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
+        # Run forecast
+        And User sets POST api to run forecast
+        And User sends a POST request to run forecast
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
+        And User checks that the lastForecastDate field was updated and jobInitiator is null in company detail information after running forecast
+        And User sets GET api endpoint to get items in shipments by restockType: <restockType>
+        And User sends a GET request to get items in shipments by restockType: <restockType>
+        And User sends a GET request to get specific item and expedite recommendation in Item list
+        And User checks expedite recommendations
+
+        Examples:
+            | TC_ID         | companyType | email                      | direction | expectedStatus | expectedStatusText | limitRow | field   | valueContain | restockType |
+            | TC_ASC_CER001 | ASC         | testautoforecast@gmail.com | desc      | 200            | OK                 | 10       | inbound | HB           | Supplier    |

@@ -24,7 +24,7 @@ Feature: API_Regression User can search shipments
         And User checks status code and status text of api
             | expectedStatus   | expectedStatusText   |
             | <expectedStatus> | <expectedStatusText> |
-        And User sets GET api method to get Items belonged to All Suppliers with direction: <direction>
+        And User sets GET api method to get Items belonged to All Suppliers with field: <field> direction: <direction> contain value: <valueContain>
         And User sends a GET api method to get Items belonged to All Suppliers
         # Item with Auto name cannot create shipment
         And User picks a random item which does not has Auto in the name in Item list
@@ -102,8 +102,8 @@ Feature: API_Regression User can search shipments
         And User checks the deleted shipments does not exist in the list
 
         Examples:
-            | TC_ID        | companyType | casePackOption | restockType | editColumn                   | value  | email                      | direction | expectedStatus | expectedStatusText | limitRow | shipmentStatus |
-            | TC_ASC_SS001 | ASC         | No             | SUPPLIER    | supplierUpdatedSalesVelocity | random | testautoforecast@gmail.com | desc      | 200            | OK                 | 10       | PENDING        |
+            | TC_ID        | companyType | casePackOption | restockType | editColumn                   | value  | email                      | direction | expectedStatus | expectedStatusText | limitRow | shipmentStatus | field                  | valueContain |
+            | TC_ASC_SS001 | ASC         | No             | SUPPLIER    | supplierUpdatedSalesVelocity | random | testautoforecast@gmail.com | desc      | 200            | OK                 | 10       | PENDING        | recommendedSupplierQty | HB           |
 
     @TC_ASC_SS002 @smoke-test-api @retry
     Scenario Outline: <TC_ID> - Verify user <email> could call APIs could call APIs to search shipments - Working
@@ -121,7 +121,7 @@ Feature: API_Regression User can search shipments
         And User checks status code and status text of api
             | expectedStatus   | expectedStatusText   |
             | <expectedStatus> | <expectedStatusText> |
-        And User sets GET api method to get Items belonged to All Suppliers with direction: <direction>
+        And User sets GET api method to get Items belonged to All Suppliers with field: <field> direction: <direction> contain value: <valueContain>
         And User sends a GET api method to get Items belonged to All Suppliers
         # Item with Auto name cannot create shipment
         And User picks a random item which does not has Auto in the name in Item list
@@ -216,8 +216,6 @@ Feature: API_Regression User can search shipments
         And User checks status code and status text of api
             | expectedStatus   | expectedStatusText   |
             | <expectedStatus> | <expectedStatusText> |
-        And User sets POST api endpoint to sync
-        And User sends a POST request to sync
         # Please ignore the message, I will find the root cause later
         # Call API to get list shipment to check the new created shipment
         And User sets GET api endpoint to find the new created shipment
@@ -247,5 +245,5 @@ Feature: API_Regression User can search shipments
         And User checks the deleted shipments must be existed in the list
 
         Examples:
-            | TC_ID        | companyType | casePackOption | restockType | editColumn   | value                        | email                      | direction | expectedStatus | expectedStatusText | limitRow | shipmentStatus |
-            | TC_ASC_SS002 | ASC         | No             | SUPPLIER    | supplierName | supplierUpdatedSalesVelocity | testautoforecast@gmail.com | desc      | 200            | OK                 | 10       | WORKING        |
+            | TC_ID        | companyType | casePackOption | restockType | editColumn   | value                        | email                      | direction | expectedStatus | expectedStatusText | limitRow | shipmentStatus | field                  | valueContain |
+            | TC_ASC_SS002 | ASC         | No             | SUPPLIER    | supplierName | supplierUpdatedSalesVelocity | testautoforecast@gmail.com | desc      | 200            | OK                 | 10       | WORKING        | recommendedSupplierQty | HB           |

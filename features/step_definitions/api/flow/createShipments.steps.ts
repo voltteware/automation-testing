@@ -82,6 +82,36 @@ Then(`{} sends a GET request to get Shipment info`, async function (actor: strin
     }
 });
 
+Then(`{} sends a GET request to get specific item and expedite recommendation in Item list`, async function (actor: string) {
+    link = `${Links.API_GET_RESTOCK_SUGGESTION}?offset=0&limit=100&where={"logic":"and","filters":[{"logic":"or","filters":[{"filters":[],"logic":"or"},{"filters":[],"logic":"or"}],"currentSupplierFilters":[{"text":"[All Suppliers]","value":"[All Suppliers]"}]},{"logic":"or","filters":[{"field":"sku","operator":"contains","value":"${this.itemName}"},{"field":"productName","operator":"contains","value":"${this.itemName}"},{"field":"category","operator":"contains","value":"${this.itemName}"},{"field":"supplier","operator":"contains","value":"${this.itemName}"},{"field":"supplierSku","operator":"contains","value":"${this.itemName}"},{"field":"asin","operator":"contains","value":"${this.itemName}"}]},{"logic":"and","filters":[]},{"filters":[{"field":"expeditedRecommendationQty","operator":"gt","value":0}],"logic":"and"}]}`
+    const options = {
+        headers: this.headers
+    }
+    this.getExpediteResponse = this.response = await shipmentRequest.getShipmentInfo(this.request, link, options);
+    const responseBodyText = await this.getExpediteResponse.text();
+    if (this.getExpediteResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
+        this.getExpediteResponseBody = JSON.parse(await this.getExpediteResponse.text());
+        logger.log('info', `Response GET ${link}: ` + JSON.stringify(this.getExpediteResponseBody, undefined, 4));
+        this.attach(`Response GET ${link}: ` + JSON.stringify(this.getExpediteResponseBody, undefined, 4));
+    }
+    else {
+        const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
+        logger.log('info', `Response ${link} has status code ${this.getExpediteResponse.status()} ${this.getExpediteResponse.statusText()} and response body ${responseBodyText}`);
+        this.attach(`Response ${link} has status code ${this.getExpediteResponse.status()} ${this.getExpediteResponse.statusText()} and response body ${actualResponseText}`);
+    }
+});
+
+Then(`{} checks expedite recommendations`, async function (actor: string) {
+    this.averageDailySaleRate = this.getExpediteResponseBody[0].demand;
+    this.onHand = this.getExpediteResponseBody[0].forecastconstant.onHand;
+    this.inboundFcTransfer = this.getExpediteResponseBody[0].inboundFcTransfer;
+    this.dayLeftInStock = Math.round((Number(this.inboundFcTransfer) + Number(this.onHand)) / Number(this.averageDailySaleRate));
+    this.actualExpeditedRecommendationQty = this.getExpediteResponseBody[0].expeditedRecommendationQty;
+    this.expectedExpeditedRecommendationQty = (this.receiveDate.getTime() - (new Date((new Date()).getTime() + (this.dayLeftInStock * 86400000))).getTime()) * this.averageDailySalesRate;
+    logger.log('info', `this.expectedExpeditedRecommendationQty: ` + this.expectedExpeditedRecommendationQty);
+    this.attach(`this.expectedExpeditedRecommendationQty: ` + this.expectedExpeditedRecommendationQty);
+});
+
 Then('{} sets GET api endpoint to get items in shipments by restockType: {}', async function (actor, restockType: string) {
     link = encodeURI(`${Links.API_SHIPMENT}-detail?offset=0&limit=20&where={"logic":"and","filters":[]}&key=${this.shipmentKey}&restockType=${restockType}`);
     const sleep = (milliseconds: number) => {
@@ -479,13 +509,14 @@ Then(`User picks a just created shipment`, async function () {
     const justCreatedShipment = this.getListShipmentsResponseBody[Math.floor(Math.random() * this.getListShipmentsResponseBody.length)];
     logger.log('info', `Just created shipment >>>>> ` + JSON.stringify(justCreatedShipment, undefined, 4));
     this.attach(`Just created shipment >>>>> ` + JSON.stringify(justCreatedShipment, undefined, 4));
-    this.shipmentKey = justCreatedShipment.key
-    this.shipmentName = justCreatedShipment.shipmentName
+    this.shipmentName = this.getListShipmentsResponseBody[0]?.shipmentName;
+    this.shipmentKey = this.key = this.getListShipmentsResponseBody[0]?.key;
 });
 
 Then('{} checks the new created shipment: {}', async function (actor, shipmentStatus: string) {
     this.shipmentStatus = this.getListShipmentsResponseBody[0].status;
-    this.name = this.getListShipmentsResponseBody[0].shipmentName;
+    this.name = this.getListShipmentsResponseBody[0]?.shipmentName;
+    this.key = this.getListShipmentsResponseBody[0]?.key;
     expect(this.shipmentStatus, `In response body, the expected shipmentStatus should be: ${shipmentStatus}`).toBe(shipmentStatus);
     expect(this.name.includes(this.shipmentName), `In response body, the expected shipmentName should be: ${this.shipmentName}`).toBeTruthy();
 });

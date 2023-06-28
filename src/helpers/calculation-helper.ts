@@ -16,13 +16,25 @@ function roundFloatNumber(number: number) {
     return Math.round((parseNumber(number) + Number.EPSILON) * 100) / 100;
 };
 
+function formatDate (date: any) {
+    if (!(date instanceof Date)) {
+        throw new Error('Invalid "date" argument. You must pass a date instance')
+    }
+
+    const year = date.getFullYear()
+    const month = String(date.getMonth() + 1).padStart(2, '0')
+    const day = String(date.getDate()).padStart(2, '0')
+
+    return `${year}-${month}-${day}`
+}
+
 function purchasing_consolidations_get_quantity(n: number, m: number) {
-	if (n <= 0) return n;
-	if (m == null) m = 1;
+    if (n <= 0) return n;
+    if (m == null) m = 1;
 
-	if (n % m == 0) return n;
+    if (n % m == 0) return n;
 
-	return n + (m - (n % m));
+    return n + (m - (n % m));
 };
 
 // Refer the mind map here: https://whimsical.com/restockamz-beta-restock-from-supplier-2y8q1eQFoikbzF7VcaqvYo
@@ -96,8 +108,8 @@ function forecastRecommendedPurchasing(input: Input, attach: ICreateAttachment) 
             logger.log('info', `snapshotQty: Actual: ${snapshotQty} and Expected: ${expectedSnapshotQty}`);
             expect(snapshotQty, `In response body, the expected snapshotQty should be: ${expectedSnapshotQty}`).toBe(expectedSnapshotQty);
             attach(`snapshotQty: Actual: ${snapshotQty} and Expected: ${expectedSnapshotQty}`);
-            
-            expectedConsolidatedQty = round(purchasing_consolidations_get_quantity((snapshotQty || 0), (lotMultipleQty || 0)), 2 );
+
+            expectedConsolidatedQty = round(purchasing_consolidations_get_quantity((snapshotQty || 0), (lotMultipleQty || 0)), 2);
             logger.log('info', `consolidatedQty: Actual: ${consolidatedQty} and Expected: ${expectedConsolidatedQty}`);
             expect(consolidatedQty, `In response body, the expected consolidatedQty should be: ${expectedConsolidatedQty}`).toBe(expectedConsolidatedQty);
             attach(`consolidatedQty: Actual: ${consolidatedQty} and Expected: ${expectedConsolidatedQty}`);
@@ -111,23 +123,23 @@ function forecastRecommendedPurchasing(input: Input, attach: ICreateAttachment) 
             logger.log('info', `snapshotQty: Actual: ${snapshotQty} and Expected: ${expectedSnapshotQty}`);
             expect(snapshotQty, `In response body, the expected snapshotQty should be: ${expectedSnapshotQty}`).toBe(expectedSnapshotQty);
             attach(`snapshotQty: Actual: ${snapshotQty} and Expected: ${expectedSnapshotQty}`);
-            
-            expectedConsolidatedQty = round(purchasing_consolidations_get_quantity((snapshotQty || 0), (lotMultipleQty || 0)), 2 );
+
+            expectedConsolidatedQty = round(purchasing_consolidations_get_quantity((snapshotQty || 0), (lotMultipleQty || 0)), 2);
             logger.log('info', `consolidatedQty: Actual: ${consolidatedQty} and Expected: ${expectedConsolidatedQty}`);
             expect(consolidatedQty, `In response body, the expected consolidatedQty should be: ${expectedConsolidatedQty}`).toBe(expectedConsolidatedQty);
             attach(`consolidatedQty: Actual: ${consolidatedQty} and Expected: ${expectedConsolidatedQty}`);
             break;
         case "FBM":
-            inventorySupply = (onHandThirdParty || 0) + (fbmSupply || 0); 
+            inventorySupply = (onHandThirdParty || 0) + (fbmSupply || 0);
             supply = (openPurchaseOrders || 0) + inventorySupply;
             demand = (openSalesOrders || 0) + (meanLtd || 0) + (safetyStockLtd || 0);
-            
+
             expectedSnapshotQty = roundFloatNumber(demand - supply);
             logger.log('info', `snapshotQty: Actual: ${snapshotQty} and Expected: ${expectedSnapshotQty}`);
             expect(snapshotQty, `In response body, the expected snapshotQty should be: ${expectedSnapshotQty}`).toBe(expectedSnapshotQty);
             attach(`snapshotQty: Actual: ${snapshotQty} and Expected: ${expectedSnapshotQty}`);
-            
-            expectedConsolidatedQty = round(purchasing_consolidations_get_quantity((snapshotQty || 0), (lotMultipleQty || 0)), 2 );
+
+            expectedConsolidatedQty = round(purchasing_consolidations_get_quantity((snapshotQty || 0), (lotMultipleQty || 0)), 2);
             logger.log('info', `consolidatedQty: Actual: ${consolidatedQty} and Expected: ${expectedConsolidatedQty}`);
             expect(consolidatedQty, `In response body, the expected consolidatedQty should be: ${expectedConsolidatedQty}`).toBe(expectedConsolidatedQty);
             attach(`consolidatedQty: Actual: ${consolidatedQty} and Expected: ${expectedConsolidatedQty}`);
@@ -373,5 +385,6 @@ export {
     inventoryAvailableFormulaRestockAMZ,
     recommendationsFormulaRestockAMZ,
     suggestionsFormulaRestockAMZ,
-    forecastRecommendedPurchasing
+    forecastRecommendedPurchasing,
+    formatDate
 };
