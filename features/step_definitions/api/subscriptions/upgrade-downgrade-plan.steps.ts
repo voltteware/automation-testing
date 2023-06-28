@@ -32,14 +32,14 @@ Then(`{} sets request body with payload to upgrade and downgrade`, async functio
     changePlanPayload = {
         "priceId": this.planPickedRandom.id,
         "subscriptionId": this.subscriptionId,
-        "isRevert": false,  
+        "isRevert": false,
     }
 })
 
-Then(`{} picks company that has status {} and has been added card`, async function(actor, status: string) {
+Then(`{} picks company that has status {} and has been added card`, async function (actor, status: string) {
     console.log("Get all company: ", this.getCompaniesResponseBody);
-    for(let i = 0; i < this.getCompaniesResponseBody.length; i++) {
-        if(this.getCompaniesResponseBody[i].subscriptionStatus === status) {
+    for (let i = 0; i < this.getCompaniesResponseBody.length; i++) {
+        if (this.getCompaniesResponseBody[i].subscriptionStatus === status) {
             this.getCompanyKey = this.getCompaniesResponseBody[i].companyKey;
             this.getCompanyType = this.getCompaniesResponseBody[i].companyType;
             this.attach(`Get company key will push into URL of api/billing/subscription: ` + this.getCompanyKey);
@@ -51,7 +51,7 @@ Then(`{} picks company that has status {} and has been added card`, async functi
             this.defaultMethod = await this.currentSubscriptionResponseBody.default_payment_method;
             console.log("defaultMethod >>>>> ", this.defaultMethod);
 
-            if(this.defaultMethod !== null) {
+            if (this.defaultMethod !== null) {
                 this.currentPlan = this.currentSubscriptionResponseBody.id;
                 this.priceOfCurrentPlan = this.currentSubscriptionResponseBody.plan.id;
                 this.subscriptionId = this.currentSubscriptionResponseBody.id;
@@ -66,10 +66,10 @@ Then(`{} picks company that has status {} and has been added card`, async functi
     }
 });
 
-Then(`{} picks company that has interval {}, status {} and has been added card`, async function(actor, interval: string, status: string) {
+Then(`{} picks company that has interval {}, status {} and has been added card`, async function (actor, interval: string, status: string) {
     console.log("Get all company: ", this.getCompaniesResponseBody);
-    for(let i = 0; i < this.getCompaniesResponseBody.length; i++) {
-        if(this.getCompaniesResponseBody[i].subscriptionStatus === status) {
+    for (let i = 0; i < this.getCompaniesResponseBody.length; i++) {
+        if (this.getCompaniesResponseBody[i].subscriptionStatus === status) {
             this.getCompanyKey = this.getCompaniesResponseBody[i].companyKey;
             this.attach(`Get company key will push into URL of api/billing/subscription: ` + this.getCompanyKey);
             console.log(`Get company key will push into URL of api/billing/subscription: `, this.getCompanyKey);
@@ -80,7 +80,7 @@ Then(`{} picks company that has interval {}, status {} and has been added card`,
             this.intervalFromAPI = await this.currentSubscriptionResponseBody.plan.interval;
             console.log("intervalFromAPI >>>>> ", this.intervalFromAPI);
 
-            if(this.intervalFromAPI === interval) {
+            if (this.intervalFromAPI === interval) {
                 this.currentPlan = this.currentSubscriptionResponseBody.id;
                 this.priceOfCurrentPlan = this.currentSubscriptionResponseBody.plan.id;
                 this.subscriptionId = this.currentSubscriptionResponseBody.id;
@@ -128,15 +128,15 @@ Then('{} sends GET api endpoint to get all plans of system', async function (act
     }
 });
 
-Then(`{} picks random plan except current plan to upgrade or downgrade`, async function (actor) {
+Then(`{} picks random plan except current plan to {}`, async function (actor, changePlan) {
     console.log(`priceOfCurrentPlan >>>>> `, this.priceOfCurrentPlan);
-    for(let i = 0; i < this.getPlansListResponseBody.length; i++) {
+    for (let i = 0; i < this.getPlansListResponseBody.length; i++) {
         if (this.priceOfCurrentPlan.split('_', 1)[0] === "price" && this.getPlansListResponseBody[i].id !== this.priceOfCurrentPlan && this.getPlansListResponseBody[i].allowOrders !== null) {
             plansAfterFiltering.push(this.getPlansListResponseBody[i]);
             console.log(`New priceOfCurrentPlan >>>>> `, this.priceOfCurrentPlan);
             console.log("New this.getPlansListResponseBody[i].allowOrders >>>>> ", this.getPlansListResponseBody[i].allowOrders)
         }
-        else if(this.priceOfCurrentPlan.split('_', 1)[0] !== "price" && this.getPlansListResponseBody[i].id !== this.priceOfCurrentPlan && this.getPlansListResponseBody[i].allowOrders === null) {
+        else if (this.priceOfCurrentPlan.split('_', 1)[0] !== "price" && this.getPlansListResponseBody[i].id !== this.priceOfCurrentPlan && this.getPlansListResponseBody[i].allowOrders === null) {
             plansAfterFiltering.push(this.getPlansListResponseBody[i]);
             console.log(`Old priceOfCurrentPlan >>>>> `, this.priceOfCurrentPlan);
             console.log("Old this.getPlansListResponseBody[i].allowOrders >>>>> ", this.getPlansListResponseBody[i].allowOrders)
@@ -183,9 +183,9 @@ Then(`{} sends POST api endpoint to upgrade and downgrade`, async function (acto
 Then(`{} filters {} plans from list above`, async function (actor, interval: string) {
     console.log(`priceOfCurrentPlan >>>>> `, this.priceOfCurrentPlan, "interval >>>>> ", interval);
 
-    for(let i = 0; i < this.getPlansListResponseBody.length; i++) {
+    for (let i = 0; i < this.getPlansListResponseBody.length; i++) {
         // Filtering monthly/yearly plans from list above
-        if(this.getPlansListResponseBody[i].interval === interval) {
+        if (this.getPlansListResponseBody[i].interval === interval) {
             intervalPlans.push(this.getPlansListResponseBody[i]);
             console.log("intervalPlans >>>>> ", intervalPlans);
             console.log("intervalPlans >>>>> ", intervalPlans.length);
@@ -194,17 +194,17 @@ Then(`{} filters {} plans from list above`, async function (actor, interval: str
     }
 })
 
-Then(`{} picks random {} plan except current plan to upgrade or downgrade`, async function (actor, interval: string) {
+Then(`{} picks random {} plan except current plan to {}`, async function (actor, interval: string, changePlan) {
     console.log(`priceOfCurrentPlan >>>>> `, this.priceOfCurrentPlan, "intervalPlans >>>>> ", intervalPlans, intervalPlans.length);
 
-    for(let i = 0; i < intervalPlans.length; i++) {
+    for (let i = 0; i < intervalPlans.length; i++) {
         console.log(`priceOfCurrentPlan: `, this.priceOfCurrentPlan, "intervalPlans: ", intervalPlans, intervalPlans.length);
         if (this.priceOfCurrentPlan.split('_', 1)[0] === "price" && intervalPlans[i].id !== this.priceOfCurrentPlan && intervalPlans[i].allowOrders !== null) {
             monthlyPlanAfterFiltering.push(intervalPlans[i]);
             console.log(`New priceOfCurrentPlan >>>>> `, this.priceOfCurrentPlan);
             console.log("New this.intervalPlans[i].allowOrders >>>>> ", intervalPlans[i].allowOrders)
         }
-        else if(this.priceOfCurrentPlan.split('_', 1)[0] !== "price" && intervalPlans[i].id !== this.priceOfCurrentPlan && intervalPlans[i].allowOrders === null) {
+        else if (this.priceOfCurrentPlan.split('_', 1)[0] !== "price" && intervalPlans[i].id !== this.priceOfCurrentPlan && intervalPlans[i].allowOrders === null) {
             monthlyPlanAfterFiltering.push(intervalPlans[i]);
             console.log(`Old priceOfCurrentPlan >>>>> `, this.priceOfCurrentPlan);
             console.log("Old this.intervalPlans[i].allowOrders >>>>> ", intervalPlans[i].allowOrders)
@@ -232,6 +232,12 @@ Then('{} sends GET api endpoint to get current subscription with payment method'
         this.subscriptionAfterChangingResponseBody = JSON.parse(await this.subscriptionAfterChangingResponse.text());
         this.previousPlanId = this.subscriptionAfterChangingResponseBody.metadata.previousPlanId
         this.planAfterSwitching = this.subscriptionAfterChangingResponseBody.plan.id;
+        this.priceId = this.subscriptionAfterChangingResponseBody.plan.id;
+        console.log("Price Id of trialing plan: ", this.priceId);
+        this.customerId = this.subscriptionAfterChangingResponseBody.customer;
+        this.subscriptionId = this.subscriptionAfterChangingResponseBody.id;
+        this.defaultPaymentMethod = this.subscriptionAfterChangingResponseBody.default_payment_method;
+        console.log("default_payment_method >>>>> ", this.defaultPaymentMethod)
         console.log("Plan of Subscription after Changing >>>>> ", this.planAfterSwitching, "previousPlanId >>>>> ", this.previousPlanId);
         logger.log('info', `Response GET current plan ${getCurrentSubscriptionWithPaymentMethodLink}` + JSON.stringify(this.subscriptionAfterChangingResponseBody, undefined, 4));
         this.attach(`Response GET current plan ${getCurrentSubscriptionWithPaymentMethodLink}` + JSON.stringify(this.subscriptionAfterChangingResponseBody, undefined, 4))
