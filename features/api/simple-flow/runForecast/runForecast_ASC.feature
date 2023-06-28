@@ -1211,7 +1211,7 @@ Feature: APIs: All features need to run forecast of ASC companies
             | <expectedStatus> | <expectedStatusText> |
         And User checks API contract of get list shipments api
         And User picks a just created shipment
-        And User sends PUT request to update Estimated Receive Date
+        And User sends PUT request to update in RestockAMZ Estimated Receive Date
         # Get Company info before run forecast
         And User sets GET api endpoint to get company information by company key
         And User sends a GET request to get company information by company key

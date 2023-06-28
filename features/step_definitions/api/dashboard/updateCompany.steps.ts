@@ -248,7 +248,7 @@ Then(`{} sets PUT api endpoint to update "Purchasing Daily Sales Rate Rules > Av
     this.attach(`Payload` + JSON.stringify(this.payLoad, undefined, 4))
 });
 
-Then(`{} sends PUT request to update "Purchasing Daily Sales Rate Rules > Average"`, async function (actor: string) {
+Then(`{} sends PUT request to update in Purchasing "Purchasing Daily Sales Rate Rules > Average"`, async function (actor: string) {
     this.response = await companyRequest.editPurchasingDailyRate(this.request, link, this.payLoad, this.headers)
     if (this.response.status() == 200) {
         this.editCompanyResponseBody = JSON.parse(await this.response.text())

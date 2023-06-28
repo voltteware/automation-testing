@@ -62,7 +62,7 @@ Then(`{} picks a random shipment in inbound analyzer`, async function (actor: st
 
 });
 
-Then(`{} sends PUT request to update {}`, async function (actor: string, fieldUpdate: string) {
+Then(`{} sends PUT request to update in RestockAMZ {}`, async function (actor: string, fieldUpdate: string) {
     linkApiUpdateShipment = `${Links.API_SHIPMENT}/${this.key}`
     if (fieldUpdate === 'Estimated Receive Date') {
         payload = {
