@@ -250,6 +250,7 @@ Given('User picks a random bom in above list boms', async function () {
     this.responseBodyOfABomObject = await this.getBomResponseBody[Math.floor(Math.random() * this.getBomResponseBody.length)];
     logger.log('info', `Random Bom: ${JSON.stringify(this.responseBodyOfABomObject, undefined, 4)}`);
     this.attach(`Random Bom: ${JSON.stringify(this.responseBodyOfABomObject, undefined, 4)}`);
+    this.componentName = this.responseBodyOfABomObject.childName;
 });
 
 Given('User saves the parentKey key and childKey key', function () {

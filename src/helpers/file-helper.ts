@@ -6,7 +6,7 @@ import { stringify } from 'csv-stringify';
 let dd: any;
 let mm: any;
 
-export function convertDataTableToCSVFile(dataTable: DataTable, section: string, fileName: string, supplierName?: string, itemName?: string) {
+export function convertDataTableToCSVFile(dataTable: DataTable, section: string, fileName: string, supplierName?: string, itemName?: string, componentName?: string) {
     var rows = dataTable.rows();
     const today = new Date();
     const yyyy = today.getFullYear();
@@ -20,6 +20,25 @@ export function convertDataTableToCSVFile(dataTable: DataTable, section: string,
     }
     const formattedToday = mm + '/' + dd + '/' + yyyy;
     switch (section) {
+        case 'bom':
+            rows.forEach((row: any, index: number) => {
+                // Parent Name
+                if (row[0] === 'hard') {
+                    rows[index][0] = `1`
+                }
+                // Component Name
+                if (row[1] === 'random') {
+                    rows[index][1] = `${itemName}`
+                }
+                if (row[1] === 'hard') {
+                    rows[index][1] = `${componentName}`
+                }
+                // Kit Qty
+                if (row[2] === 'random') {
+                    rows[index][2] = `${Number(faker.random.numeric())}`
+                }
+            })
+            break;
         case 'supplier':
             rows.forEach((row: any, index: number) => {
                 // Supplier Name

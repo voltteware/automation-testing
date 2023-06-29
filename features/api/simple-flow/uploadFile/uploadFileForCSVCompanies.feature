@@ -286,3 +286,70 @@ Feature: API_Regression User uploads file for all sections in CSV companies
         Examples:
             | TC_ID          | companyType | email                      | fileName                     | option | expectedStatus | expectedStatusText | valueContain     |
             | TC_UFFCSV004_2 | CSV         | testautoforecast@gmail.com | supplyTemplateCSVCompany.csv | false  | 200            | OK                 | from upload auto |
+
+    # Kits section
+    # Create new kits
+    # Please remove items with name including "from upload auto" to reduce time running
+    @csvCompanies-kit
+    Scenario Outline: Add new kits via upload csv file
+        Given User picks company which has onboarded before with type <companyType> in above response
+        And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
+        And User finds the list items contain value: <valueContain>
+        And User picks a random item in above list items
+        And User prepares the <fileName> file contains the list bom as following data:
+            | Parent Name | Component Name | Kit Qty |
+            | hard        | random         | random  |
+        And User sets GET api to get signed request
+        And User sends a GET request to get signed request
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
+        And User sets PUT api to upload file <fileName> to the Amazon S3
+        And User sends a PUT request to upload file to the Amazon S3
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
+        And User sets POST api to sync file <fileName> from Amazon S3 with option isCreateNew: <option>
+        And User sends a POST request to sync file from Amazon S3
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
+        When User finds the list bom contain value: <valueContain>
+        Then User checks items in the bom must be the same as in csv file
+
+        Examples:
+            | TC_ID          | companyType | email                      | fileName                  | option | expectedStatus | expectedStatusText | valueContain     |
+            | TC_UFFCSV005_1 | CSV         | testautoforecast@gmail.com | bomTemplateCSVCompany.csv | true   | 200            | OK                 | from upload auto |
+
+    # Kits section
+    # Update new kits
+    @csvCompanies-kit
+    Scenario Outline: Update kits via upload csv file
+        Given User picks company which has onboarded before with type <companyType> in above response
+        And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
+        And User finds the list bom contain value: <valueContain>
+        And User picks a random bom in above list boms
+        And User prepares the <fileName> file contains the list bom as following data:
+            | Parent Name | Component Name | Kit Qty |
+            | hard        | hard           | random  |
+        And User sets GET api to get signed request
+        And User sends a GET request to get signed request
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
+        And User sets PUT api to upload file <fileName> to the Amazon S3
+        And User sends a PUT request to upload file to the Amazon S3
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
+        And User sets POST api to sync file <fileName> from Amazon S3 with option isCreateNew: <option>
+        And User sends a POST request to sync file from Amazon S3
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
+        When User finds the list bom contain value: <valueContain>
+        Then User checks items in the bom must be the same as in csv file
+
+        Examples:
+            | TC_ID          | companyType | email                      | fileName                  | option | expectedStatus | expectedStatusText | valueContain     |
+            | TC_UFFCSV005_2 | CSV         | testautoforecast@gmail.com | bomTemplateCSVCompany.csv | false  | 200            | OK                 | from upload auto |
