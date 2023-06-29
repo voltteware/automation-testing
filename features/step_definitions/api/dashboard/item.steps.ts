@@ -2,6 +2,7 @@ import { When, Then, Given, DataTable } from '@cucumber/cucumber';
 import { expect } from '@playwright/test';
 import * as itemRequest from '../../../../src/api/request/item.service';
 import * as vendorRequest from '../../../../src/api/request/vendor.service';
+import * as bomRequest from '../../../../src/api/request/bom.service';
 import logger from '../../../../src/Logger/logger';
 import { Links } from '../../../../src/utils/links';
 import { faker } from '@faker-js/faker';
@@ -41,21 +42,32 @@ Then(`{} sets GET api endpoint to get items that have not purchase as`, async fu
     linkGetItems = `${Links.API_ITEMS}?offset=0&limit=50&where={"filters":[{"filters":[{"field":"lotMultipleItemName","operator":"isnull","value":null}],"logic":"and"}],"logic":"and"}`
 });
 
-Then(`{} finds the list items contain value: {}`, async function (actor, valueContain: string) {
-    let link = `${Links.API_ITEMS}?offset=0&limit=100&where={"filters":[{"filters":[{"field":"name","operator":"contains","value":"${valueContain}"}],"logic":"and"}],"logic":"and"}`;
-    const options = {
-        headers: this.headers
+Then(`{} finds the list {} contain value: {}`, async function (actor, section, valueContain: string) {
+    if (section === 'items') {
+        link = `${Links.API_ITEMS}?offset=0&limit=100&where={"filters":[{"filters":[{"field":"name","operator":"contains","value":"${valueContain}"}],"logic":"and"}],"logic":"and"}`;
+        const options = {
+            headers: this.headers
+        }
+        this.getItemsResponse = this.response = await itemRequest.getItems(this.request, link, options);
+        this.responseBodyText = await this.getItemsResponse.text();
+        this.responseBody = this.getItemsResponseBody = JSON.parse(await this.response.text());
     }
-    this.getItemsResponse = this.response = await itemRequest.getItems(this.request, link, options);
-    const responseBodyText = await this.getItemsResponse.text();
-    if (this.getItemsResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
-        this.responseBody = this.getItemsResponseBody = JSON.parse(await this.getItemsResponse.text());
-        logger.log('info', `Response GET ${link}` + JSON.stringify(this.getItemsResponseBody, undefined, 4));
-        this.attach(`Response GET ${link}` + JSON.stringify(this.getItemsResponseBody, undefined, 4))
+    if (section === 'bom') {
+        link = `${Links.API_BOM}?offset=0&limit=100&where={"filters":[{"filters":[{"field":"childName","operator":"contains","value":"${valueContain}"}],"logic":"and"}],"logic":"and"}`;
+        const options = {
+            headers: this.headers
+        }
+        this.getBomResponse = this.response = await bomRequest.getBom(this.request, link, options);
+        this.responseBodyText = await this.getBomResponse.text();
+        this.responseBody = this.getBomResponseBody = JSON.parse(await this.response.text());
+    }
+    if (this.response.status() == 200 && !this.responseBodyText.includes('<!doctype html>')) {
+        logger.log('info', `Response GET ${link}` + JSON.stringify(this.responseBody, undefined, 4));
+        this.attach(`Response GET ${link}` + JSON.stringify(this.responseBody, undefined, 4))
     }
     else {
-        const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
-        logger.log('info', `Response GET ${link} has status code ${this.response.status()} ${this.response.statusText()} and response body ${responseBodyText}`);
+        const actualResponseText = this.responseBodyText.includes('<!doctype html>') ? 'html' : this.responseBodyText;
+        logger.log('info', `Response GET ${link} has status code ${this.response.status()} ${this.response.statusText()} and response body ${this.responseBodyText}`);
         this.attach(`Response GET ${link} has status code ${this.response.status()} ${this.response.statusText()} and response body ${actualResponseText}`)
     }
 });
@@ -1367,7 +1379,7 @@ When('User sends PUT request to update item {} sales velocity setting type {} wi
             this.randomWeightNumbers = []
 
             if (isNumber) {
-                 // The function returns the array of 8 numbers that add up to the desired sum (here is percentage of purchasing daily sales)
+                // The function returns the array of 8 numbers that add up to the desired sum (here is percentage of purchasing daily sales)
                 this.randomWeightNumbers = keyword.generateRandomNumbers(Number(percentage), 8);
 
                 this.payLoad = {
@@ -1381,14 +1393,14 @@ When('User sends PUT request to update item {} sales velocity setting type {} wi
                     "targetQtyOnHandMax": 60,
                     "salesVelocityType": "average",
                     "salesVelocitySettingData": {
-                            "percent2Day": this.randomWeightNumbers[0],
-                            "percent7Day": this.randomWeightNumbers[1],
-                            "percent14Day": this.randomWeightNumbers[2],
-                            "percent30Day": this.randomWeightNumbers[3],
-                            "percent60Day": this.randomWeightNumbers[4],
-                            "percent90Day": this.randomWeightNumbers[5],
-                            "percent180Day": this.randomWeightNumbers[6],
-                            "percentForecasted": this.randomWeightNumbers[7]
+                        "percent2Day": this.randomWeightNumbers[0],
+                        "percent7Day": this.randomWeightNumbers[1],
+                        "percent14Day": this.randomWeightNumbers[2],
+                        "percent30Day": this.randomWeightNumbers[3],
+                        "percent60Day": this.randomWeightNumbers[4],
+                        "percent90Day": this.randomWeightNumbers[5],
+                        "percent180Day": this.randomWeightNumbers[6],
+                        "percentForecasted": this.randomWeightNumbers[7]
                     }
                 }
             }
@@ -1403,12 +1415,12 @@ When('User sends PUT request to update item {} sales velocity setting type {} wi
                 "localLeadTime": 7,
                 "targetQtyOnHandMin": 30,
                 "targetQtyOnHandMax": 60,
-                "salesVelocityType": "auto"                
+                "salesVelocityType": "auto"
             }
             break;
         default:
             break;
-    }    
+    }
 
     logger.log('info', `Payload` + JSON.stringify(this.payLoad, undefined, 4));
     this.attach(`Payload` + JSON.stringify(this.payLoad, undefined, 4))
@@ -1459,7 +1471,7 @@ Then('User sends a GET request to get Item by Item key', async function () {
         logger.log('info', `Response GET ${linkItemKey} has status code ${this.response.status()} ${this.response.statusText()} and response body ${responseBodyText}`);
         this.attach(`Response GET ${linkItemKey} has status code ${this.response.status()} ${this.response.statusText()} and response body ${actualResponseText}`)
     }
-    
+
     this.vendorPriceOfItem = this.getItemByItemKeyResponseBody.vendorPrice;
     this.packageWeightOfItem = this.getItemByItemKeyResponseBody.packageWeight;
 });

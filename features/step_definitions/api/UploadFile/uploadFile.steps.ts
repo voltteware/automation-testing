@@ -19,7 +19,7 @@ Then(`User prepares the {} file contains the list {} as following data:`, async 
     // Write data in table to csv file
     this.fileName = fileName;
     this.section = section;
-    const result = fileHelper.convertDataTableToCSVFile(dataTable, section, this.fileName, this.supplierName, this.itemName);
+    const result = fileHelper.convertDataTableToCSVFile(dataTable, section, this.fileName, this.supplierName, this.itemName, this.componentName);
     this.expectedData = result
     logger.log('info', `Content of file: ` + this.expectedData);
     this.attach(`Content of file: ` + this.expectedData);
@@ -104,6 +104,27 @@ Then(`{} checks items in the {} must be the same as in csv file`, async function
     logger.log('info', `Data: ` + JSON.stringify(data, undefined, 4));
     this.attach(`Data: ` + JSON.stringify(data, undefined, 4));
     switch (section) {
+        case "bom":
+            expectedValueName = data.map((bom: any) => bom['Component Name'])
+            logger.log('info', `expectedValueName: ` + JSON.stringify(expectedValueName, undefined, 4));
+            this.attach(`expectedValueName: ` + JSON.stringify(expectedValueName, undefined, 4));
+
+            actualValueName = this.getBomResponseBody.map((bom: any) => bom.childName)
+            logger.log('info', `actualValueName: ` + JSON.stringify(actualValueName, undefined, 4));
+            this.attach(`actualValueName: ` + JSON.stringify(actualValueName, undefined, 4));
+
+            let expectedKitQty = data.map((bom: any) => bom['Kit Qty']).map(i => Number(i));
+            logger.log('info', `expectedKitQty: ` + JSON.stringify(expectedKitQty, undefined, 4));
+            this.attach(`expectedKitQty: ` + JSON.stringify(expectedKitQty, undefined, 4));
+
+            let actualKitQty = this.getBomResponseBody.map((bom: any) => bom.qty)
+            logger.log('info', `actualKitQty: ` + JSON.stringify(actualKitQty, undefined, 4));
+            this.attach(`actualKitQty: ` + JSON.stringify(actualKitQty, undefined, 4));
+
+            let booleanKitQty = isSubset(actualKitQty, expectedKitQty);
+            expect(booleanKitQty).toBe(true);
+
+            break;
         case "shipment":
             expectedValueName = data.map((item: any) => item.SKU)
             logger.log('info', `expectedValueName: ` + JSON.stringify(expectedValueName, undefined, 4));
@@ -112,6 +133,7 @@ Then(`{} checks items in the {} must be the same as in csv file`, async function
             actualValueName = this.getShipmentItemsResponseBody.map((item: any) => item.itemName)
             logger.log('info', `actualValueName: ` + JSON.stringify(actualValueName, undefined, 4));
             this.attach(`actualValueName: ` + JSON.stringify(actualValueName, undefined, 4));
+
             break;
         case "supplier":
             expectedValueName = data.map((supplier: any) => supplier['Supplier Name'])
