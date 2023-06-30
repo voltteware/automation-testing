@@ -48,7 +48,7 @@ jobs:
 
 trigger:
   branch:
-    - master
+    - feature/configCI
 
 # Orchestrate jobs using workflows
 # See: https://circleci.com/docs/configuration-reference/#workflows
@@ -59,14 +59,14 @@ workflows:
           filters:
             branches:
               only:
-                - master
+                - feature/configCI
       - start-testing-api-run-forecast-qbfs-csv:
           filters:
             branches:
               only:
-                - master
+                - feature/configCI
       - start-testing-api-run-forecast-asc:
           filters:
             branches:
               only:
-                - master
+                - feature/configCI
