@@ -14,19 +14,10 @@ var planAfterFiltering = new Array();
 
 // Pick random plan to subscribe
 Then(`{} picks random plan to subscribe`, async function (actor) {
-    console.log(`priceOfCurrentPlan >>>>> `, this.priceId);
-
     for (let i = 0; i < this.getPlansListResponseBody.length; i++) {
-        console.log(`priceOfCurrentPlan: `, this.priceId, "getPlansListResponseBody: ", this.getPlansListResponseBody);
-        if (this.priceId.split('_', 1)[0] === "price" && this.getPlansListResponseBody[i].allowOrders !== null) {
+        if (this.getPlansListResponseBody[i].allowOrders !== null) {
             planAfterFiltering.push(this.getPlansListResponseBody[i]);
-            console.log(`New priceOfCurrentPlan >>>>> `, this.priceId);
             console.log("New this.getPlansListResponseBody[i].allowOrders >>>>> ", this.getPlansListResponseBody[i].allowOrders)
-        }
-        else if (this.priceId.split('_', 1)[0] !== "price" && this.getPlansListResponseBody[i].allowOrders === null) {
-            planAfterFiltering.push(this.getPlansListResponseBody[i]);
-            console.log(`Old priceOfCurrentPlan >>>>> `, this.priceId);
-            console.log("Old this.getPlansListResponseBody[i].allowOrders >>>>> ", this.getPlansListResponseBody[i].allowOrders)
         }
     }
 
@@ -139,6 +130,7 @@ Then('{} creates payment method to subscribe', async function (actor) {
     },
     });
     console.log("paymentMethod >>>>> ", this.paymentMethod.id);
+    this.attach(`paymentMethod >>>>> ` + this.paymentMethod.id);
 });
 
 // Confirm subscribed
@@ -146,11 +138,22 @@ Then('{} sets POST api endpoint to confirm subscribed', async function (actor) {
     confirmSubscribedLink = encodeURI(`https://api.stripe.com/v1/payment_pages/${this.CsTest[5]}/confirm`);
 });
 
-Then('{} sets request body with payload to confirm subscribed', async function (actor) {
+Then('{} sets request body with payload to confirm subscribed with {} status', async function (actor, status: string) {
+    if(status === "canceled") {
+        console.log("Expected Amount >>>>> ", this.planPickedRandom.amount);
+        let amount = this.planPickedRandom.amount;
+        this.expectedAmount = amount * 100;
+        console.log("Expected Amount after * 100 >>>>> ", this.expectedAmount);
+        this.attach(`Expected Amount after * 100 >>>>> ` + this.expectedAmount);
+    }
+    else {
+        this.expectedAmount = 0;
+    }
+    
     this.confirmSubscribedPayLoad = { 
         "eid": "NA",
         "payment_method": this.paymentMethod.id,
-        "expected_amount": 0,
+        "expected_amount": this.expectedAmount,
         "expected_payment_method_type": "card",
         "guid": this.guid,
         "muid": this.muid,
@@ -159,6 +162,7 @@ Then('{} sets request body with payload to confirm subscribed', async function (
     }
 
     console.log("confirmSubscribedPayLoad >>>>> ", this.confirmSubscribedPayLoad);
+    this.attach(`confirmSubscribedPayLoad >>>>> ` + JSON.stringify(this.confirmSubscribedPayLoad));
 });
 
 Then(`{} sends POST api endpoint to confirm subscribed`, async function (actor) {
@@ -182,10 +186,15 @@ Then(`{} sends POST api endpoint to confirm subscribed`, async function (actor) 
         logger.log('info', `Response POST confirm subscribed ${confirmSubscribedLink} - ${responseBodyText}`);
         this.attach(`Response POST confirm subscribed ${confirmSubscribedLink} returns html`)
     }
+
+    // Waiting the page after a delay of 3 seconds
+    await new Promise((resolve) => setTimeout(() => resolve(null), 3000));
 });
 
 // Get latest subscription
 Then('{} sets GET api endpoint to get latest subscription', async function (actor) {
+    console.log("subscriptionId after subscribed >>>>> ", this.subscriptionId);
+    this.attach(`subscriptionId after subscribed >>>>> ` + this.subscriptionId);
     getLatestSubscriptionLink = encodeURI(`${Links.API_LATEST_SUB}${this.subscriptionId}/latest`);
 });
 
@@ -212,6 +221,31 @@ Then(`{} sends GET api endpoint to get latest subscription`, async function (act
 });
 
 // Check default method after subscribed
-Then(`{} checks current subscription is subscription that has been subscribed`, async function (actor) {
-    expect(this.paymentMethod.id).toEqual(this.paymentMethod.id);
+Then(`{} checks current payment method is method that has been subscribed`, async function (actor) {
+    expect(this.defaultPaymentMethod).toEqual(this.paymentMethod.id);
 });
+
+// Check status after subscribed successfully
+Then(`{} checks current status is {}`, async function (actor, status: string) {
+    console.log("Expected status >>>>> ", this.expectedStatus);
+    this.attach(`Expected status >>>>> ` + this.expectedStatus);
+    expect(this.expectedStatus).toEqual(status);
+    expect(this.subscriptionAfterChangingResponseBody.metadata.companyKey).toEqual(this.companyKey);
+})
+
+// ====== Subscribed plan with subscription has status Canceled ======
+// Pick random company that has Canceled status
+Then(`{} picks random company that has {} status`, async function (actor, status: string) {
+    console.log("Get all company: ", this.getCompaniesResponseBody);
+    for (let i = 0; i < this.getCompaniesResponseBody.length; i++) {
+        if (this.getCompaniesResponseBody[i].subscriptionStatus === status) {
+            this.companyKey = this.getCompaniesResponseBody[i].companyKey;
+            this.companyType = this.getCompaniesResponseBody[i].companyType;
+            this.companyName = this.getCompaniesResponseBody[i].companyName;
+            this.customerId = this.getCompaniesResponseBody[i].customerId;
+            this.subscriptionId = this.getCompaniesResponseBody[i].subscriptionId;
+            this.responseBodyOfACompanyObject = this.getCompaniesResponseBody[i];
+            console.log("this.getCompanyKey >>>>> ", this.companyKey);
+        }
+    }
+}); 

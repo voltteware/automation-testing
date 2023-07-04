@@ -99,7 +99,11 @@ Then('{} sends a GET request to get company information by company key', async f
         this.purchasingSalesVelocityType = this.getCompanyInfoResponseBody.purchasingSalesVelocityType;
         //Global RestockAMZ settings
         this.salesVelocityType = this.getCompanyInfoResponseBody.salesVelocityType;
-        logger.log('info', `purchasingSalesVelocityType:: ` + this.purchasingSalesVelocityType);
+        // Get subscription Id
+        this.subscriptionId = this.getCompanyInfoResponseBody.subscriptionId;
+        this.subscriptionId = this.getCompanyInfoResponseBody.subscriptionId;
+        logger.log('info', `subscriptionId:: ` + this.subscriptionId);
+        logger.log('info', `subscriptionId:: ` + this.subscriptionId);
         this.attach(`purchasingSalesVelocityType:: ` + this.purchasingSalesVelocityType)
         logger.log('info', `salesVelocityType:: ` + this.salesVelocityType);
         this.attach(`salesVelocityType:: ` + this.salesVelocityType)
