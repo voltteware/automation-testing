@@ -216,7 +216,7 @@ Feature: API_Regression User can delete shipments which have Pending & Working s
     # #Script to delete shipments on Amazon, change retry in cucumber.js
     # @run-this @retry
     # Scenario Outline: <TC_ID> - Verify user <email> could call APIs to delete shipments ITC which have WORKING status
-    #     Given User picks company which has onboarded before with type <companyType> in above response
+    #     Given User picks a company with type <companyType> and name <companyName> in above response
     #     And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
     #     And User sets GET api endpoint to find itc auto shipments
     #     And User sends a GET request to find the new created shipment
@@ -231,5 +231,5 @@ Feature: API_Regression User can delete shipments which have Pending & Working s
     #     And The status text is "<expectedStatusText>"
 
     #     Examples:
-    #         | TC_ID        | companyType | email                      | expectedStatus | expectedStatusText |
-    #         | TC_ASC_DS003 | ASC         | testautoforecast@gmail.com | 400            | OK                 |
+    #         | TC_ID        | companyType | email                      | expectedStatus | expectedStatusText | companyName           |
+    #         | TC_ASC_DS003 | ASC         | testautoforecast@gmail.com | 400            | OK                 | Fishers Finery Amazon |
