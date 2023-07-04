@@ -383,22 +383,3 @@ Then(`User sends a POST request to get demand aggregation of item`, async functi
         this.attach(`Response POST get demand aggregation ${this.linkGetDemandAggregation} has status code ${this.getDemandAggregationResponse.status()} ${this.getDemandAggregationResponse.statusText()} and response body ${actualResponseText}`)
     }
 })
-
-Then(`{} finds the list demand contain value: {}`, async function (actor, valueContain: string) {
-    let link = `${Links.API_DEMAND}?offset=0&limit=100&where={"filters":[{"filters":[{"field":"itemName","operator":"contains","value":"${valueContain}"}],"logic":"and"}],"logic":"and"}`;
-    const options = {
-        headers: this.headers
-    }
-    this.getDemandResponse = this.response = await demandRequest.getDemand(this.request, link, options);
-    const responseBodyText = await this.getDemandResponse.text();
-    if (this.getDemandResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
-        this.responseBody = this.getDemandResponseBody = JSON.parse(await this.getDemandResponse.text());
-        logger.log('info', `Response GET ${link}` + JSON.stringify(this.getDemandResponseBody, undefined, 4));
-        this.attach(`Response GET ${link}` + JSON.stringify(this.getDemandResponseBody, undefined, 4))
-    }
-    else {
-        const actualResponseText = responseBodyText.includes('<!doctype html>') ? 'html' : responseBodyText;
-        logger.log('info', `Response GET ${link} has status code ${this.response.status()} ${this.response.statusText()} and response body ${responseBodyText}`);
-        this.attach(`Response GET ${link} has status code ${this.response.status()} ${this.response.statusText()} and response body ${actualResponseText}`)
-    }
-});

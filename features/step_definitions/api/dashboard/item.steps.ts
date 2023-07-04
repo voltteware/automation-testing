@@ -2,16 +2,13 @@ import { When, Then, Given, DataTable } from '@cucumber/cucumber';
 import { expect } from '@playwright/test';
 import * as itemRequest from '../../../../src/api/request/item.service';
 import * as vendorRequest from '../../../../src/api/request/vendor.service';
-import * as bomRequest from '../../../../src/api/request/bom.service';
 import logger from '../../../../src/Logger/logger';
 import { Links } from '../../../../src/utils/links';
 import { faker } from '@faker-js/faker';
 import _ from "lodash";
 import * as keyword from '../../../../src/utils/actionwords'
-import exp from 'constants';
 import { itemInfoResponseSchema } from '../assertion/dashboard/itemAssertionSchema';
 
-let linkUpdateVendorSalesVelocitySettings: any;
 let linkUpdateItemSalesVelocitySettings: any;
 let linkGetItemsWithFilter: any;
 let linkGetItemSalesVelocitySettings: any;
@@ -40,36 +37,6 @@ Then(`{} sets GET api endpoint to get items that have purchase as`, async functi
 
 Then(`{} sets GET api endpoint to get items that have not purchase as`, async function (actor) {
     linkGetItems = `${Links.API_ITEMS}?offset=0&limit=50&where={"filters":[{"filters":[{"field":"lotMultipleItemName","operator":"isnull","value":null}],"logic":"and"}],"logic":"and"}`
-});
-
-Then(`{} finds the list {} contain value: {}`, async function (actor, section, valueContain: string) {
-    if (section === 'items') {
-        link = `${Links.API_ITEMS}?offset=0&limit=100&where={"filters":[{"filters":[{"field":"name","operator":"contains","value":"${valueContain}"}],"logic":"and"}],"logic":"and"}`;
-        const options = {
-            headers: this.headers
-        }
-        this.getItemsResponse = this.response = await itemRequest.getItems(this.request, link, options);
-        this.responseBodyText = await this.getItemsResponse.text();
-        this.responseBody = this.getItemsResponseBody = JSON.parse(await this.response.text());
-    }
-    if (section === 'bom') {
-        link = `${Links.API_BOM}?offset=0&limit=100&where={"filters":[{"filters":[{"field":"childName","operator":"contains","value":"${valueContain}"}],"logic":"and"}],"logic":"and"}`;
-        const options = {
-            headers: this.headers
-        }
-        this.getBomResponse = this.response = await bomRequest.getBom(this.request, link, options);
-        this.responseBodyText = await this.getBomResponse.text();
-        this.responseBody = this.getBomResponseBody = JSON.parse(await this.response.text());
-    }
-    if (this.response.status() == 200 && !this.responseBodyText.includes('<!doctype html>')) {
-        logger.log('info', `Response GET ${link}` + JSON.stringify(this.responseBody, undefined, 4));
-        this.attach(`Response GET ${link}` + JSON.stringify(this.responseBody, undefined, 4))
-    }
-    else {
-        const actualResponseText = this.responseBodyText.includes('<!doctype html>') ? 'html' : this.responseBodyText;
-        logger.log('info', `Response GET ${link} has status code ${this.response.status()} ${this.response.statusText()} and response body ${this.responseBodyText}`);
-        this.attach(`Response GET ${link} has status code ${this.response.status()} ${this.response.statusText()} and response body ${actualResponseText}`)
-    }
 });
 
 Then(`{} set GET api endpoint to get items with name contains {string}`, async function (actor, containText: string) {

@@ -4,7 +4,12 @@ import * as authenticateRequest from '../../../../../src/api/request/authenticat
 import logger from "../../../../../src/Logger/logger";
 import { Links } from "../../../../../src/utils/links";
 import * as _ from "lodash";
+import * as itemRequest from '../../../../../src/api/request/item.service';
+import * as bomRequest from '../../../../../src/api/request/bom.service';
+import * as demandRequest from '../../../../../src/api/request/demand.service';
 import { sortLocale } from '../../../../../src/helpers/array-helper';
+
+let link: any;
 
 // Get Valid Token 
 Then('{} has valid connect.sid of {} after send a POST request with payload as email: {string} and password: {string}', async function (name, user: string, email: string, password: string) {
@@ -99,6 +104,45 @@ Then('{} checks status code and status text of api', function (actor: string, da
     expect(this.response.statusText(), `In response, status text should be: ${expectedStatusText}`).toBe(expectedStatusText);
 });
 
+Then(`{} finds the list {} contain value: {}`, async function (actor, section, valueContain: string) {
+    if (section === 'items') {
+        link = `${Links.API_ITEMS}?offset=0&limit=100&where={"filters":[{"filters":[{"field":"name","operator":"contains","value":"${valueContain}"}],"logic":"and"}],"logic":"and"}`;
+        const options = {
+            headers: this.headers
+        }
+        this.getItemsResponse = this.response = await itemRequest.getItems(this.request, link, options);
+        this.responseBodyText = await this.getItemsResponse.text();
+        this.responseBody = this.getItemsResponseBody = JSON.parse(await this.response.text());
+    }
+    if (section === 'bom') {
+        link = `${Links.API_BOM}?offset=0&limit=100&where={"filters":[{"filters":[{"field":"childName","operator":"contains","value":"${valueContain}"}],"logic":"and"}],"logic":"and"}`;
+        const options = {
+            headers: this.headers
+        }
+        this.getBomResponse = this.response = await bomRequest.getBom(this.request, link, options);
+        this.responseBodyText = await this.getBomResponse.text();
+        this.responseBody = this.getBomResponseBody = JSON.parse(await this.response.text());
+    }
+    if (section == 'demand') {
+        let link = `${Links.API_DEMAND}?offset=0&limit=100&where={"filters":[{"filters":[{"field":"itemName","operator":"contains","value":"${valueContain}"}],"logic":"and"}],"logic":"and"}`;
+        const options = {
+            headers: this.headers
+        }
+        this.getDemandResponse = this.response = await demandRequest.getDemand(this.request, link, options);
+        this.responseBodyText = await this.getDemandResponse.text();
+        this.responseBody = this.getDemandResponseBody = JSON.parse(await this.getDemandResponse.text());
+    }
+    if (this.response.status() == 200 && !this.responseBodyText.includes('<!doctype html>')) {
+        logger.log('info', `Response GET ${link}` + JSON.stringify(this.responseBody, undefined, 4));
+        this.attach(`Response GET ${link}` + JSON.stringify(this.responseBody, undefined, 4))
+    }
+    else {
+        const actualResponseText = this.responseBodyText.includes('<!doctype html>') ? 'html' : this.responseBodyText;
+        logger.log('info', `Response GET ${link} has status code ${this.response.status()} ${this.response.statusText()} and response body ${this.responseBodyText}`);
+        this.attach(`Response GET ${link} has status code ${this.response.status()} ${this.response.statusText()} and response body ${actualResponseText}`)
+    }
+});
+
 Then('Response of Login and Register API must match with API contract', async function () {
     expect(this.responseBody).toHaveProperty('userId')
     expect(this.responseBody).toHaveProperty('isAdmin')
@@ -147,7 +191,7 @@ Then('Response of Login and Register API must match with API contract', async fu
 Then('UserId {} in the response of API is correct', async function (email) {
     // if (email.includes('random')) {
     var expectedUserId = email.includes('<random>') ? this.randomEmail : email;
-    // Somecase user object response is under object called model
+    // Some cases user object response is under object called model
     var userInfo = this.responseBodyOfAUserObject;
     if (userInfo == null) {
         // This is case when user object is not under object model like register API or login API

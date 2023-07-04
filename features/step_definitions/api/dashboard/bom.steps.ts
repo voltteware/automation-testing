@@ -151,7 +151,7 @@ Then(`{} sends a GET request to get total of boms`, async function (actor: strin
 Then('{} sends a DELETE method to delete bom {}', async function (actor, bomKey: string) {
     if (bomKey == 'child') {
         payLoadDelete = {
-            ids: this.selectedBoms.map((bo: any) => `${bo.parentKey}/${bo.childKey}`),
+            ids: this.selectedBoms.map((bo: any) => `${encodeURIComponent(bo.parentKey)}/${encodeURIComponent(bo.childKey)}`),
         }
     } else {
         payLoadDelete = {
