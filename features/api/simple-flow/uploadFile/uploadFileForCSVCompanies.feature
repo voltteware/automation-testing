@@ -12,7 +12,7 @@ Feature: API_Regression User uploads file for all sections in CSV companies
     # Create new Suppliers
     # Please remove supplier with name including "from upload auto" to reduce time running
     @csvCompanies-supplier
-    Scenario Outline: Add new suppliers via upload csv file
+    Scenario Outline: <TC_ID> - Add new suppliers via upload csv file
         Given User picks company which has onboarded before with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User prepares the <fileName> file contains the list supplier as following data:
@@ -39,13 +39,13 @@ Feature: API_Regression User uploads file for all sections in CSV companies
         Then User checks items in the supplier must be the same as in csv file
 
         Examples:
-            | TC_ID          | companyType | email                      | fileName                       | option | expectedStatus | expectedStatusText | columnFilter | valueColumnFilter | sortColumn | directionSort |
-            | TC_UFFCSV001_1 | CSV         | testautoforecast@gmail.com | supplierTemplateCSVCompany.csv | true   | 200            | OK                 | name         | from upload auto  | name       | asc           |
+            | TC_ID          | companyType | email                      | fileName                             | option | expectedStatus | expectedStatusText | columnFilter | valueColumnFilter | sortColumn | directionSort |
+            | TC_UFFCSV001_1 | CSV         | testautoforecast@gmail.com | supplierTemplateCreateCSVCompany.csv | true   | 200            | OK                 | name         | from upload auto  | name       | asc           |
 
     # Supplier section
     # Update Supplier via Upload file
     @csvCompanies-supplier
-    Scenario Outline: Update Supplier via upload csv file
+    Scenario Outline: <TC_ID> - Update Supplier via upload csv file
         Given User picks company which has onboarded before with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User filters one column and sorts one column
@@ -76,14 +76,14 @@ Feature: API_Regression User uploads file for all sections in CSV companies
         Then User checks items in the supplier must be the same as in csv file
 
         Examples:
-            | TC_ID          | companyType | email                      | fileName                       | option | expectedStatus | expectedStatusText | columnFilter | valueColumnFilter | sortColumn | directionSort |
-            | TC_UFFCSV001_2 | CSV         | testautoforecast@gmail.com | supplierTemplateCSVCompany.csv | false  | 200            | OK                 | name         | from upload auto  | name       | asc           |
+            | TC_ID          | companyType | email                      | fileName                             | option | expectedStatus | expectedStatusText | columnFilter | valueColumnFilter | sortColumn | directionSort |
+            | TC_UFFCSV001_2 | CSV         | testautoforecast@gmail.com | supplierTemplateUpdateCSVCompany.csv | false  | 200            | OK                 | name         | from upload auto  | name       | asc           |
 
     # Items section
     # Create new items
     # Please remove items with name including "from upload auto" to reduce time running
     @csvCompanies-items
-    Scenario Outline: Add new items via upload csv file
+    Scenario Outline: <TC_ID> - Add new items via upload csv file
         Given User picks company which has onboarded before with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get suppliers with limit row: 10
@@ -111,13 +111,13 @@ Feature: API_Regression User uploads file for all sections in CSV companies
         Then User checks items in the item must be the same as in csv file
 
         Examples:
-            | TC_ID          | companyType | email                      | fileName                   | option | expectedStatus | expectedStatusText | valueContain     |
-            | TC_UFFCSV002_1 | CSV         | testautoforecast@gmail.com | itemTemplateCSVCompany.csv | true   | 200            | OK                 | from upload auto |
+            | TC_ID          | companyType | email                      | fileName                         | option | expectedStatus | expectedStatusText | valueContain     |
+            | TC_UFFCSV002_1 | CSV         | testautoforecast@gmail.com | itemTemplateCreateCSVCompany.csv | true   | 200            | OK                 | from upload auto |
 
     # Items section
     # Update Items via Upload file
     @csvCompanies-items
-    Scenario Outline: Update Items via upload csv file
+    Scenario Outline: <TC_ID> - Update Items via upload csv file
         Given User picks company which has onboarded before with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get suppliers with limit row: 10
@@ -147,14 +147,14 @@ Feature: API_Regression User uploads file for all sections in CSV companies
         Then User checks items in the item must be the same as in csv file
 
         Examples:
-            | TC_ID          | companyType | email                      | fileName                   | option | expectedStatus | expectedStatusText | valueContain     |
-            | TC_UFFCSV002_2 | CSV         | testautoforecast@gmail.com | itemTemplateCSVCompany.csv | false  | 200            | OK                 | from upload auto |
+            | TC_ID          | companyType | email                      | fileName                         | option | expectedStatus | expectedStatusText | valueContain     |
+            | TC_UFFCSV002_2 | CSV         | testautoforecast@gmail.com | itemTemplateUpdateCSVCompany.csv | false  | 200            | OK                 | from upload auto |
 
     # Demand section
     # Create new demand
     # Please remove demad with items name including "from upload auto" to reduce time running
     @csvCompanies-demand
-    Scenario Outline: Add new demand via upload csv file
+    Scenario Outline: <TC_ID> - Add new demand via upload csv file
         Given User picks company which has onboarded before with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User finds the list items contain value: <valueContain>
@@ -179,12 +179,12 @@ Feature: API_Regression User uploads file for all sections in CSV companies
 
         Examples:
             | TC_ID          | companyType | email                      | fileName                     | option | expectedStatus | expectedStatusText | valueContain     |
-            | TC_UFFCSV003_1 | CSV         | testautoforecast@gmail.com | demandTemplateCSVCompany.csv | true   | 200            | OK                 | from upload auto |
+            | TC_UFFCSV003_1 | CSV         | testautoforecast@gmail.com | demandTemplateCreateCSVCompany.csv | true   | 200            | OK                 | from upload auto |
 
     # Demand section
     # Update Demand via Upload file
     @csvCompanies-demand
-    Scenario Outline: Update demand via upload csv file
+    Scenario Outline: <TC_ID> - Update demand via upload csv file
         Given User picks company which has onboarded before with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User finds the list demand contain value: <valueContain>
@@ -209,13 +209,13 @@ Feature: API_Regression User uploads file for all sections in CSV companies
 
         Examples:
             | TC_ID          | companyType | email                      | fileName                     | option | expectedStatus | expectedStatusText | valueContain     |
-            | TC_UFFCSV003_2 | CSV         | testautoforecast@gmail.com | demandTemplateCSVCompany.csv | false  | 200            | OK                 | from upload auto |
+            | TC_UFFCSV003_2 | CSV         | testautoforecast@gmail.com | demandTemplateUpdateCSVCompany.csv | false  | 200            | OK                 | from upload auto |
 
     # Supply section
     # Create new supply
     # Please remove supply with items name including "from upload auto" to reduce time running
     @csvCompanies-supply
-    Scenario Outline: Add new supply via upload csv file
+    Scenario Outline: <TC_ID> - Add new supply via upload csv file
         Given User picks company which has onboarded before with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get suppliers with limit row: 10
@@ -247,12 +247,12 @@ Feature: API_Regression User uploads file for all sections in CSV companies
 
         Examples:
             | TC_ID          | companyType | email                      | fileName                     | option | expectedStatus | expectedStatusText | valueContain     |
-            | TC_UFFCSV004_1 | CSV         | testautoforecast@gmail.com | supplyTemplateCSVCompany.csv | true   | 200            | OK                 | from upload auto |
+            | TC_UFFCSV004_1 | CSV         | testautoforecast@gmail.com | supplyTemplateCreateCSVCompany.csv | true   | 200            | OK                 | from upload auto |
 
     # Supply section
     # Update Supply via Upload file
     @csvCompanies-supply
-    Scenario Outline: Update Supply via upload csv file
+    Scenario Outline: <TC_ID> - Update supply via upload csv file
         Given User picks company which has onboarded before with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get suppliers with limit row: 10
@@ -284,14 +284,14 @@ Feature: API_Regression User uploads file for all sections in CSV companies
         Then User checks items in the supply must be the same as in csv file
 
         Examples:
-            | TC_ID          | companyType | email                      | fileName                     | option | expectedStatus | expectedStatusText | valueContain     |
-            | TC_UFFCSV004_2 | CSV         | testautoforecast@gmail.com | supplyTemplateCSVCompany.csv | false  | 200            | OK                 | from upload auto |
+            | TC_ID          | companyType | email                      | fileName                           | option | expectedStatus | expectedStatusText | valueContain     |
+            | TC_UFFCSV004_2 | CSV         | testautoforecast@gmail.com | supplyTemplateUpdateCSVCompany.csv | false  | 200            | OK                 | from upload auto |
 
     # Kits section
     # Create new kits
     # Please remove items with name including "from upload auto" to reduce time running
     @csvCompanies-kit
-    Scenario Outline: Add new kits via upload csv file
+    Scenario Outline: <TC_ID> - Add new kits via upload csv file
         Given User picks company which has onboarded before with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User finds the list items contain value: <valueContain>
@@ -318,13 +318,13 @@ Feature: API_Regression User uploads file for all sections in CSV companies
         Then User checks items in the bom must be the same as in csv file
 
         Examples:
-            | TC_ID          | companyType | email                      | fileName                  | option | expectedStatus | expectedStatusText | valueContain     |
-            | TC_UFFCSV005_1 | CSV         | testautoforecast@gmail.com | bomTemplateCSVCompany.csv | true   | 200            | OK                 | from upload auto |
+            | TC_ID          | companyType | email                      | fileName                        | option | expectedStatus | expectedStatusText | valueContain     |
+            | TC_UFFCSV005_1 | CSV         | testautoforecast@gmail.com | bomTemplateCreateCSVCompany.csv | true   | 200            | OK                 | from upload auto |
 
     # Kits section
     # Update new kits
     @csvCompanies-kit
-    Scenario Outline: Update kits via upload csv file
+    Scenario Outline: <TC_ID> - Update kits via upload csv file
         Given User picks company which has onboarded before with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User finds the list bom contain value: <valueContain>
@@ -351,5 +351,5 @@ Feature: API_Regression User uploads file for all sections in CSV companies
         Then User checks items in the bom must be the same as in csv file
 
         Examples:
-            | TC_ID          | companyType | email                      | fileName                  | option | expectedStatus | expectedStatusText | valueContain     |
-            | TC_UFFCSV005_2 | CSV         | testautoforecast@gmail.com | bomTemplateCSVCompany.csv | false  | 200            | OK                 | from upload auto |
+            | TC_ID          | companyType | email                      | fileName                        | option | expectedStatus | expectedStatusText | valueContain     |
+            | TC_UFFCSV005_2 | CSV         | testautoforecast@gmail.com | bomTemplateUpdateCSVCompany.csv | false  | 200            | OK                 | from upload auto |

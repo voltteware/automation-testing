@@ -12,7 +12,7 @@ Feature: API_Regression User uploads file for all sections in QBFS companies
     # Create new Suppliers
     # Please remove supplier with name including "from upload auto" to reduce time running
     @qbfsCompanies-supplier
-    Scenario Outline: Add new suppliers via upload csv file
+    Scenario Outline: <TC_ID> - Add new suppliers via upload csv file
         Given User picks company which has onboarded before with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User prepares the <fileName> file contains the list supplier as following data:
@@ -39,13 +39,13 @@ Feature: API_Regression User uploads file for all sections in QBFS companies
         Then User checks items in the supplier must be the same as in csv file
 
         Examples:
-            | TC_ID           | companyType | email                      | fileName                        | option | expectedStatus | expectedStatusText | columnFilter | valueColumnFilter | sortColumn | directionSort |
-            | TC_UFFQBFS001_1 | QBFS        | testautoforecast@gmail.com | supplierTemplateQBFSCompany.csv | true   | 200            | OK                 | name         | from upload auto  | name       | asc           |
+            | TC_ID           | companyType | email                      | fileName                              | option | expectedStatus | expectedStatusText | columnFilter | valueColumnFilter | sortColumn | directionSort |
+            | TC_UFFQBFS001_1 | QBFS        | testautoforecast@gmail.com | supplierTemplateCreateQBFSCompany.csv | true   | 200            | OK                 | name         | from upload auto  | name       | asc           |
 
     # Supplier section
     # Update Supplier via Upload file
     @qbfsCompanies-supplier
-    Scenario Outline: Update Supplier via upload csv file
+    Scenario Outline: <TC_ID> - Update Supplier via upload csv file
         Given User picks company which has onboarded before with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User filters one column and sorts one column
@@ -76,14 +76,14 @@ Feature: API_Regression User uploads file for all sections in QBFS companies
         Then User checks items in the supplier must be the same as in csv file
 
         Examples:
-            | TC_ID           | companyType | email                      | fileName                        | option | expectedStatus | expectedStatusText | columnFilter | valueColumnFilter | sortColumn | directionSort |
-            | TC_UFFQBFS001_2 | QBFS        | testautoforecast@gmail.com | supplierTemplateQBFSCompany.csv | false  | 200            | OK                 | name         | from upload auto  | name       | asc           |
+            | TC_ID           | companyType | email                      | fileName                              | option | expectedStatus | expectedStatusText | columnFilter | valueColumnFilter | sortColumn | directionSort |
+            | TC_UFFQBFS001_2 | QBFS        | testautoforecast@gmail.com | supplierTemplateUpdateQBFSCompany.csv | false  | 200            | OK                 | name         | from upload auto  | name       | asc           |
 
     # Items section
     # Create new items
     # Please remove items with name including "from upload auto" to reduce time running
     @qbfsCompanies-items
-    Scenario Outline: Add new items via upload csv file
+    Scenario Outline: <TC_ID> - Add new items via upload csv file
         Given User picks company which has onboarded before with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get suppliers with limit row: 10
@@ -111,13 +111,13 @@ Feature: API_Regression User uploads file for all sections in QBFS companies
         Then User checks items in the item must be the same as in csv file
 
         Examples:
-            | TC_ID           | companyType | email                      | fileName                    | option | expectedStatus | expectedStatusText | valueContain     |
-            | TC_UFFQBFS002_1 | QBFS        | testautoforecast@gmail.com | itemTemplateQBFSCompany.csv | true   | 200            | OK                 | from upload auto |
+            | TC_ID           | companyType | email                      | fileName                          | option | expectedStatus | expectedStatusText | valueContain     |
+            | TC_UFFQBFS002_1 | QBFS        | testautoforecast@gmail.com | itemTemplateCreateQBFSCompany.csv | true   | 200            | OK                 | from upload auto |
 
     # Items section
     # Update Items via Upload file
     @qbfsCompanies-items
-    Scenario Outline: Update Items via upload csv file
+    Scenario Outline: <TC_ID> - Update Items via upload csv file
         Given User picks company which has onboarded before with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
         And User sets GET api endpoint to get suppliers with limit row: 10
@@ -147,5 +147,5 @@ Feature: API_Regression User uploads file for all sections in QBFS companies
         Then User checks items in the item must be the same as in csv file
 
         Examples:
-            | TC_ID           | companyType | email                      | fileName                    | option | expectedStatus | expectedStatusText | valueContain     |
-            | TC_UFFQBFS002_2 | QBFS        | testautoforecast@gmail.com | itemTemplateQBFSCompany.csv | false  | 200            | OK                 | from upload auto |
+            | TC_ID           | companyType | email                      | fileName                          | option | expectedStatus | expectedStatusText | valueContain     |
+            | TC_UFFQBFS002_2 | QBFS        | testautoforecast@gmail.com | itemTemplateUpdateQBFSCompany.csv | false  | 200            | OK                 | from upload auto |
