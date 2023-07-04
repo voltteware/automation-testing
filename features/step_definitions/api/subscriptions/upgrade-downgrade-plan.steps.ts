@@ -237,6 +237,7 @@ Then('{} sends GET api endpoint to get current subscription with payment method'
         this.customerId = this.subscriptionAfterChangingResponseBody.customer;
         this.subscriptionId = this.subscriptionAfterChangingResponseBody.id;
         this.defaultPaymentMethod = this.subscriptionAfterChangingResponseBody.default_payment_method;
+        this.expectedStatus = this.subscriptionAfterChangingResponseBody.status;
         console.log("default_payment_method >>>>> ", this.defaultPaymentMethod)
         console.log("Plan of Subscription after Changing >>>>> ", this.planAfterSwitching, "previousPlanId >>>>> ", this.previousPlanId);
         logger.log('info', `Response GET current plan ${getCurrentSubscriptionWithPaymentMethodLink}` + JSON.stringify(this.subscriptionAfterChangingResponseBody, undefined, 4));
