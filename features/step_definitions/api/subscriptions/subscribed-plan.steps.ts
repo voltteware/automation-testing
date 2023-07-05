@@ -130,6 +130,7 @@ Then('{} creates payment method to subscribe', async function (actor) {
     },
     });
     console.log("paymentMethod >>>>> ", this.paymentMethod.id);
+    this.attach(`paymentMethod >>>>> ` + this.paymentMethod.id);
 });
 
 // Confirm subscribed
@@ -138,14 +139,15 @@ Then('{} sets POST api endpoint to confirm subscribed', async function (actor) {
 });
 
 Then('{} sets request body with payload to confirm subscribed with {} status', async function (actor, status: string) {
-    if(status === "trialing") {
-        this.expectedAmount = 0;
-    }
-    else {
+    if(status === "canceled") {
         console.log("Expected Amount >>>>> ", this.planPickedRandom.amount);
         let amount = this.planPickedRandom.amount;
         this.expectedAmount = amount * 100;
         console.log("Expected Amount after * 100 >>>>> ", this.expectedAmount);
+        this.attach(`Expected Amount after * 100 >>>>> ` + this.expectedAmount);
+    }
+    else {
+        this.expectedAmount = 0;
     }
     
     this.confirmSubscribedPayLoad = { 
@@ -160,6 +162,7 @@ Then('{} sets request body with payload to confirm subscribed with {} status', a
     }
 
     console.log("confirmSubscribedPayLoad >>>>> ", this.confirmSubscribedPayLoad);
+    this.attach(`confirmSubscribedPayLoad >>>>> ` + JSON.stringify(this.confirmSubscribedPayLoad));
 });
 
 Then(`{} sends POST api endpoint to confirm subscribed`, async function (actor) {
