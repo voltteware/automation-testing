@@ -358,7 +358,7 @@ Then('{} sends a POST request to sync', async function (actor: string) {
     const sleep = (milliseconds: number) => {
         return new Promise(resolve => setTimeout(resolve, milliseconds))
     }
-    await sleep(6000);
+    await sleep(8000);
 });
 
 Then(`{} sets GET api endpoint to count items in Shipment Review with restockType: {}`, async function (actor, restockType: string) {

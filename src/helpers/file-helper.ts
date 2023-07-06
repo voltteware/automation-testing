@@ -94,6 +94,54 @@ export function convertDataTableToCSVFile(dataTable: DataTable, section: string,
                 }
             })
             break;
+        case 'itemASC':
+            rows.forEach((row: any, index: number) => {
+                // Item Name
+                if (row[0] === 'random') {
+                    rows[index][0] = `item ${index} from upload auto ${Date.now()}`
+                }
+                // Item Name
+                if (row[0] === 'hard') {
+                    rows[index][0] = `${itemName}`
+                }
+                // ASIN
+                if (row[1] === 'random') {
+                    rows[index][1] = `asin ${index} from upload auto ${Date.now()}`
+                }
+                // FNSKU
+                if (row[2] === 'random') {
+                    rows[index][2] = `fnsku ${index} from upload auto ${Date.now()}`
+                }
+                // Supplier Name
+                if (row[3] === 'random') {
+                    rows[index][3] = `${supplierName}`
+                }
+                // Supplier Price
+                if (row[4] === 'random') {
+                    rows[index][4] = `${Number(faker.random.numeric())}`
+                }
+                // MOQ
+                if (row[5] === 'random') {
+                    rows[index][5] = `${Number(faker.random.numeric())}`
+                }
+                // Service Level
+                if (row[6] === 'random') {
+                    rows[index][6] = `${Number(faker.random.numeric())}`
+                }
+                // On Hand FBA Qty
+                if (row[7] === 'random') {
+                    rows[index][7] = `${Number(faker.random.numeric())}`
+                }
+                // Warehouse Qty
+                if (row[8] === 'random') {
+                    rows[index][8] = `${Number(faker.random.numeric())}`
+                }
+                // On Hand FBM Qty
+                if (row[9] === 'random') {
+                    rows[index][9] = `${Number(faker.random.numeric())}`
+                }
+            })
+            break;
         case 'demand':
             rows.forEach((row: any, index: number) => {
                 // Item Name

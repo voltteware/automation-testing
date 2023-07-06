@@ -63,6 +63,9 @@ Then(`User sends a PUT request to upload file to the Amazon S3`, async function 
 Then(`User sets POST api to sync file {} from Amazon S3 with option isCreateNew: {}`, async function (fileName: string, isCreateNew: string) {
     var regexPattern = new RegExp("true");
     var boolValue = regexPattern.test(isCreateNew);
+    if (this.section == "itemASC") {
+        this.section = "item";
+    }
 
     this.linkSyncFile = `${Links.API_SYNC}/${this.section}`;
     this.payloadSyncFile = {
