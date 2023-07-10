@@ -153,7 +153,7 @@ Feature: API_Regression User uploads file for all sections in ASC companies
     # Supply section
     # Create new supply
     # Please remove supply with items name including "from upload auto" to reduce time running
-    @csvCompanies-supply
+    @ascCompanies-supply
     Scenario Outline: <TC_ID> - Add new supply via upload csv file
         Given User picks company which has onboarded before with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
@@ -190,7 +190,7 @@ Feature: API_Regression User uploads file for all sections in ASC companies
 
     # Supply section
     # Update Supply via Upload file
-    @csvCompanies-supply
+    @ascCompanies-supply
     Scenario Outline: <TC_ID> - Update supply via upload csv file
         Given User picks company which has onboarded before with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
@@ -262,7 +262,7 @@ Feature: API_Regression User uploads file for all sections in ASC companies
 
     # Kits section
     # Update new kits
-    @csvCompanies-kit
+    @ascCompanies-kit
     Scenario Outline: <TC_ID> - Update kits via upload csv file
         Given User picks company which has onboarded before with type <companyType> in above response
         And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
@@ -292,3 +292,43 @@ Feature: API_Regression User uploads file for all sections in ASC companies
         Examples:
             | TC_ID          | companyType | email                      | fileName                        | option | expectedStatus | expectedStatusText | valueContain     |
             | TC_UFFASC004_2 | ASC         | testautoforecast@gmail.com | bomTemplateUpdateASCCompany.csv | false  | 200            | OK                 | from upload auto |
+
+    # Restock from Warehouse
+    # Create shipments via upload file
+    @ascCompanies-uploadInventory
+    Scenario Outline: <TC_ID> - Create shipments via upload file
+        Given User picks company which has onboarded before with type <companyType> in above response
+        And User sets valid cookie of <email> and valid companyKey and valid companyType in the header
+        # Prepares shipment inventory csv file
+        And User prepares the <fileName> file contains the list shipmentItem as following data:
+            | SKU                 | Product Name | Warehouse Quantity |
+            | HB-02-PC1-825-WHT-Q |              | 5                  |
+        And User sets GET api to get signed request
+        And User sends a GET request to get signed request
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
+        And User sets PUT api to upload file <fileName> to the Amazon S3
+        And User sends a PUT request to upload file to the Amazon S3
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
+        # Create shipment from warehouse and upload warehouse inventory file
+        And User sets POST api to create shipment from Warehouse with name:
+            | shipmentName           |
+            | ITC_shipment_auto_name |
+        And User sends a POST request to create Shipment
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
+        And User checks API contract of create shipment api
+        And User sets GET api endpoint to get Shipment info
+        And User sends a GET request to get Shipment info
+        And User checks status code and status text of api
+            | expectedStatus   | expectedStatusText   |
+            | <expectedStatus> | <expectedStatusText> |
+        And User checks API contract of get Shipment info api
+
+        Examples:
+            | TC_ID        | companyType | fileName                              | expectedStatus | expectedStatusText |
+            | TC_UFFASC005 | ASC         | inventoryTemplateUpdateASCCompany.csv | 200            | OK                 |
