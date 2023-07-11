@@ -12,6 +12,8 @@ let getCurrentPlanOfSubscriptionLink: any;
 let getPlansLink: any;
 let switchPlanLink: any;
 let changePlanPayload: any;
+let pendingSubscriptionLink: any;
+let cancelSubscriptionLink: any;
 var plansAfterFiltering = new Array();
 var intervalPlans = new Array();
 var monthlyPlanAfterFiltering = new Array();
@@ -66,19 +68,25 @@ Then(`{} picks company that has status {} and has been added card`, async functi
     }
 });
 
-Then(`{} picks company that has interval {}, status {} and has been added card`, async function (actor, interval: string, status: string) {
-    console.log("Get all company: ", this.getCompaniesResponseBody);
-    for (let i = 0; i < this.getCompaniesResponseBody.length; i++) {
-        if (this.getCompaniesResponseBody[i].subscriptionStatus === status) {
-            this.getCompanyKey = this.getCompaniesResponseBody[i].companyKey;
-            this.attach(`Get company key will push into URL of api/billing/subscription: ` + this.getCompanyKey);
-            console.log(`Get company key will push into URL of api/billing/subscription: `, this.getCompanyKey);
+Then(`{} picks company that has interval {}, status {} and has been added card with company key {}`, async function (actor, interval: string, status: string, companyKey: string) {
+    if (companyKey === "random") {
+        console.log("Get all company: ", this.getCompaniesResponseBody);
+        for (let i = 0; i < this.getCompaniesResponseBody.length; i++) {
+            // Filtering company with status
+            if (this.getCompaniesResponseBody[i].subscriptionStatus === status) {
+                this.getCompanyKey = this.getCompaniesResponseBody[i].companyKey;
+                this.attach(`Random - Get company key will push into URL of api/billing/subscription: ` + this.getCompanyKey);
+                console.log(`Random - Get company key will push into URL of api/billing/subscription: `, this.getCompanyKey);
+            }
 
+            // Call APi to get interval of these company above
             this.currentSubscriptionResponse = await subscriptionRequest.getCurrentSubscription(this.request, getCurrentSubscriptionWithPaymentMethodLink, this.headers, this.getCompanyKey);
             this.currentSubscriptionResponseBody = JSON.parse(await this.currentSubscriptionResponse.text());
-            console.log("currentSubscriptionResponseBody >>>>> ", this.currentSubscriptionResponseBody);
-            this.intervalFromAPI = await this.currentSubscriptionResponseBody.plan.interval;
-            console.log("intervalFromAPI >>>>> ", this.intervalFromAPI);
+            console.log("Random - currentSubscriptionResponseBody >>>>> ", this.currentSubscriptionResponseBody);
+            this.attach(`Random - currentSubscriptionResponseBody >>>>> ` + JSON.stringify(this.currentSubscriptionResponseBody));
+            this.intervalFromAPI = this.currentSubscriptionResponseBody.plan.interval;
+            console.log("Random - intervalFromAPI >>>>> ", this.intervalFromAPI);
+            this.attach(`Random - intervalFromAPI >>>>> ` + this.intervalFromAPI);
 
             if (this.intervalFromAPI === interval) {
                 this.currentPlan = this.currentSubscriptionResponseBody.id;
@@ -87,11 +95,30 @@ Then(`{} picks company that has interval {}, status {} and has been added card`,
                 this.customer = this.currentSubscriptionResponseBody.customer;
                 this.companyKey = this.currentSubscriptionResponseBody.metadata.companyKey;
                 this.companyType = this.currentSubscriptionResponseBody.metadata.companyType;
-                console.log("subscriptionId >>>>> ", this.subscriptionId, "currentSubscriptionResponseBody.default_payment_method >>>>> ", this.currentSubscriptionResponseBody.default_payment_method);
-                this.attach(`Current Subscription >>>>>> ` + this.currentSubscriptionResponseBody, `priceOfCurrentPlan of current plan >>>>> ` + this.priceOfCurrentPlan);
-                console.log(`Current Subscription >>>>>> `, this.currentSubscriptionResponseBody, `priceOfCurrentPlan of current plan >>>>> `, this.priceOfCurrentPlan);
+                console.log("Random - subscriptionId >>>>> ", this.subscriptionId, "Random - currentSubscriptionResponseBody.default_payment_method >>>>> ", this.currentSubscriptionResponseBody.default_payment_method);
+                this.attach(`Random - Current Subscription >>>>>> ` + this.currentSubscriptionResponseBody, `Random - priceOfCurrentPlan of current plan >>>>> ` + this.priceOfCurrentPlan);
+                console.log(`Random - Current Subscription >>>>>> `, this.currentSubscriptionResponseBody, `Random - priceOfCurrentPlan of current plan >>>>> `, this.priceOfCurrentPlan);
             }
         }
+    }
+    else {
+        // Call APi to get interval of these company above
+        this.currentSubscriptionResponse = await subscriptionRequest.getCurrentSubscription(this.request, getCurrentSubscriptionWithPaymentMethodLink, this.headers, companyKey);
+        this.currentSubscriptionResponseBody = JSON.parse(await this.currentSubscriptionResponse.text());
+        console.log("currentSubscriptionResponseBody >>>>> ", this.currentSubscriptionResponseBody);
+        this.attach(`currentSubscriptionResponseBody >>>>> ` + JSON.stringify(this.currentSubscriptionResponseBody));
+        this.intervalFromAPI = this.currentSubscriptionResponseBody.plan.interval;
+        console.log("intervalFromAPI >>>>> ", this.intervalFromAPI);
+        this.attach(`intervalFromAPI >>>>> ` + this.intervalFromAPI);
+        this.currentPlan = this.currentSubscriptionResponseBody.id;
+        this.priceOfCurrentPlan = this.currentSubscriptionResponseBody.plan.id;
+        this.subscriptionId = this.currentSubscriptionResponseBody.id;
+        this.customer = this.currentSubscriptionResponseBody.customer;
+        this.companyKey = this.currentSubscriptionResponseBody.metadata.companyKey;
+        this.companyType = this.currentSubscriptionResponseBody.metadata.companyType;
+        console.log("subscriptionId >>>>> ", this.subscriptionId, "currentSubscriptionResponseBody.default_payment_method >>>>> ", this.currentSubscriptionResponseBody.default_payment_method);
+        this.attach(`Current Subscription >>>>>> ` + this.currentSubscriptionResponseBody, `priceOfCurrentPlan of current plan >>>>> ` + this.priceOfCurrentPlan);
+        console.log(`Current Subscription >>>>>> `, this.currentSubscriptionResponseBody, `priceOfCurrentPlan of current plan >>>>> `, this.priceOfCurrentPlan);
     }
 });
 
@@ -190,6 +217,9 @@ Then(`{} filters {} plans from list above`, async function (actor, interval: str
             console.log("intervalPlans >>>>> ", intervalPlans);
             console.log("intervalPlans >>>>> ", intervalPlans.length);
             console.log("this.priceOfCurrentPlan.split('_', 1)[0] >>>>> ", this.priceOfCurrentPlan.split('_', 1)[0]);
+            this.attach(`intervalPlans >>>>> ` + intervalPlans);
+            this.attach(`intervalPlans >>>>> ` + intervalPlans.length);
+            this.attach(`this.priceOfCurrentPlan.split('_', 1)[0] >>>>> ` + this.priceOfCurrentPlan.split('_', 1)[0]);
         }
     }
 })
@@ -199,7 +229,7 @@ Then(`{} picks random {} plan except current plan to {}`, async function (actor,
 
     for (let i = 0; i < intervalPlans.length; i++) {
         console.log(`priceOfCurrentPlan: `, this.priceOfCurrentPlan, "intervalPlans: ", intervalPlans, intervalPlans.length);
-        if (this.priceOfCurrentPlan.split('_', 1)[0] === "price" && intervalPlans[i].id !== this.priceOfCurrentPlan && intervalPlans[i].allowOrders !== null) {
+        if (this.priceOfCurrentPlan.split('_', 1)[0] === "price" && intervalPlans[i].id !== this.priceOfCurrentPlan && intervalPlans[i].allowOrders !== null || intervalPlans[i].allowOrders === Infinity) {
             monthlyPlanAfterFiltering.push(intervalPlans[i]);
             console.log(`New priceOfCurrentPlan >>>>> `, this.priceOfCurrentPlan);
             console.log("New this.intervalPlans[i].allowOrders >>>>> ", intervalPlans[i].allowOrders)
@@ -264,4 +294,54 @@ Then(`{} checks current subscription is subscription that has been chosen to swi
 Then(`{} checks current subscription is still kept`, async function (actor) {
     // Expected: Plan after switching isn't equal to plan that has been picked random
     expect(this.planAfterSwitching).not.toEqual(this.planPickedRandom.id);
+});
+
+// Get pending subscription
+Then(`{} sets GET api endpoint to get pending subscription`, async function (actor) {
+    pendingSubscriptionLink = encodeURI(`${Links.API_PENDING_SUB}${this.customer}/${this.subscriptionId}`);
+});
+
+Then(`{} sends GET api endpoint to get pending subscription`, async function (actor) {
+    console.log("Subscription id >>>>> ", this.subscriptionId);
+
+    this.headers = {
+        'Cookie': this.cookie,
+        "COMPANY-KEY": this.companyKey,
+        "COMPANY-TYPE": this.companyType
+    }
+    console.log("Headers >>>>> ", this.headers);
+
+    this.getPendingSubscription = await subscriptionRequest.getPendingSubscription(this.request, pendingSubscriptionLink, this.headers);
+
+    const responseBodyText = await this.getPendingSubscription.text();
+    if (this.getPendingSubscription.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
+        this.getPendingSubscriptionBody = JSON.parse(await this.getPendingSubscription.text());
+        this.nextSubscriptionId = this.getPendingSubscriptionBody.id;
+        logger.log('info', `Response GET pending subscription ${pendingSubscriptionLink}` + JSON.stringify(this.getPendingSubscriptionBody, undefined, 4));
+        this.attach(`Response GET pending subscription ${pendingSubscriptionLink}` + JSON.stringify(this.getPendingSubscriptionBody, undefined, 4))
+    }
+    else if (responseBodyText.includes('<!doctype html>')) {
+        logger.log('info', `Response GET pending subscription ${pendingSubscriptionLink} ${responseBodyText}`);
+        this.attach(`Response GET pending subscription ${pendingSubscriptionLink} returns html`)
+    }
+});
+
+// Cancel the next plan
+Then(`{} sets DELETE api endpoint to cancel subscription`, async function (actor) {
+    cancelSubscriptionLink = encodeURI(`${Links.API_SUBSCRIPTION}${this.companyKey}`);
+});
+
+Then(`{} checks company key above, If it have switched to yearly plan then cancel it`, async function (actor) {
+    this.attach(`nextSubscriptionId >>>>> ` + this.nextSubscriptionId);
+    console.log(`nextSubscriptionId >>>>> `, this.nextSubscriptionId);
+    this.headers = {
+        'Cookie': this.cookie,
+        "COMPANY-KEY": this.companyKey,
+        "COMPANY-TYPE": this.companyType
+    }
+    console.log("Headers >>>>> ", this.headers);
+
+    this.attach(`Response of Pending subscription API >>>>> ` + JSON.stringify(this.getPendingSubscriptionBody));
+    this.cancelSubscriptionResponse = await subscriptionRequest.cancelSubscription(this.request, cancelSubscriptionLink, this.headers, this.nextSubscriptionId);
+    this.attach(`Response of cancel subscription >>>>> ` + this.cancelSubscriptionResponse)
 });

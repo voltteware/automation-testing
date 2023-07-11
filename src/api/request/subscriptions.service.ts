@@ -70,7 +70,7 @@ async function getIds(request: APIRequestContext, linkApi: string, headers: any)
 }
 
 // Confirm Subscribed
-async function confirmSubscribed(request: APIRequestContext, linkApi: string, headers: any, payload: any) {
+async function addPromotionCodeAndConfirmSubscribed(request: APIRequestContext, linkApi: string, headers: any, payload: any) {
   const url = `${linkApi}`;
   logger.log('info', `Send POST request ${url}`);
   const exportResponse = await request.post(url, {
@@ -92,6 +92,31 @@ async function latestSubscription(request: APIRequestContext, linkApi: string, h
   return exportResponse;
 }
 
+// Get pending subscription
+async function getPendingSubscription(request: APIRequestContext, linkApi: string, headers: any) {
+  const url = `${linkApi}`;
+  logger.log('info', `Send POST request of pending subscription ${url}`);
+  const exportResponse = await request.get(url, {
+    headers: headers,
+  });
+  console.log("exportResponse Get pending Subscription: ", exportResponse, "headers: ", exportResponse.headers());
+  return exportResponse;
+}
+
+// Cancel the next plan
+async function cancelSubscription(request: APIRequestContext, linkApi: string, headers: any, subscriptionId: any) {
+  const url = `${linkApi}`;
+  logger.log('info', `Send DELETE request ${url}`);
+  const exportResponse = await request.delete(url, {
+    headers: headers,
+    params: {
+      nextPlanSubscriptionId: subscriptionId
+    }
+  });
+  console.log("exportResponse cancel subscription: ", exportResponse, "headers: ", exportResponse.headers());
+  return exportResponse;
+}
+
 export {
     getCurrentSubscription,
     getCurrentPlanOfSubscription,
@@ -99,6 +124,8 @@ export {
     switchPlan,
     getCheckoutLink,
     getIds,
-    confirmSubscribed,
-    latestSubscription
+    addPromotionCodeAndConfirmSubscribed,
+    latestSubscription,
+    getPendingSubscription,
+    cancelSubscription
 }
