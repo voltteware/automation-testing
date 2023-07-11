@@ -34,7 +34,7 @@ Feature: API_Subscriptions api/billing/plan/id
     Scenario Outline: TC_Switch002 - Verify <email> could call this API to switch any <interval> plans in <status> status with subscrtipion have been added normal card
         Given User sends a GET request to get companies
         And User sets GET api endpoint to get current subscription with payment method
-        And User picks company that has interval <interval>, status <status> and has been added card 
+        And User picks company that has interval <interval>, status <status> and has been added card with company key <companyKey> 
         And User sets GET api endpoint to get current plan of subscription
         Then User sends GET api endpoint to get current plan of subscription
         And User sets GET api endpoint to get all plans of system
@@ -51,14 +51,14 @@ Feature: API_Subscriptions api/billing/plan/id
         And User sends GET api endpoint to get current subscription with payment method
         And User checks current subscription is subscription that has been chosen to switch
         Examples:
-            | user | email                         | password  | status  | expectedStatus | expectedStatusText | message                     | interval  |
-            | user | subscriptionapitest@gmail.com | Test1111# | active  | 200            | OK                 | Switching plan successfully | month     |
+            | user | email                         | password  | status  | companyKey | expectedStatus | expectedStatusText | message                     | interval  |
+            | user | subscriptionapitest@gmail.com | Test1111# | active  | random     | 200            | OK                 | Switching plan successfully | month     |
 
     @TC_Switch003
     Scenario Outline: TC_Switch003 - Verify <email> could call this API to switch any <interval> plans in <status> status with subscrtipion have been added normal card
         Given User sends a GET request to get companies
         And User sets GET api endpoint to get current subscription with payment method
-        And User picks company that has interval <interval>, status <status> and has been added card 
+        And User picks company that has interval <interval>, status <status> and has been added card with company key <companyKey>
         And User sets GET api endpoint to get current plan of subscription
         Then User sends GET api endpoint to get current plan of subscription
         And User sets GET api endpoint to get all plans of system
@@ -75,14 +75,14 @@ Feature: API_Subscriptions api/billing/plan/id
         And User sends GET api endpoint to get current subscription with payment method
         And User checks current subscription is subscription that has been chosen to switch
         Examples:
-            | user | email                         | password  | status  | expectedStatus | expectedStatusText | message                     | interval |
-            | user | subscriptionapitest@gmail.com | Test1111# | active  | 200            | OK                 | Switching plan successfully | year     |
+            | user | email                         | password  | status  | companyKey | expectedStatus | expectedStatusText | message                     | interval |
+            | user | subscriptionapitest@gmail.com | Test1111# | active  | random     | 200            | OK                 | Switching plan successfully | year     |
 
     @TC_Switch004
     Scenario Outline: TC_Switch004 - Verify <email> couldn't call this API to switch from yearly to monthly plans in <status> status with subscrtipion have been added normal card
         Given User sends a GET request to get companies
         And User sets GET api endpoint to get current subscription with payment method
-        And User picks company that has interval year, status <status> and has been added card 
+        And User picks company that has interval year, status <status> and has been added card with company key <companyKey>
         And User sets GET api endpoint to get current plan of subscription
         Then User sends GET api endpoint to get current plan of subscription
         And User sets GET api endpoint to get all plans of system
@@ -99,16 +99,20 @@ Feature: API_Subscriptions api/billing/plan/id
         And User sends GET api endpoint to get current subscription with payment method
         And User checks current subscription is still kept
         Examples:
-            | user | email                         | password  | status  | expectedStatus | expectedStatusText | message                                                    | interval |
-            | user | subscriptionapitest@gmail.com | Test1111# | active  | 200            | OK                 | Switching from yearly plan to monthly plan is not allowed. | month     |
+            | user | email                         | password  | status  | companyKey                           | expectedStatus | expectedStatusText | message                                                    | interval |
+            | user | subscriptionapitest@gmail.com | Test1111# | active  | d1248550-37f9-4742-970a-954d69197c2d | 200            | OK                 | Switching from yearly plan to monthly plan is not allowed. | month     |
 
     @TC_Switch005
     Scenario Outline: TC_Switch005 - Verify <email> couldn't call this API to switch from monthly to yearly plans in <status> status with subscrtipion have been added normal card
         Given User sends a GET request to get companies
         And User sets GET api endpoint to get current subscription with payment method
-        And User picks company that has interval month, status <status> and has been added card 
+        And User picks company that has interval month, status <status> and has been added card with company key <companyKey>
         And User sets GET api endpoint to get current plan of subscription
         Then User sends GET api endpoint to get current plan of subscription
+        And User sets GET api endpoint to get pending subscription
+        And User sends GET api endpoint to get pending subscription
+        And User sets DELETE api endpoint to cancel subscription
+        And User checks company key above, If it have switched to yearly plan then cancel it
         And User sets GET api endpoint to get all plans of system
         And User sends GET api endpoint to get all plans of system
         And User filters <interval> plans from list above
@@ -123,8 +127,8 @@ Feature: API_Subscriptions api/billing/plan/id
         And User sends GET api endpoint to get current subscription with payment method
         And User checks current subscription is still kept 
         Examples:
-            | user | email                         | password  | status  | expectedStatus | expectedStatusText | message                                                                                        | interval |
-            | user | subscriptionapitest@gmail.com | Test1111# | active  | 200            | OK                 | Your subscription will be changed to the chosen yearly plan after the current one has expired. | year     |
+            | user | email                         | password  | status  | companyKey                           | expectedStatus | expectedStatusText | message                                                                                        | interval |
+            | user | subscriptionapitest@gmail.com | Test1111# | active  | 929b66d9-f339-41c0-b4e6-bc31d11087e9 | 200            | OK                 | Your subscription will be changed to the chosen yearly plan after the current one has expired. | year     |
 
 
    

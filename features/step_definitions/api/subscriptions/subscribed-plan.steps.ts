@@ -10,12 +10,13 @@ let getCheckoutLinkPayload: any;
 let getIdsLink: any;
 let confirmSubscribedLink: any;
 let getLatestSubscriptionLink: any;
+let addPromotionCodeLink: any;
 var planAfterFiltering = new Array();
 
 // Pick random plan to subscribe
 Then(`{} picks random plan to subscribe`, async function (actor) {
     for (let i = 0; i < this.getPlansListResponseBody.length; i++) {
-        if (this.getPlansListResponseBody[i].allowOrders !== null) {
+        if (this.getPlansListResponseBody[i].allowOrders !== null || this.getPlansListResponseBody[i].allowOrders === Infinity) {
             planAfterFiltering.push(this.getPlansListResponseBody[i]);
             console.log("New this.getPlansListResponseBody[i].allowOrders >>>>> ", this.getPlansListResponseBody[i].allowOrders)
         }
@@ -142,7 +143,7 @@ Then('{} sets request body with payload to confirm subscribed with {} status', a
     if(status === "canceled") {
         console.log("Expected Amount >>>>> ", this.planPickedRandom.amount);
         let amount = this.planPickedRandom.amount;
-        this.expectedAmount = amount * 100;
+        this.expectedAmount = Math.round(amount * 100) / 1;
         console.log("Expected Amount after * 100 >>>>> ", this.expectedAmount);
         this.attach(`Expected Amount after * 100 >>>>> ` + this.expectedAmount);
     }
@@ -174,7 +175,7 @@ Then(`{} sends POST api endpoint to confirm subscribed`, async function (actor) 
     }
     console.log("Headers >>>>> ", this.headers);
 
-    this.confirmSubscribedResponse = await subscriptionRequest.confirmSubscribed(this.request, confirmSubscribedLink, this.headers, this.confirmSubscribedPayLoad);
+    this.confirmSubscribedResponse = await subscriptionRequest.addPromotionCodeAndConfirmSubscribed(this.request, confirmSubscribedLink, this.headers, this.confirmSubscribedPayLoad);
 
     const responseBodyText = await this.confirmSubscribedResponse.text();
     if (this.confirmSubscribedResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
@@ -249,3 +250,45 @@ Then(`{} picks random company that has {} status`, async function (actor, status
         }
     }
 }); 
+
+// Add promotion code
+Then(`{} sets POST api endpoint to add promotion code`, async function (actor) {
+    addPromotionCodeLink = encodeURI(`https://api.stripe.com/v1/payment_pages/${this.CsTest[5]}`)
+});
+
+Then('{} sets request body with payload to add promotion code', async function (actor) {
+    this.addPromotionCodePayload = { 
+        "eid": "NA",
+        "promotion_code": "TEST20PR",
+        "key": "pk_test_0Dq01FUcmFyHtRjr7PmXf5JL",
+    }
+
+    console.log("addPromotionCodePayload >>>>> ", this.addPromotionCodePayload);
+    this.attach(`addPromotionCodePayload >>>>> ` + JSON.stringify(this.addPromotionCodePayload));
+});
+
+Then(`{} sends POST api endpoint to add promotion code`, async function (actor) {
+    this.headers = {
+        'Cookie': this.setCookie,
+        "COMPANY-KEY": this.companyKey,
+        "COMPANY-TYPE": this.companyType,
+        "content-type": "application/x-www-form-urlencoded",
+    }
+    console.log("Headers >>>>> ", this.headers);
+
+    this.addPromotionCodeResponse = await subscriptionRequest.addPromotionCodeAndConfirmSubscribed(this.request, addPromotionCodeLink, this.headers, this.addPromotionCodePayload);
+
+    const responseBodyText = await this.addPromotionCodeResponse.text();
+    if (this.addPromotionCodeResponse.status() == 200 && !responseBodyText.includes('<!doctype html>')) {
+        this.addPromotionCodeResponseBody = JSON.parse(await this.addPromotionCodeResponse.text());
+        logger.log('info', `Response POST confirm subscribed ${addPromotionCodeLink}` + JSON.stringify(this.addPromotionCodeResponseBody, undefined, 4));
+        this.attach(`Response POST confirm subscribed ${addPromotionCodeLink}` + JSON.stringify(this.addPromotionCodeResponseBody, undefined, 4))
+    }
+    else if (responseBodyText.includes('<!doctype html>')) {
+        logger.log('info', `Response POST confirm subscribed ${addPromotionCodeLink} - ${responseBodyText}`);
+        this.attach(`Response POST confirm subscribed ${addPromotionCodeLink} returns html`)
+    }
+
+    // Waiting the page after a delay of 3 seconds
+    await new Promise((resolve) => setTimeout(() => resolve(null), 3000));
+});
